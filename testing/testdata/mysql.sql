@@ -1,0 +1,15 @@
+create table configuration_group_tab(name varchar(50) not null, id bigint not null auto_increment, primary key(id)) engine=innodb;
+create table configuration_item_tab(id bigint not null auto_increment, primary key(id), name varchar(50) not null, value varchar(50) not null, configuration_group bigint not null, application bigint not null) engine=innodb;
+create table application_tab(name varchar(50) not null, id bigint not null auto_increment, primary key(id), status varchar(255) not null) engine=innodb;
+create table address_tab(zip varchar(50) not null, city varchar(50) not null, street varchar(50) not null, id bigint not null auto_increment, primary key(id)) engine=innodb;
+create table customer_tab(name varchar(50) not null, credit double not null, id bigint not null auto_increment, primary key(id), address bigint not null) engine=innodb;
+create table role_tab(name varchar(50) not null, id bigint not null auto_increment, primary key(id)) engine=innodb;
+create table user_tab(name varchar(50) not null, active boolean not null, creation date not null, updated date not null, activation date not null, locking datetime not null, external varchar(36) not null, license decimal not null, id bigint not null auto_increment, primary key(id)) engine=innodb;
+create table user_roles_tab(user_pk bigint not null, role_pk bigint not null) engine=innodb;
+alter table configuration_item_tab add constraint fk_configuration_item_configuration_group foreign key fk_configuration_item_configuration_group(configuration_group) references configuration_group_tab(id) on delete cascade on update cascade;
+alter table configuration_item_tab add constraint fk_configuration_item_application foreign key fk_configuration_item_application(application) references application_tab(id) on delete cascade on update cascade;
+alter table customer_tab add unique uk_customer_address(address);
+alter table customer_tab add constraint fk_customer_address foreign key fk_customer_address(address) references address_tab(id) on delete cascade on update cascade;
+alter table user_roles_tab add unique uk_user_roles(user_pk, role_pk);
+alter table user_roles_tab add constraint fk_user_roles_1 foreign key fk_user_roles_1(user_pk) references user_tab(id) on delete cascade on update cascade;
+alter table user_roles_tab add constraint fk_user_roles_2 foreign key fk_user_roles_2(role_pk) references role_tab(id) on delete cascade on update cascade;
