@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="testing" nsURI="http:///net/codecadenza/eclipse/model/testing.ecore"
+    nsPrefix="net.codecadenza.eclipse.model.testing">
+  <eClassifiers xsi:type="ecore:EClass" name="AbstractTestModule" abstract="true">
+    <eOperations name="getTestSuites" upperBound="-1" eType="#//TestSuite"/>
+    <eOperations name="getTestCases" upperBound="-1" eType="#//AbstractTestCase"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="namespace" eType="ecore:EClass java.ecore#//Namespace"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="testCaseSuffix" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="project" eType="ecore:EClass project.ecore#//Project"
+        eOpposite="project.ecore#//Project/testModules"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="SeleniumTestModule" eSuperTypes="#//AbstractTestModule">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="driver" eType="#//SeleniumDriver"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="driverPath" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="maximizeWindow" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="implicitWaitTime" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="pageLoadTime" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="TestSuite" eSuperTypes="java.ecore#//JavaType">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="testCases" upperBound="-1"
+        eType="#//AbstractTestCase"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="AbstractTestCase" abstract="true" eSuperTypes="java.ecore#//JavaType"/>
+  <eClassifiers xsi:type="ecore:EClass" name="GUITestCase" eSuperTypes="#//AbstractTestCase">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="testActions" upperBound="-1"
+        eType="#//GUITestAction" containment="true" eOpposite="#//GUITestAction/testCase"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="GUITestAction">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="comment" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="form" eType="ecore:EClass client.ecore#//Form"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="targetForm" eType="ecore:EClass client.ecore#//Form"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="formAction" eType="ecore:EClass client.ecore#//FormAction"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="formPanel" eType="ecore:EClass client.ecore#//FormPanel"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="type" eType="#//GUITestActionType"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="testData" upperBound="-1"
+        eType="#//GUITestData" containment="true" eOpposite="#//GUITestData/testAction"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="actionResult" eType="#//GUITestActionResult"
+        containment="true" eOpposite="#//GUITestActionResult/testAction"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="testCase" eType="#//GUITestCase"
+        eOpposite="#//GUITestCase/testActions"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="delayBefore" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EIntegerObject"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="delayAfter" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EIntegerObject"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="GUITestActionResult">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="messageText" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="status" eType="#//GUITestActionStatus"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="testAction" eType="#//GUITestAction"
+        eOpposite="#//GUITestAction/actionResult"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="componentType" eType="#//GUITestActionResultComponentType"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="GUITestData">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="formField" eType="ecore:EClass client.ecore#//FormField"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="tableColumnField" eType="ecore:EClass client.ecore#//TableColumnField"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="newValue" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="expectedValue" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="type" eType="#//GUITestDataType"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="testAction" eType="#//GUITestAction"
+        eOpposite="#//GUITestAction/testData"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="filterValue" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="GUITestActionStatus">
+    <eLiterals name="INFO"/>
+    <eLiterals name="WARNING" value="1"/>
+    <eLiterals name="ERROR" value="2"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="GUITestActionType">
+    <eLiterals name="EXECUTE_FORM_ACTION"/>
+    <eLiterals name="EXECUTE_REFRESH_ACTION" value="1"/>
+    <eLiterals name="OPEN_PAGE_DIRECT" value="2"/>
+    <eLiterals name="OPEN_PAGE_BY_NAVIGATOR" value="3"/>
+    <eLiterals name="PERFORM_LOGOUT" value="4"/>
+    <eLiterals name="SEARCH_ROW_CURRENT_PAGE" value="5"/>
+    <eLiterals name="SEARCH_ROW_ALL_PAGES" value="6"/>
+    <eLiterals name="ENTER_SEARCH_DATA" value="7"/>
+    <eLiterals name="COUNT_RECORDS" value="8"/>
+    <eLiterals name="RESET_SEARCH_DATA" value="9"/>
+    <eLiterals name="ENTER_FORM_DATA" value="10"/>
+    <eLiterals name="VALIDATE_FORM_DATA" value="11"/>
+    <eLiterals name="DOUBLE_CLICK_ROW" value="12"/>
+    <eLiterals name="PRESS_OK_BUTTON" value="13"/>
+    <eLiterals name="PRESS_CANCEL_BUTTON" value="14"/>
+    <eLiterals name="OPEN_LOGIN_PAGE" value="15"/>
+    <eLiterals name="UPLOAD_FILE" value="16"/>
+    <eLiterals name="PRESS_DOWNLOAD_BUTTON" value="17"/>
+    <eLiterals name="VALIDATE_ROW_COUNT_EQUAL" value="18"/>
+    <eLiterals name="VALIDATE_ROW_COUNT_GREATER" value="19"/>
+    <eLiterals name="VALIDATE_ROW_COUNT_SMALLER" value="20"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="GUITestDataType">
+    <eLiterals name="FORM_FIELD"/>
+    <eLiterals name="PAGE_TITLE" value="1"/>
+    <eLiterals name="OBJECT_ID" value="2"/>
+    <eLiterals name="ROW_INDEX" value="3"/>
+    <eLiterals name="CELL_VALUE" value="4"/>
+    <eLiterals name="ROW_COUNT" value="5"/>
+    <eLiterals name="SEARCH_FILTER" value="6"/>
+    <eLiterals name="SEARCH_OPERATOR" value="7"/>
+    <eLiterals name="SEARCH_SORT_ORDER" value="8"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="SeleniumDriver">
+    <eLiterals name="CHROME"/>
+    <eLiterals name="EDGE" value="1"/>
+    <eLiterals name="FIREFOX" value="2"/>
+    <eLiterals name="INTERNET_EXPLORER" value="3"/>
+    <eLiterals name="OPERA" value="4"/>
+    <eLiterals name="SAFARI" value="5"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="GUITestActionResultComponentType">
+    <eLiterals name="DIALOG"/>
+    <eLiterals name="NOTIFICATION" value="1"/>
+  </eClassifiers>
+</ecore:EPackage>

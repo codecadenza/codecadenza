@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="integration" nsURI="http:///net/codecadenza/eclipse/model/integration.ecore"
+    nsPrefix="net.codecadenza.eclipse.model.integration">
+  <eClassifiers xsi:type="ecore:EClass" name="SOAPIntegrationBean" eSuperTypes="#//AbstractIntegrationBean">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="serviceName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="portName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="rpcStype" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="bareParameterStyle" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="portTypeName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="RESTIntegrationBean" eSuperTypes="#//AbstractIntegrationBean">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="path" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="AbstractIntegrationBean" eSuperTypes="service.ecore#//ServiceBean">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="methods" upperBound="-1"
+        eType="#//AbstractIntegrationMethod" containment="true" eOpposite="#//AbstractIntegrationMethod/integrationBean"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="clientClassName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="producerClassName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="SOAPIntegrationMethod" eSuperTypes="#//AbstractIntegrationMethod">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="operationName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="addParameterAnnotations"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="returnValueName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="returnValuePartName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="RESTIntegrationMethod" eSuperTypes="#//AbstractIntegrationMethod">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="path" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="httpMethod" eType="#//HttpMethodEnumeration"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="inputType" eType="#//MediaTypeEnumeration"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="outputType" eType="#//MediaTypeEnumeration"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="AbstractIntegrationMethod" eSuperTypes="service.ecore#//ServiceMethod">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="integrationBean" eType="#//AbstractIntegrationBean"
+        eOpposite="#//AbstractIntegrationBean/methods"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="startNewThread" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="boundaryMethod" eType="ecore:EClass boundary.ecore#//BoundaryMethod"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="MediaTypeEnumeration">
+    <eLiterals name="XML" value="1"/>
+    <eLiterals name="JSON" value="2"/>
+    <eLiterals name="TEXT" value="3"/>
+    <eLiterals name="BINARY" value="4"/>
+    <eLiterals name="NONE"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="HttpMethodEnumeration">
+    <eLiterals name="GET"/>
+    <eLiterals name="PUT" value="1"/>
+    <eLiterals name="POST" value="2"/>
+    <eLiterals name="DELETE" value="3" literal="DELETE"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="RMIIntegrationMethod" eSuperTypes="#//AbstractIntegrationMethod"/>
+  <eClassifiers xsi:type="ecore:EClass" name="RMIIntegrationBean" eSuperTypes="#//AbstractIntegrationBean"/>
+  <eClassifiers xsi:type="ecore:EClass" name="KafkaIntegrationBean" eSuperTypes="#//AbstractIntegrationBean">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="requestTopic" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="responseTopic" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="consumerGroup" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="KafkaIntegrationMethod" eSuperTypes="#//AbstractIntegrationMethod">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="requestSchemaName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="responseSchemaName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="sendResponse" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="useDedicatedPartition"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="JMSIntegrationMethod" eSuperTypes="#//AbstractIntegrationMethod">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="operationID" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="sendResponse" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="JMSIntegrationBean" eSuperTypes="#//AbstractIntegrationBean">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="requestDestination" eType="#//JMSResource"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="responseDestination" eType="#//JMSResource"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="JMSResource">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="topic" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+  </eClassifiers>
+</ecore:EPackage>

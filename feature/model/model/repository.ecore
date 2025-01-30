@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="repository" nsURI="http:///net/codecadenza/eclipse/model/repository.ecore"
+    nsPrefix="net.codecadenza.eclipse.model.repository">
+  <eClassifiers xsi:type="ecore:EClass" name="Repository" eSuperTypes="service.ecore#//ServiceBean">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="repositoryMethods" upperBound="-1"
+        eType="#//RepositoryMethod" containment="true" resolveProxies="false" eOpposite="#//RepositoryMethod/repository"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="RepositoryMethod" eSuperTypes="service.ecore#//ServiceMethod">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="repository" eType="#//Repository"
+        transient="true" eOpposite="#//Repository/repositoryMethods"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="methodType" eType="#//RepositoryMethodTypeEnumeration"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="hint" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="RepositoryMethodParameter" eSuperTypes="java.ecore#//MethodParameter">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="association" eType="ecore:EClass domain.ecore#//AbstractDomainAssociation"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="attribute" eType="ecore:EClass domain.ecore#//DomainAttribute"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="RepositoryMethodTypeEnumeration">
+    <eLiterals name="FIND_ALL"/>
+    <eLiterals name="FIND_BY_ID" value="1"/>
+    <eLiterals name="EXISTS_BY_ID" value="2"/>
+    <eLiterals name="DELETE_ALL" value="3"/>
+    <eLiterals name="GET_ASSOCIATION" value="4"/>
+    <eLiterals name="FIND_BY_OBJECT" value="5"/>
+    <eLiterals name="SEARCH_BY_UNIQUE_KEY" value="6"/>
+    <eLiterals name="FIND_BY_UNIQUE_KEY" value="7"/>
+    <eLiterals name="EXISTS_BY_UNIQUE_KEY" value="8"/>
+    <eLiterals name="EXISTS_BY_UNIQUE_KEY_WITH_ID" value="9"/>
+    <eLiterals name="COUNT_ALL" value="10"/>
+    <eLiterals name="DELETE" value="11"/>
+    <eLiterals name="MERGE" value="12"/>
+    <eLiterals name="PERSIST" value="13"/>
+    <eLiterals name="FIND_EXISTING" value="14"/>
+    <eLiterals name="SEARCH" value="15"/>
+    <eLiterals name="COUNT" value="16"/>
+    <eLiterals name="CHANGE_PARENT" value="17"/>
+    <eLiterals name="ADD_TO_ASSOCIATION" value="18"/>
+    <eLiterals name="REMOVE_FROM_ASSOCIATION" value="19"/>
+    <eLiterals name="COPY" value="20"/>
+    <eLiterals name="SAVE" value="21"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="PermissionModeEnumeration">
+    <eLiterals name="DENY_ALL"/>
+    <eLiterals name="PERMIT_ALL" value="1"/>
+    <eLiterals name="DEDICATED_ROLES" value="2"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="TransactionTypeEnumeration">
+    <eLiterals name="REQUIRES_NEW"/>
+    <eLiterals name="REQUIRED" value="1"/>
+    <eLiterals name="SUPPORTS" value="2"/>
+    <eLiterals name="NOT_SUPPORTED" value="3"/>
+    <eLiterals name="MANDATORY" value="4"/>
+  </eClassifiers>
+</ecore:EPackage>

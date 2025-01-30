@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="boundary" nsURI="http:///net/codecadenza/eclipse/model/boundary.ecore"
+    nsPrefix="net.codecadenza.eclipse.model.boundary">
+  <eClassifiers xsi:type="ecore:EClass" name="BoundaryBean" eSuperTypes="service.ecore#//ServiceBean">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="boundaryMethods" upperBound="-1"
+        eType="#//BoundaryMethod" containment="true" resolveProxies="false" eOpposite="#//BoundaryMethod/boundaryBean"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="repository" eType="ecore:EClass repository.ecore#//Repository"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="BoundaryMethod" eSuperTypes="service.ecore#//ServiceMethod">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="boundaryBean" eType="#//BoundaryBean"
+        transient="true" eOpposite="#//BoundaryBean/boundaryMethods"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="methodType" eType="#//BoundaryMethodTypeEnumeration"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="domainAttribute" eType="ecore:EClass domain.ecore#//DomainAttribute"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="association" eType="ecore:EClass domain.ecore#//AbstractDomainAssociation"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="dataFetchType" eType="#//BoundaryMethodDataFetchType"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="serviceMethod" eType="ecore:EClass service.ecore#//ServiceMethod"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="BoundaryMethodTypeEnumeration">
+    <eLiterals name="DELETE"/>
+    <eLiterals name="UPDATE" value="1"/>
+    <eLiterals name="FIND_ALL" value="2"/>
+    <eLiterals name="CREATE" value="3"/>
+    <eLiterals name="SEARCH" value="4"/>
+    <eLiterals name="FIND_BY_PARENT" value="5"/>
+    <eLiterals name="FIND_BY_ID" value="6"/>
+    <eLiterals name="EXISTS_BY_ID" value="7"/>
+    <eLiterals name="DELETE_ALL" value="8"/>
+    <eLiterals name="GET_ASSOCIATION" value="9"/>
+    <eLiterals name="FIND_BY_OBJECT" value="10"/>
+    <eLiterals name="SEARCH_BY_UNIQUE_KEY" value="11"/>
+    <eLiterals name="FIND_BY_UNIQUE_KEY" value="12"/>
+    <eLiterals name="COUNT_ALL" value="13"/>
+    <eLiterals name="FIND_EXISTING" value="14"/>
+    <eLiterals name="SEARCH_BY_FILTER" value="15"/>
+    <eLiterals name="EXISTS_BY_UNIQUE_KEY" value="16"/>
+    <eLiterals name="EXISTS_BY_UNIQUE_KEY_WITH_ID" value="17"/>
+    <eLiterals name="CHANGE_PARENT" value="18"/>
+    <eLiterals name="ADD_TO_ASSOCIATION" value="19"/>
+    <eLiterals name="REMOVE_FROM_ASSOCIATION" value="20"/>
+    <eLiterals name="GET_LIST_OF_VALUES" value="21"/>
+    <eLiterals name="COUNT" value="22"/>
+    <eLiterals name="LOG_ON" value="23" literal="LOG_ON"/>
+    <eLiterals name="DOWNLOAD" value="24" literal="DOWNLOAD"/>
+    <eLiterals name="UPLOAD" value="25" literal="UPLOAD"/>
+    <eLiterals name="CHANGE_PASSWORD" value="26"/>
+    <eLiterals name="SERVICE_CALL" value="27"/>
+    <eLiterals name="DOWNLOAD_EXPORT" value="28"/>
+    <eLiterals name="UPLOAD_IMPORT" value="29"/>
+    <eLiterals name="COPY" value="30"/>
+    <eLiterals name="CHANGE_ASSOCIATION" value="31"/>
+    <eLiterals name="SAVE" value="32"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="BoundaryMethodDataFetchType">
+    <eLiterals name="DEFAULT"/>
+    <eLiterals name="CLIENT" value="1"/>
+    <eLiterals name="USER" value="2"/>
+  </eClassifiers>
+</ecore:EPackage>

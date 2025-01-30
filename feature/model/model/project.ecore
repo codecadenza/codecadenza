@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="project" nsURI="http:///net/codecadenza/eclipse/model/project.ecore"
+    nsPrefix="net.codecadenza.eclipse.model.project">
+  <eClassifiers xsi:type="ecore:EEnum" name="ClientPlatformEnumeration">
+    <eLiterals name="RCP" value="1"/>
+    <eLiterals name="SWING" value="2"/>
+    <eLiterals name="JSF_PRIMEFACES" value="3"/>
+    <eLiterals name="RAP" value="4" literal="RAP"/>
+    <eLiterals name="VAADIN" value="5"/>
+    <eLiterals name="JAVAFX" value="6"/>
+    <eLiterals name="ANGULAR" value="7"/>
+    <eLiterals name="NONE"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Datasource">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="connectionURL" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="userName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="password" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="driverName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="driverList" upperBound="-1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="PersistenceUnitProperty">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Project">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="code" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="serverPlatform" eType="#//ServerPlatformEnumeration"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="clientPlatform" eType="#//ClientPlatformEnumeration"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="roles" upperBound="-1"
+        eType="#//Role" containment="true" resolveProxies="false"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="persistenceUnitProperties"
+        upperBound="-1" eType="#//PersistenceUnitProperty" containment="true" resolveProxies="false"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="dataSource" eType="#//Datasource"
+        containment="true" resolveProxies="false"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="rootNamespace" eType="ecore:EClass java.ecore#//Namespace"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="repositoryNamespace" eType="ecore:EClass java.ecore#//Namespace"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="dTONamespace" eType="ecore:EClass java.ecore#//Namespace"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="boundaryNamespace" eType="ecore:EClass java.ecore#//Namespace"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="domainNamespace" eType="ecore:EClass java.ecore#//Namespace"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="clientNamespace" eType="ecore:EClass java.ecore#//Namespace"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="supportedStandardNamespaces"
+        upperBound="-1" eType="ecore:EClass java.ecore#//Namespace" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="database" eType="ecore:EClass db.ecore#//Database"
+        containment="true" eOpposite="db.ecore#//Database/project"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="allSupportedTypes" upperBound="-1"
+        eType="ecore:EClass java.ecore#//JavaType" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="formGroups" upperBound="-1"
+        eType="ecore:EClass client.ecore#//FormGroup" eOpposite="client.ecore#//FormGroup/project"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="persistenceProvider" eType="#//PersistenceProviderEnumeration"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="jpaVersion" eType="#//JPAVersionEnumeration"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="technology" eType="#//TechnologyPlatformEnumeration"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="validationType" eType="#//ValidationTypeEnumeration"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="boundaryMode" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="exchangeNamespace" eType="ecore:EClass java.ecore#//Namespace"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="buildTool" eType="#//BuildToolEnumeration"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="buildConfiguration" upperBound="-1"
+        eType="#//BuildArtifact" containment="true" eOpposite="#//BuildArtifact/project"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="xmlNamespace" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="integrationModules" upperBound="-1"
+        eType="#//IntegrationModule" containment="true" eOpposite="#//IntegrationModule/project"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="mappingStrategy" eType="#//MappingAnnotationStrategy"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="defaultXMLMappingType"
+        eType="#//XMLMappingType"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="xmlNamespacePrefix" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="testModules" upperBound="-1"
+        eType="ecore:EClass testing.ecore#//AbstractTestModule" containment="true"
+        eOpposite="testing.ecore#//AbstractTestModule/project"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="protectManualChanges" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Role">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="adminRole" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="readonlyRole" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="ServerPlatformEnumeration">
+    <eLiterals name="JBOSS"/>
+    <eLiterals name="GLASSFISH" value="1" literal="GLASSFISH"/>
+    <eLiterals name="NONE" value="2" literal="NONE"/>
+    <eLiterals name="TOMCAT" value="3"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="PersistenceProviderEnumeration">
+    <eLiterals name="HIBERNATE"/>
+    <eLiterals name="ECLIPSELINK" value="1"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="JPAVersionEnumeration">
+    <eLiterals name="JPA3" value="1" literal="JPA3"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="TechnologyPlatformEnumeration">
+    <eLiterals name="JAKARTA_EE" value="1" literal="JAKARTA_EE"/>
+    <eLiterals name="JAVA_SE" value="2" literal="JAVA_SE"/>
+    <eLiterals name="SPRING_BOOT" value="3"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="ValidationTypeEnumeration">
+    <eLiterals name="INTERNAL"/>
+    <eLiterals name="STANDARD" value="1" literal="STANDARD"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="BuildToolEnumeration">
+    <eLiterals name="MAVEN" literal="MAVEN"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="BuildArtifactType">
+    <eLiterals name="DOMAIN"/>
+    <eLiterals name="REPOSITORY" value="1"/>
+    <eLiterals name="BOUNDARY" value="2"/>
+    <eLiterals name="FACADE" value="3"/>
+    <eLiterals name="SERVICE" value="4"/>
+    <eLiterals name="CLIENT_INTERFACE" value="5"/>
+    <eLiterals name="SERVER" value="6"/>
+    <eLiterals name="GUI" value="7"/>
+    <eLiterals name="MASTER" value="8"/>
+    <eLiterals name="DTO" value="9"/>
+    <eLiterals name="DATA_EXCHANGE" value="10"/>
+    <eLiterals name="INTEGRATION_IMP_SOAP" value="11"/>
+    <eLiterals name="INTEGRATION_SEI_SOAP" value="12"/>
+    <eLiterals name="INTEGRATION_CLIENT_SOAP" value="13"/>
+    <eLiterals name="INTEGRATION_IMP_REST" value="14"/>
+    <eLiterals name="INTEGRATION_SEI_REST" value="15"/>
+    <eLiterals name="INTEGRATION_CLIENT_REST" value="16"/>
+    <eLiterals name="INTEGRATION_IMP_RMI" value="17"/>
+    <eLiterals name="INTEGRATION_SEI_RMI" value="18"/>
+    <eLiterals name="INTEGRATION_CLIENT_RMI" value="19"/>
+    <eLiterals name="SELENIUM_TEST" value="20"/>
+    <eLiterals name="SHARED" value="21"/>
+    <eLiterals name="INTEGRATION_IMP_KAFKA" value="22"/>
+    <eLiterals name="INTEGRATION_SEI_KAFKA" value="23"/>
+    <eLiterals name="INTEGRATION_CLIENT_KAFKA" value="24"/>
+    <eLiterals name="INTEGRATION_IMP_JMS" value="25"/>
+    <eLiterals name="INTEGRATION_SEI_JMS" value="26"/>
+    <eLiterals name="INTEGRATION_CLIENT_JMS" value="27"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="BuildArtifact">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="type" eType="#//BuildArtifactType"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="containedArtifacts" upperBound="-1"
+        eType="#//BuildArtifactType"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="project" eType="#//Project"
+        eOpposite="#//Project/buildConfiguration"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="MappingAnnotationStrategy">
+    <eLiterals name="NEVER"/>
+    <eLiterals name="ALWAYS" value="1"/>
+    <eLiterals name="ON_DEMAND" value="2"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="XMLMappingType">
+    <eLiterals name="ATTRIBUTE"/>
+    <eLiterals name="ELEMENT" value="1"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="IntegrationModule">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="technology" eType="#//IntegrationTechnology"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="project" eType="#//Project"
+        eOpposite="#//Project/integrationModules"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="namespace" eType="ecore:EClass java.ecore#//Namespace"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="addSecurityHandler" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="addProducers" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="IntegrationTechnology">
+    <eLiterals name="REST"/>
+    <eLiterals name="SOAP" value="1"/>
+    <eLiterals name="RMI" value="2"/>
+    <eLiterals name="KAFKA" value="3"/>
+    <eLiterals name="JMS" value="4"/>
+  </eClassifiers>
+</ecore:EPackage>
