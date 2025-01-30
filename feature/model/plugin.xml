@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.0"?>
+<plugin>
+
+  <extension point="org.eclipse.emf.ecore.generated_package">
+    <package
+      uri="http:///net/codecadenza/eclipse/model/boundary.ecore"
+      class="net.codecadenza.eclipse.model.boundary.BoundaryPackage"
+      genModel="model/codecadenza.genmodel"/>
+  </extension>
+
+  <extension point="org.eclipse.emf.ecore.generated_package">
+    <package
+      uri="http:///net/codecadenza/eclipse/model/client.ecore"
+      class="net.codecadenza.eclipse.model.client.ClientPackage"
+      genModel="model/codecadenza.genmodel"/>
+  </extension>
+
+  <extension point="org.eclipse.emf.ecore.generated_package">
+    <package
+      uri="http:///net/codecadenza/eclipse/model/repository.ecore"
+      class="net.codecadenza.eclipse.model.repository.RepositoryPackage"
+      genModel="model/codecadenza.genmodel"/>
+  </extension>
+
+  <extension point="org.eclipse.emf.ecore.generated_package">
+    <package
+      uri="http:///net/codecadenza/eclipse/model/db.ecore"
+      class="net.codecadenza.eclipse.model.db.DbPackage"
+      genModel="model/codecadenza.genmodel"/>
+  </extension>
+
+  <extension point="org.eclipse.emf.ecore.generated_package">
+    <package
+      uri="http:///net/codecadenza/eclipse/model/dto.ecore"
+      class="net.codecadenza.eclipse.model.dto.DtoPackage"
+      genModel="model/codecadenza.genmodel"/>
+  </extension>
+
+  <extension point="org.eclipse.emf.ecore.generated_package">
+    <package
+      uri="http:///net/codecadenza/eclipse/model/domain.ecore"
+      class="net.codecadenza.eclipse.model.domain.DomainPackage"
+      genModel="model/codecadenza.genmodel"/>
+  </extension>
+
+  <extension point="org.eclipse.emf.ecore.generated_package">
+    <package
+      uri="http:///net/codecadenza/eclipse/model/java.ecore"
+      class="net.codecadenza.eclipse.model.java.JavaPackage"
+      genModel="model/codecadenza.genmodel"/>
+  </extension>
+
+  <extension point="org.eclipse.emf.ecore.generated_package">
+    <package
+      uri="http:///net/codecadenza/eclipse/model/project.ecore"
+      class="net.codecadenza.eclipse.model.project.ProjectPackage"
+      genModel="model/codecadenza.genmodel"/>
+  </extension>
+
+  <extension point="org.eclipse.emf.ecore.generated_package">
+    <package
+      uri="http:///net/codecadenza/eclipse/model/exchange.ecore"
+      class="net.codecadenza.eclipse.model.exchange.ExchangePackage"
+      genModel="model/codecadenza.genmodel"/>
+  </extension>
+
+  <extension point="org.eclipse.emf.ecore.generated_package">
+    <package
+      uri="http:///net/codecadenza/eclipse/model/integration.ecore"
+      class="net.codecadenza.eclipse.model.integration.IntegrationPackage"
+      genModel="model/codecadenza.genmodel"/>
+  </extension>
+
+  <extension point="org.eclipse.emf.ecore.generated_package">
+    <package
+      uri="http:///net/codecadenza/eclipse/model/service.ecore"
+      class="net.codecadenza.eclipse.model.service.ServicePackage"
+      genModel="model/codecadenza.genmodel"/>
+  </extension>
+
+  <extension point="org.eclipse.emf.ecore.generated_package">
+    <package
+      uri="http:///net/codecadenza/eclipse/model/testing.ecore"
+      class="net.codecadenza.eclipse.model.testing.TestingPackage"
+      genModel="model/codecadenza.genmodel"/>
+  </extension>
+
+  <extension point="org.eclipse.emf.ecore.generated_package">
+    <package
+      uri="http:///net/codecadenza/eclipse/model/mapping.ecore"
+      class="net.codecadenza.eclipse.model.mapping.MappingPackage"
+      genModel="model/codecadenza.genmodel"/>
+  </extension>
+
+</plugin>

@@ -1,0 +1,200 @@
+/*
+ * This file is part of CodeCadenza, a set of tools, libraries and plug-ins
+ * for modeling and creating Java-based enterprise applications.
+ * For more information visit:
+ *
+ * https://github.com/codecadenza/
+ *
+ * This software is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * This software is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this software; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
+ */
+package net.codecadenza.eclipse.model.boundary.impl;
+
+import net.codecadenza.eclipse.model.boundary.BoundaryBean;
+import net.codecadenza.eclipse.model.boundary.BoundaryFactory;
+import net.codecadenza.eclipse.model.boundary.BoundaryMethod;
+import net.codecadenza.eclipse.model.boundary.BoundaryMethodDataFetchType;
+import net.codecadenza.eclipse.model.boundary.BoundaryMethodTypeEnumeration;
+import net.codecadenza.eclipse.model.boundary.BoundaryPackage;
+import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.EDataType;
+import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.EPackage;
+import org.eclipse.emf.ecore.impl.EFactoryImpl;
+import org.eclipse.emf.ecore.plugin.EcorePlugin;
+
+/**
+ * An implementation of the model factory.
+ * @generated
+ */
+public class BoundaryFactoryImpl extends EFactoryImpl implements BoundaryFactory {
+	/**
+	 * @return the default factory implementation
+	 * @generated
+	 */
+	public static BoundaryFactory init() {
+		try {
+			final var theBoundaryFactory = (BoundaryFactory) EPackage.Registry.INSTANCE.getEFactory(BoundaryPackage.eNS_URI);
+
+			if (theBoundaryFactory != null)
+				return theBoundaryFactory;
+		}
+		catch (final Exception exception) {
+			EcorePlugin.INSTANCE.log(exception);
+		}
+
+		return new BoundaryFactoryImpl();
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see org.eclipse.emf.ecore.impl.EFactoryImpl#create(org.eclipse.emf.ecore.EClass)
+	 * @generated
+	 */
+	@Override
+	public EObject create(EClass eClass) {
+		return switch (eClass.getClassifierID()) {
+			case BoundaryPackage.BOUNDARY_BEAN -> createBoundaryBean();
+			case BoundaryPackage.BOUNDARY_METHOD -> createBoundaryMethod();
+			default -> throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
+		};
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see org.eclipse.emf.ecore.impl.EFactoryImpl#createFromString(org.eclipse.emf.ecore.EDataType, java.lang.String)
+	 * @generated
+	 */
+	@Override
+	public Object createFromString(EDataType eDataType, String initialValue) {
+		return switch (eDataType.getClassifierID()) {
+			case BoundaryPackage.BOUNDARY_METHOD_TYPE_ENUMERATION -> createBoundaryMethodTypeEnumerationFromString(eDataType,
+					initialValue);
+			case BoundaryPackage.BOUNDARY_METHOD_DATA_FETCH_TYPE -> createBoundaryMethodDataFetchTypeFromString(eDataType,
+					initialValue);
+			default -> throw new IllegalArgumentException("The datatype '" + eDataType.getName() + "' is not a valid classifier");
+		};
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see org.eclipse.emf.ecore.impl.EFactoryImpl#convertToString(org.eclipse.emf.ecore.EDataType, java.lang.Object)
+	 * @generated
+	 */
+	@Override
+	public String convertToString(EDataType eDataType, Object instanceValue) {
+		return switch (eDataType.getClassifierID()) {
+			case BoundaryPackage.BOUNDARY_METHOD_TYPE_ENUMERATION -> convertBoundaryMethodTypeEnumerationToString(eDataType,
+					instanceValue);
+			case BoundaryPackage.BOUNDARY_METHOD_DATA_FETCH_TYPE -> convertBoundaryMethodDataFetchTypeToString(eDataType,
+					instanceValue);
+			default -> throw new IllegalArgumentException("The datatype '" + eDataType.getName() + "' is not a valid classifier");
+		};
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see net.codecadenza.eclipse.model.boundary.BoundaryFactory#createBoundaryBean()
+	 * @generated
+	 */
+	@Override
+	public BoundaryBean createBoundaryBean() {
+		return new BoundaryBeanImpl();
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see net.codecadenza.eclipse.model.boundary.BoundaryFactory#createBoundaryMethod()
+	 * @generated
+	 */
+	@Override
+	public BoundaryMethod createBoundaryMethod() {
+		return new BoundaryMethodImpl();
+	}
+
+	/**
+	 * @param eDataType
+	 * @param initialValue
+	 * @return the enumeration
+	 * @generated
+	 */
+	public BoundaryMethodTypeEnumeration createBoundaryMethodTypeEnumerationFromString(EDataType eDataType, String initialValue) {
+		final BoundaryMethodTypeEnumeration result = BoundaryMethodTypeEnumeration.get(initialValue);
+
+		if (result == null)
+			throw new IllegalArgumentException(
+					"The value '" + initialValue + "' is not a valid enumerator of '" + eDataType.getName() + "'");
+
+		return result;
+	}
+
+	/**
+	 * @param eDataType
+	 * @param instanceValue
+	 * @return the String value
+	 * @generated
+	 */
+	@SuppressWarnings("unused")
+	public String convertBoundaryMethodTypeEnumerationToString(EDataType eDataType, Object instanceValue) {
+		return instanceValue == null ? null : instanceValue.toString();
+	}
+
+	/**
+	 * @param eDataType
+	 * @param initialValue
+	 * @return an enumeration based on given parameters
+	 * @generated
+	 */
+	public BoundaryMethodDataFetchType createBoundaryMethodDataFetchTypeFromString(EDataType eDataType, String initialValue) {
+		final BoundaryMethodDataFetchType result = BoundaryMethodDataFetchType.get(initialValue);
+
+		if (result == null)
+			throw new IllegalArgumentException(
+					"The value '" + initialValue + "' is not a valid enumerator of '" + eDataType.getName() + "'");
+
+		return result;
+	}
+
+	/**
+	 * @param eDataType
+	 * @param instanceValue
+	 * @return the String value
+	 * @generated
+	 */
+	@SuppressWarnings("unused")
+	public String convertBoundaryMethodDataFetchTypeToString(EDataType eDataType, Object instanceValue) {
+		return instanceValue == null ? null : instanceValue.toString();
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see net.codecadenza.eclipse.model.boundary.BoundaryFactory#getBoundaryPackage()
+	 * @generated
+	 */
+	@Override
+	public BoundaryPackage getBoundaryPackage() {
+		return (BoundaryPackage) getEPackage();
+	}
+
+	/**
+	 * @return the boundary package
+	 * @deprecated
+	 * @generated
+	 */
+	@Deprecated
+	public static BoundaryPackage getPackage() {
+		return BoundaryPackage.eINSTANCE;
+	}
+
+}

@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="exchange" nsURI="http:///net/codecadenza/eclipse/model/exchange.ecore"
+    nsPrefix="net.codecadenza.eclipse.model.exchange">
+  <eClassifiers xsi:type="ecore:EClass" name="DataExchangeServiceBean" eSuperTypes="service.ecore#//ServiceBean">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="dataExchangeMethods" upperBound="-1"
+        eType="#//DataExchangeMethod" containment="true" eOpposite="#//DataExchangeMethod/dataExchangeServiceBean"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="DataExchangeMethod" eSuperTypes="service.ecore#//ServiceMethod">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="exchangeMode" eType="#//DataExchangeMode"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="rootElement" eType="#//DataExchangeElement"
+        containment="true" eOpposite="#//DataExchangeElement/dataExchangeMethod"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="contentType" eType="#//ContentTypeEnumeration"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="methodType" eType="#//DataExchangeMethodTypeEnumeration"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="parser" eType="#//ParserImplementationEnumeration"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="performValidation" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="charset" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="formatOutput" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="dataExchangeServiceBean"
+        eType="#//DataExchangeServiceBean" eOpposite="#//DataExchangeServiceBean/dataExchangeMethods"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="processSingleObject" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="joinedImportMethod" eType="#//DataExchangeMethod"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="quoteCharacter" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EChar"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="recordSeparator" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="commentCharacter" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EChar"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="delimiter" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EChar"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="defaultDateFormat" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="defaultDateTimeFormat"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="defaultNumberFormat" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="associationControllers"
+        upperBound="-1" eType="#//AssociationController" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="schemaFileName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="DataExchangeMethodTypeEnumeration">
+    <eLiterals name="IMPORT"/>
+    <eLiterals name="EXPORT" value="1"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="ContentTypeEnumeration">
+    <eLiterals name="XML"/>
+    <eLiterals name="EXCEL97" value="1"/>
+    <eLiterals name="EXCEL2007" value="2"/>
+    <eLiterals name="CSV" value="3"/>
+    <eLiterals name="JSON" value="4" literal="JSON"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="ParserImplementationEnumeration">
+    <eLiterals name="POI"/>
+    <eLiterals name="JAXB" value="1"/>
+    <eLiterals name="APACHE_COMMONS" value="2"/>
+    <eLiterals name="JSONB" value="3"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="DataExchangeMode" abstract="true">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="maxObjectsToBeProcessed"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EIntegerObject"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="StringExchangeMode" eSuperTypes="#//DataExchangeMode"/>
+  <eClassifiers xsi:type="ecore:EClass" name="FileExchangeMode" eSuperTypes="#//DataExchangeMode">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="path" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="fileNamePattern" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="blockSize" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EIntegerObject"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="newTransactionPerFile"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="deleteAfterImport" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Determines if a file should be removed after import operation has been finished successfully!"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="targetPathAfterImport"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="The path to move original file to after import has been finished successfully."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="DataExchangeElement">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="minOccurrences" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EIntegerObject"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="maxOccurrences" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EIntegerObject"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="elementOrder" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EIntegerObject"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="typeName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="wrapperElementName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="dataExchangeMethod" eType="#//DataExchangeMethod"
+        eOpposite="#//DataExchangeMethod/rootElement"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="valueListEntries" upperBound="-1"
+        eType="#//ValueListEntry" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="attributes" upperBound="-1"
+        eType="#//DataExchangeAttribute" containment="true" eOpposite="#//DataExchangeAttribute/element"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="mappingAttribute" eType="#//ExchangeMappingAttribute"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="subElements" upperBound="-1"
+        eType="#//DataExchangeElement" containment="true" eOpposite="#//DataExchangeElement/parentElement"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="parentElement" eType="#//DataExchangeElement"
+        eOpposite="#//DataExchangeElement/subElements"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="dataType" eType="ecore:EClass java.ecore#//JavaType"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="mappingObject" eType="#//ExchangeMappingObject"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="container" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="disableExternalMapping"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="usedForCustomQuery" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="DataExchangeAttribute">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="valueListEntries" upperBound="-1"
+        eType="#//ValueListEntry" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="visible" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="optional" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="attributeOrder" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EIntegerObject"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="readonly" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="element" eType="#//DataExchangeElement"
+        eOpposite="#//DataExchangeElement/attributes"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="mappingAttribute" eType="#//ExchangeMappingAttribute"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="dataType" eType="ecore:EClass java.ecore#//JavaType"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="format" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="disableExternalMapping"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="usedForCustomQuery" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ValueListEntry">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="itemText" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ExchangeMappingObject" eSuperTypes="mapping.ecore#//MappingObject">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="attributes" upperBound="-1"
+        eType="#//ExchangeMappingAttribute" containment="true" eOpposite="#//ExchangeMappingAttribute/exchangeMappingObject"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="deleteAllItems" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="addNewItems" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="updateExistingItems" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ExchangeMappingAttribute" eSuperTypes="mapping.ecore#//MappingAttribute">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="exchangeMappingObject"
+        eType="#//ExchangeMappingObject" eOpposite="#//ExchangeMappingObject/attributes"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="insertable" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="updatable" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="selectionListStatement"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="deleteAllItems" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="addNewItems" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="joinAttribute" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="updateExistingItems" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="FilterMethodParameter" eSuperTypes="java.ecore#//MethodParameter">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="domainAttribute" eType="ecore:EClass domain.ecore#//DomainAttribute"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="association" eType="ecore:EClass domain.ecore#//AbstractDomainAssociation"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="associationList" upperBound="-1"
+        eType="ecore:EClass domain.ecore#//AbstractDomainAssociation"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="operator" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="AssociationController">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="queryAttributes" upperBound="-1"
+        eType="#//ExchangeMappingAttribute"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="association" eType="ecore:EClass domain.ecore#//AbstractDomainAssociation"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="persistAttributes" upperBound="-1"
+        eType="#//ExchangeMappingAttribute"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="DirectExchangeMode" eSuperTypes="#//DataExchangeMode"/>
+</ecore:EPackage>

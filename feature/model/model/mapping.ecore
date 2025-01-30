@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="mapping" nsURI="http:///net/codecadenza/eclipse/model/mapping.ecore"
+    nsPrefix="net.codecadenza.eclipse.model.mapping">
+  <eClassifiers xsi:type="ecore:EClass" name="MappingObject" abstract="true" eSuperTypes="java.ecore#//JavaType">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="domainObject" eType="ecore:EClass domain.ecore#//DomainObject"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="MappingAttribute" abstract="true">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="association" eType="ecore:EClass domain.ecore#//AbstractDomainAssociation"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="domainAttribute" eType="ecore:EClass domain.ecore#//DomainAttribute"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="associationList" upperBound="-1"
+        eType="ecore:EClass domain.ecore#//AbstractDomainAssociation"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="mappingType" eType="ecore:EClass java.ecore#//JavaType"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="modifier" eType="ecore:EEnum java.ecore#//JavaTypeModifierEnumeration"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="defaultValue" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+</ecore:EPackage>

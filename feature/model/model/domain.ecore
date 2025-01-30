@@ -1,0 +1,203 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="domain" nsURI="http:///net/codecadenza/eclipse/model/domain.ecore"
+    nsPrefix="net.codecadenza.eclipse.model.domain">
+  <eClassifiers xsi:type="ecore:EClass" name="AbstractDomainAssociation" abstract="true">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="owner" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="cascadePersist" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="cascadeMerge" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="cascadeRemove" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="cascadeRefresh" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="fetchTypeEager" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="domainObject" eType="#//DomainObject"
+        transient="true" eOpposite="#//DomainObject/associations"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="target" eType="#//DomainObject"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="tag" eType="#//AssociationTagEnumeration"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="internalComment" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="userComment" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="reverseAssociation" eType="#//AbstractDomainAssociation"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="DiscriminatorColumnTypeEnumeration">
+    <eLiterals name="STRING"/>
+    <eLiterals name="INTEGER" value="1"/>
+    <eLiterals name="CHAR" value="2"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="DomainObject" eSuperTypes="java.ecore#//JavaType">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="label" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="namePlural" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="labelPlural" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="discriminatorValue" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="discriminatorColumnType"
+        eType="#//DiscriminatorColumnTypeEnumeration"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="inheritanceType" eType="#//InheritanceTypeEnumeration"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="propertyAccess" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="abstract" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="mappedSuperClass" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="parent" eType="#//DomainObject"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="iDGenerator" eType="#//IDGenerator"
+        containment="true" resolveProxies="false"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="inheritance" eType="#//DomainInheritance"
+        containment="true" resolveProxies="false" eOpposite="#//DomainInheritance/source"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="attributes" upperBound="-1"
+        eType="#//DomainAttribute" containment="true" resolveProxies="false" eOpposite="#//DomainAttribute/domainObject"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="associations" upperBound="-1"
+        eType="#//AbstractDomainAssociation" containment="true" resolveProxies="false"
+        eOpposite="#//AbstractDomainAssociation/domainObject"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="enumAssociations" upperBound="-1"
+        eType="#//EnumAssociation" containment="true" resolveProxies="false" eOpposite="#//EnumAssociation/source"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="targetInheritances" upperBound="-1"
+        eType="#//DomainInheritance"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="discriminatorColumn" eType="ecore:EClass db.ecore#//DBColumn"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="databaseTable" eType="ecore:EClass db.ecore#//DBTable"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="tag" eType="#//DomainTagEnumeration"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="DomainAttribute">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="pk" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
+        defaultValueLiteral="false"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="label" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="labelPlural" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="persistent" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
+        defaultValueLiteral="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="fetchTypeEager" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="insertable" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
+        defaultValueLiteral="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="updatable" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
+        defaultValueLiteral="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="trackVersion" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
+        defaultValueLiteral="false"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="setDateOnPersist" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
+        defaultValueLiteral="false"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="setDateOnUpdate" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
+        defaultValueLiteral="false"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="displayAttribute" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
+        defaultValueLiteral="false"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="domainObject" eType="#//DomainObject"
+        transient="true" eOpposite="#//DomainObject/attributes"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="domainAttributeValidator"
+        eType="#//DomainAttributeValidator" containment="true" resolveProxies="false"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="temporalType" eType="#//TemporalTypeEnumeration"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="javaType" eType="ecore:EClass java.ecore#//JavaType"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="column" eType="ecore:EClass db.ecore#//DBColumn"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="tag" eType="#//AttributeTagEnumeration"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="lob" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="internalComment" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="userComment" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="removeWhitespaceCharacters"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="convertToUpperCase" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="convertToLowerCase" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="DomainAttributeValidator">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="futureDate" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="pastDate" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="maxLength" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EIntegerObject"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="minLength" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EIntegerObject"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="nullable" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="maxValue" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="minValue" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="regularExpression" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="DomainInheritance">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="source" eType="#//DomainObject"
+        transient="true" eOpposite="#//DomainObject/inheritance"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="target" eType="#//DomainObject"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="DomainNamespace" eSuperTypes="java.ecore#//Namespace">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="domainObjects" upperBound="-1"
+        eType="#//DomainObject" containment="true" resolveProxies="false"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="enumerations" upperBound="-1"
+        eType="ecore:EClass java.ecore#//JavaEnum" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="EnumAssociation">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="source" eType="#//DomainObject"
+        transient="true" eOpposite="#//DomainObject/enumAssociations"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="target" eType="ecore:EClass java.ecore#//JavaEnum"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="domainAttribute" eType="#//DomainAttribute"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="IDGenerator">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="blockSize" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="initialValue" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="generatorType" eType="#//IDGeneratorTypeEnumeration"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="IDGeneratorTypeEnumeration">
+    <eLiterals name="NONE"/>
+    <eLiterals name="SEQUENCE" value="1"/>
+    <eLiterals name="IDENTITY" value="2"/>
+    <eLiterals name="TABLE" value="3"/>
+    <eLiterals name="UUID" value="4"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="InheritanceTypeEnumeration">
+    <eLiterals name="NONE"/>
+    <eLiterals name="SINGLE_TABLE" value="1"/>
+    <eLiterals name="JOINED" value="2"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ManyToManyAssociation" eSuperTypes="#//AbstractDomainAssociation">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="table" eType="ecore:EClass db.ecore#//DBTable"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ManyToOneAssociation" eSuperTypes="#//AbstractDomainAssociation">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="insertable" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="updatable" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="optional" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="column" eType="ecore:EClass db.ecore#//DBColumn"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="OneToManyAssociation" eSuperTypes="#//AbstractDomainAssociation">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="table" eType="ecore:EClass db.ecore#//DBTable"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="OneToOneAssociation" eSuperTypes="#//AbstractDomainAssociation">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="optional" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="column" eType="ecore:EClass db.ecore#//DBColumn"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="TemporalTypeEnumeration">
+    <eLiterals name="NONE"/>
+    <eLiterals name="TIMESTAMP" value="1"/>
+    <eLiterals name="DATE" value="2"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="DomainTagEnumeration">
+    <eLiterals name="NONE"/>
+    <eLiterals name="USER" value="2"/>
+    <eLiterals name="LOGGING" value="4"/>
+    <eLiterals name="ROLE" value="5"/>
+    <eLiterals name="DOCUMENT" value="1"/>
+    <eLiterals name="SAVEDQUERY" value="3"/>
+    <eLiterals name="CLIENT" value="6"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="AttributeTagEnumeration">
+    <eLiterals name="NONE"/>
+    <eLiterals name="USER_NAME" value="1"/>
+    <eLiterals name="USER_PASSWORD" value="2"/>
+    <eLiterals name="USER_EMAIL" value="3"/>
+    <eLiterals name="USER_ACTIVE" value="4"/>
+    <eLiterals name="LOGGING_DURATION" value="11"/>
+    <eLiterals name="LOGGING_STACK_TRACE" value="12" literal="LOGGING_STACK_TRACE"/>
+    <eLiterals name="LOGGING_CLASS_NAME" value="13" literal="LOGGING_CLASS_NAME"/>
+    <eLiterals name="LOGGING_METHOD_NAME" value="14" literal="LOGGING_METHOD_NAME"/>
+    <eLiterals name="LOGGING_DATE" value="15"/>
+    <eLiterals name="LOGGING_MESSAGE" value="16"/>
+    <eLiterals name="LOGGING_LEVEL" value="17"/>
+    <eLiterals name="LOGGING_HOST" value="18"/>
+    <eLiterals name="ROLE_NAME" value="22"/>
+    <eLiterals name="DOCUMENT_REF" value="5"/>
+    <eLiterals name="DOCUMENT_DATA" value="6" literal="DOCUMENT_DATA"/>
+    <eLiterals name="DOCUMENT_NAME" value="7"/>
+    <eLiterals name="DOCUMENT_SIZE" value="8"/>
+    <eLiterals name="SAVEDQUERY_TITLE" value="9"/>
+    <eLiterals name="SAVEDQUERY_VIEW_NAME" value="10"/>
+    <eLiterals name="SAVEDQUERY_DATA_OBJ" value="19"/>
+    <eLiterals name="CLIENT_NAME" value="20"/>
+    <eLiterals name="CLIENT_ACTIVE" value="21"/>
+    <eLiterals name="CLIENT_DISPLAY" value="23"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="AssociationTagEnumeration">
+    <eLiterals name="NONE"/>
+    <eLiterals name="USER_ROLE" value="1"/>
+    <eLiterals name="LOGGING_USER" value="5"/>
+    <eLiterals name="SAVEDQUERY_OWNER" value="2"/>
+    <eLiterals name="CLIENT_REFERENCE" value="3"/>
+  </eClassifiers>
+</ecore:EPackage>

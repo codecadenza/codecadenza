@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="service" nsURI="http:///net/codecadenza/eclipse/model/service.ecore"
+    nsPrefix="net.codecadenza.eclipse.model.service">
+  <eClassifiers xsi:type="ecore:EClass" name="ServiceBean" abstract="true" eSuperTypes="java.ecore#//JavaType">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="domainObject" eType="ecore:EClass domain.ecore#//DomainObject"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="interfaceName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ServiceMethod" abstract="true" eSuperTypes="java.ecore#//JavaMethod">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="queryStatement" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="permissionMode" eType="ecore:EEnum repository.ecore#//PermissionModeEnumeration"
+        defaultValueLiteral="PERMIT_ALL"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="transactionType" eType="ecore:EEnum repository.ecore#//TransactionTypeEnumeration"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="roles" upperBound="-1"
+        eType="ecore:EClass project.ecore#//Role"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="methodInvocation" eType="#//MethodInvocation"
+        containment="true" eOpposite="#//MethodInvocation/method"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="customStatement" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="MethodInvocation" abstract="true">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="method" eType="#//ServiceMethod"
+        eOpposite="#//ServiceMethod/methodInvocation"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ScheduledInvocation" eSuperTypes="#//MethodInvocation">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="second" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="minute" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="hour" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="dayOfWeek" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="dayOfMonth" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="month" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="year" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="AsynchronousInvocation" eSuperTypes="#//MethodInvocation">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="delayInMilliseconds" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EIntegerObject"/>
+  </eClassifiers>
+</ecore:EPackage>

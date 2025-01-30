@@ -1,0 +1,252 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="client" nsURI="http:///net/codecadenza/eclipse/model/client.ecore"
+    nsPrefix="net.codecadenza.eclipse.model.client">
+  <eClassifiers xsi:type="ecore:EClass" name="Form">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="formType" eType="#//FormTypeEnumeration"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="formGroup" eType="#//FormGroup"
+        eOpposite="#//FormGroup/forms"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="title" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="modal" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
+        defaultValueLiteral="false"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="resizable" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
+        defaultValueLiteral="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="titleArea" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
+        defaultValueLiteral="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="openEditAfterCreate" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
+        defaultValueLiteral="false"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="height" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="width" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="formPanels" upperBound="-1"
+        eType="#//FormPanel" eOpposite="#//FormPanel/form"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="actions" upperBound="-1"
+        eType="#//FormAction" containment="true" resolveProxies="false" eOpposite="#//FormAction/form"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="dTO" eType="ecore:EClass dto.ecore#//DTOBean"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="domainObject" eType="ecore:EClass domain.ecore#//DomainObject"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="roles" upperBound="-1"
+        eType="ecore:EClass project.ecore#//Role"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="boundaryMethod" eType="ecore:EClass boundary.ecore#//BoundaryMethod"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="FormAction">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="description" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="form" eType="#//Form" transient="true"
+        eOpposite="#//Form/actions"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="panel" eType="#//FormPanel"
+        transient="true" eOpposite="#//FormPanel/actions"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="targetForm" eType="#//Form"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="boundaryMethod" eType="ecore:EClass boundary.ecore#//BoundaryMethod"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="roles" upperBound="-1"
+        eType="ecore:EClass project.ecore#//Role"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="type" eType="#//ActionType"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="label" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="FormField">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="colIndex" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"
+        defaultValueLiteral="1"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="rowIndex" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"
+        defaultValueLiteral="1"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="visible" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
+        defaultValueLiteral="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="label" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="spanCols" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
+        defaultValueLiteral="false"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="readonly" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
+        defaultValueLiteral="false"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="mandatory" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
+        defaultValueLiteral="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="fieldType" eType="#//FormFieldTypeEnumeration"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="panel" eType="#//FormPanel"
+        transient="true" eOpposite="#//FormPanel/fields"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="width" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"
+        defaultValueLiteral="0"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="defaultValue" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="listOfValues" eType="#//Form"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="dTOAttribute" eType="ecore:EClass dto.ecore#//DTOBeanAttribute"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="addFormLinkToLabel" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="FormFieldTypeEnumeration">
+    <eLiterals name="SIMPLE_TEXT"/>
+    <eLiterals name="LABEL" value="1"/>
+    <eLiterals name="CHECKBOX" value="2"/>
+    <eLiterals name="DATE_TIME" value="3"/>
+    <eLiterals name="MULTI_LINE_TEXT" value="4"/>
+    <eLiterals name="COMBOBOX" value="5"/>
+    <eLiterals name="LOV" value="6"/>
+    <eLiterals name="DATE" value="7"/>
+    <eLiterals name="LIST" value="8"/>
+    <eLiterals name="SEARCHABLE_LIST" value="9"/>
+    <eLiterals name="SELECTION_BY_PARENT_FORM" value="10"/>
+    <eLiterals name="SELECTION_BY_SECURITY_DTO" value="11"/>
+    <eLiterals name="PROPOSAL_TEXT" value="12"/>
+    <eLiterals name="ENUM_COMBOBOX" value="13"/>
+    <eLiterals name="DOCUMENT_SIZE_FIELD" value="14"/>
+    <eLiterals name="MULTI_LINE_LABEL" value="15"/>
+    <eLiterals name="WEB_LINK" value="16"/>
+    <eLiterals name="MAIL_LINK" value="17"/>
+    <eLiterals name="FORM_LINK" value="18"/>
+    <eLiterals name="SELECTION_BY_CLIENT" value="19"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="FormGroup">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="groupOrder" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="parentGroup" eType="#//FormGroup"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="childGroups" upperBound="-1"
+        eType="#//FormGroup" containment="true" resolveProxies="false"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="forms" upperBound="-1"
+        eType="#//Form" eOpposite="#//Form/formGroup"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="panels" upperBound="-1"
+        eType="#//FormPanel" eOpposite="#//FormPanel/formGroup"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="roles" upperBound="-1"
+        eType="ecore:EClass project.ecore#//Role"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="project" eType="ecore:EClass project.ecore#//Project"
+        eOpposite="project.ecore#//Project/formGroups"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="FormPanel">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="columnCount" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="colIndex" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"
+        defaultValueLiteral="1"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="rowIndex" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"
+        defaultValueLiteral="1"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="verticalspan" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
+        defaultValueLiteral="false"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="horizontalSpan" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
+        defaultValueLiteral="false"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="formGroup" eType="#//FormGroup"
+        eOpposite="#//FormGroup/panels"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="label" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="form" eType="#//Form" eOpposite="#//Form/formPanels"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="drawBorder" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
+        defaultValueLiteral="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="basePanel" eType="#//FormPanel"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="formTable" eType="#//FormTable"
+        eOpposite="#//FormTable/formPanel"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="fields" upperBound="-1"
+        eType="#//FormField" containment="true" resolveProxies="false" eOpposite="#//FormField/panel"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="actions" upperBound="-1"
+        eType="#//FormAction" containment="true" resolveProxies="false" eOpposite="#//FormAction/panel"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="dTO" eType="ecore:EClass dto.ecore#//DTOBean"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="boundaryMethod" eType="ecore:EClass boundary.ecore#//BoundaryMethod"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="association" eType="ecore:EClass domain.ecore#//AbstractDomainAssociation"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="FormTable">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="colIndex" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"
+        defaultValueLiteral="1"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="rowIndex" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"
+        defaultValueLiteral="1"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="spanCols" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"
+        defaultValueLiteral="1"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="spanRows" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"
+        defaultValueLiteral="1"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="verticalSpan" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
+        defaultValueLiteral="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="horizontalSpan" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
+        defaultValueLiteral="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="formPanel" eType="#//FormPanel"
+        eOpposite="#//FormPanel/formTable"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="fields" upperBound="-1"
+        eType="#//TableColumnField" containment="true" resolveProxies="false" eOpposite="#//TableColumnField/formTable"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="association" eType="ecore:EClass domain.ecore#//AbstractDomainAssociation"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="FormTypeEnumeration">
+    <eLiterals name="UPDATE"/>
+    <eLiterals name="READONLY" value="1"/>
+    <eLiterals name="CREATE" value="2"/>
+    <eLiterals name="SEARCHABLE_VIEW" value="3"/>
+    <eLiterals name="SIMPLE_VIEW" value="4"/>
+    <eLiterals name="ADD" value="5"/>
+    <eLiterals name="LOV" value="6"/>
+    <eLiterals name="GRID" value="7"/>
+    <eLiterals name="TREE_VIEW" value="8"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="TableColumnField">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="colIndex" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"
+        defaultValueLiteral="1"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="visible" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
+        defaultValueLiteral="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="identifier" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
+        defaultValueLiteral="false"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="formTable" eType="#//FormTable"
+        transient="true" eOpposite="#//FormTable/fields"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="width" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"
+        defaultValueLiteral="100"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="title" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="lovForm" eType="#//Form"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="fieldType" eType="#//TableColumnFieldTypeEnumeration"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="associationRef" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="searchable" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
+        defaultValueLiteral="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="dTOAttribute" eType="ecore:EClass dto.ecore#//DTOBeanAttribute"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="TableColumnFieldTypeEnumeration">
+    <eLiterals name="STRING"/>
+    <eLiterals name="INTEGER" value="1"/>
+    <eLiterals name="DOUBLE" value="2"/>
+    <eLiterals name="BOOLEAN" value="3"/>
+    <eLiterals name="DATE" value="4"/>
+    <eLiterals name="GREGORIAN_CALENDAR" value="5"/>
+    <eLiterals name="ENUM" value="6"/>
+    <eLiterals name="FLOAT" value="7"/>
+    <eLiterals name="LONG" value="8"/>
+    <eLiterals name="CHAR" value="9"/>
+    <eLiterals name="BIG_DECIMAL" value="10"/>
+    <eLiterals name="LOCAL_DATE" value="11"/>
+    <eLiterals name="LOCAL_DATE_TIME" value="12"/>
+    <eLiterals name="UUID_BINARY" value="13"/>
+    <eLiterals name="UUID_STRING" value="14"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="ActionType">
+    <eLiterals name="CREATE" literal="CREATE"/>
+    <eLiterals name="DIRECT_UPLOAD" value="1" literal="DIRECT_UPLOAD"/>
+    <eLiterals name="INDIRECT_UPLOAD" value="2"/>
+    <eLiterals name="DOWNLOAD" value="3"/>
+    <eLiterals name="POSITVE_DECISION" value="4"/>
+    <eLiterals name="NEGATIVE_DECISION" value="5"/>
+    <eLiterals name="UNDEF_DECISION" value="6"/>
+    <eLiterals name="UPDATE" value="7"/>
+    <eLiterals name="READ" value="8"/>
+    <eLiterals name="DELETE" value="9"/>
+    <eLiterals name="DOWNLOAD_EXPORT" value="10"/>
+    <eLiterals name="UPLOAD_IMPORT" value="11"/>
+    <eLiterals name="COPY" value="12"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="TreeView" eSuperTypes="#//Form">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="rootTreeItem" eType="#//TreeViewItem"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="quickSearchItems" upperBound="-1"
+        eType="#//TreeSearchItem" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="advancedSearchItems" upperBound="-1"
+        eType="#//TreeSearchItem" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="countMethod" eType="ecore:EClass boundary.ecore#//BoundaryMethod"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="recursiveMethod" eType="ecore:EClass boundary.ecore#//BoundaryMethod"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="TreeViewItem">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="parentItem" eType="#//TreeViewItem"
+        eOpposite="#//TreeViewItem/children"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="children" upperBound="-1"
+        eType="#//TreeViewItem" containment="true" eOpposite="#//TreeViewItem/parentItem"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="dataFetchMethod" eType="ecore:EClass boundary.ecore#//BoundaryMethod"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="dropMethod" eType="ecore:EClass boundary.ecore#//BoundaryMethod"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="displayAttributes" upperBound="-1"
+        eType="ecore:EClass dto.ecore#//DTOBeanAttribute"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="association" eType="ecore:EClass domain.ecore#//AbstractDomainAssociation"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="nodes" upperBound="-1"
+        eType="#//TreeNode" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="label" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="itemDTO" eType="ecore:EClass dto.ecore#//DTOBean"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="invisibleAttributes" upperBound="-1"
+        eType="ecore:EClass dto.ecore#//DTOBeanAttribute"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="TreeSearchItem">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="label" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="dTOAttribute" eType="ecore:EClass dto.ecore#//DTOBeanAttribute"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="TreeNode">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="label" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="dTOAttribute" eType="ecore:EClass dto.ecore#//DTOBeanAttribute"/>
+  </eClassifiers>
+</ecore:EPackage>
