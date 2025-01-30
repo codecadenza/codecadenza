@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry exported="true" kind="lib" path="lib/poi-5.3.0.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/poi-ooxml-5.3.0.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/slf4j-api-2.0.16.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/slf4j-nop-2.0.16.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/jaxb/angus-activation-1.0.0.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/jaxb/istack-commons-runtime-4.1.1.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/jaxb/jakarta.activation-api-2.1.0.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/jaxb/jakarta.xml.bind-api-4.0.0.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/jaxb/jaxb-core-4.0.1.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/jaxb/jaxb-runtime-4.0.1.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/jaxb/txw2-4.0.1.jar"/>
+	<classpathentry kind="con" path="org.eclipse.pde.core.requiredPlugins"/>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER">
+		<attributes>
+			<attribute name="module" value="true"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" exported="true" path="lib/codecadenza-eclipse-1.0.0.jar"/>
+	<classpathentry kind="lib" exported="true" path="lib/codecadenza-rcp-1.0.0.jar"/>
+	<classpathentry kind="lib" exported="true" path="lib/codecadenza-richclient-1.0.0.jar"/>
+	<classpathentry kind="lib" exported="true" path="lib/codecadenza-util-1.0.0.jar"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>
