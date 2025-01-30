@@ -1,0 +1,62 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="jakarta.faces.facelets"
+	xmlns:h="jakarta.faces.html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="jakarta.faces.core">
+
+<h:head>
+	<meta content='text/html; charset=UTF-8' http-equiv="Content-Type" />
+	<link type="text/css" rel="stylesheet" href="#{request.contextPath}/css/default.css" />
+
+	<style type="text/css">
+		body 
+		{
+			margin: 20px;
+			padding: 0;
+			font-size: 10px;
+			background: #efefef;
+		}
+	</style>
+</h:head>
+
+<h:body>
+
+	<table>
+		<tr>
+			<td><div class="pi pi-exclamation-triangle" style="font-size: 3em"/></td>
+			<td><h:outputText value="&#160;#{i18n.errorpage_title}" styleClass="label-form-title"/></td>
+		</tr>
+	</table>
+
+	<br/>
+
+	<p:panel>
+		<table style="padding: 10px 10px 10px 10px;">
+			<tr>
+				<td><h:outputText styleClass="label-field-mandatory" value="#{i18n.field_errorpage_code}:"></h:outputText></td>
+				<td><h:outputText value="#{errorDetails.statusCode}"></h:outputText>
+				</td>
+			</tr>
+			<tr>
+				<td><h:outputText styleClass="label-field-mandatory" value="#{i18n.field_errorpage_description}:"></h:outputText></td>
+				<td><h:outputText value="#{errorDetails.message}"></h:outputText></td>
+			</tr>
+			<tr>
+				<td><h:outputText styleClass="label-field-mandatory" value="#{i18n.field_errorpage_type}:"></h:outputText></td>
+				<td><h:outputText value="#{errorDetails.exceptionType}"></h:outputText></td>
+			</tr>
+			<tr>
+				<td><h:outputText styleClass="label-field-mandatory" value="#{i18n.field_errorpage_class}:"></h:outputText></td>
+				<td><h:outputText value="#{errorDetails.exception}"></h:outputText>
+				</td>
+			</tr>
+			<tr>
+				<td><h:outputText styleClass="label-field-mandatory" value="#{i18n.field_errorpage_uri}:"></h:outputText></td>
+				<td><h:outputText value="#{errorDetails.requestURI}"></h:outputText></td>
+			</tr>
+		</table>
+	</p:panel>
+
+</h:body>
+
+</html>

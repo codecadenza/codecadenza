@@ -1,0 +1,17 @@
+<project name="CodeCadenza's runtime library for JSF clients" default="content">
+
+	<!-- Property section -->
+	<property name="CONTENT" location="target/content_jsf_primefaces.zip"/>
+
+	<!-- Build file including static web content -->
+	<target name="content" description="Static content for JSF clients">
+		<echo message="Building static content for JSF clients..." level="info"/>
+		<zip destfile="${CONTENT}">
+			<zipfileset dir="ui" prefix="">
+			</zipfileset>
+		</zip>
+
+		<copy file="${CONTENT}" todir="=../../../../feature/resource/build/content"/>
+	</target>
+
+</project>
