@@ -1,0 +1,14 @@
+<p-dialog [(visible)]="visible" [modal]="true" i18n-header="@@savesearchdialog_header" header="Save search"
+  [style]="{'min-width': '400px', 'min-height': '200px'}" (onHide)="close()">
+
+  <cc-form-container>
+    <cc-form-control-container i18n-label="@@savesearchdialog_lblname" label="Enter a name:" [span]="true">
+      <input pInputText [(ngModel)]="name" class="inputfield w-full"/>
+    </cc-form-control-container>
+  </cc-form-container>
+
+  <ng-template pTemplate="footer">
+    <button pButton style="min-width: 100px" type="button" i18n-label="@@button_ok" label="OK" (click)="save()" [disabled]="!name"></button>
+  </ng-template>
+
+</p-dialog>

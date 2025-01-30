@@ -1,0 +1,99 @@
+body {
+  margin: 0px;
+  font-family: var(--font-family);
+  background-color: var(--surface-ground);
+  color: var(--text-color);
+}
+
+a, a:visited, a:hover, a:active {
+  color: inherit;
+  text-decoration: none;
+}
+
+.template-main-area {
+  position: absolute;
+  top: 45px;
+  width: 100%;
+}
+
+.template-page-border {
+  display: table-cell;
+  min-width: 10px;
+}
+
+.template-navigator {
+  padding: 0px 0px 0px 0px;
+}
+
+.template-content {
+  display: table-cell;
+  vertical-align: top;
+  width: 100%;
+  min-width: 600px;
+  padding: 0px 0px 0px 10px;
+}
+
+.template-bottom-spacer {
+  display: table;
+  width: 100%;
+  height: 40px;
+}
+
+.template-footer {
+  position: fixed;
+  bottom: 0px;
+  width: 100%;
+  height: 35px;
+  background-color: var(--surface-ground);
+  border-top: 1px solid var(--surface-border);
+}
+
+.template-footer-text-left {
+  float: left;
+  position: relative;
+  top: 50%;
+  transform: translateY(-50%);
+  padding-left: 10px;
+}
+
+.template-footer-text-right {
+  float: right;
+  position: relative;
+  top: 50%;
+  transform: translateY(-50%);
+  padding-right: 10px;
+}
+
+.label-field-mandatory {
+  white-space: nowrap;
+  font-weight: bold;
+  margin-bottom: 0.2rem;
+}
+
+.label-field-optional {
+  white-space: nowrap;
+  margin-bottom: 0.2rem;
+}
+
+.form-field-table {
+  display: table;
+  border: 0.3rem solid transparent;
+}
+
+.form-field-row {
+  display: table-row;
+}
+
+.form-field-cell {
+  border: 1px solid transparent;
+  display: table-cell;
+  padding: 0.3rem 1rem 0.3rem 0rem;
+}
+
+.form-field-readonly {
+  color: var(--text-color-secondary) !important;
+}
+
+.form-spacer {
+  height: 5px;
+}
