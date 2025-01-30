@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.2"?>
+<plugin>
+
+  <extension point="org.eclipse.ui.viewActions">
+    <viewContribution id="net.codecadenza.eclipse.buildtest.action" targetID="org.eclipse.jdt.ui.PackageExplorer">
+      <action id="net.codecadenza.eclipse.buildtest.action.RunBuildAction" label="Perform CodeCadenza build test"
+        tooltip="Rebuild all CodeCadenza reference projects" menubarPath="additions"
+        class="net.codecadenza.eclipse.buildtest.action.RunBuildAction"
+        enablesFor="*">
+      </action>
+    </viewContribution>
+  </extension>
+
+</plugin>

@@ -1,0 +1,247 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<config_groups>
+	<config_group name="NONE">
+		<description></description>
+		<config clp="NONE" spl="TOMCAT" pp="HIBERNATE" tpl="SPRING_BOOT" bm="true" bt="MAVEN" template="BUG-TRACKER"/>
+		<config clp="NONE" spl="TOMCAT" pp="ECLIPSELINK" tpl="SPRING_BOOT" bm="false" bt="MAVEN" template="ORDER-ENTRY"/>
+		<config clp="NONE" spl="TOMCAT" pp="HIBERNATE" tpl="SPRING_BOOT" bm="true" bt="MAVEN" template="EMPLOYEE-NS"/>
+		<config clp="NONE" spl="TOMCAT" pp="ECLIPSELINK" tpl="SPRING_BOOT" bm="false" bt="MAVEN" template="NORTHWIND-NS"/>
+		<config clp="NONE" spl="GLASSFISH" pp="ECLIPSELINK" tpl="JAKARTA_EE" bm="true" bt="MAVEN" template="MOVIE"/>
+		<config clp="NONE" spl="TOMCAT" pp="ECLIPSELINK" tpl="SPRING_BOOT" bm="true" bt="MAVEN" template="REPAIR-NS"/>
+		<config clp="NONE" spl="TOMCAT" pp="HIBERNATE" tpl="SPRING_BOOT" bm="false" bt="MAVEN" template="MOVIE"/>
+		<config clp="NONE" spl="GLASSFISH" pp="ECLIPSELINK" tpl="JAKARTA_EE" bm="false" bt="MAVEN" template="EMPLOYEE-NS"/>
+		<config clp="NONE" spl="GLASSFISH" pp="ECLIPSELINK" tpl="JAKARTA_EE" bm="false" bt="MAVEN" template="NORTHWIND-NS"/>
+		<config clp="NONE" spl="TOMCAT" pp="ECLIPSELINK" tpl="SPRING_BOOT" bm="true" bt="MAVEN" template="PRODUCT"/>
+		<config clp="NONE" spl="GLASSFISH" pp="ECLIPSELINK" tpl="JAKARTA_EE" bm="true" bt="MAVEN" template="REPAIR-NS"/>
+		<config clp="NONE" spl="TOMCAT" pp="HIBERNATE" tpl="SPRING_BOOT" bm="false" bt="MAVEN" template="GENERIC"/>
+		<config clp="NONE" spl="JBOSS" pp="HIBERNATE" tpl="JAKARTA_EE" bm="true" bt="MAVEN" template="BUG-TRACKER"/>
+		<config clp="NONE" spl="TOMCAT" pp="ECLIPSELINK" tpl="SPRING_BOOT" bm="true" bt="MAVEN" template="REPAIR"/>
+		<config clp="NONE" spl="GLASSFISH" pp="ECLIPSELINK" tpl="JAKARTA_EE" bm="true" bt="MAVEN" template="REPAIR"/>
+		<config clp="NONE" spl="TOMCAT" pp="HIBERNATE" tpl="SPRING_BOOT" bm="false" bt="MAVEN" template="CONTACTS"/>
+		<config clp="NONE" spl="JBOSS" pp="HIBERNATE" tpl="JAKARTA_EE" bm="false" bt="MAVEN" template="CONTACTS"/>
+		<config clp="NONE" spl="GLASSFISH" pp="ECLIPSELINK" tpl="JAKARTA_EE" bm="true" bt="MAVEN" template="ORDER-ENTRY"/>
+		<config clp="NONE" spl="JBOSS" pp="HIBERNATE" tpl="JAKARTA_EE" bm="false" bt="MAVEN" template="GENERIC"/>
+		<config clp="NONE" spl="GLASSFISH" pp="ECLIPSELINK" tpl="JAKARTA_EE" bm="true" bt="MAVEN" template="PRODUCT"/>
+		<config clp="NONE" spl="TOMCAT" pp="HIBERNATE" tpl="SPRING_BOOT" bm="false" bt="MAVEN" template="CFS"/>
+		<config clp="NONE" spl="GLASSFISH" pp="ECLIPSELINK" tpl="JAKARTA_EE" bm="true" bt="MAVEN" template="CFS"/>
+	</config_group>
+	<config_group name="RCP">
+		<description></description>
+		<config clp="RCP" spl="NONE" pp="ECLIPSELINK" tpl="JAVA_SE" bm="false" bt="MAVEN" template="REPAIR"/>
+		<config clp="RCP" spl="NONE" pp="ECLIPSELINK" tpl="JAVA_SE" bm="true" bt="MAVEN" template="GENERIC"/>
+		<config clp="RCP" spl="NONE" pp="ECLIPSELINK" tpl="JAVA_SE" bm="false" bt="MAVEN" template="NORTHWIND-NS"/>
+		<config clp="RCP" spl="NONE" pp="ECLIPSELINK" tpl="JAVA_SE" bm="true" bt="MAVEN" template="BUG-TRACKER"/>
+		<config clp="RCP" spl="NONE" pp="ECLIPSELINK" tpl="JAVA_SE" bm="false" bt="MAVEN" template="PRODUCT"/>
+		<config clp="RCP" spl="NONE" pp="ECLIPSELINK" tpl="JAVA_SE" bm="false" bt="MAVEN" template="ORDER-ENTRY"/>
+		<config clp="RCP" spl="NONE" pp="ECLIPSELINK" tpl="JAVA_SE" bm="true" bt="MAVEN" template="CONTACTS"/>
+		<config clp="RCP" spl="NONE" pp="ECLIPSELINK" tpl="JAVA_SE" bm="true" bt="MAVEN" template="MOVIE"/>
+		<config clp="RCP" spl="NONE" pp="ECLIPSELINK" tpl="JAVA_SE" bm="false" bt="MAVEN" template="REPAIR-NS"/>
+		<config clp="RCP" spl="NONE" pp="ECLIPSELINK" tpl="JAVA_SE" bm="true" bt="MAVEN" template="EMPLOYEE-NS"/>
+		<config clp="RCP" spl="TOMCAT" pp="ECLIPSELINK" tpl="SPRING_BOOT" bm="true" bt="MAVEN" template="EMPLOYEE-NS"/>
+		<config clp="RCP" spl="GLASSFISH" pp="ECLIPSELINK" tpl="JAKARTA_EE" bm="true" bt="MAVEN" template="PRODUCT"/>
+		<config clp="RCP" spl="TOMCAT" pp="ECLIPSELINK" tpl="SPRING_BOOT" bm="true" bt="MAVEN" template="BUG-TRACKER"/>
+		<config clp="RCP" spl="JBOSS" pp="HIBERNATE" tpl="JAKARTA_EE" bm="true" bt="MAVEN" template="NORTHWIND-NS"/>
+		<config clp="RCP" spl="GLASSFISH" pp="ECLIPSELINK" tpl="JAKARTA_EE" bm="true" bt="MAVEN" template="CONTACTS"/>
+		<config clp="RCP" spl="JBOSS" pp="HIBERNATE" tpl="JAKARTA_EE" bm="true" bt="MAVEN" template="ORDER-ENTRY"/>
+		<config clp="RCP" spl="TOMCAT" pp="HIBERNATE" tpl="SPRING_BOOT" bm="true" bt="MAVEN" template="REPAIR"/>
+		<config clp="RCP" spl="GLASSFISH" pp="ECLIPSELINK" tpl="JAKARTA_EE" bm="true" bt="MAVEN" template="EMPLOYEE-NS"/>
+		<config clp="RCP" spl="GLASSFISH" pp="ECLIPSELINK" tpl="JAKARTA_EE" bm="true" bt="MAVEN" template="GENERIC"/>
+		<config clp="RCP" spl="TOMCAT" pp="ECLIPSELINK" tpl="SPRING_BOOT" bm="true" bt="MAVEN" template="MOVIE"/>
+		<config clp="RCP" spl="TOMCAT" pp="ECLIPSELINK" tpl="SPRING_BOOT" bm="true" bt="MAVEN" template="CONTACTS"/>
+		<config clp="RCP" spl="GLASSFISH" pp="ECLIPSELINK" tpl="JAKARTA_EE" bm="true" bt="MAVEN" template="MOVIE"/>
+		<config clp="RCP" spl="GLASSFISH" pp="ECLIPSELINK" tpl="JAKARTA_EE" bm="true" bt="MAVEN" template="REPAIR-NS"/>
+		<config clp="RCP" spl="GLASSFISH" pp="ECLIPSELINK" tpl="JAKARTA_EE" bm="true" bt="MAVEN" template="BUG-TRACKER"/>
+		<config clp="RCP" spl="TOMCAT" pp="HIBERNATE" tpl="SPRING_BOOT" bm="true" bt="MAVEN" template="REPAIR-NS"/>
+		<config clp="RCP" spl="JBOSS" pp="HIBERNATE" tpl="JAKARTA_EE" bm="true" bt="MAVEN" template="REPAIR"/>
+		<config clp="RCP" spl="TOMCAT" pp="ECLIPSELINK" tpl="SPRING_BOOT" bm="true" bt="MAVEN" template="GENERIC"/>
+		<config clp="RCP" spl="TOMCAT" pp="HIBERNATE" tpl="SPRING_BOOT" bm="true" bt="MAVEN" template="NORTHWIND-NS"/>
+		<config clp="RCP" spl="TOMCAT" pp="HIBERNATE" tpl="SPRING_BOOT" bm="true" bt="MAVEN" template="ORDER-ENTRY"/>
+		<config clp="RCP" spl="TOMCAT" pp="HIBERNATE" tpl="SPRING_BOOT" bm="true" bt="MAVEN" template="PRODUCT"/>
+		<config clp="RCP" spl="NONE" pp="ECLIPSELINK" tpl="JAVA_SE" bm="true" bt="MAVEN" template="CFS"/>
+		<config clp="RCP" spl="TOMCAT" pp="HIBERNATE" tpl="SPRING_BOOT" bm="true" bt="MAVEN" template="CFS"/>
+		<config clp="RCP" spl="GLASSFISH" pp="ECLIPSELINK" tpl="JAKARTA_EE" bm="true" bt="MAVEN" template="CFS"/>
+	</config_group>
+	<config_group name="SWING">
+		<description></description>
+		<config clp="SWING" spl="TOMCAT" pp="HIBERNATE" tpl="SPRING_BOOT" bm="true" bt="MAVEN" template="EMPLOYEE-NS"/>
+		<config clp="SWING" spl="TOMCAT" pp="HIBERNATE" tpl="SPRING_BOOT" bm="true" bt="MAVEN" template="CONTACTS"/>
+		<config clp="SWING" spl="NONE" pp="ECLIPSELINK" tpl="JAVA_SE" bm="true" bt="MAVEN" template="ORDER-ENTRY"/>
+		<config clp="SWING" spl="TOMCAT" pp="ECLIPSELINK" tpl="SPRING_BOOT" bm="true" bt="MAVEN" template="REPAIR"/>
+		<config clp="SWING" spl="GLASSFISH" pp="ECLIPSELINK" tpl="JAKARTA_EE" bm="true" bt="MAVEN" template="MOVIE"/>
+		<config clp="SWING" spl="NONE" pp="ECLIPSELINK" tpl="JAVA_SE" bm="false" bt="MAVEN" template="CONTACTS"/>
+		<config clp="SWING" spl="JBOSS" pp="HIBERNATE" tpl="JAKARTA_EE" bm="true" bt="MAVEN" template="GENERIC"/>
+		<config clp="SWING" spl="TOMCAT" pp="ECLIPSELINK" tpl="SPRING_BOOT" bm="true" bt="MAVEN" template="ORDER-ENTRY"/>
+		<config clp="SWING" spl="NONE" pp="ECLIPSELINK" tpl="JAVA_SE" bm="true" bt="MAVEN" template="REPAIR-NS"/>
+		<config clp="SWING" spl="NONE" pp="ECLIPSELINK" tpl="JAVA_SE" bm="false" bt="MAVEN" template="MOVIE"/>
+		<config clp="SWING" spl="TOMCAT" pp="ECLIPSELINK" tpl="SPRING_BOOT" bm="true" bt="MAVEN" template="PRODUCT"/>
+		<config clp="SWING" spl="NONE" pp="ECLIPSELINK" tpl="JAVA_SE" bm="true" bt="MAVEN" template="PRODUCT"/>
+		<config clp="SWING" spl="NONE" pp="ECLIPSELINK" tpl="JAVA_SE" bm="false" bt="MAVEN" template="EMPLOYEE-NS"/>
+		<config clp="SWING" spl="TOMCAT" pp="HIBERNATE" tpl="SPRING_BOOT" bm="true" bt="MAVEN" template="MOVIE"/>
+		<config clp="SWING" spl="GLASSFISH" pp="ECLIPSELINK" tpl="JAKARTA_EE" bm="true" bt="MAVEN" template="NORTHWIND-NS"/>
+		<config clp="SWING" spl="TOMCAT" pp="ECLIPSELINK" tpl="SPRING_BOOT" bm="true" bt="MAVEN" template="REPAIR-NS"/>
+		<config clp="SWING" spl="NONE" pp="ECLIPSELINK" tpl="JAVA_SE" bm="false" bt="MAVEN" template="GENERIC"/>
+		<config clp="SWING" spl="NONE" pp="ECLIPSELINK" tpl="JAVA_SE" bm="false" bt="MAVEN" template="BUG-TRACKER"/>
+		<config clp="SWING" spl="GLASSFISH" pp="ECLIPSELINK" tpl="JAKARTA_EE" bm="true" bt="MAVEN" template="EMPLOYEE-NS"/>
+		<config clp="SWING" spl="TOMCAT" pp="ECLIPSELINK" tpl="SPRING_BOOT" bm="true" bt="MAVEN" template="NORTHWIND-NS"/>
+		<config clp="SWING" spl="JBOSS" pp="HIBERNATE" tpl="JAKARTA_EE" bm="true" bt="MAVEN" template="CONTACTS"/>
+		<config clp="SWING" spl="GLASSFISH" pp="ECLIPSELINK" tpl="JAKARTA_EE" bm="true" bt="MAVEN" template="ORDER-ENTRY"/>
+		<config clp="SWING" spl="GLASSFISH" pp="ECLIPSELINK" tpl="JAKARTA_EE" bm="true" bt="MAVEN" template="PRODUCT"/>
+		<config clp="SWING" spl="GLASSFISH" pp="ECLIPSELINK" tpl="JAKARTA_EE" bm="true" bt="MAVEN" template="REPAIR-NS"/>
+		<config clp="SWING" spl="NONE" pp="ECLIPSELINK" tpl="JAVA_SE" bm="true" bt="MAVEN" template="REPAIR"/>
+		<config clp="SWING" spl="GLASSFISH" pp="ECLIPSELINK" tpl="JAKARTA_EE" bm="true" bt="MAVEN" template="BUG-TRACKER"/>
+		<config clp="SWING" spl="GLASSFISH" pp="ECLIPSELINK" tpl="JAKARTA_EE" bm="true" bt="MAVEN" template="REPAIR"/>
+		<config clp="SWING" spl="TOMCAT" pp="HIBERNATE" tpl="SPRING_BOOT" bm="true" bt="MAVEN" template="GENERIC"/>
+		<config clp="SWING" spl="NONE" pp="ECLIPSELINK" tpl="JAVA_SE" bm="true" bt="MAVEN" template="NORTHWIND-NS"/>
+		<config clp="SWING" spl="TOMCAT" pp="HIBERNATE" tpl="SPRING_BOOT" bm="true" bt="MAVEN" template="BUG-TRACKER"/>
+		<config clp="SWING" spl="NONE" pp="ECLIPSELINK" tpl="JAVA_SE" bm="false" bt="MAVEN" template="CFS"/>
+		<config clp="SWING" spl="TOMCAT" pp="HIBERNATE" tpl="SPRING_BOOT" bm="true" bt="MAVEN" template="CFS"/>
+		<config clp="SWING" spl="GLASSFISH" pp="ECLIPSELINK" tpl="JAKARTA_EE" bm="true" bt="MAVEN" template="CFS"/>
+	</config_group>
+	<config_group name="RAP">
+		<description></description>
+		<config clp="RAP" spl="TOMCAT" pp="ECLIPSELINK" tpl="JAVA_SE" bm="true" bt="MAVEN" template="BUG-TRACKER"/>
+		<config clp="RAP" spl="TOMCAT" pp="ECLIPSELINK" tpl="JAVA_SE" bm="false" bt="MAVEN" template="REPAIR"/>
+		<config clp="RAP" spl="TOMCAT" pp="ECLIPSELINK" tpl="JAVA_SE" bm="true" bt="MAVEN" template="MOVIE"/>
+		<config clp="RAP" spl="TOMCAT" pp="ECLIPSELINK" tpl="JAVA_SE" bm="false" bt="MAVEN" template="ORDER-ENTRY"/>
+		<config clp="RAP" spl="TOMCAT" pp="ECLIPSELINK" tpl="JAVA_SE" bm="true" bt="MAVEN" template="CONTACTS"/>
+		<config clp="RAP" spl="TOMCAT" pp="ECLIPSELINK" tpl="JAVA_SE" bm="false" bt="MAVEN" template="PRODUCT"/>
+		<config clp="RAP" spl="TOMCAT" pp="ECLIPSELINK" tpl="JAVA_SE" bm="false" bt="MAVEN" template="NORTHWIND-NS"/>
+		<config clp="RAP" spl="TOMCAT" pp="ECLIPSELINK" tpl="JAVA_SE" bm="true" bt="MAVEN" template="GENERIC"/>
+		<config clp="RAP" spl="TOMCAT" pp="ECLIPSELINK" tpl="JAVA_SE" bm="false" bt="MAVEN" template="REPAIR-NS"/>
+		<config clp="RAP" spl="TOMCAT" pp="ECLIPSELINK" tpl="JAVA_SE" bm="true" bt="MAVEN" template="EMPLOYEE-NS"/>
+		<config clp="RAP" spl="JBOSS" pp="HIBERNATE" tpl="JAKARTA_EE" bm="true" bt="MAVEN" template="NORTHWIND-NS"/>
+		<config clp="RAP" spl="GLASSFISH" pp="ECLIPSELINK" tpl="JAKARTA_EE" bm="true" bt="MAVEN" template="BUG-TRACKER"/>
+		<config clp="RAP" spl="GLASSFISH" pp="ECLIPSELINK" tpl="JAKARTA_EE" bm="true" bt="MAVEN" template="MOVIE"/>
+		<config clp="RAP" spl="TOMCAT" pp="HIBERNATE" tpl="SPRING_BOOT" bm="true" bt="MAVEN" template="NORTHWIND-NS"/>
+		<config clp="RAP" spl="JBOSS" pp="HIBERNATE" tpl="JAKARTA_EE" bm="true" bt="MAVEN" template="ORDER-ENTRY"/>
+		<config clp="RAP" spl="JBOSS" pp="HIBERNATE" tpl="JAKARTA_EE" bm="true" bt="MAVEN" template="PRODUCT"/>
+		<config clp="RAP" spl="GLASSFISH" pp="ECLIPSELINK" tpl="JAKARTA_EE" bm="true" bt="MAVEN" template="GENERIC"/>
+		<config clp="RAP" spl="TOMCAT" pp="HIBERNATE" tpl="SPRING_BOOT" bm="true" bt="MAVEN" template="ORDER-ENTRY"/>
+		<config clp="RAP" spl="TOMCAT" pp="ECLIPSELINK" tpl="SPRING_BOOT" bm="true" bt="MAVEN" template="BUG-TRACKER"/>
+		<config clp="RAP" spl="GLASSFISH" pp="ECLIPSELINK" tpl="JAKARTA_EE" bm="true" bt="MAVEN" template="CONTACTS"/>
+		<config clp="RAP" spl="TOMCAT" pp="HIBERNATE" tpl="SPRING_BOOT" bm="true" bt="MAVEN" template="PRODUCT"/>
+		<config clp="RAP" spl="GLASSFISH" pp="ECLIPSELINK" tpl="JAKARTA_EE" bm="true" bt="MAVEN" template="REPAIR"/>
+		<config clp="RAP" spl="TOMCAT" pp="ECLIPSELINK" tpl="SPRING_BOOT" bm="true" bt="MAVEN" template="EMPLOYEE-NS"/>
+		<config clp="RAP" spl="TOMCAT" pp="ECLIPSELINK" tpl="SPRING_BOOT" bm="true" bt="MAVEN" template="MOVIE"/>
+		<config clp="RAP" spl="TOMCAT" pp="HIBERNATE" tpl="SPRING_BOOT" bm="true" bt="MAVEN" template="REPAIR"/>
+		<config clp="RAP" spl="TOMCAT" pp="HIBERNATE" tpl="SPRING_BOOT" bm="true" bt="MAVEN" template="REPAIR-NS"/>
+		<config clp="RAP" spl="TOMCAT" pp="ECLIPSELINK" tpl="SPRING_BOOT" bm="true" bt="MAVEN" template="CONTACTS"/>
+		<config clp="RAP" spl="GLASSFISH" pp="ECLIPSELINK" tpl="JAKARTA_EE" bm="true" bt="MAVEN" template="EMPLOYEE-NS"/>
+		<config clp="RAP" spl="TOMCAT" pp="ECLIPSELINK" tpl="SPRING_BOOT" bm="true" bt="MAVEN" template="GENERIC"/>
+		<config clp="RAP" spl="GLASSFISH" pp="ECLIPSELINK" tpl="JAKARTA_EE" bm="true" bt="MAVEN" template="REPAIR-NS"/>
+		<config clp="RAP" spl="TOMCAT" pp="ECLIPSELINK" tpl="JAVA_SE" bm="false" bt="MAVEN" template="CFS"/>
+		<config clp="RAP" spl="TOMCAT" pp="HIBERNATE" tpl="SPRING_BOOT" bm="true" bt="MAVEN" template="CFS"/>
+		<config clp="RAP" spl="GLASSFISH" pp="ECLIPSELINK" tpl="JAKARTA_EE" bm="true" bt="MAVEN" template="CFS"/>
+	</config_group>
+	<config_group name="JSF_PRIMEFACES">
+		<description></description>
+		<config clp="JSF_PRIMEFACES" spl="TOMCAT" pp="ECLIPSELINK" tpl="SPRING_BOOT" bm="false" bt="MAVEN" template="BUG-TRACKER"/>
+		<config clp="JSF_PRIMEFACES" spl="TOMCAT" pp="HIBERNATE" tpl="SPRING_BOOT" bm="true" bt="MAVEN" template="ORDER-ENTRY"/>
+		<config clp="JSF_PRIMEFACES" spl="TOMCAT" pp="ECLIPSELINK" tpl="SPRING_BOOT" bm="false" bt="MAVEN" template="EMPLOYEE-NS"/>
+		<config clp="JSF_PRIMEFACES" spl="TOMCAT" pp="HIBERNATE" tpl="SPRING_BOOT" bm="true" bt="MAVEN" template="NORTHWIND-NS"/>
+		<config clp="JSF_PRIMEFACES" spl="GLASSFISH" pp="ECLIPSELINK" tpl="JAKARTA_EE" bm="false" bt="MAVEN" template="MOVIE"/>
+		<config clp="JSF_PRIMEFACES" spl="TOMCAT" pp="HIBERNATE" tpl="SPRING_BOOT" bm="true" bt="MAVEN" template="REPAIR-NS"/>
+		<config clp="JSF_PRIMEFACES" spl="TOMCAT" pp="HIBERNATE" tpl="SPRING_BOOT" bm="true" bt="MAVEN" template="MOVIE"/>
+		<config clp="JSF_PRIMEFACES" spl="GLASSFISH" pp="ECLIPSELINK" tpl="JAKARTA_EE" bm="true" bt="MAVEN" template="EMPLOYEE-NS"/>
+		<config clp="JSF_PRIMEFACES" spl="GLASSFISH" pp="ECLIPSELINK" tpl="JAKARTA_EE" bm="true" bt="MAVEN" template="NORTHWIND-NS"/>
+		<config clp="JSF_PRIMEFACES" spl="TOMCAT" pp="ECLIPSELINK" tpl="SPRING_BOOT" bm="false" bt="MAVEN" template="PRODUCT"/>
+		<config clp="JSF_PRIMEFACES" spl="GLASSFISH" pp="ECLIPSELINK" tpl="JAKARTA_EE" bm="false" bt="MAVEN" template="REPAIR-NS"/>
+		<config clp="JSF_PRIMEFACES" spl="TOMCAT" pp="HIBERNATE" tpl="SPRING_BOOT" bm="true" bt="MAVEN" template="GENERIC"/>
+		<config clp="JSF_PRIMEFACES" spl="GLASSFISH" pp="ECLIPSELINK" tpl="JAKARTA_EE" bm="false" bt="MAVEN" template="BUG-TRACKER"/>
+		<config clp="JSF_PRIMEFACES" spl="TOMCAT" pp="ECLIPSELINK" tpl="SPRING_BOOT" bm="false" bt="MAVEN" template="REPAIR"/>
+		<config clp="JSF_PRIMEFACES" spl="GLASSFISH" pp="ECLIPSELINK" tpl="JAKARTA_EE" bm="true" bt="MAVEN" template="REPAIR"/>
+		<config clp="JSF_PRIMEFACES" spl="TOMCAT" pp="HIBERNATE" tpl="SPRING_BOOT" bm="true" bt="MAVEN" template="CONTACTS"/>
+		<config clp="JSF_PRIMEFACES" spl="JBOSS" pp="HIBERNATE" tpl="JAKARTA_EE" bm="true" bt="MAVEN" template="CONTACTS"/>
+		<config clp="JSF_PRIMEFACES" spl="GLASSFISH" pp="ECLIPSELINK" tpl="JAKARTA_EE" bm="true" bt="MAVEN" template="ORDER-ENTRY"/>
+		<config clp="JSF_PRIMEFACES" spl="JBOSS" pp="HIBERNATE" tpl="JAKARTA_EE" bm="true" bt="MAVEN" template="GENERIC"/>
+		<config clp="JSF_PRIMEFACES" spl="GLASSFISH" pp="ECLIPSELINK" tpl="JAKARTA_EE" bm="true" bt="MAVEN" template="PRODUCT"/>
+		<config clp="JSF_PRIMEFACES" spl="TOMCAT" pp="HIBERNATE" tpl="SPRING_BOOT" bm="true" bt="MAVEN" template="CFS"/>
+		<config clp="JSF_PRIMEFACES" spl="GLASSFISH" pp="ECLIPSELINK" tpl="JAKARTA_EE" bm="false" bt="MAVEN" template="CFS"/>
+	</config_group>
+	<config_group name="VAADIN">
+		<description></description>
+		<config clp="VAADIN" spl="GLASSFISH" pp="ECLIPSELINK" tpl="JAKARTA_EE" bm="false" bt="MAVEN" template="BUG-TRACKER"/>
+		<config clp="VAADIN" spl="TOMCAT" pp="HIBERNATE" tpl="SPRING_BOOT" bm="true" bt="MAVEN" template="NORTHWIND-NS"/>
+		<config clp="VAADIN" spl="TOMCAT" pp="ECLIPSELINK" tpl="SPRING_BOOT" bm="false" bt="MAVEN" template="BUG-TRACKER"/>
+		<config clp="VAADIN" spl="JBOSS" pp="HIBERNATE" tpl="JAKARTA_EE" bm="true" bt="MAVEN" template="REPAIR-NS"/>
+		<config clp="VAADIN" spl="JBOSS" pp="HIBERNATE" tpl="JAKARTA_EE" bm="true" bt="MAVEN" template="PRODUCT"/>
+		<config clp="VAADIN" spl="TOMCAT" pp="HIBERNATE" tpl="SPRING_BOOT" bm="true" bt="MAVEN" template="REPAIR"/>
+		<config clp="VAADIN" spl="GLASSFISH" pp="ECLIPSELINK" tpl="JAKARTA_EE" bm="true" bt="MAVEN" template="MOVIE"/>
+		<config clp="VAADIN" spl="TOMCAT" pp="ECLIPSELINK" tpl="SPRING_BOOT" bm="false" bt="MAVEN" template="MOVIE"/>
+		<config clp="VAADIN" spl="GLASSFISH" pp="ECLIPSELINK" tpl="JAKARTA_EE" bm="true" bt="MAVEN" template="EMPLOYEE-NS"/>
+		<config clp="VAADIN" spl="GLASSFISH" pp="ECLIPSELINK" tpl="JAKARTA_EE" bm="false" bt="MAVEN" template="REPAIR"/>
+		<config clp="VAADIN" spl="JBOSS" pp="HIBERNATE" tpl="JAKARTA_EE" bm="true" bt="MAVEN" template="NORTHWIND-NS"/>
+		<config clp="VAADIN" spl="TOMCAT" pp="ECLIPSELINK" tpl="SPRING_BOOT" bm="false" bt="MAVEN" template="GENERIC"/>
+		<config clp="VAADIN" spl="TOMCAT" pp="ECLIPSELINK" tpl="SPRING_BOOT" bm="true" bt="MAVEN" template="PRODUCT"/>
+		<config clp="VAADIN" spl="TOMCAT" pp="HIBERNATE" tpl="SPRING_BOOT" bm="true" bt="MAVEN" template="REPAIR-NS"/>
+		<config clp="VAADIN" spl="TOMCAT" pp="ECLIPSELINK" tpl="SPRING_BOOT" bm="true" bt="MAVEN" template="ORDER-ENTRY"/>
+		<config clp="VAADIN" spl="GLASSFISH" pp="ECLIPSELINK" tpl="JAKARTA_EE" bm="true" bt="MAVEN" template="CONTACTS"/>
+		<config clp="VAADIN" spl="GLASSFISH" pp="ECLIPSELINK" tpl="JAKARTA_EE" bm="true" bt="MAVEN" template="GENERIC"/>
+		<config clp="VAADIN" spl="TOMCAT" pp="ECLIPSELINK" tpl="SPRING_BOOT" bm="false" bt="MAVEN" template="EMPLOYEE-NS"/>
+		<config clp="VAADIN" spl="TOMCAT" pp="ECLIPSELINK" tpl="SPRING_BOOT" bm="false" bt="MAVEN" template="CONTACTS"/>
+		<config clp="VAADIN" spl="JBOSS" pp="HIBERNATE" tpl="JAKARTA_EE" bm="true" bt="MAVEN" template="ORDER-ENTRY"/>
+		<config clp="VAADIN" spl="TOMCAT" pp="HIBERNATE" tpl="SPRING_BOOT" bm="true" bt="MAVEN" template="CFS"/>
+		<config clp="VAADIN" spl="JBOSS" pp="HIBERNATE" tpl="JAKARTA_EE" bm="true" bt="MAVEN" template="CFS"/>
+	</config_group>
+	<config_group name="JAVAFX">
+		<description></description>
+		<config clp="JAVAFX" spl="TOMCAT" pp="HIBERNATE" tpl="SPRING_BOOT" bm="true" bt="MAVEN" template="EMPLOYEE-NS"/>
+		<config clp="JAVAFX" spl="TOMCAT" pp="HIBERNATE" tpl="SPRING_BOOT" bm="true" bt="MAVEN" template="CONTACTS"/>
+		<config clp="JAVAFX" spl="NONE" pp="ECLIPSELINK" tpl="JAVA_SE" bm="true" bt="MAVEN" template="ORDER-ENTRY"/>
+		<config clp="JAVAFX" spl="TOMCAT" pp="ECLIPSELINK" tpl="SPRING_BOOT" bm="true" bt="MAVEN" template="REPAIR"/>
+		<config clp="JAVAFX" spl="GLASSFISH" pp="ECLIPSELINK" tpl="JAKARTA_EE" bm="true" bt="MAVEN" template="MOVIE"/>
+		<config clp="JAVAFX" spl="NONE" pp="ECLIPSELINK" tpl="JAVA_SE" bm="false" bt="MAVEN" template="CONTACTS"/>
+		<config clp="JAVAFX" spl="JBOSS" pp="HIBERNATE" tpl="JAKARTA_EE" bm="true" bt="MAVEN" template="GENERIC"/>
+		<config clp="JAVAFX" spl="TOMCAT" pp="ECLIPSELINK" tpl="SPRING_BOOT" bm="true" bt="MAVEN" template="ORDER-ENTRY"/>
+		<config clp="JAVAFX" spl="NONE" pp="ECLIPSELINK" tpl="JAVA_SE" bm="true" bt="MAVEN" template="REPAIR-NS"/>
+		<config clp="JAVAFX" spl="NONE" pp="ECLIPSELINK" tpl="JAVA_SE" bm="false" bt="MAVEN" template="MOVIE"/>
+		<config clp="JAVAFX" spl="TOMCAT" pp="ECLIPSELINK" tpl="SPRING_BOOT" bm="true" bt="MAVEN" template="PRODUCT"/>
+		<config clp="JAVAFX" spl="NONE" pp="ECLIPSELINK" tpl="JAVA_SE" bm="true" bt="MAVEN" template="PRODUCT"/>
+		<config clp="JAVAFX" spl="NONE" pp="ECLIPSELINK" tpl="JAVA_SE" bm="false" bt="MAVEN" template="EMPLOYEE-NS"/>
+		<config clp="JAVAFX" spl="TOMCAT" pp="HIBERNATE" tpl="SPRING_BOOT" bm="true" bt="MAVEN" template="MOVIE"/>
+		<config clp="JAVAFX" spl="GLASSFISH" pp="ECLIPSELINK" tpl="JAKARTA_EE" bm="true" bt="MAVEN" template="NORTHWIND-NS"/>
+		<config clp="JAVAFX" spl="TOMCAT" pp="ECLIPSELINK" tpl="SPRING_BOOT" bm="true" bt="MAVEN" template="REPAIR-NS"/>
+		<config clp="JAVAFX" spl="NONE" pp="ECLIPSELINK" tpl="JAVA_SE" bm="false" bt="MAVEN" template="GENERIC"/>
+		<config clp="JAVAFX" spl="NONE" pp="ECLIPSELINK" tpl="JAVA_SE" bm="false" bt="MAVEN" template="BUG-TRACKER"/>
+		<config clp="JAVAFX" spl="GLASSFISH" pp="ECLIPSELINK" tpl="JAKARTA_EE" bm="true" bt="MAVEN" template="EMPLOYEE-NS"/>
+		<config clp="JAVAFX" spl="TOMCAT" pp="ECLIPSELINK" tpl="SPRING_BOOT" bm="true" bt="MAVEN" template="NORTHWIND-NS"/>
+		<config clp="JAVAFX" spl="JBOSS" pp="HIBERNATE" tpl="JAKARTA_EE" bm="true" bt="MAVEN" template="CONTACTS"/>
+		<config clp="JAVAFX" spl="GLASSFISH" pp="ECLIPSELINK" tpl="JAKARTA_EE" bm="true" bt="MAVEN" template="ORDER-ENTRY"/>
+		<config clp="JAVAFX" spl="GLASSFISH" pp="ECLIPSELINK" tpl="JAKARTA_EE" bm="true" bt="MAVEN" template="PRODUCT"/>
+		<config clp="JAVAFX" spl="GLASSFISH" pp="ECLIPSELINK" tpl="JAKARTA_EE" bm="true" bt="MAVEN" template="REPAIR-NS"/>
+		<config clp="JAVAFX" spl="NONE" pp="ECLIPSELINK" tpl="JAVA_SE" bm="true" bt="MAVEN" template="REPAIR"/>
+		<config clp="JAVAFX" spl="GLASSFISH" pp="ECLIPSELINK" tpl="JAKARTA_EE" bm="true" bt="MAVEN" template="BUG-TRACKER"/>
+		<config clp="JAVAFX" spl="GLASSFISH" pp="ECLIPSELINK" tpl="JAKARTA_EE" bm="true" bt="MAVEN" template="REPAIR"/>
+		<config clp="JAVAFX" spl="TOMCAT" pp="HIBERNATE" tpl="SPRING_BOOT" bm="true" bt="MAVEN" template="GENERIC"/>
+		<config clp="JAVAFX" spl="NONE" pp="ECLIPSELINK" tpl="JAVA_SE" bm="true" bt="MAVEN" template="NORTHWIND-NS"/>
+		<config clp="JAVAFX" spl="TOMCAT" pp="HIBERNATE" tpl="SPRING_BOOT" bm="true" bt="MAVEN" template="BUG-TRACKER"/>
+		<config clp="JAVAFX" spl="NONE" pp="ECLIPSELINK" tpl="JAVA_SE" bm="false" bt="MAVEN" template="CFS"/>
+		<config clp="JAVAFX" spl="TOMCAT" pp="HIBERNATE" tpl="SPRING_BOOT" bm="true" bt="MAVEN" template="CFS"/>
+		<config clp="JAVAFX" spl="JBOSS" pp="HIBERNATE" tpl="JAKARTA_EE" bm="true" bt="MAVEN" template="CFS"/>
+	</config_group>
+	<config_group name="ANGULAR">
+		<description></description>
+		<config clp="ANGULAR" spl="JBOSS" pp="HIBERNATE" tpl="JAKARTA_EE" bm="true" bt="MAVEN" template="REPAIR-NS"/>
+		<config clp="ANGULAR" spl="TOMCAT" pp="ECLIPSELINK" tpl="SPRING_BOOT" bm="true" bt="MAVEN" template="REPAIR-NS"/>
+		<config clp="ANGULAR" spl="JBOSS" pp="HIBERNATE" tpl="JAKARTA_EE" bm="true" bt="MAVEN" template="REPAIR"/>
+		<config clp="ANGULAR" spl="TOMCAT" pp="ECLIPSELINK" tpl="SPRING_BOOT" bm="true" bt="MAVEN" template="REPAIR"/>
+		<config clp="ANGULAR" spl="GLASSFISH" pp="ECLIPSELINK" tpl="JAKARTA_EE" bm="true" bt="MAVEN" template="PRODUCT"/>
+		<config clp="ANGULAR" spl="TOMCAT" pp="HIBERNATE" tpl="SPRING_BOOT" bm="true" bt="MAVEN" template="PRODUCT"/>
+		<config clp="ANGULAR" spl="GLASSFISH" pp="ECLIPSELINK" tpl="JAKARTA_EE" bm="true" bt="MAVEN" template="ORDER-ENTRY"/>
+		<config clp="ANGULAR" spl="TOMCAT" pp="ECLIPSELINK" tpl="SPRING_BOOT" bm="true" bt="MAVEN" template="ORDER-ENTRY"/>
+		<config clp="ANGULAR" spl="GLASSFISH" pp="ECLIPSELINK" tpl="JAKARTA_EE" bm="true" bt="MAVEN" template="NORTHWIND-NS"/>
+		<config clp="ANGULAR" spl="TOMCAT" pp="ECLIPSELINK" tpl="SPRING_BOOT" bm="true" bt="MAVEN" template="NORTHWIND-NS"/>
+		<config clp="ANGULAR" spl="JBOSS" pp="HIBERNATE" tpl="JAKARTA_EE" bm="true" bt="MAVEN" template="MOVIE"/>
+		<config clp="ANGULAR" spl="TOMCAT" pp="HIBERNATE" tpl="SPRING_BOOT" bm="true" bt="MAVEN" template="MOVIE"/>
+		<config clp="ANGULAR" spl="GLASSFISH" pp="ECLIPSELINK" tpl="JAKARTA_EE" bm="true" bt="MAVEN" template="EMPLOYEE-NS"/>
+		<config clp="ANGULAR" spl="TOMCAT" pp="ECLIPSELINK" tpl="SPRING_BOOT" bm="true" bt="MAVEN" template="EMPLOYEE-NS"/>
+		<config clp="ANGULAR" spl="GLASSFISH" pp="ECLIPSELINK" tpl="JAKARTA_EE" bm="true" bt="MAVEN" template="GENERIC"/>
+		<config clp="ANGULAR" spl="TOMCAT" pp="HIBERNATE" tpl="SPRING_BOOT" bm="true" bt="MAVEN" template="GENERIC"/>
+		<config clp="ANGULAR" spl="JBOSS" pp="HIBERNATE" tpl="JAKARTA_EE" bm="true" bt="MAVEN" template="BUG-TRACKER"/>
+		<config clp="ANGULAR" spl="TOMCAT" pp="ECLIPSELINK" tpl="SPRING_BOOT" bm="true" bt="MAVEN" template="BUG-TRACKER"/>
+		<config clp="ANGULAR" spl="GLASSFISH" pp="ECLIPSELINK" tpl="JAKARTA_EE" bm="true" bt="MAVEN" template="CONTACTS"/>
+		<config clp="ANGULAR" spl="TOMCAT" pp="HIBERNATE" tpl="SPRING_BOOT" bm="true" bt="MAVEN" template="CONTACTS"/>
+		<config clp="ANGULAR" spl="TOMCAT" pp="HIBERNATE" tpl="SPRING_BOOT" bm="true" bt="MAVEN" template="CFS"/>
+		<config clp="ANGULAR" spl="JBOSS" pp="HIBERNATE" tpl="JAKARTA_EE" bm="true" bt="MAVEN" template="CFS"/>
+	</config_group>
+</config_groups>
