@@ -1,0 +1,932 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.0"?>
+<plugin>
+
+  <extension point="org.eclipse.team.core.fileTypes">
+    <?gmfgen generated="true"?>
+    <fileTypes
+      type="text"
+      extension="ccd">
+    </fileTypes>
+  </extension>
+
+  <extension point="org.eclipse.emf.ecore.extension_parser">
+    <?gmfgen generated="true"?>
+    <parser
+      type="ccd"
+      class="org.eclipse.gmf.runtime.emf.core.resources.GMFResourceFactory">
+    </parser>
+  </extension>
+
+  <extension point="org.eclipse.ui.editors">
+    <?gmfgen generated="true"?>
+    <editor
+      id="net.codecadenza.eclipse.diagram.domain.part.CodeCadenzaDiagramEditorID"
+      name="%editorName"
+      icon="icons/obj16/DomainDiagramFile.gif"
+      extensions="ccd"
+      default="true"
+      class="net.codecadenza.eclipse.diagram.domain.part.CodeCadenzaDiagramEditor"
+      matchingStrategy="net.codecadenza.eclipse.diagram.domain.part.CodeCadenzaMatchingStrategy"
+      contributorClass="net.codecadenza.eclipse.diagram.domain.part.CodeCadenzaDiagramActionBarContributor">
+    </editor>
+  </extension>
+
+  <extension point="org.eclipse.ui.contexts">
+    <?gmfgen generated="true"?>
+    <context
+      description="%context.description"
+      id="net.codecadenza.eclipse.diagram.domain.ui.diagramContext"
+      name="%context.name"
+      parentId="org.eclipse.gmf.runtime.diagram.ui.diagramContext">
+    </context>
+  </extension>
+
+  <extension point="org.eclipse.ui.popupMenus">
+    <?gmfgen generated="true"?>
+    <objectContribution
+      adaptable="false"
+      id="net.codecadenza.eclipse.diagram.CreateShortcut"
+      objectClass="net.codecadenza.eclipse.diagram.domain.edit.parts.DomainNamespaceEditPart">
+      <action
+        class="net.codecadenza.eclipse.diagram.domain.part.CodeCadenzaCreateShortcutAction"
+        enablesFor="1"
+        id="net.codecadenza.eclipse.diagram.CreateShortcutAction"
+        label="%createShortcutActionLabel"
+        menubarPath="additions">
+      </action>
+    </objectContribution>
+    <objectContribution
+      adaptable="false"
+      id="net.codecadenza.eclipse.diagram.LoadResource"
+      objectClass="net.codecadenza.eclipse.diagram.domain.edit.parts.DomainNamespaceEditPart">
+      <action
+        class="net.codecadenza.eclipse.diagram.domain.part.CodeCadenzaLoadResourceAction"
+        enablesFor="1"
+        id="net.codecadenza.eclipse.diagram.LoadResourceAction"
+        label="%loadResourceActionLabel"
+        menubarPath="additions">
+      </action>
+    </objectContribution>
+  </extension>
+
+  <extension point="org.eclipse.ui.popupMenus">
+    <?gmfgen generated="true"?>
+    <objectContribution
+      id="net.codecadenza.eclipse.diagram.InitDiagram"
+      nameFilter="*.xmi"
+      objectClass="org.eclipse.core.resources.IFile">
+      <action
+        label="%initDiagramActionLabel"
+        class="net.codecadenza.eclipse.diagram.domain.part.CodeCadenzaInitDiagramFileAction"
+        menubarPath="additions"
+        enablesFor="1"
+        id="net.codecadenza.eclipse.diagram.InitDiagramAction">
+      </action>
+    </objectContribution>
+  </extension>
+
+  <extension point="org.eclipse.gmf.runtime.common.ui.services.action.globalActionHandlerProviders">
+    <?gmfgen generated="true"?>
+    <GlobalActionHandlerProvider
+      class="org.eclipse.gmf.runtime.diagram.ui.providers.DiagramGlobalActionHandlerProvider"
+      id="CodeCadenzaPresentation">
+      <Priority name="Lowest"/>
+      <ViewId id="dnet.codecadenza.eclipse.diagram.domain.part.CodeCadenzaDiagramEditorID">
+        <ElementType class="org.eclipse.gmf.runtime.diagram.ui.editparts.DiagramEditPart">
+          <GlobalActionId actionId="save"/>
+        </ElementType>
+      </ViewId>
+    </GlobalActionHandlerProvider>
+    <GlobalActionHandlerProvider
+      class="org.eclipse.gmf.runtime.diagram.ui.providers.ide.providers.DiagramIDEGlobalActionHandlerProvider"
+      id="CodeCadenzaPresentationIDE">
+      <Priority name="Lowest"/>
+      <ViewId id="net.codecadenza.eclipse.diagram.domain.part.CodeCadenzaDiagramEditorID">
+        <ElementType class="org.eclipse.gmf.runtime.diagram.ui.editparts.IGraphicalEditPart">
+          <GlobalActionId actionId="bookmark"/>
+        </ElementType>
+      </ViewId>
+    </GlobalActionHandlerProvider>
+  </extension>
+
+  <extension point="org.eclipse.core.runtime.preferences">
+    <?gmfgen generated="true"?>
+    <initializer class="net.codecadenza.eclipse.diagram.domain.preferences.DiagramPreferenceInitializer"/>
+  </extension>
+
+  <extension point="org.eclipse.ui.preferencePages">
+    <?gmfgen generated="true"?>
+    <page
+      id="net.codecadenza.eclipse.diagram.general"
+      name="%preference.page.title.net.codecadenza.eclipse.diagram.general"
+      class="net.codecadenza.eclipse.diagram.domain.preferences.DiagramGeneralPreferencePage"
+      category="net.codecadenza.eclipse.preferences.main">
+    </page>
+
+    <page
+      id="net.codecadenza.eclipse.diagram.appearance"
+      name="%preference.page.title.net.codecadenza.eclipse.diagram.appearance"
+      category="net.codecadenza.eclipse.diagram.general"
+      class="net.codecadenza.eclipse.diagram.domain.preferences.DiagramAppearancePreferencePage">
+    </page>
+
+    <page
+      id="net.codecadenza.eclipse.diagram.connections"
+      name="%preference.page.title.net.codecadenza.eclipse.diagram.connections"
+      category="net.codecadenza.eclipse.diagram.general"
+      class="net.codecadenza.eclipse.diagram.domain.preferences.DiagramConnectionsPreferencePage">
+    </page>
+
+    <page
+      id="net.codecadenza.eclipse.diagram.printing"
+      name="%preference.page.title.net.codecadenza.eclipse.diagram.printing"
+      category="net.codecadenza.eclipse.diagram.general"
+      class="net.codecadenza.eclipse.diagram.domain.preferences.DiagramPrintingPreferencePage">
+    </page>
+
+    <page
+      id="net.codecadenza.eclipse.diagram.rulersAndGrid"
+      name="%preference.page.title.net.codecadenza.eclipse.diagram.rulersAndGrid"
+      category="net.codecadenza.eclipse.diagram.general"
+      class="net.codecadenza.eclipse.diagram.domain.preferences.DiagramRulersAndGridPreferencePage">
+    </page>
+
+    <page
+      id="net.codecadenza.eclipse.diagram.pathmaps"
+      name="%preference.page.title.net.codecadenza.eclipse.diagram.pathmaps"
+      category="net.codecadenza.eclipse.diagram.general"
+      class="org.eclipse.gmf.runtime.emf.ui.preferences.PathmapsPreferencePage">
+    </page>
+  </extension>
+
+  <extension point="org.eclipse.ui.views.properties.tabbed.propertyContributor">
+    <?gmfgen generated="true"?>
+    <propertyContributor
+      contributorId="net.codecadenza.eclipse.diagram"
+      labelProvider="net.codecadenza.eclipse.diagram.domain.sheet.CodeCadenzaSheetLabelProvider">
+      <propertyCategory
+        category="custom">
+      </propertyCategory>
+      <propertyCategory
+        category="domain">
+      </propertyCategory>
+      <propertyCategory
+        category="visual">
+      </propertyCategory>
+      <propertyCategory
+        category="extra">
+      </propertyCategory>
+    </propertyContributor>
+  </extension>
+
+  <extension point="org.eclipse.ui.views.properties.tabbed.propertyTabs">
+    <?gmfgen generated="true"?>
+    <propertyTabs contributorId="net.codecadenza.eclipse.diagram">
+      <propertyTab
+        category="custom"
+        id="property.tab.standard"
+        label="Standard properties">
+      </propertyTab>
+      <propertyTab
+        category="custom"
+        id="property.tab.persistence"
+        label="Database properties"
+        afterTab="property.tab.standard">
+      </propertyTab>
+      <propertyTab
+        category="visual"
+        id="property.tab.AppearancePropertySection"
+        label="%tab.appearance"
+        afterTab="property.tab.standard">
+      </propertyTab>
+      <propertyTab
+        category="visual"
+        id="property.tab.DiagramPropertySection"
+        label="%tab.diagram"
+        afterTab="property.tab.standard">
+      </propertyTab>
+      <propertyTab
+        category="custom"
+        id="property.tab.comment"
+        label="Comments"
+        afterTab="property.tab.persistence">
+      </propertyTab>
+    </propertyTabs>
+  </extension>
+
+  <extension point="org.eclipse.ui.views.properties.tabbed.propertySections">
+    <?gmfgen generated="true"?>
+    <propertySections contributorId="net.codecadenza.eclipse.diagram">
+      <propertySection
+        class="net.codecadenza.eclipse.diagram.domain.sheet.custom.DbTablePropertySection"
+        id="property.section.persistence.dbtable"
+        tab="property.tab.persistence">
+        <input
+          type="net.codecadenza.eclipse.diagram.domain.edit.parts.DomainObjectEditPart">
+        </input>
+      </propertySection>
+
+      <propertySection
+        class="net.codecadenza.eclipse.diagram.domain.sheet.custom.DomainObjectPropertySection"
+        id="property.section.custom.bean"
+        tab="property.tab.standard">
+        <input
+          type="net.codecadenza.eclipse.diagram.domain.edit.parts.DomainObjectEditPart">
+        </input>
+      </propertySection>
+
+      <propertySection
+        class="net.codecadenza.eclipse.diagram.domain.sheet.custom.EnumPropertySection"
+        id="property.section.custom.enum"
+        tab="property.tab.standard">
+        <input
+          type="net.codecadenza.eclipse.diagram.domain.edit.parts.JavaEnumEditPart">
+        </input>
+      </propertySection>
+
+      <propertySection
+        class="net.codecadenza.eclipse.diagram.domain.sheet.custom.M2MAssociationPropertySection"
+        id="property.section.custom.m2massociation"
+        tab="property.tab.standard">
+        <input
+          type="net.codecadenza.eclipse.diagram.domain.edit.parts.ManyToManyAssociationEditPart">
+        </input>
+      </propertySection>
+
+      <propertySection
+        class="net.codecadenza.eclipse.diagram.domain.sheet.custom.O2OAssociationPropertySection"
+        id="property.section.custom.o2oassociation"
+        tab="property.tab.standard">
+        <input
+          type="net.codecadenza.eclipse.diagram.domain.edit.parts.OneToOneAssociationEditPart">
+        </input>
+      </propertySection>
+
+      <propertySection
+        class="net.codecadenza.eclipse.diagram.domain.sheet.custom.O2MAssociationPropertySection"
+        id="property.section.custom.o2massociation"
+        tab="property.tab.standard">
+        <input
+          type="net.codecadenza.eclipse.diagram.domain.edit.parts.OneToManyAssociationEditPart">
+        </input>
+      </propertySection>
+
+      <propertySection
+        class="net.codecadenza.eclipse.diagram.domain.sheet.custom.M2OAssociationPropertySection"
+        id="property.section.custom.m2oassociation"
+        tab="property.tab.standard">
+        <input
+          type="net.codecadenza.eclipse.diagram.domain.edit.parts.ManyToOneAssociationEditPart">
+        </input>
+      </propertySection>
+
+      <propertySection
+        class="net.codecadenza.eclipse.diagram.domain.sheet.custom.DomainAttributePropertySection"
+        id="property.section.custom.attribute"
+        tab="property.tab.standard">
+        <input
+          type="net.codecadenza.eclipse.diagram.domain.edit.parts.DomainAttributeEditPart">
+        </input>
+      </propertySection>
+
+      <propertySection
+        class="net.codecadenza.eclipse.diagram.domain.sheet.custom.CommentsPropertySection"
+        id="property.section.attribute.comments"
+        tab="property.tab.comment">
+        <input
+          type="net.codecadenza.eclipse.diagram.domain.edit.parts.DomainAttributeEditPart">
+        </input>
+      </propertySection>
+
+      <propertySection
+        class="net.codecadenza.eclipse.diagram.domain.sheet.custom.DbColumnPropertySection"
+        id="property.section.persistence.dbcolumn"
+        tab="property.tab.persistence">
+        <input
+          type="net.codecadenza.eclipse.diagram.domain.edit.parts.DomainAttributeEditPart">
+        </input>
+      </propertySection>
+
+      <propertySection
+        class="net.codecadenza.eclipse.diagram.domain.sheet.custom.DbTablePropertySection"
+        id="property.tab.persistence.m2massociation"
+        tab="property.tab.persistence">
+        <input
+          type="net.codecadenza.eclipse.diagram.domain.edit.parts.ManyToManyAssociationEditPart">
+        </input>
+      </propertySection>
+
+      <propertySection
+        class="net.codecadenza.eclipse.diagram.domain.sheet.custom.CommentsPropertySection"
+        id="property.tab.comments.m2massociation"
+        tab="property.tab.comment">
+        <input
+          type="net.codecadenza.eclipse.diagram.domain.edit.parts.ManyToManyAssociationEditPart">
+        </input>
+      </propertySection>
+
+      <propertySection
+        class="net.codecadenza.eclipse.diagram.domain.sheet.custom.M2OPersistenceProperty"
+        id="property.tab.persistence.m2oassociation"
+        tab="property.tab.persistence">
+        <input
+          type="net.codecadenza.eclipse.diagram.domain.edit.parts.ManyToOneAssociationEditPart">
+        </input>
+      </propertySection>
+
+      <propertySection
+        class="net.codecadenza.eclipse.diagram.domain.sheet.custom.CommentsPropertySection"
+        id="property.tab.comments.m2oassociation"
+        tab="property.tab.comment">
+        <input
+          type="net.codecadenza.eclipse.diagram.domain.edit.parts.ManyToOneAssociationEditPart">
+        </input>
+      </propertySection>
+
+      <propertySection
+        class="net.codecadenza.eclipse.diagram.domain.sheet.custom.O2MPersistencePropertySection"
+        id="property.tab.persistence.o2massociation"
+        tab="property.tab.persistence">
+        <input
+          type="net.codecadenza.eclipse.diagram.domain.edit.parts.OneToManyAssociationEditPart">
+        </input>
+      </propertySection>
+
+      <propertySection
+        class="net.codecadenza.eclipse.diagram.domain.sheet.custom.CommentsPropertySection"
+        id="property.tab.comments.o2massociation"
+        tab="property.tab.comment">
+        <input
+          type="net.codecadenza.eclipse.diagram.domain.edit.parts.OneToManyAssociationEditPart">
+        </input>
+      </propertySection>
+
+      <propertySection
+        class="net.codecadenza.eclipse.diagram.domain.sheet.custom.O2OPersistencePropertySection"
+        id="property.tab.persistence.o2oassociation"
+        tab="property.tab.persistence">
+        <input
+          type="net.codecadenza.eclipse.diagram.domain.edit.parts.OneToOneAssociationEditPart">
+        </input>
+      </propertySection>
+
+      <propertySection
+        class="net.codecadenza.eclipse.diagram.domain.sheet.custom.CommentsPropertySection"
+        id="property.tab.comments.o2oassociation"
+        tab="property.tab.comment">
+        <input
+          type="net.codecadenza.eclipse.diagram.domain.edit.parts.OneToOneAssociationEditPart">
+        </input>
+      </propertySection>
+
+      <propertySection
+        class="net.codecadenza.eclipse.diagram.domain.sheet.custom.InheritancePropertySection"
+        id="property.section.custom.inheritance"
+        tab="property.tab.standard">
+        <input
+          type="net.codecadenza.eclipse.diagram.domain.edit.parts.DomainObjectInheritanceEditPart">
+        </input>
+      </propertySection>
+
+      <propertySection
+        class="org.eclipse.gmf.runtime.diagram.ui.properties.sections.appearance.ConnectionAppearancePropertySection"
+        filter="org.eclipse.gmf.runtime.diagram.ui.properties.filters.ConnectionEditPartPropertySectionFilter"
+        id="property.section.ConnectorAppearancePropertySection"
+        tab="property.tab.AppearancePropertySection">
+      </propertySection>
+
+      <propertySection
+        class="org.eclipse.gmf.runtime.diagram.ui.properties.sections.appearance.ShapeColorsAndFontsPropertySection"
+        filter="org.eclipse.gmf.runtime.diagram.ui.properties.filters.ShapeEditPartPropertySectionFilter"
+        id="property.section.ShapeColorAndFontPropertySection"
+        tab="property.tab.AppearancePropertySection">
+      </propertySection>
+
+      <propertySection
+        class="org.eclipse.gmf.runtime.diagram.ui.properties.sections.appearance.DiagramColorsAndFontsPropertySection"
+        filter="org.eclipse.gmf.runtime.diagram.ui.properties.filters.DiagramEditPartPropertySectionFilter"
+        id="property.section.DiagramColorsAndFontsPropertySection"
+        tab="property.tab.AppearancePropertySection">
+      </propertySection>
+
+      <propertySection
+        class="org.eclipse.gmf.runtime.diagram.ui.properties.sections.grid.RulerGridPropertySection"
+        filter="org.eclipse.gmf.runtime.diagram.ui.properties.filters.DiagramEditPartPropertySectionFilter"
+        id="property.section.RulerGridPropertySection"
+        tab="property.tab.DiagramPropertySection">
+      </propertySection>
+    </propertySections>
+  </extension>
+
+  <extension point="org.eclipse.gmf.runtime.diagram.core.viewProviders">
+    <?gmfgen generated="true"?>
+    <viewProvider class="net.codecadenza.eclipse.diagram.domain.providers.CodeCadenzaViewProvider">
+      <Priority name="Lowest"/>
+      <context viewClass="org.eclipse.gmf.runtime.notation.Diagram" semanticHints="CodeCadenza"/>
+      <context viewClass="org.eclipse.gmf.runtime.notation.Node" semanticHints=""/>
+      <context viewClass="org.eclipse.gmf.runtime.notation.Edge" semanticHints=""/>
+    </viewProvider>
+  </extension>
+
+  <extension point="org.eclipse.gmf.runtime.diagram.ui.editpartProviders">
+    <?gmfgen generated="true"?>
+    <editpartProvider class="net.codecadenza.eclipse.diagram.domain.providers.CodeCadenzaEditPartProvider">
+      <Priority name="Lowest"/>
+    </editpartProvider>
+  </extension>
+
+  <extension point="org.eclipse.gmf.runtime.emf.ui.modelingAssistantProviders">
+    <?gmfgen generated="true"?>
+    <modelingAssistantProvider class="net.codecadenza.eclipse.diagram.domain.providers.CodeCadenzaModelingAssistantProvider">
+      <Priority name="Lowest"/>
+    </modelingAssistantProvider>
+  </extension>
+
+  <extension point="org.eclipse.gmf.runtime.common.ui.services.iconProviders">
+    <?gmfgen generated="true"?>
+    <IconProvider class="net.codecadenza.eclipse.diagram.domain.providers.CodeCadenzaIconProvider">
+      <Priority name="Low"/>
+    </IconProvider>
+  </extension>
+
+  <extension point="org.eclipse.gmf.runtime.common.ui.services.parserProviders">
+    <?gmfgen generated="true"?>
+    <ParserProvider class="net.codecadenza.eclipse.diagram.domain.providers.CodeCadenzaParserProvider">
+      <Priority name="Lowest"/>
+    </ParserProvider>
+  </extension>
+
+  <extension point="org.eclipse.gmf.runtime.diagram.ui.decoratorProviders">
+    <?gmfgen generated="true"?>
+    <decoratorProvider class="net.codecadenza.eclipse.diagram.domain.providers.CodeCadenzaShortcutsDecoratorProvider">
+      <Priority name="Lowest"/>
+    </decoratorProvider>
+  </extension>
+
+  <extension point="org.eclipse.gmf.runtime.emf.type.core.elementTypes">
+    <?gmfgen generated="true"?>
+    <metamodel nsURI="http:///net/codecadenza/eclipse/model/domain.ecore">
+      <metamodelType
+        id="net.codecadenza.eclipse.diagram.DomainNamespace_1000"
+        name="%metatype.name.DomainNamespace_1000"
+        kind="org.eclipse.gmf.runtime.emf.type.core.IHintedType"
+        eclass="DomainNamespace"
+        edithelper="net.codecadenza.eclipse.diagram.domain.edit.helpers.DomainNamespaceEditHelper">
+        <param name="semanticHint" value="1000"/>
+      </metamodelType>
+    </metamodel>
+
+    <metamodel nsURI="http:///net/codecadenza/eclipse/model/domain.ecore">
+      <metamodelType
+        id="net.codecadenza.eclipse.diagram.DomainObject_2001"
+        name="%metatype.name.DomainObject_2001"
+        kind="org.eclipse.gmf.runtime.emf.type.core.IHintedType"
+        eclass="DomainObject"
+        edithelper="net.codecadenza.eclipse.diagram.domain.edit.helpers.DomainObjectEditHelper">
+        <param name="semanticHint" value="2001"/>
+      </metamodelType>
+    </metamodel>
+
+    <metamodel nsURI="http:///net/codecadenza/eclipse/model/java.ecore">
+      <metamodelType
+        id="net.codecadenza.eclipse.diagram.JavaEnum_2002"
+        name="%metatype.name.JavaEnum_2002"
+        kind="org.eclipse.gmf.runtime.emf.type.core.IHintedType"
+        eclass="JavaEnum"
+        edithelper="net.codecadenza.eclipse.diagram.domain.edit.helpers.JavaEnumEditHelper">
+        <param name="semanticHint" value="2002"/>
+      </metamodelType>
+    </metamodel>
+
+    <metamodel nsURI="http:///net/codecadenza/eclipse/model/domain.ecore">
+      <metamodelType
+        id="net.codecadenza.eclipse.diagram.DomainAttribute_3001"
+        name="%metatype.name.DomainAttribute_3001"
+        kind="org.eclipse.gmf.runtime.emf.type.core.IHintedType"
+        eclass="DomainAttribute"
+        edithelper="net.codecadenza.eclipse.diagram.domain.edit.helpers.DomainAttributeEditHelper">
+        <param name="semanticHint" value="3001"/>
+      </metamodelType>
+    </metamodel>
+
+    <metamodel nsURI="http:///net/codecadenza/eclipse/model/java.ecore">
+      <metamodelType
+        id="net.codecadenza.eclipse.diagram.EnumLiteral_3002"
+        name="%metatype.name.EnumLiteral_3002"
+        kind="org.eclipse.gmf.runtime.emf.type.core.IHintedType"
+        eclass="EnumLiteral"
+        edithelper="net.codecadenza.eclipse.diagram.domain.edit.helpers.EnumLiteralEditHelper">
+        <param name="semanticHint" value="3002"/>
+      </metamodelType>
+    </metamodel>
+
+    <metamodel nsURI="http:///net/codecadenza/eclipse/model/domain.ecore">
+      <metamodelType
+        id="net.codecadenza.eclipse.diagram.OneToOneAssociation_4003"
+        name="%metatype.name.OneToOneAssociation_4003"
+        kind="org.eclipse.gmf.runtime.emf.type.core.IHintedType"
+        eclass="OneToOneAssociation"
+        edithelper="net.codecadenza.eclipse.diagram.domain.edit.helpers.OneToOneAssociationEditHelper">
+        <param name="semanticHint" value="4003"/>
+      </metamodelType>
+    </metamodel>
+
+    <metamodel nsURI="http:///net/codecadenza/eclipse/model/domain.ecore">
+      <metamodelType
+        id="net.codecadenza.eclipse.diagram.ManyToManyAssociation_4002"
+        name="%metatype.name.ManyToManyAssociation_4002"
+        kind="org.eclipse.gmf.runtime.emf.type.core.IHintedType"
+        eclass="ManyToManyAssociation"
+        edithelper="net.codecadenza.eclipse.diagram.domain.edit.helpers.ManyToManyAssociationEditHelper">
+        <param name="semanticHint" value="4002"/>
+      </metamodelType>
+    </metamodel>
+
+    <metamodel nsURI="http:///net/codecadenza/eclipse/model/domain.ecore">
+      <metamodelType
+        id="net.codecadenza.eclipse.diagram.ManyToOneAssociation_4004"
+        name="%metatype.name.ManyToOneAssociation_4004"
+        kind="org.eclipse.gmf.runtime.emf.type.core.IHintedType"
+        eclass="ManyToOneAssociation"
+        edithelper="net.codecadenza.eclipse.diagram.domain.edit.helpers.ManyToOneAssociationEditHelper">
+        <param name="semanticHint" value="4004"/>
+      </metamodelType>
+    </metamodel>
+
+    <metamodel nsURI="http:///net/codecadenza/eclipse/model/domain.ecore">
+      <metamodelType
+        id="net.codecadenza.eclipse.diagram.OneToManyAssociation_4006"
+        name="%metatype.name.OneToManyAssociation_4006"
+        kind="org.eclipse.gmf.runtime.emf.type.core.IHintedType"
+        eclass="OneToManyAssociation"
+        edithelper="net.codecadenza.eclipse.diagram.domain.edit.helpers.OneToManyAssociationEditHelper">
+        <param name="semanticHint" value="4006"/>
+      </metamodelType>
+    </metamodel>
+
+    <metamodel nsURI="http:///net/codecadenza/eclipse/model/domain.ecore">
+      <metamodelType
+        id="net.codecadenza.eclipse.diagram.EnumAssociation_4001"
+        name="%metatype.name.EnumAssociation_4001"
+        kind="org.eclipse.gmf.runtime.emf.type.core.IHintedType"
+        eclass="EnumAssociation"
+        edithelper="net.codecadenza.eclipse.diagram.domain.edit.helpers.EnumAssociationEditHelper">
+        <param name="semanticHint" value="4001"/>
+      </metamodelType>
+    </metamodel>
+
+    <metamodel nsURI="http:///net/codecadenza/eclipse/model/domain.ecore">
+      <metamodelType
+        id="net.codecadenza.eclipse.diagram.DomainInheritance_4005"
+        name="%metatype.name.DomainInheritance_4005"
+        kind="org.eclipse.gmf.runtime.emf.type.core.IHintedType"
+        eclass="DomainInheritance"
+        edithelper="net.codecadenza.eclipse.diagram.domain.edit.helpers.DomainInheritanceEditHelper">
+        <param name="semanticHint" value="4005"/>
+      </metamodelType>
+    </metamodel>
+  </extension>
+
+  <extension point="org.eclipse.core.expressions.propertyTesters">
+    <?gmfgen generated="true"?>
+    <propertyTester
+      id="net.codecadenza.eclipse.diagram.URIEditorInputPropertyTester"
+      type="org.eclipse.emf.common.ui.URIEditorInput"
+      namespace="net.codecadenza.eclipse.diagram"
+      properties="isURIEditorInput"
+      class="net.codecadenza.eclipse.diagram.domain.part.CodeCadenzaUriEditorInputTester">
+    </propertyTester>
+  </extension>
+
+  <extension point="org.eclipse.core.expressions.propertyTesters">
+    <?gmfgen generated="true"?>
+    <propertyTester
+      id="net.codecadenza.eclipse.diagram.ShortcutPropertyTester"
+      type="org.eclipse.gmf.runtime.notation.View"
+      namespace="net.codecadenza.eclipse.diagram"
+      properties="isShortcut"
+      class="net.codecadenza.eclipse.diagram.domain.part.CodeCadenzaShortcutPropertyTester">
+    </propertyTester>
+  </extension>
+
+  <extension point="org.eclipse.core.expressions.propertyTesters">
+    <?gmfgen generated="true"?>
+    <propertyTester
+      id="net.codecadenza.eclipse.diagram.DomainModelElementPropertyTester"
+      type="org.eclipse.emf.ecore.EObject"
+      namespace="net.codecadenza.eclipse.diagram"
+      properties="isDomainModelElement"
+      class="net.codecadenza.eclipse.diagram.domain.part.CodeCadenzaDomainModelElementTester">
+    </propertyTester>
+  </extension>
+
+  <extension point="org.eclipse.ui.navigator.viewer">
+    <?gmfgen generated="true"?>
+    <viewerContentBinding viewerId="org.eclipse.ui.navigator.ProjectExplorer">
+      <includes>
+        <contentExtension pattern="net.codecadenza.eclipse.diagram.resourceContent"/>
+        <contentExtension pattern="net.codecadenza.eclipse.diagram.domainResourceContent"/>
+        <contentExtension pattern="net.codecadenza.eclipse.diagram.navigatorLinkHelper"/>
+      </includes>
+    </viewerContentBinding>
+    <viewerActionBinding viewerId="org.eclipse.ui.navigator.ProjectExplorer">
+      <includes>
+        <actionExtension pattern="net.codecadenza.eclipse.diagram.navigatorActionProvider"/>
+      </includes>
+    </viewerActionBinding>
+  </extension>
+
+  <extension point="org.eclipse.ui.navigator.navigatorContent">
+    <?gmfgen generated="true"?>
+    <navigatorContent
+      id="net.codecadenza.eclipse.diagram.resourceContent" 
+      name="%navigatorContentName" 
+      priority="normal" 
+      contentProvider="net.codecadenza.eclipse.diagram.domain.navigator.CodeCadenzaNavigatorContentProvider" 
+      labelProvider="net.codecadenza.eclipse.diagram.domain.navigator.CodeCadenzaNavigatorLabelProvider"
+      icon="icons/obj16/DomainDiagramFile.gif"
+      activeByDefault="true">
+      <triggerPoints>
+        <or>
+          <and>
+            <instanceof value="org.eclipse.core.resources.IFile"/>
+            <test property="org.eclipse.core.resources.extension" value="ccd"/>
+          </and>
+          <instanceof value="net.codecadenza.eclipse.diagram.domain.navigator.CodeCadenzaAbstractNavigatorItem"/>
+          <adapt type="org.eclipse.gmf.runtime.notation.View">
+            <test property="net.codecadenza.eclipse.diagram.isShortcut"/>
+          </adapt>
+        </or>
+      </triggerPoints>
+      <possibleChildren>
+        <or>
+          <instanceof value="net.codecadenza.eclipse.diagram.domain.navigator.CodeCadenzaAbstractNavigatorItem"/>
+          <adapt type="org.eclipse.gmf.runtime.notation.View">
+            <test property="net.codecadenza.eclipse.diagram.isShortcut"/>
+          </adapt>
+        </or>
+      </possibleChildren>
+      <commonSorter 
+        id="net.codecadenza.eclipse.diagram.navigatorSorter" 
+        class="net.codecadenza.eclipse.diagram.domain.navigator.CodeCadenzaNavigatorSorter">
+        <parentExpression>
+          <or>
+            <and>
+              <instanceof value="org.eclipse.core.resources.IFile"/>
+              <test property="org.eclipse.core.resources.extension" value="ccd"/>
+            </and>
+            <instanceof value="net.codecadenza.eclipse.diagram.domain.navigator.CodeCadenzaAbstractNavigatorItem"/>
+          </or>
+        </parentExpression>
+      </commonSorter>
+    </navigatorContent>
+
+    <navigatorContent
+      id="net.codecadenza.eclipse.diagram.domainResourceContent" 
+      name="%domainNavigatorContentName" 
+      priority="normal" 
+      contentProvider="net.codecadenza.eclipse.diagram.domain.navigator.CodeCadenzaDomainNavigatorContentProvider" 
+      labelProvider="net.codecadenza.eclipse.diagram.domain.navigator.CodeCadenzaDomainNavigatorLabelProvider"
+      icon="icons/obj16/DomainDiagramFile.gif"
+      activeByDefault="true">
+      <triggerPoints>
+        <or>
+          <and>
+            <instanceof value="org.eclipse.core.resources.IFile"/>
+            <test property="org.eclipse.core.resources.extension" value="xmi"/>
+          </and>
+          <and>
+            <instanceof value="org.eclipse.emf.ecore.EObject"/>
+            <test property="net.codecadenza.eclipse.diagram.isDomainModelElement"/>
+          </and>
+        </or>
+      </triggerPoints>
+      <possibleChildren>
+        <and>
+          <instanceof value="org.eclipse.emf.ecore.EObject"/>
+          <test property="net.codecadenza.eclipse.diagram.isDomainModelElement"/>
+        </and>
+      </possibleChildren>
+    </navigatorContent>
+
+    <actionProvider
+      id="net.codecadenza.eclipse.diagram.navigatorActionProvider"
+      class="net.codecadenza.eclipse.diagram.domain.navigator.CodeCadenzaNavigatorActionProvider">
+      <enablement>
+        <or>
+          <instanceof value="net.codecadenza.eclipse.diagram.domain.navigator.CodeCadenzaAbstractNavigatorItem"/>
+          <adapt type="org.eclipse.gmf.runtime.notation.View">
+            <test property="net.codecadenza.eclipse.diagram.isShortcut"/>
+          </adapt>
+        </or>
+      </enablement>
+    </actionProvider>
+  </extension>
+
+  <extension point="org.eclipse.ui.navigator.linkHelper">
+    <?gmfgen generated="true"?>
+    <linkHelper
+      id="net.codecadenza.eclipse.diagram.navigatorLinkHelper"
+      class="net.codecadenza.eclipse.diagram.domain.navigator.CodeCadenzaNavigatorLinkHelper">
+      <editorInputEnablement>
+        <and>
+          <instanceof value="org.eclipse.emf.common.ui.URIEditorInput"/>
+          <test property="net.codecadenza.eclipse.diagram.isURIEditorInput"/>
+        </and>
+      </editorInputEnablement>
+      <selectionEnablement>
+        <instanceof value="net.codecadenza.eclipse.diagram.domain.navigator.CodeCadenzaAbstractNavigatorItem"/>
+      </selectionEnablement>
+    </linkHelper>
+  </extension>
+
+  <extension point="org.eclipse.ui.commands">
+    <?gmfgen generated="true"?>
+    <command
+      categoryId="org.eclipse.ui.category.edit"
+      defaultHandler="net.codecadenza.eclipse.diagram.domain.part.CodeCadenzaDiagramUpdateCommand"
+      description="%update.diagram.description"
+      id="net.codecadenza.eclipse.diagram.domain.updateDiagram"
+      name="%update.diagram.name"/>
+  </extension>
+
+  <extension point="org.eclipse.ui.bindings">
+    <?gmfgen generated="true"?>
+    <key 
+      commandId="net.codecadenza.eclipse.diagram.domain.updateDiagram"
+      contextId="net.codecadenza.eclipse.diagram.domain.ui.diagramContext"
+      schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
+      sequence="F5"/>
+  </extension>
+
+  <extension point="org.eclipse.ui.popupMenus">
+    <objectContribution
+      adaptable="false"
+      id="net.codecadenza.eclipse.diagram.ManyToManyContribution"
+      objectClass="net.codecadenza.eclipse.diagram.domain.edit.parts.ManyToManyAssociationEditPart">
+      <menu
+        id="net.codecadenza.eclipse.diagram.menu4"
+        label="Edit many-to-many association">
+      </menu>
+      <action
+        class="net.codecadenza.eclipse.diagram.domain.edit.action.EditManyToManyAssociationAction"
+        id="net.codecadenza.eclipse.diagram.editm2m"
+        label="Edit many-to-many association">
+      </action>
+    </objectContribution>
+
+    <objectContribution
+      adaptable="false"
+      id="net.codecadenza.eclipse.diagram.ManyToOneContribution"
+      objectClass="net.codecadenza.eclipse.diagram.domain.edit.parts.ManyToOneAssociationEditPart">
+      <menu
+        id="net.codecadenza.eclipse.diagram.menu5"
+        label="Edit many-to-one association">
+      </menu>
+      <action
+        class="net.codecadenza.eclipse.diagram.domain.edit.action.EditManyToOneAssociationAction"
+        id="net.codecadenza.eclipse.diagram.action5"
+        label="Edit many-to-one association">
+      </action>
+    </objectContribution>
+
+    <objectContribution
+      adaptable="false"
+      id="net.codecadenza.eclipse.diagram.OneToManyContribution"
+      objectClass="net.codecadenza.eclipse.diagram.domain.edit.parts.OneToManyAssociationEditPart">
+      <menu
+        id="net.codecadenza.eclipse.diagram.menu6"
+        label="Edit one-to-many association">
+      </menu>
+      <action
+        class="net.codecadenza.eclipse.diagram.domain.edit.action.EditOneToManyAssociationAction"
+        id="net.codecadenza.eclipse.diagram.action6"
+        label="Edit one-to-many association">
+      </action>
+    </objectContribution>
+
+    <objectContribution
+      adaptable="false"
+      id="net.codecadenza.eclipse.diagram.OneToOneContribution"
+      objectClass="net.codecadenza.eclipse.diagram.domain.edit.parts.OneToOneAssociationEditPart">
+      <menu
+        id="net.codecadenza.eclipse.diagram.menu7"
+        label="Edit one-to-one association">
+      </menu>
+      <action
+        class="net.codecadenza.eclipse.diagram.domain.edit.action.EditOneToOneAssociationAction"
+        id="net.codecadenza.eclipse.diagram.action7"
+        label="Edit one-to-one association">
+      </action>
+    </objectContribution>
+
+    <objectContribution
+      adaptable="false"
+      id="net.codecadenza.eclipse.diagram.OneToManyReverseContribution"
+      objectClass="net.codecadenza.eclipse.diagram.domain.edit.parts.OneToManyAssociationEditPart">
+      <menu
+        id="net.codecadenza.eclipse.diagram.menu8"
+        label="Edit reverse association">
+      </menu>
+      <action
+        class="net.codecadenza.eclipse.diagram.domain.edit.action.EditReverseManyToOneAssociationAction"
+        id="net.codecadenza.eclipse.diagram.action8"
+        label="Edit reverse association">
+      </action>
+    </objectContribution>
+
+    <objectContribution
+      adaptable="false"
+      id="net.codecadenza.eclipse.diagram.ManyToManyReverseContribution"
+      objectClass="net.codecadenza.eclipse.diagram.domain.edit.parts.ManyToManyAssociationEditPart">
+      <menu
+        id="net.codecadenza.eclipse.diagram.menu.9"
+        label="Edit reverse association">
+      </menu>
+      <action
+        class="net.codecadenza.eclipse.diagram.domain.edit.action.EditReverseManyToManyAssociationAction"
+        id="net.codecadenza.eclipse.diagram.action9"
+        label="Edit reverse association">
+      </action>
+    </objectContribution>
+
+    <objectContribution
+      adaptable="false"
+      id="net.codecadenza.eclipse.diagram.OneToOneReverseContribution"
+      objectClass="net.codecadenza.eclipse.diagram.domain.edit.parts.OneToOneAssociationEditPart">
+      <menu
+        id="net.codecadenza.eclipse.diagram.menu.10"
+        label="Edit reverse association">
+      </menu>
+      <action
+        class="net.codecadenza.eclipse.diagram.domain.edit.action.EditReverseOneToOneAssociationAction"
+        id="net.codecadenza.eclipse.diagram.action10"
+        label="Edit reverse association">
+      </action>
+    </objectContribution>
+  </extension>
+
+  <extension point="org.eclipse.ui.popupMenus">
+    <objectContribution
+      adaptable="false"
+      id="net.codecadenza.eclipse.diagram.RenameDomainObject"
+      objectClass="net.codecadenza.eclipse.diagram.domain.edit.parts.DomainObjectEditPart">
+      <menu
+        id="net.codecadenza.eclipse.diagram.menu1"
+        label="Rename domain object">
+      </menu>
+      <action
+        class="net.codecadenza.eclipse.diagram.domain.edit.action.RenameNodeAction"
+        id="net.codecadenza.eclipse.diagram.model.diagram.edit.actions.RenameNodeAction"
+        label="Rename domain object">
+      </action>
+    </objectContribution>
+
+    <objectContribution
+      adaptable="false"
+      id="net.codecadenza.eclipse.diagram.RenameJavaEnum"
+      objectClass="net.codecadenza.eclipse.diagram.domain.edit.parts.JavaEnumEditPart">
+      <menu
+        id="net.codecadenza.eclipse.diagram.menu1"
+        label="Rename Enum">
+      </menu>
+      <action
+        class="net.codecadenza.eclipse.diagram.domain.edit.action.RenameNodeAction"
+        id="net.codecadenza.eclipse.diagram.model.diagram.edit.actions.RenameJavaEnumAction"
+        label="Rename Enum">
+      </action>
+    </objectContribution>
+  </extension>
+
+  <extension point="org.eclipse.ui.bindings">
+    <key
+      contextId="net.codecadenza.eclipse.diagram.domain.ui.diagramContext"
+      schemeId="net.codecadenza.eclipse.diagram.scheme1"
+      sequence="DEL">
+    </key>
+    <scheme
+      id="net.codecadenza.eclipse.diagram.scheme1"
+      name="name"
+      parentId="org.eclipse.ui.defaultAcceleratorConfiguration">
+    </scheme>
+  </extension>
+
+  <extension point="org.eclipse.ui.popupMenus">
+    <objectContribution
+      adaptable="false"
+      id="net.codecadenza.eclipse.diagram.domain.DomainObjectContribution.UniqueKey"
+      objectClass="net.codecadenza.eclipse.diagram.domain.edit.parts.DomainObjectEditPart">
+      <menu
+        id="net.codecadenza.eclipse.diagram.menu1"
+        label="Create unique key">
+      </menu>
+      <action
+        class="net.codecadenza.eclipse.diagram.domain.edit.action.AddUniqueKeyAction"
+        id="net.codecadenza.eclipse.diagram.domain.edit.action.AddUniqueKeyAction"
+        label="Create unique key">
+      </action>
+    </objectContribution>
+  </extension>
+
+</plugin>
