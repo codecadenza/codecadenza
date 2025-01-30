@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="java" nsURI="http:///net/codecadenza/eclipse/model/java.ecore"
+    nsPrefix="net.codecadenza.eclipse.model.java">
+  <eClassifiers xsi:type="ecore:EClass" name="EnumLiteral">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="tag" eType="#//EnumLiteralTagEnumeration"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="javaEnum" eType="#//JavaEnum"
+        eOpposite="#//JavaEnum/enumerationValues"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="JavaEnum" eSuperTypes="#//JavaType">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="enumerationValues" upperBound="-1"
+        eType="#//EnumLiteral" containment="true" resolveProxies="false" eOpposite="#//EnumLiteral/javaEnum"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="tag" eType="#//EnumTagEnumeration"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="JavaMethod">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="comment" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="javaType" eType="#//JavaType"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="returnType" eType="#//JavaType"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="returnTypeModifier" eType="#//JavaTypeModifierEnumeration"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="methodParameters" upperBound="-1"
+        eType="#//MethodParameter" containment="true" resolveProxies="false" eOpposite="#//MethodParameter/method"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="JavaType">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="comment" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="mappable" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="primitive" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="namespace" eType="#//Namespace"
+        eOpposite="#//Namespace/javaTypes"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="JavaTypeModifierEnumeration">
+    <eLiterals name="None"/>
+    <eLiterals name="Collection" value="1"/>
+    <eLiterals name="ArrayList" value="2"/>
+    <eLiterals name="Vector" value="3"/>
+    <eLiterals name="HashMap" value="4"/>
+    <eLiterals name="HashSet" value="5" literal="HashSet"/>
+    <eLiterals name="List" value="6" literal="List"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="MethodParameter">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="method" eType="#//JavaMethod"
+        transient="true" eOpposite="#//JavaMethod/methodParameters"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="type" eType="#//JavaType"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="modifier" eType="#//JavaTypeModifierEnumeration"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="hint" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Namespace">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="parent" eType="#//Namespace"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="childNamespaces" upperBound="-1"
+        eType="#//Namespace"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="javaTypes" upperBound="-1"
+        eType="#//JavaType" eOpposite="#//JavaType/namespace"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="project" eType="ecore:EClass project.ecore#//Project"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="EnumLiteralTagEnumeration">
+    <eLiterals name="NONE"/>
+    <eLiterals name="LOGGING_LEVEL_WARN" value="1" literal="LOGGING_LEVEL_WARN"/>
+    <eLiterals name="LOGGING_LEVEL_ERROR" value="2"/>
+    <eLiterals name="LOGGING_LEVEL_INFO" value="3"/>
+    <eLiterals name="LOGGING_LEVEL_DEBUG" value="4" literal="LOGGING_LEVEL_DEBUG"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="EnumTagEnumeration">
+    <eLiterals name="NONE"/>
+    <eLiterals name="LOGGING_LEVEL" value="1"/>
+  </eClassifiers>
+</ecore:EPackage>

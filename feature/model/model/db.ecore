@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="db" nsURI="http:///net/codecadenza/eclipse/model/db.ecore" nsPrefix="net.codecadenza.eclipse.model.db">
+  <eClassifiers xsi:type="ecore:EClass" name="DBColumn">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="length" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="nullable" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="precision" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="scale" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="databaseTable" eType="#//DBTable"
+        transient="true" eOpposite="#//DBTable/columns"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="columnType" eType="#//DBColumnType"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="DBColumnType">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="javaTypes" upperBound="-1"
+        eType="ecore:EClass java.ecore#//JavaType"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="omitSizeInformation" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="DBIndex">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="table" eType="#//DBTable"
+        transient="true" eOpposite="#//DBTable/indexes"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="unique" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="columns" upperBound="-1"
+        eType="#//DBColumn"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="DBTable">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="database" eType="#//Database"
+        eOpposite="#//Database/databaseTables"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="columns" upperBound="-1"
+        eType="#//DBColumn" containment="true" resolveProxies="false" eOpposite="#//DBColumn/databaseTable"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="primaryKey" eType="#//PrimaryKey"
+        containment="true" resolveProxies="false" eOpposite="#//PrimaryKey/table"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="foreignKeys" upperBound="-1"
+        eType="#//ForeignKey" containment="true" resolveProxies="false" eOpposite="#//ForeignKey/table"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="indexes" upperBound="-1"
+        eType="#//DBIndex" containment="true" resolveProxies="false" eOpposite="#//DBIndex/table"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="schemaName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="catalogName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="DBVendorGroupEnumeration">
+    <eLiterals name="MYSQL"/>
+    <eLiterals name="ORACLE" value="1"/>
+    <eLiterals name="DERBY" value="2"/>
+    <eLiterals name="DERBY_EMBEDDED" value="3"/>
+    <eLiterals name="POSTGRESQL" value="4"/>
+    <eLiterals name="MSSQL" value="5"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Database">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="databaseTables" upperBound="-1"
+        eType="#//DBTable" eOpposite="#//DBTable/database"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="project" eType="ecore:EClass project.ecore#//Project"
+        eOpposite="project.ecore#//Project/database"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="schemaName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="catalogName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="identifierRegEx" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="identifierStyle" eType="#//IdentifierStyleEnumeration"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="maxIdentifierLength" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="hibernateDialect" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="eclipseLinkTargetDBName"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="reservedWords" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="supportsIdentityColumn"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="supportsSequence" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="vendorGroup" eType="#//DBVendorGroupEnumeration"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="allSupportedColumnTypes"
+        upperBound="-1" eType="#//DBColumnType" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ForeignKey">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="table" eType="#//DBTable"
+        transient="true" eOpposite="#//DBTable/foreignKeys"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="column" eType="#//DBColumn"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="referencedColumn" eType="#//DBColumn"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="PrimaryKey">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="table" eType="#//DBTable"
+        transient="true" eOpposite="#//DBTable/primaryKey"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="column" eType="#//DBColumn"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="IdentifierStyleEnumeration">
+    <eLiterals name="UPPERCASE"/>
+    <eLiterals name="LOWERCASE" value="1"/>
+    <eLiterals name="CASE_SENSITIVE" value="2"/>
+  </eClassifiers>
+</ecore:EPackage>
