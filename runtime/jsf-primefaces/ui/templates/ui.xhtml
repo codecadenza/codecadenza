@@ -1,0 +1,71 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="jakarta.faces.html"
+	xmlns:f="jakarta.faces.core"
+	xmlns:ui="jakarta.faces.facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+<f:view locale="#{userSession.locale}">
+
+<h:head>
+	<title><ui:insert name="title">#{i18n.application_title}</ui:insert></title>
+	<meta http-equiv="refresh" content="#{session.maxInactiveInterval};url=#{request.scheme}://#{request.serverName}:#{request.serverPort}#{request.contextPath}"/>
+	<meta content='text/html; charset=UTF-8' http-equiv="Content-Type"/>
+	<link type="text/css" rel="stylesheet" href="#{request.contextPath}/css/default.css" />
+	<script type="text/javascript" src="#{request.contextPath}/script/util.js"/>
+</h:head>
+<h:body>
+
+	<!-- Page header -->
+	<h:form id="form_header">
+		<h:panelGrid columns="3" styleClass="template-header" columnClasses="top-col-left,top-col-center,top-col-right">
+			<div class="pi pi-globe" style="font-size: 3em"/>
+			<p:outputLabel styleClass="label-application-title">#{i18n.application_title}</p:outputLabel>
+			<h:panelGrid columns="4" style="float: right;">
+				<p:commandButton id="cmdHome" value="#{i18n.navigator_home}" ajax="false" icon="pi pi-home" action="/view/index.jsf?faces-redirect=true"></p:commandButton>
+				<p:commandButton id="cmdLogout" value="#{i18n.navigator_logout}" icon="pi pi-sign-out" action="#{userSession.logout}"></p:commandButton>
+				<p:commandButton id="cmdEditSettings" value="#{i18n.navigator_settings}" icon="pi pi-user" action="/dialog/EditUserSettingsDialog.jsf?faces-redirect=true"></p:commandButton>
+				<p:commandButton id="cmdChangePassword" value="#{i18n.navigator_password}" icon="pi pi-pencil" action="/dialog/ChangePasswordDialog.jsf?faces-redirect=true"></p:commandButton>
+			</h:panelGrid>
+		</h:panelGrid>
+	</h:form>
+
+	<!-- Main area -->
+	<h:form id="form">
+		<div class="template-main-area"> 
+			<div style="display: table;">
+				<div style="display: table-row;">
+
+					<!-- Create a border on the left side -->
+					<div class="template-page-border"></div>
+
+					<!-- Add application tree view navigator -->
+					<div class="template-navigator">
+						<ui:include src="NavigatorTree.xhtml"/>
+					</div>
+
+					<!-- Add content area -->
+					<div class="template-content">
+						<ui:insert name="content"></ui:insert>
+					</div>
+
+					<!-- Create a border on the right side -->
+					<div class="template-page-border"></div>
+				</div>
+			</div>
+
+			<!-- Add a small space in order to see the full page content which is otherwise hidden by the footer after scrolling down! -->
+			<div class="template-bottom-spacer"/>
+		</div>
+	</h:form>
+	
+	<!-- Page footer -->
+	<div id="footer" class="template-footer">
+		<div class="template-footer-text-left">&copy;&nbsp;&nbsp;2025&nbsp;&bull;&nbsp;CodeCadenza technology</div>
+		<div class="template-footer-text-right">Powered by PrimeFaces 14.0.6</div>
+	</div>
+
+</h:body>
+</f:view>
+</html>

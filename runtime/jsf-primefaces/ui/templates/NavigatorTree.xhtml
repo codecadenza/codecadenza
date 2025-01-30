@@ -1,0 +1,21 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="jakarta.faces.facelets"
+	xmlns:h="jakarta.faces.html"
+	xmlns:f="jakarta.faces.core"
+	xmlns:p="http://primefaces.org/ui">
+
+	<p:tree style="width:100%;" value="#{navigatorView.root}" var="navigatorItem" dynamic="true">
+
+		<p:treeNode type="view_type" icon="pi pi-file" >
+			<h:outputLink value="#{navigatorItem.link}">
+				<h:outputText value="#{navigatorItem.name}" />
+			</h:outputLink>
+		</p:treeNode>
+
+		<p:treeNode type="folder_type" expandedIcon="pi pi-folder-open" collapsedIcon="pi pi-folder">
+			<h:outputText value="#{navigatorItem.name}" />
+		</p:treeNode>
+
+	</p:tree>
+
+</ui:composition>
