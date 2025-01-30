@@ -1,0 +1,20 @@
+<p-dialog [(visible)]="visible" [modal]="true" i18n-header="@@savedsearchselectiondialog_header" header="Select a saved search"
+  [style]="{'min-width': '400px', 'min-height': '300px'}" (onHide)="close()" (onShow)="initDialog()">
+
+  <cc-form-container>
+    <cc-form-control-container [span]="true">
+      <p-listbox [disabled]="confirmDelete" [options]="savedSearchObjects" [(ngModel)]="selectedItem" (onDblClick)="runSavedSearch()"
+        [listStyle]="{'min-height':'250px'}" optionLabel="name"></p-listbox>
+    </cc-form-control-container>
+  </cc-form-container>
+
+  <ng-template pTemplate="footer">
+    <button pButton style="min-width: 100px" type="button" icon="pi pi-check" i18n-label="@@button_run" [disabled]="!selectedItem"
+      label="Run" (click)="runSavedSearch()"></button>
+    <button pButton style="min-width: 100px" type="button" icon="pi pi-trash" i18n-label="@@button_delete" [disabled]="!selectedItem || confirmDelete"
+      label="Delete" (click)="confirmDelete = true"></button>
+    <button pButton style="min-width: 100px" type="button" icon="pi pi-question" i18n-label="@@button_confirm" [disabled]="!selectedItem || !confirmDelete"
+      label="Confirm" (click)="deleteSavedSearch()"></button>
+  </ng-template>
+
+</p-dialog>

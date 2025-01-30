@@ -1,0 +1,20 @@
+<div *ngIf="filterSourceItems && !disabled" class="form-field-row">
+  <div class="form-field-cell label-field-mandatory" i18n="@@multiselectionlist_searchitems">Search items:</div>
+  <div class="form-field-cell">
+    <input pInputText (keyup)="onKeyUp($event)" type="text">
+  </div>
+  <div *ngIf="loading" class="form-field-cell">
+    <div class="pi pi-spin pi-spinner" style="font-size: 1.45rem"></div>
+  </div>
+</div>
+
+<div class="form-spacer"></div>
+
+<p-pickList [disabled]="disabled" [responsive]="true" [source]="_availableItems" [target]="selectedItems" sourceHeader="{{sourceListHeader}}"
+  targetHeader="{{targetListHeader}}" [showSourceControls]="false" [showTargetControls]="false" (onMoveToTarget)="updateListHeaders()"
+  (onMoveToSource)="updateListHeaders()">
+
+  <ng-template let-item pTemplate="item">
+    <div>{{getItemText(item)}}</div>
+  </ng-template>
+</p-pickList>

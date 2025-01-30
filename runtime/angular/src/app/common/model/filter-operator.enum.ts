@@ -1,0 +1,19 @@
+/**
+ * Enumeration of supported filter operators
+ */
+export enum FilterOperatorEnum {
+  IN = 'IN',
+  NOT_IN = 'NOT_IN',
+  BETWEEN = 'BETWEEN',
+  IS_NULL = 'IS_NULL',
+  IS_NOT_NULL = 'IS_NOT_NULL',
+  LIKE = 'LIKE',
+  NOT_LIKE = 'NOT_LIKE',
+  EQUAL = 'EQUAL',
+  GREATER = 'GREATER',
+  SMALLER = 'SMALLER',
+  GREATER_OR_EQUAL = 'GREATER_OR_EQUAL',
+  SMALLER_OR_EQUAL = 'SMALLER_OR_EQUAL',
+  TOKEN_DELIMITER_IN = 'TOKEN_DELIMITER_IN',
+  TOKEN_DELIMITER_BETWEEN = 'TOKEN_DELIMITER_BETWEEN'
+}

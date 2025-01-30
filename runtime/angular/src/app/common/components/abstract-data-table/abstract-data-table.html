@@ -1,0 +1,37 @@
+<div class="grid" style="padding-right: 20px">
+  <button pButton type="button" icon="pi pi-refresh" class="col xl:col-1 md:col-2 sm:col-12" [style]="{'margin': '10px 0px 10px 10px'}"
+    i18n-label="@@button_refresh" label="Refresh" (click)="refreshView()" id="cmdRefresh"></button>
+  <button pButton type="button" icon="pi pi-download" class="col xl:col-1 md:col-2 sm:col-12" [style]="{'margin': '10px 0px 10px 10px'}"
+    i18n-label="@@button_export" label="Export" (click)="dataTable.exportCSV()" id="cmdExport"></button>
+  <button pButton type="button" icon="pi pi-plus" class="col xl:col-1 md:col-2 sm:col-12" [style]="{'margin': '10px 0px 10px 10px'}"
+     *ngIf="showNewButton" i18n-label="@@button_new" label="New" (click)="onNewButtonClicked()" id="cmdNew"></button>
+  <p-fileUpload #fileUpload mode="basic" class="col xl:col-1 md:col-2 sm:col-12" [style]="{'margin': '2px 0px 0px 2px'}"
+    *ngIf="showImportButton" i18n-chooseLabel="@@button_import" chooseLabel="Import" [customUpload]="true" [auto]="true"
+    (uploadHandler)="onImportButtonPressed($event, fileUpload)" id="cmdImport"></p-fileUpload>
+</div>
+
+<p-table #dataTable [columns]="columns" [value]="items" [paginator]="true" [rows]="10" [(contextMenuSelection)]="selectedItem"
+  [contextMenu]="cm" [resizableColumns]="true" [loading]="loading" [rowsPerPageOptions]="[10, 20, 30, 50, 100, 500, 1000]"
+  [scrollable]="true" responsiveLayout="scroll" [style]="tableStyle" paginatorPosition="top" selectionMode="single"
+  styleClass="p-datatable-sm" [id]="tableId">
+  <ng-template pTemplate="header" let-columns>
+    <tr>
+      <th scope="col" *ngFor="let col of columns" pResizableColumn [ngStyle]="{'width': col.width}" [pSortableColumn]="col.field">
+        <p-sortIcon [field]="col.field"></p-sortIcon>
+        {{col.header}}
+      </th>
+    </tr>
+  </ng-template>
+  <ng-template pTemplate="body" let-rowData let-columns="columns" let-item>
+    <tr [pContextMenuRow]="rowData" [pSelectableRow]="rowData" (dblclick)="onRowDoubleClicked(item)" id="{{rowData[rowKey]}}">
+      <td *ngFor="let col of columns">
+        {{formatField(col.field, rowData[col.field])}}
+      </td>
+    </tr>
+  </ng-template>
+  <ng-template pTemplate="summary">
+    {{summaryText}}
+  </ng-template>
+</p-table>
+
+<p-contextMenu #cm [model]="contextMenuItems" id="{{tableId}}_contextMenu"></p-contextMenu>

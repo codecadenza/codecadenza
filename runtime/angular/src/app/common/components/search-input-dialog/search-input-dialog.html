@@ -1,0 +1,104 @@
+<p-dialog [(visible)]="visible" [modal]="true" i18n-header="@@searchinput_header" header="Enter filter and sorting criteria"
+  [style]="{'width': '830px', 'min-width': '500px'}" (onHide)="close()">
+
+  <form [formGroup]="searchInputForm">
+    <table style="width: 100%; border: 1px solid var(--surface-border); margin-bottom: 0.5rem; border-collapse:collapse;" aria-label="General settings">
+      <!-- Add an empty table header to satisfy SonarLint! -->
+      <thead><tr><th></th></tr></thead>
+      <tr style="vertical-align: top;">
+        <td style="padding: 10px;">
+          <div class="label-field-mandatory" i18n="@@searchinput_lblfetchsize">Max. number of recordsets:</div>
+          <p-dropdown [options]="fetchSizeItems" formControlName="maxResult"></p-dropdown>
+        </td>
+        <td style="padding: 10px;">
+          <div class="label-field-mandatory" i18n="@@searchinput_lblcasesensitive">Case sensitve:</div>
+          <input type="checkbox" formControlName="caseSensitive">
+        </td>
+        <td style="padding: 10px;">
+          <div class="label-field-mandatory" i18n="@@searchinput_lblexactfiltermatch">Exact filter match:</div>
+          <input type="checkbox" formControlName="exactFilterMatch">
+        </td>
+        <!-- Add an empty cell that fills up the rest of the space-->
+        <td style="width: 100%;"></td>
+      </tr>
+    </table>
+
+    <div style="width: 100%; border: 1px solid var(--surface-border);" formArrayName="searchFields" [style]="{'min-height': '500px'}">
+      <table style="width: 100%; border-collapse:collapse;" aria-label="Search fields">
+        <thead>
+          <tr style="height: 35px;">
+            <th style="background-color: var(--surface-ground);" i18n="@@searchinput_lblfieldname">Field name</th>
+            <th style="background-color: var(--surface-ground);" i18n="@@searchinput_lblsortoperator">Sort operator</th>
+            <th style="background-color: var(--surface-ground);" i18n="@@searchinput_lblfilteroperator">Filter operator</th>
+            <th style="background-color: var(--surface-ground);" i18n="@@searchinput_lblfilterinput">Filter input</th>
+            <th style="background-color: var(--surface-ground); white-space: nowrap;" i18n="@@searchinput_lblshowcolumn">Show column</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let searchInputField of searchFieldFormArray.controls; let i=index" [formGroupName]="i">
+            <td class="label-field-optional" *ngIf="displaySearchInputField(searchInputField)" style="padding: 5px;">
+              <div>{{ getSearchInputFieldLabel(searchInputField) }}</div>
+            </td>
+            <td *ngIf="displaySearchInputField(searchInputField)" style="padding: 5px;">
+              <p-dropdown [options]="sortOrderItems" formControlName="sortOrder" [id]="'s_' + i"></p-dropdown>
+            </td>
+
+            <!-- Add a dropdown field with search operators depending on the data type -->
+            <td *ngIf="displaySearchInputField(searchInputField)" style="padding: 5px;">
+              <p-dropdown *ngIf="getSearchInputFieldType(searchInputField) === FieldType.STRING" [options]="stringOperatorItems"
+                formControlName="operator" [id]="'o_' + i"></p-dropdown>
+              <p-dropdown *ngIf="getSearchInputFieldType(searchInputField) === FieldType.ENUM" [options]="enumOperatorItems"
+                formControlName="operator" [id]="'o_' + i"></p-dropdown>
+              <p-dropdown *ngIf="getSearchInputFieldType(searchInputField) === FieldType.DECIMAL" [options]="numericOperatorItems"
+                formControlName="operator" (onChange)="onOperatorChange(searchInputField)" [id]="'o_' + i"></p-dropdown>
+              <p-dropdown *ngIf="getSearchInputFieldType(searchInputField) === FieldType.INTEGER" [options]="numericOperatorItems"
+                formControlName="operator" (onChange)="onOperatorChange(searchInputField)" [id]="'o_' + i"></p-dropdown>
+              <p-dropdown *ngIf="getSearchInputFieldType(searchInputField) === FieldType.BOOLEAN" [options]="booleanOperatorItems"
+                formControlName="operator" [id]="'o_' + i"></p-dropdown>
+              <p-dropdown *ngIf="getSearchInputFieldType(searchInputField) === FieldType.DATE" [options]="dateOperatorItems"
+                formControlName="operator" [id]="'o_' + i"></p-dropdown>
+              <p-dropdown *ngIf="getSearchInputFieldType(searchInputField) === FieldType.UUID" [options]="stringOperatorItems"
+                formControlName="operator" [id]="'o_' + i"></p-dropdown>
+              <p-dropdown *ngIf="getSearchInputFieldType(searchInputField) === FieldType.UUID_BINARY" [options]="uuidOperatorItems"
+                formControlName="operator" [id]="'o_' + i"></p-dropdown>
+            </td>
+
+            <!-- Add a filter input control depending on the data type -->
+            <td style="width: 100%" *ngIf="displaySearchInputField(searchInputField)" style="padding: 5px;">
+              <input style="width: 100%;" *ngIf="getSearchInputFieldType(searchInputField) === FieldType.STRING" pInputText (keyup.enter)="applyInput()"
+                formControlName="filterCriteria" [id]="'fi_' + i">
+              <input style="width: 100%;" *ngIf="getSearchInputFieldType(searchInputField) === FieldType.DECIMAL" pInputText (keyup.enter)="applyInput()"
+                formControlName="filterCriteria" [id]="'fi_' + i">
+              <input style="width: 100%;" *ngIf="getSearchInputFieldType(searchInputField) === FieldType.INTEGER" pInputText (keyup.enter)="applyInput()"
+                formControlName="filterCriteria" [id]="'fi_' + i">
+              <input style="width: 100%;" *ngIf="getSearchInputFieldType(searchInputField) === FieldType.UUID" pInputText (keyup.enter)="applyInput()"
+                formControlName="filterCriteria" [id]="'fi_' + i">
+              <input style="width: 100%;" *ngIf="getSearchInputFieldType(searchInputField) === FieldType.UUID_BINARY" pInputText (keyup.enter)="applyInput()"
+                formControlName="filterCriteria" [id]="'fi_' + i">
+              <p-dropdown *ngIf="getSearchInputFieldType(searchInputField) === FieldType.BOOLEAN" [options]="booleanValueItems"
+                formControlName="filterCriteria" [id]="'fc_' + i"></p-dropdown>
+              <p-dropdown *ngIf="getSearchInputFieldType(searchInputField) === FieldType.ENUM" [options]="getSelectionList(searchInputField)"
+                formControlName="filterCriteria" [id]="'fc_' + i"></p-dropdown>
+              <p-calendar *ngIf="getSearchInputFieldType(searchInputField) === FieldType.DATE" formControlName="dateCriterion" (keyup.enter)="applyInput()"
+                [showTime]="showTime(searchInputField)" dateFormat="dd.mm.yy" [id]="'fd_' + i"></p-calendar>
+            </td>
+
+            <td style="text-align: center;" *ngIf="displaySearchInputField(searchInputField)" style="padding: 5px;">
+              <input type="checkbox" formControlName="displayInTable">
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </form>
+
+  <ng-template pTemplate="footer">
+    <button pButton style="min-width: 120px;" type="button" icon="pi pi-check" i18n-label="@@button_submit" label="Submit"
+      (click)="applyInput()" [disabled]="!searchInputForm.valid" id="cmdSubmit"></button>
+    <button pButton style="min-width: 120px;" type="button" icon="pi pi-info" i18n-label="@@button_count" label="Count"
+      (click)="countRecords()" [disabled]="!searchInputForm.valid" id="cmdCount"></button>
+    <button pButton style="min-width: 120px;" type="button" icon="pi pi-times" i18n-label="@@button_reset" label="Reset"
+      (click)="resetSearchInput()" id="cmdReset"></button>
+  </ng-template>
+
+</p-dialog>

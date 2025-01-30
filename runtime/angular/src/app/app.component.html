@@ -1,0 +1,67 @@
+<p-toast [style]="{'marginTop': '80px'}"></p-toast>
+<p-confirmDialog></p-confirmDialog>
+
+<!-- Menu bar -->
+<ul id="menu-bar" *ngIf="loggedIn$ | async">
+  <li>
+    <a routerLink="/welcome" i18n="@@app_menu_home">Home</a>
+  </li>
+
+  <li>
+    <a i18n="@@app_menu_edit">Edit</a>
+    <ul>
+      <li>
+        <a routerLink="/settings" i18n="@@app_menu_edit_settings">Format preferences</a>
+      </li>
+      <li>
+        <a routerLink="/changepassword" i18n="@@app_menu_edit_changepassword">Change password</a>
+      </li>
+    </ul>
+  </li>
+
+  <li>
+    <a (click)="logout()" tabindex="0" (keypress)="logout()" i18n="@@app_menu_logout" id="cmdLogout">Logout</a>
+  </li>
+</ul>
+
+<!-- Global progress bar -->
+<div style="display: table; position: fixed; top: 38px; width: 100%; z-index: 1;">
+  <div style="display: table-row; vertical-align: top; ">
+    <div *ngIf="loading" style="display: table-cell; padding: 0px 10px 0px 10px;">
+      <p-progressBar mode="indeterminate" [style]="{'height': '4px'}"></p-progressBar>
+    </div>
+  </div>
+</div>
+
+<!-- Main area -->
+<div class="template-main-area">
+  <div style="display: table;">
+    <div style="display: table-row;">
+
+      <!-- Create a border on the left side -->
+      <div class="template-page-border"></div>
+
+      <!-- Add application tree view navigator -->
+      <div class="template-navigator" *ngIf="loggedIn$ | async">
+        <cc-tree-navigator [collapsed]="collapseNavigator"></cc-tree-navigator>
+      </div>
+
+      <!-- Add content area -->
+      <div class="template-content">
+        <router-outlet></router-outlet>
+      </div>
+
+      <!-- Create a border on the right side -->
+      <div class="template-page-border"></div>
+    </div>
+  </div>
+
+  <!-- Add a small space in order to see the full page content which is otherwise hidden by the footer after scrolling down! -->
+  <div class="template-bottom-spacer"></div>
+</div>
+
+<!-- Page footer -->
+<div id="footer" class="template-footer" *ngIf="loggedIn$ | async">
+  <div class="template-footer-text-left">&copy;&nbsp;&nbsp;2025&nbsp;&bull;&nbsp;CodeCadenza</div>
+  <div class="template-footer-text-right" i18n="@@app_footer_poweredby">Powered by Primeng 17</div>
+</div>

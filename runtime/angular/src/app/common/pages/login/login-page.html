@@ -1,0 +1,25 @@
+<p-dialog [visible]="true" [resizable]="false" [modal]="true" i18n-header="@@loginpage_header" header="Please sign in below"
+  [style]="{'width': '300px'}" [draggable]="false" [closable]="false">
+  <form [formGroup]="formGroup" (ngSubmit)="performLogin()">
+    <div style="text-align: center;">
+      <img src="assets/images/logo.png" alt="">
+    </div>
+
+    <cc-form-container>
+      <cc-form-control-container i18n-label="@@loginpage_lblusername" label="User name:" [formGroup]="formGroup" name="userName"
+        [required]="true" [span]="true">
+        <!-- eslint-disable-next-line @angular-eslint/template/no-autofocus -->
+        <input pInputText formControlName="userName" class="inputfield w-full" autofocus id="txtUserName"/>
+      </cc-form-control-container>
+
+      <cc-form-control-container i18n-label="@@loginpage_lblpassword" label="Password:" [formGroup]="formGroup" name="password"
+        [required]="true" [span]="true">
+        <input type="password" [feedback]="false" pPassword formControlName="password" class="inputfield w-full"
+          style="margin-bottom: 1rem;" id="txtPassword"/>
+      </cc-form-control-container>
+    </cc-form-container>
+
+    <button pButton type="submit" style="width: 100%; min-height: 2.5rem;" i18n-label="@@button_login" label="Login"
+      [disabled]="!formGroup.valid" id="cmdLogin"></button>
+  </form>
+</p-dialog>
