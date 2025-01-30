@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.2"?>
+<plugin>
+
+  <extension
+    point="org.eclipse.ui.newWizards">
+    <category
+      name="CodeCadenza"
+      parentCategory=""
+      id="net.codecadenza.eclipse.ui.wizard">
+    </category>
+    <wizard
+      name="CodeCadenza project"
+      icon="icons/obj16/project.gif"
+      category="net.codecadenza.eclipse.ui.wizard"
+      class="net.codecadenza.eclipse.ui.wizard.CreateNewProjectWizard"
+      project="true"
+      finalPerspective="org.eclipse.jdt.ui.JavaPerspective"
+      id="net.codecadenza.eclipse.ui.wizard.CreateNewProjectWizard">
+    </wizard>
+  </extension>
+
+  <extension
+    point="org.eclipse.ui.views">
+    <category
+      name="CodeCadenza"
+      id="net.codecadenza.eclipse">
+    </category>
+    <view
+      category="net.codecadenza.eclipse"
+      class="net.codecadenza.eclipse.ui.view.ProjectView"
+      id="net.codecadenza.eclipse.ui.view.ProjectView"
+      name="CodeCadenza projects">
+    </view>
+  </extension>
+
+</plugin>
