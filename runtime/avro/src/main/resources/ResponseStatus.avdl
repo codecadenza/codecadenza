@@ -1,0 +1,22 @@
+/**
+ * Definition for common response data
+ */
+@namespace("net.codecadenza.runtime.avro.response")
+protocol ResponseStatusProtocol {
+
+  // Enumeration of supported response codes
+  enum ResponseCode 
+  {
+    SUCCESS,
+    NOT_FOUND,
+    ERROR
+  }
+
+  // Record that represents a response status
+  record ResponseStatus 
+  {
+    ResponseCode code;
+    union {null, string} message = null;
+  }
+
+}
