@@ -1,0 +1,4 @@
+<div class="p-inputgroup">
+  <input pInputText [readonly]="true" [value]="getItemText()" type="text">
+  <button pButton type="button" icon="pi pi-search" [disabled]="readonly" (click)="onSearchClicked()"></button>
+</div>

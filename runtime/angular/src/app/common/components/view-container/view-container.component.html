@@ -1,0 +1,24 @@
+<div class="view-border">
+
+  <!-- Header area -->
+  <div [ngClass]="collapsed ? 'view-header-collapsed' : 'view-header'">
+    <div [ngClass]="collapsed ? 'view-header-row-collapsed' : 'view-header-row'">
+      <div *ngIf="!collapsed" class="view-header-icon-cell">
+        <i class="pi {{headerIcon}}" style="font-size: 1.5rem"></i>
+      </div>
+      <div class="view-header-text-cell">
+        <div *ngIf="!collapsed" class="view-header-text">{{headerText}}</div>
+      </div>
+      <div *ngIf="enableCollapse" (click)="collapsed = !collapsed" tabindex="0" (keypress)="collapsed = !collapsed"
+        class="view-header-icon-cell" id="cmdCollapse">
+        <i [ngClass]="collapsed ? 'pi pi-bars' : 'pi pi-window-minimize'" style="font-size: 1.5rem"></i>
+      </div>
+    </div>
+  </div>
+
+  <!-- Content area -->
+  <div *ngIf="!collapsed" class="view-content" style="padding: {{contentPadding}}">
+    <ng-content></ng-content>
+  </div>
+
+</div>

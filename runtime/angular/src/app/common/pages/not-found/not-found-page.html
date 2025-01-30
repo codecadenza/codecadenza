@@ -1,0 +1,25 @@
+<p-dialog [(visible)]="visible" [resizable]="false" [modal]="true" i18n-header="@@notfoundpage_header" header="Page Not Found"
+  [style]="{'width': '460px'}" (onHide)="onCloseDialog()">
+
+  <table style="width: 100%; margin-bottom: 2rem; border-spacing: 0;" aria-label="Error details">
+    <!-- Add an empty table header to satisfy SonarLint! -->
+    <thead><tr><th></th></tr></thead>
+    <tr>
+      <td>
+        <i class="pi pi-exclamation-triangle" style="font-size: 4rem"></i>
+      </td>
+      <td>
+        <div style="font-size: 1.4rem; font-weight: bold;" i18n="@@notfoundpage_message">The requested page does not exist!</div>
+      </td>
+    </tr>
+  </table>
+
+  <div style="margin-bottom: 0.5rem;">
+    <div i18n="@@notfoundpage_info">If you close this dialog the start page will be opened.</div>
+  </div>
+
+  <ng-template pTemplate="footer">
+    <button pButton style="min-width: 100px" type="button" icon="pi pi-home" i18n-label="@@button_ok" label="OK" (click)="visible = false"></button>
+  </ng-template>
+
+</p-dialog>

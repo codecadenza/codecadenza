@@ -1,0 +1,12 @@
+<project name="Static files for Angular clients" default="content">
+
+	<target name="content">
+		<echo message="Building static files for Angular clients..." level="info"/>
+
+		<zip destfile="../../feature/resource/build/content/content_angular.zip">
+			<zipfileset dir="src" prefix="src"></zipfileset>
+			<zipfileset dir="config" prefix=""></zipfileset>
+		</zip>
+	</target>
+
+</project>

@@ -1,0 +1,57 @@
+<cc-search-input-dialog [visible]="showSearchInputDialog" (closeDialog)="showSearchInputDialog = false" [searchInput]="searchInput"
+  (performSearch)="performSearchOperation($event)" (performCount)="performCountOperation($event)">
+</cc-search-input-dialog>
+
+<cc-save-search-dialog [visible]="showSaveSearchDialog" (closeDialog)="showSaveSearchDialog = false" [searchInput]="searchInput"
+  [viewName]="id"></cc-save-search-dialog>
+
+<cc-saved-search-selection-dialog [visible]="showSavedSearchSelectionDialog" (closeDialog)="showSavedSearchSelectionDialog = false"
+  [searchInput]="searchInput" [viewName]="id" (savedSearchSelected)="performSearchOperation($event)"></cc-saved-search-selection-dialog>
+
+<cc-view-container headerText="{{title}}" headerIcon="pi-list">
+  <div class="grid" style="padding-right: 20px">
+    <button pButton class="col xl:col-1 md:col-3 sm:col-12" [style]="{'margin': '10px 0px 10px 10px'}" type="button" *ngIf="enableSearchInput"
+      icon="pi pi-search" i18n-label="@@button_search" label="Search" (click)="showSearchInputDialog = true" id="cmdSearch"></button>
+    <button pButton class="col xl:col-1 md:col-3 sm:col-12" [style]="{'margin': '10px 0px 10px 10px'}" type="button"
+      icon="pi pi-refresh" i18n-label="@@button_refresh" label="Refresh" (click)="refreshView()" id="cmdRefresh"></button>
+    <button pButton class="col xl:col-1 md:col-3 sm:col-12" [style]="{'margin': '10px 0px 10px 10px'}" type="button" *ngIf="enableSearchInput"
+      icon="pi pi-star" i18n-label="@@button_savesearch" label="Save" (click)="showSaveSearchDialog = true"></button>
+    <button pButton class="col xl:col-1 md:col-3 sm:col-12" [style]="{'margin': '10px 0px 10px 10px'}" type="button" *ngIf="enableSearchInput"
+      icon="pi pi-list" i18n-label="@@button_open" label="Open" (click)="showSavedSearchSelectionDialog = true;"
+      savedSearchSelected="performSearchOperation(event)"></button>
+    <button pButton class="col xl:col-1 md:col-3 sm:col-12" [style]="{'margin': '10px 0px 10px 10px'}" type="button"
+      icon="pi pi-download" i18n-label="@@button_export" label="Export" (click)="dataTable.exportCSV()" id="cmdExport"></button>
+    <button pButton class="col xl:col-1 md:col-3 sm:col-12" [style]="{'margin': '10px 0px 10px 10px'}" type="button" *ngIf="showNewButton"
+      icon="pi pi-plus" i18n-label="@@button_new" label="New" (click)="onNewButtonClicked()" id="cmdNew"></button>
+    <p-fileUpload mode="basic" [auto]="true" #fileUpload class="col xl:col-1 md:col-3 sm:col-12" *ngIf="showImportButton" [customUpload]="true"
+      [style]="{'margin': '2px 0px 0px 2px'}" i18n-chooseLabel="@@button_import" chooseLabel="Import"
+      (uploadHandler)="onImportButtonPressed($event, fileUpload)" id="cmdImport"></p-fileUpload>
+  </div>
+
+  <p-table #dataTable [columns]="columns" [value]="items" [paginator]="true" [rows]="30"
+    [(contextMenuSelection)]="selectedItem" responsiveLayout="scroll" [contextMenu]="cm" [resizableColumns]="true"
+    [loading]="loading" [rowsPerPageOptions]="[10, 20, 30, 50, 100, 500, 1000]" paginatorPosition="top"
+    styleClass="p-datatable-sm" selectionMode="single" id="dataTable">
+    <ng-template pTemplate="header" let-columns>
+      <tr>
+        <th scope="col" *ngFor="let col of columns" pResizableColumn [ngStyle]="{'width': col.width}" [pSortableColumn]="col.field">
+          <p-sortIcon [field]="col.field"></p-sortIcon>
+          {{col.header}}
+        </th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-rowData let-columns="columns" let-item>
+      <tr [pContextMenuRow]="rowData" [pSelectableRow]="rowData" (dblclick)="onRowDoubleClicked(item)" id="{{rowData[rowKey]}}">
+        <td *ngFor="let col of columns">
+          {{formatField(col.field, rowData[col.field])}}
+        </td>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="summary">
+      {{summaryText}}
+    </ng-template>
+  </p-table>
+
+  <p-contextMenu #cm [model]="contextMenuItems" id="dataTable_contextMenu"></p-contextMenu>
+
+</cc-view-container>

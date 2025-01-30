@@ -1,0 +1,14 @@
+<cc-view-container contentPadding="0px" i18n-headerText="@@applicationnavigator_header"
+  [collapsed]="collapsed" headerText="Application navigator" [enableCollapse]="true">
+  <p-tree [value]="nodes" scrollHeight="calc(100vh - 2.7rem - 90px)"
+    [style]="{'width': '100%', 'min-width': '300px', 'padding': '0px', 'border': '0px'}">
+    <ng-template let-node pTemplate="{{FORM_GROUP_TYPE}}">
+      <i class="pi pi-folder"></i>&nbsp;
+      <span style="vertical-align: middle;">{{node.label}}</span>
+    </ng-template>
+    <ng-template let-node pTemplate="{{FORM_TYPE}}">
+      <i class="pi pi-file"></i>&nbsp;
+      <a style="vertical-align: middle;" [routerLink]="node.data">{{node.label}}</a>
+    </ng-template>
+  </p-tree>
+</cc-view-container>
