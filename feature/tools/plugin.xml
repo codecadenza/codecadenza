@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.2"?>
+<plugin>
+
+  <extension
+    id="editors"
+    point="org.eclipse.ui.editors">
+
+    <editor
+      class="net.codecadenza.eclipse.tools.sqleditor.SQLEditor"
+      default="true"
+      extensions="sql"
+      icon="icons/document_sql.png"
+      id="net.codecadenza.eclipse.tools.sqleditor.SQLEditor"
+      name="SQL editor">
+     </editor>
+
+    <editor
+      class="net.codecadenza.eclipse.tools.reverse.editor.ReverseEditor"
+      default="true"
+      icon="icons/document_sql.png"
+      id="net.codecadenza.eclipse.tools.reverse.editor.ReverseEditor"
+      name="Reverse editor">
+    </editor>
+
+    <editor
+      class="net.codecadenza.eclipse.tools.jpaeditor.JPAQueryEditor"
+      default="true"
+      extensions="jpa"
+      icon="icons/document_sql.png"
+      id="net.codecadenza.eclipse.tools.jpaeditor.JPAQueryEditor"
+      name="JPA query editor">
+    </editor>
+
+    <editor
+      icon="icons/synch_db.png"
+      class="net.codecadenza.eclipse.tools.dbsync.editor.DBSyncEditor"
+      id="net.codecadenza.eclipse.tools.dbsync.editor.DBSyncEditor"
+      name="Database sync editor"/>
+  </extension>
+
+  <extension
+   point = "org.eclipse.ui.preferencePages">
+   <page
+     class="net.codecadenza.eclipse.tools.util.editor.QueryPreferencePage"
+     id="net.codecadenza.eclipse.tools.util.editor.QueryPreferencePage"
+     name="Query editor"
+     category="net.codecadenza.eclipse.preferences.main"/>
+  </extension>
+
+</plugin>
