@@ -1,0 +1,7 @@
+# Tracing options for the diagram plug-in
+
+# Common issues
+net.codecadenza.eclipse.diagram/debug=false
+
+# Visual IDs
+net.codecadenza.eclipse.diagram/debug/visualID=false
