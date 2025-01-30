@@ -1,0 +1,58 @@
+/**
+ * Definition of data structures that are used for search operations
+ */
+@namespace("net.codecadenza.runtime.avro.search")
+protocol SearchInputProtocol {
+
+  // Enumeration of supported filter operators
+  enum FilterOperatorEnum 
+  {
+    IN,
+    NOT_IN,
+    BETWEEN,
+    IS_NULL,
+    IS_NOT_NULL,
+    LIKE,
+    NOT_LIKE,
+    EQUAL,
+    GREATER,
+    SMALLER,
+    GREATER_OR_EQUAL,
+    SMALLER_OR_EQUAL
+  }
+
+  // Enumeration of supported sort directions
+  enum SortDirectionEnum 
+  {
+    NONE,
+    ASC, 
+    DESC
+  }
+
+  // Filter and sort settings for a single field
+  record SearchInputField 
+  {
+    union {string, null} filterCriteria;
+    string name;
+    SortDirectionEnum sortOrder;
+    int sortIndex;
+    boolean dateTimeFormat = true;
+    FilterOperatorEnum operator;
+  }
+
+  // Record that is used for search operations
+  record SearchInput 
+  {
+    int maxResult;
+    boolean caseSensitive;
+    union {string, null} numberFormat;
+    union {string, null} dateFormat;
+    union {string, null} dateTimeFormat;
+    int startIndex;
+    array<SearchInputField> searchFields;
+    boolean exactFilterMatch;
+    string decimalSeparator;
+    string groupingSeparator;
+  }
+
+}

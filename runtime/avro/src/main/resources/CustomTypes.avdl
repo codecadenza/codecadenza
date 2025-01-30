@@ -1,0 +1,9 @@
+/**
+ * Definition of custom data types
+ */
+@namespace("net.codecadenza.runtime.avro.types")
+protocol CustomTypesProtocol {
+
+  fixed Uuid(16);
+
+}
