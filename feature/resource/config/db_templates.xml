@@ -1,0 +1,659 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<db_templates>
+    <db_template vendor_group="DERBY">
+        <driver_name>org.apache.derby.jdbc.ClientDriver</driver_name>
+        <sample_url>jdbc:derby://localhost:1527/[instance];user=sa;password=sa;create=true;</sample_url>
+        <hibernate_dialect>org.hibernate.dialect.DerbyDialect</hibernate_dialect>
+        <max_identifier_length>128</max_identifier_length>
+        <eclipselink_target_dbname>Derby</eclipselink_target_dbname>
+        <identifier_regex>[A-Za-z][A-Za-z0-9_]*</identifier_regex>
+        <default_schema_name></default_schema_name>
+        <comment>Derby 10</comment>
+        <reserved_words>ADD ALL ALLOCATE ALTER AND ANY ARE AS ASC ASSERTION AT AUTHORIZATION AVG BEGIN BETWEEN BIGINT BIT BOOLEAN BOTH BY CALL CASCADE CASCADED CASE CAST CHAR CHARACTER CHECK CLOSE COALESCE COLLATE COLLATION COLUMN COMMIT CONNECT CONNECTION CONSTRAINT CONSTRAINTS CONTINUE CONVERT CORRESPONDING CREATE CURRENT CURRENT_DATE CURRENT_TIME CURRENT_TIMESTAMP CURRENT_USER CURSOR DEALLOCATE DEC DECIMAL DECLARE DEFAULT DEFERRABLE DEFERRED DELETE DESC DESCRIBE DIAGNOSTICS DISCONNECT DISTINCT DOUBLE DROP ELSE END END-EXEC ESCAPE EXCEPT EXCEPTION EXEC EXECUTE EXISTS EXPLAIN EXTERNAL FALSE FETCH FIRST FLOAT FOR FOREIGN FOUND FROM FULL FUNCTION GET GETCURRENTCONNECTION GLOBAL GO GOTO GRANT GROUP HAVING HOUR IDENTITY IMMEDIATE IN INDICATOR INITIALLY INNER INOUT INPUT INSENSITIVE INSERT INT INTEGER INTERSECT INTO IS ISOLATION JOIN KEY LAST LEFT LIKE LOWER LTRIM MATCH MAX MIN MINUTE NATIONAL NATURAL NCHAR NVARCHAR NEXT NO NOT NULL NULLIF NUMERIC OF ON ONLY OPEN OPTION OR ORDER OUTER OUTPUT OVERLAPS PAD PARTIAL PREPARE PRESERVE PRIMARY PRIOR PRIVILEGES PROCEDURE PUBLIC READ REAL REFERENCES RELATIVE RESTRICT REVOKE RIGHT ROLLBACK ROWS RTRIM SCHEMA SCROLL SECOND SELECT SESSION_USER SET SMALLINT SOME SPACE SQL SQLCODE SQLERROR SQLSTATE SUBSTR SUBSTRING SUM SYSTEM_USER TABLE TEMPORARY TIMEZONE_HOUR TIMEZONE_MINUTE TO TRANSACTION TRANSLATE TRANSLATION TRIM TRUE UNION UNIQUE UNKNOWN UPDATE UPPER USER USING VALUES VARCHAR VARYING VIEW WHENEVER WHERE WITH WORK WRITE XML XMLEXISTS XMLPARSE XMLQUERY XMLSERIALIZE YEAR</reserved_words>
+        <identity_column_support>true</identity_column_support>
+        <sequence_support>false</sequence_support>
+        <conversion_type>UPPERCASE</conversion_type>
+        <column_type_mapping name="INTEGER" omit_length_information="true">
+            <java_type name="int"/>
+            <java_type name="Integer"/>
+        </column_type_mapping>
+        <column_type_mapping name="BIGINT" omit_length_information="true">
+            <java_type name="long"/>
+            <java_type name="Long"/>
+        </column_type_mapping>
+        <column_type_mapping name="DOUBLE" omit_length_information="true">
+            <java_type name="double"/>
+            <java_type name="Double"/>
+        </column_type_mapping>
+        <column_type_mapping name="REAL" omit_length_information="true">
+            <java_type name="float"/>
+            <java_type name="Float"/>
+        </column_type_mapping>
+        <column_type_mapping name="DATE" omit_length_information="true">
+            <java_type name="LocalDate"/>
+            <java_type name="Date"/>
+            <java_type name="GregorianCalendar"/>
+        </column_type_mapping>
+        <column_type_mapping name="TIMESTAMP" omit_length_information="true">
+            <java_type name="LocalDateTime"/>
+            <java_type name="Date"/>
+            <java_type name="GregorianCalendar"/>
+        </column_type_mapping>
+        <column_type_mapping name="VARCHAR" omit_length_information="false">
+            <java_type name="String"/>
+            <java_type name="UUID"/>
+        </column_type_mapping>
+        <column_type_mapping name="CHAR" omit_length_information="false">
+            <java_type name="String"/>
+            <java_type name="char"/>
+            <java_type name="UUID"/>
+        </column_type_mapping>
+        <column_type_mapping name="SMALLINT" omit_length_information="true">
+            <java_type name="boolean"/>
+            <java_type name="Boolean"/>
+        </column_type_mapping>
+        <column_type_mapping name="BLOB" omit_length_information="false">
+            <java_type name="byte[]"/>
+            <java_type name="Byte[]"/>
+            <java_type name="UUID"/>
+        </column_type_mapping>
+        <column_type_mapping name="CLOB" omit_length_information="false">
+            <java_type name="byte[]"/>
+            <java_type name="Byte[]"/>
+            <java_type name="UUID"/>
+        </column_type_mapping>
+        <column_type_mapping name="NUMERIC" omit_length_information="true">
+            <java_type name="BigDecimal"/>
+        </column_type_mapping>
+        <column_type_mapping name="DECIMAL" omit_length_information="true">
+            <java_type name="BigDecimal"/>
+        </column_type_mapping>
+        <column_type_mapping name="INT" omit_length_information="true">
+            <java_type name="int"/>
+            <java_type name="Integer"/>
+        </column_type_mapping>
+        <column_type_mapping name="BINARY LARGE OBJECT" omit_length_information="false">
+            <java_type name="byte[]"/>
+            <java_type name="Byte[]"/>
+            <java_type name="UUID"/>
+        </column_type_mapping>
+        <column_type_mapping name="DEC" omit_length_information="true">
+            <java_type name="BigDecimal"/>
+        </column_type_mapping>
+        <column_type_mapping name="CHAR VARYING" omit_length_information="false">
+            <java_type name="String"/>
+            <java_type name="UUID"/>
+        </column_type_mapping>
+        <column_type_mapping name="CHARACTER" omit_length_information="false">
+            <java_type name="String"/>
+            <java_type name="UUID"/>
+        </column_type_mapping>
+        <column_type_mapping name="CHARACTER LARGE OBJECT" omit_length_information="false">
+            <java_type name="String"/>
+            <java_type name="UUID"/>
+        </column_type_mapping>
+        <column_type_mapping name="CHARACTER VARYING" omit_length_information="false">
+            <java_type name="String"/>
+            <java_type name="UUID"/>
+        </column_type_mapping>
+        <column_type_mapping name="DOUBLE PRECISION" omit_length_information="true">
+            <java_type name="double"/>
+            <java_type name="Double"/>
+        </column_type_mapping>
+        <column_type_mapping name="LONG VARCHAR" omit_length_information="true">
+            <java_type name="String"/>
+            <java_type name="UUID"/>
+        </column_type_mapping>
+    </db_template>
+    <db_template vendor_group="DERBY_EMBEDDED">
+        <driver_name>org.apache.derby.jdbc.EmbeddedDriver</driver_name>
+        <sample_url>jdbc:derby:[instance];user=sa;password=sa;create=true</sample_url>
+        <hibernate_dialect>org.hibernate.dialect.DerbyDialect</hibernate_dialect>
+        <max_identifier_length>128</max_identifier_length>
+        <eclipselink_target_dbname>Derby</eclipselink_target_dbname>
+        <identifier_regex>[A-Za-z][A-Za-z0-9_]*</identifier_regex>
+        <default_schema_name></default_schema_name>
+        <comment>Derby 10 (for embedded use)</comment>
+        <reserved_words>ADD ALL ALLOCATE ALTER AND ANY ARE AS ASC ASSERTION AT AUTHORIZATION AVG BEGIN BETWEEN BIGINT BIT BOOLEAN BOTH BY CALL CASCADE CASCADED CASE CAST CHAR CHARACTER CHECK CLOSE COALESCE COLLATE COLLATION COLUMN COMMIT CONNECT CONNECTION CONSTRAINT CONSTRAINTS CONTINUE CONVERT CORRESPONDING CREATE CURRENT CURRENT_DATE CURRENT_TIME CURRENT_TIMESTAMP CURRENT_USER CURSOR DEALLOCATE DEC DECIMAL DECLARE DEFAULT DEFERRABLE DEFERRED DELETE DESC DESCRIBE DIAGNOSTICS DISCONNECT DISTINCT DOUBLE DROP ELSE END END-EXEC ESCAPE EXCEPT EXCEPTION EXEC EXECUTE EXISTS EXPLAIN EXTERNAL FALSE FETCH FIRST FLOAT FOR FOREIGN FOUND FROM FULL FUNCTION GET GETCURRENTCONNECTION GLOBAL GO GOTO GRANT GROUP HAVING HOUR IDENTITY IMMEDIATE IN INDICATOR INITIALLY INNER INOUT INPUT INSENSITIVE INSERT INT INTEGER INTERSECT INTO IS ISOLATION JOIN KEY LAST LEFT LIKE LOWER LTRIM MATCH MAX MIN MINUTE NATIONAL NATURAL NCHAR NVARCHAR NEXT NO NOT NULL NULLIF NUMERIC OF ON ONLY OPEN OPTION OR ORDER OUTER OUTPUT OVERLAPS PAD PARTIAL PREPARE PRESERVE PRIMARY PRIOR PRIVILEGES PROCEDURE PUBLIC READ REAL REFERENCES RELATIVE RESTRICT REVOKE RIGHT ROLLBACK ROWS RTRIM SCHEMA SCROLL SECOND SELECT SESSION_USER SET SMALLINT SOME SPACE SQL SQLCODE SQLERROR SQLSTATE SUBSTR SUBSTRING SUM SYSTEM_USER TABLE TEMPORARY TIMEZONE_HOUR TIMEZONE_MINUTE TO TRANSACTION TRANSLATE TRANSLATION TRIM TRUE UNION UNIQUE UNKNOWN UPDATE UPPER USER USING VALUES VARCHAR VARYING VIEW WHENEVER WHERE WITH WORK WRITE XML XMLEXISTS XMLPARSE XMLQUERY XMLSERIALIZE YEAR</reserved_words>
+        <identity_column_support>true</identity_column_support>
+        <sequence_support>false</sequence_support>
+        <conversion_type>UPPERCASE</conversion_type>
+       	<column_type_mapping name="INTEGER" omit_length_information="true">
+            <java_type name="int"/>
+            <java_type name="Integer"/>
+        </column_type_mapping>
+        <column_type_mapping name="BIGINT" omit_length_information="true">
+            <java_type name="long"/>
+            <java_type name="Long"/>
+        </column_type_mapping>
+        <column_type_mapping name="DOUBLE" omit_length_information="true">
+            <java_type name="double"/>
+            <java_type name="Double"/>
+        </column_type_mapping>
+        <column_type_mapping name="REAL" omit_length_information="true">
+            <java_type name="float"/>
+            <java_type name="Float"/>
+        </column_type_mapping>
+        <column_type_mapping name="DATE" omit_length_information="true">
+            <java_type name="LocalDate"/>
+            <java_type name="Date"/>
+            <java_type name="GregorianCalendar"/>
+        </column_type_mapping>
+        <column_type_mapping name="TIMESTAMP" omit_length_information="true">
+            <java_type name="LocalDateTime"/>
+            <java_type name="Date"/>
+            <java_type name="GregorianCalendar"/>
+        </column_type_mapping>
+        <column_type_mapping name="VARCHAR" omit_length_information="false">
+            <java_type name="String"/>
+            <java_type name="UUID"/>
+        </column_type_mapping>
+        <column_type_mapping name="CHAR" omit_length_information="false">
+            <java_type name="String"/>
+            <java_type name="char"/>
+            <java_type name="UUID"/>
+        </column_type_mapping>
+        <column_type_mapping name="SMALLINT" omit_length_information="true">
+            <java_type name="boolean"/>
+            <java_type name="Boolean"/>
+        </column_type_mapping>
+        <column_type_mapping name="BLOB" omit_length_information="false">
+            <java_type name="byte[]"/>
+            <java_type name="Byte[]"/>
+            <java_type name="UUID"/>
+        </column_type_mapping>
+        <column_type_mapping name="CLOB" omit_length_information="false">
+            <java_type name="byte[]"/>
+            <java_type name="Byte[]"/>
+            <java_type name="UUID"/>
+        </column_type_mapping>
+        <column_type_mapping name="NUMERIC" omit_length_information="true">
+            <java_type name="BigDecimal"/>
+        </column_type_mapping>
+        <column_type_mapping name="DECIMAL" omit_length_information="true">
+            <java_type name="BigDecimal"/>
+        </column_type_mapping>
+        <column_type_mapping name="CHARACTER" omit_length_information="false">
+            <java_type name="String"/>
+            <java_type name="UUID"/>
+        </column_type_mapping>
+        <column_type_mapping name="DOUBLE PRECISION" omit_length_information="true">
+            <java_type name="double"/>
+            <java_type name="Double"/>
+        </column_type_mapping>
+        <column_type_mapping name="INT" omit_length_information="true">
+            <java_type name="int"/>
+            <java_type name="Integer"/>
+        </column_type_mapping>
+        <column_type_mapping name="LONG VARCHAR" omit_length_information="true">
+            <java_type name="String"/>
+            <java_type name="UUID"/>
+        </column_type_mapping>
+        <column_type_mapping name="DEC" omit_length_information="true">
+            <java_type name="BigDecimal"/>
+        </column_type_mapping>
+        <column_type_mapping name="BINARY LARGE OBJECT" omit_length_information="false">
+            <java_type name="byte[]"/>
+            <java_type name="Byte[]"/>
+            <java_type name="UUID"/>
+        </column_type_mapping>
+        <column_type_mapping name="CHARACTER LARGE OBJECT" omit_length_information="false">
+            <java_type name="String"/>
+            <java_type name="UUID"/>
+        </column_type_mapping>
+        <column_type_mapping name="CHAR VARYING" omit_length_information="false">
+            <java_type name="String"/>
+            <java_type name="UUID"/>
+        </column_type_mapping>
+        <column_type_mapping name="CHARACTER VARYING" omit_length_information="false">
+            <java_type name="String"/>
+            <java_type name="UUID"/>
+        </column_type_mapping>
+    </db_template>
+    <db_template vendor_group="MYSQL">
+        <driver_name>com.mysql.cj.jdbc.Driver</driver_name>
+        <sample_url>jdbc:mysql://localhost:3306/[instance]</sample_url>
+        <hibernate_dialect>org.hibernate.dialect.MySQLDialect</hibernate_dialect>
+        <max_identifier_length>64</max_identifier_length>
+        <eclipselink_target_dbname>MySQL</eclipselink_target_dbname>
+        <identifier_regex>[A-Za-z][A-Za-z0-9_]*</identifier_regex>
+        <default_schema_name></default_schema_name>
+        <comment>MySQL 5</comment>
+        <reserved_words>ACCESSIBLE ADD ALL ALTER ANALYZE AND AS ASC ASENSITIVE BEFORE BETWEEN BIGINT BINARY BLOB BOTH BY CALL CASCADE CASE CHANGE CHAR CHARACTER CHECK COLLATE COLUMN CONDITION CONSTRAINT CONTINUE CONVERT CREATE CROSS CURRENT_DATE CURRENT_TIME CURRENT_TIMESTAMP CURRENT_USER CURSOR DATABASE DATABASES DAY_HOUR DAY_MICROSECOND DAY_MINUTE DAY_SECOND DEC DECIMAL DECLARE DEFAULT DELAYED DELETE DESC DESCRIBE DETERMINISTIC DISTINCT DISTINCTROW DIV DOUBLE DROP DUAL EACH ELSE ELSEIF ENCLOSED ESCAPED EXISTS EXIT EXPLAIN FALSE FETCH FLOAT FLOAT4 FLOAT8 FOR FORCE FOREIGN FROM FULLTEXT GRANT GROUP HAVING HIGH_PRIORITY HOUR_MICROSECOND HOUR_MINUTE HOUR_SECOND IF IGNORE IN INDEX INFILE INNER INOUT INSENSITIVE INSERT INT INT1 INT2 INT3 INT4 INT8 INTEGER INTERVAL INTO IS ITERATE JOIN KEY KEYS KILL LEADING LEAVE LEFT LIKE LIMIT LINEAR LINES LOAD LOCALTIME LOCALTIMESTAMP LOCK LONG LONGBLOB LONGTEXT LOOP LOW_PRIORITY MASTER_SSL_VERIFY_SERVER_CERT MATCH MAXVALUE MEDIUMBLOB MEDIUMINT MEDIUMTEXT MIDDLEINT MINUTE_MICROSECOND MINUTE_SECOND MOD MODIFIES NATURAL NOT NO_WRITE_TO_BINLOG NULL NUMERIC ON OPTIMIZE OPTION OPTIONALLY OR ORDER OUT OUTER OUTFILE PRECISION PRIMARY PROCEDURE PURGE RANGE READ READS READ_WRITE REAL REFERENCES REGEXP RELEASE RENAME REPEAT REPLACE REQUIRE RESIGNAL RESTRICT RETURN REVOKE RIGHT RLIKE SCHEMA SCHEMAS SECOND_MICROSECOND SELECT SENSITIVE SEPARATOR SET SHOW SIGNAL SMALLINT SPATIAL SPECIFIC SQL SQLEXCEPTION SQLSTATE SQLWARNING SQL_BIG_RESULT SQL_CALC_FOUND_ROWS SQL_SMALL_RESULT SSL STARTING STRAIGHT_JOIN TABLE TERMINATED THEN TINYBLOB TINYINT TINYTEXT TO TRAILING TRIGGER TRUE UNDO UNION UNIQUE UNLOCK UNSIGNED UPDATE USAGE USE USING UTC_DATE UTC_TIME UTC_TIMESTAMP VALUES VARBINARY VARCHAR VARCHARACTER VARYING WHEN WHERE WHILE WITH WRITE XOR YEAR_MONT ZEROFILL GENERAL IGNORE_SERVER_IDS MASTER_HEARTBEAT_PERIOD MAXVALUE RESIGNAL SIGNAL SLOW</reserved_words>
+        <identity_column_support>true</identity_column_support>
+        <sequence_support>false</sequence_support>
+        <conversion_type>LOWERCASE</conversion_type>
+        <column_type_mapping name="INTEGER" omit_length_information="true">
+            <java_type name="int"/>
+            <java_type name="Integer"/>
+        </column_type_mapping>
+        <column_type_mapping name="BIGINT" omit_length_information="true">
+            <java_type name="long"/>
+            <java_type name="Long"/>
+        </column_type_mapping>
+        <column_type_mapping name="DOUBLE" omit_length_information="true">
+            <java_type name="double"/>
+            <java_type name="Double"/>
+        </column_type_mapping>
+        <column_type_mapping name="DATE" omit_length_information="true">
+            <java_type name="LocalDate"/>
+            <java_type name="Date"/>
+            <java_type name="GregorianCalendar"/>
+        </column_type_mapping>
+        <column_type_mapping name="VARCHAR" omit_length_information="false">
+            <java_type name="String"/>
+            <java_type name="UUID"/>
+        </column_type_mapping>
+        <column_type_mapping name="CHAR" omit_length_information="false">
+            <java_type name="String"/>
+            <java_type name="char"/>
+            <java_type name="UUID"/>
+        </column_type_mapping>
+        <column_type_mapping name="BLOB" omit_length_information="true">
+            <java_type name="byte[]"/>
+            <java_type name="Byte[]"/>
+            <java_type name="UUID"/>
+        </column_type_mapping>
+        <column_type_mapping name="DECIMAL" omit_length_information="true">
+            <java_type name="BigDecimal"/>
+        </column_type_mapping>
+        <column_type_mapping name="TINYBLOB" omit_length_information="true">
+            <java_type name="byte[]"/>
+            <java_type name="Byte[]"/>
+        </column_type_mapping>
+        <column_type_mapping name="MEDIUMBLOB" omit_length_information="true">
+            <java_type name="byte[]"/>
+            <java_type name="Byte[]"/>
+        </column_type_mapping>
+        <column_type_mapping name="LONGBLOB" omit_length_information="true">
+            <java_type name="byte[]"/>
+            <java_type name="Byte[]"/>
+        </column_type_mapping>
+        <column_type_mapping name="BOOLEAN" omit_length_information="true">
+            <java_type name="boolean"/>
+            <java_type name="Boolean"/>
+        </column_type_mapping>
+        <column_type_mapping name="BOOL" omit_length_information="true">
+            <java_type name="boolean"/>
+            <java_type name="Boolean"/>
+        </column_type_mapping>
+        <column_type_mapping name="FLOAT" omit_length_information="true">
+            <java_type name="float"/>
+            <java_type name="Float"/>
+        </column_type_mapping>
+        <column_type_mapping name="DATETIME" omit_length_information="true">
+            <java_type name="LocalDateTime"/>
+            <java_type name="Date"/>
+            <java_type name="GregorianCalendar"/>
+        </column_type_mapping>
+        <column_type_mapping name="TINYINT" omit_length_information="true">
+            <java_type name="boolean"/>
+            <java_type name="Boolean"/>
+        </column_type_mapping>
+        <column_type_mapping name="TEXT" omit_length_information="true">
+            <java_type name="String"/>
+            <java_type name="UUID"/>
+        </column_type_mapping>
+        <column_type_mapping name="TINYTEXT" omit_length_information="true">
+            <java_type name="String"/>
+            <java_type name="UUID"/>
+        </column_type_mapping>
+        <column_type_mapping name="MEDIUMTEXT" omit_length_information="true">
+            <java_type name="String"/>
+            <java_type name="UUID"/>
+        </column_type_mapping>
+        <column_type_mapping name="LONGTEXT" omit_length_information="true">
+            <java_type name="String"/>
+            <java_type name="UUID"/>
+        </column_type_mapping>
+        <column_type_mapping name="BIT" omit_length_information="true">
+            <java_type name="boolean"/>
+            <java_type name="Boolean"/>
+        </column_type_mapping>
+        <column_type_mapping name="SMALLINT" omit_length_information="true">
+            <java_type name="int"/>
+            <java_type name="Integer"/>
+        </column_type_mapping>
+        <column_type_mapping name="INT" omit_length_information="true">
+            <java_type name="int"/>
+            <java_type name="Integer"/>
+        </column_type_mapping>
+        <column_type_mapping name="BINARY" omit_length_information="false">
+            <java_type name="byte[]"/>
+            <java_type name="Byte[]"/>
+            <java_type name="UUID"/>
+        </column_type_mapping>
+        <column_type_mapping name="VARBINARY" omit_length_information="false">
+            <java_type name="byte[]"/>
+            <java_type name="Byte[]"/>
+            <java_type name="UUID"/>
+        </column_type_mapping>
+        <column_type_mapping name="MEDIUMINT" omit_length_information="true">
+            <java_type name="int"/>
+            <java_type name="Integer"/>
+        </column_type_mapping>
+    </db_template>
+    <db_template vendor_group="ORACLE">
+        <driver_name>oracle.jdbc.OracleDriver</driver_name>
+        <sample_url>jdbc:oracle:thin:@localhost:1521:[instance]</sample_url>
+        <hibernate_dialect>org.hibernate.dialect.Oracle10gDialect</hibernate_dialect>
+        <max_identifier_length>30</max_identifier_length>
+        <eclipselink_target_dbname>Oracle</eclipselink_target_dbname>
+        <identifier_regex>[A-Za-z][A-Za-z0-9_]*</identifier_regex>
+        <default_schema_name></default_schema_name>
+        <comment>Oracle 11g</comment>
+        <reserved_words>ACCESS ELSE MODIFY START ADD EXCLUSIVE NOAUDIT SELECT ALL EXISTS NOCOMPRESS SESSION ALTER FILE NOT SET AND FLOAT NOTFOUND SHARE ANY FOR NOWAIT SIZE ARRAYLEN FROM NULL SMALLINT AS GRANT NUMBER SQLBUF ASC GROUP OF SUCCESSFUL AUDIT HAVING OFFLINE SYNONYM BETWEEN IDENTIFIED ON SYSDATE BY IMMEDIATE ONLINE TABLE CHAR IN OPTION THEN CHECK INCREMENT OR TO CLUSTER INDEX ORDER TRIGGER COLUMN INITIAL PCTFREE UID COMMENT INSERT PRIOR UNION COMPRESS INTEGER PRIVILEGES UNIQUE CONNECT INTERSECT PUBLIC UPDATE CREATE INTO RAW USER CURRENT IS RENAME VALIDATE DATE LEVEL RESOURCE VALUES DECIMAL LIKE REVOKE VARCHAR DEFAULT LOCK ROW VARCHAR2 DELETE LONG ROWID VIEW DESC MAXEXTENTS ROWLABEL WHENEVER DISTINCT MINUS ROWNUM WHERE DROP MODE ROWS WITH</reserved_words>
+        <identity_column_support>false</identity_column_support>
+        <sequence_support>true</sequence_support>
+        <conversion_type>UPPERCASE</conversion_type>
+        <column_type_mapping name="VARCHAR2" omit_length_information="false">
+            <java_type name="String"/>
+            <java_type name="UUID"/>
+        </column_type_mapping>
+        <column_type_mapping name="DATE" omit_length_information="true">
+            <java_type name="LocalDate"/>
+            <java_type name="Date"/>
+            <java_type name="GregorianCalendar"/>
+        </column_type_mapping>
+        <column_type_mapping name="FLOAT" omit_length_information="true">
+            <java_type name="double"/>
+            <java_type name="Double"/>
+            <java_type name="float"/>
+            <java_type name="Float"/>
+        </column_type_mapping>
+        <column_type_mapping name="NUMBER" omit_length_information="true">
+            <java_type name="int"/>
+            <java_type name="Integer"/>
+            <java_type name="long"/>
+            <java_type name="Long"/>
+            <java_type name="double"/>
+            <java_type name="Double"/>
+            <java_type name="float"/>
+            <java_type name="Float"/>
+            <java_type name="boolean"/>
+            <java_type name="Boolean"/>
+            <java_type name="BigDecimal"/>
+        </column_type_mapping>
+        <column_type_mapping name="BLOB" omit_length_information="true">
+            <java_type name="byte[]"/>
+            <java_type name="Byte[]"/>
+            <java_type name="UUID"/>
+        </column_type_mapping>
+        <column_type_mapping name="TIMESTAMP" omit_length_information="true">
+            <java_type name="LocalDateTime"/>
+            <java_type name="Date"/>
+            <java_type name="GregorianCalendar"/>
+        </column_type_mapping>
+        <column_type_mapping name="CHAR" omit_length_information="false">
+            <java_type name="String"/>
+            <java_type name="char"/>
+            <java_type name="UUID"/>
+        </column_type_mapping>
+        <column_type_mapping name="NCHAR" omit_length_information="false">
+            <java_type name="String"/>
+            <java_type name="char"/>
+            <java_type name="UUID"/>
+        </column_type_mapping>
+        <column_type_mapping name="CLOB" omit_length_information="true">
+            <java_type name="byte[]"/>
+            <java_type name="Byte[]"/>
+            <java_type name="UUID"/>
+        </column_type_mapping>
+        <column_type_mapping name="NCLOB" omit_length_information="true">
+            <java_type name="byte[]"/>
+            <java_type name="Byte[]"/>
+            <java_type name="UUID"/>
+        </column_type_mapping>
+        <column_type_mapping name="RAW" omit_length_information="false">
+            <java_type name="byte[]"/>
+            <java_type name="Byte[]"/>
+            <java_type name="UUID"/>
+        </column_type_mapping>
+        <column_type_mapping name="LONG" omit_length_information="true">
+            <java_type name="String"/>
+            <java_type name="UUID"/>
+        </column_type_mapping>
+        <column_type_mapping name="LONG RAW" omit_length_information="true">
+            <java_type name="byte[]"/>
+            <java_type name="Byte[]"/>
+            <java_type name="UUID"/>
+        </column_type_mapping>
+        <column_type_mapping name="NVARCHAR2" omit_length_information="false">
+            <java_type name="String"/>
+            <java_type name="UUID"/>
+        </column_type_mapping>
+        <column_type_mapping name="TIMESTAMP WITH LOCAL TIME ZONE" omit_length_information="true">
+            <java_type name="Date"/>
+            <java_type name="GregorianCalendar"/>
+        </column_type_mapping>
+        <column_type_mapping name="TIMESTAMP WITH TIME ZONE" omit_length_information="true">
+            <java_type name="Date"/>
+            <java_type name="GregorianCalendar"/>
+        </column_type_mapping>
+    </db_template>
+    <db_template vendor_group="POSTGRESQL">
+        <driver_name>org.postgresql.Driver</driver_name>
+        <sample_url>jdbc:postgresql://localhost:5432/[instance]</sample_url>
+        <hibernate_dialect>org.hibernate.dialect.PostgreSQLDialect</hibernate_dialect>
+        <max_identifier_length>63</max_identifier_length>
+        <eclipselink_target_dbname>PostgreSQL</eclipselink_target_dbname>
+        <identifier_regex>[A-Za-z][A-Za-z0-9_]*</identifier_regex>
+        <default_schema_name></default_schema_name>
+        <comment>PostgreSQL 9</comment>
+        <reserved_words>ALL ANALYSE ANALYZE AND ANY AS ASC AUTHORIZATION BETWEEN BINARY BOTH CASE CAST CHECK COLLATE COLUMN CONSTRAINT CREATE CROSS CURRENT_DATE CURRENT_TIME CURRENT_TIMESTAMP CURRENT_USER DEFAULT DEFERRABLE DESC DISTINCT DO ELSE END EXCEPT FALSE FOR FOREIGN FREEZE FROM FULL GRANT GROUP HAVING ILIKE IN INITIALLY INNER INTERSECT INTO IS ISNULL JOIN LEADING LEFT LIKE LIMIT LOCALTIME LOCALTIMESTAMP NATURAL NEW NOT NOTNULL NULL OFF OFFSET OLD ON ONLY OR ORDER OUTER OVERLAPS PLACING PRIMARY REFERENCES RIGHT SELECT SESSION_USER SIMILAR SOME TABLE THEN TO TRAILING TRUE UNION UNIQUE USER USING VERBOSE WHEN WHERE</reserved_words>
+        <identity_column_support>true</identity_column_support>
+        <sequence_support>true</sequence_support>
+        <conversion_type>LOWERCASE</conversion_type>
+        <column_type_mapping name="INTEGER" omit_length_information="true">
+            <java_type name="int"/>
+            <java_type name="Integer"/>
+        </column_type_mapping>
+        <column_type_mapping name="INT4" omit_length_information="true">
+            <java_type name="int"/>
+            <java_type name="Integer"/>
+        </column_type_mapping>
+        <column_type_mapping name="INT2" omit_length_information="true">
+            <java_type name="int"/>
+            <java_type name="Integer"/>
+        </column_type_mapping>
+        <column_type_mapping name="SMALLINT" omit_length_information="true">
+            <java_type name="int"/>
+            <java_type name="Integer"/>
+        </column_type_mapping>
+        <column_type_mapping name="BIGINT" omit_length_information="true">
+            <java_type name="long"/>
+            <java_type name="Long"/>
+        </column_type_mapping>
+        <column_type_mapping name="INT8" omit_length_information="true">
+            <java_type name="long"/>
+            <java_type name="Long"/>
+        </column_type_mapping>
+        <column_type_mapping name="BOOLEAN" omit_length_information="true">
+            <java_type name="boolean"/>
+            <java_type name="Boolean"/>
+        </column_type_mapping>
+        <column_type_mapping name="BOOL" omit_length_information="true">
+            <java_type name="boolean"/>
+            <java_type name="Boolean"/>
+        </column_type_mapping>
+        <column_type_mapping name="REAL" omit_length_information="true">
+            <java_type name="float"/>
+            <java_type name="Float"/>
+        </column_type_mapping>
+        <column_type_mapping name="DATE" omit_length_information="true">
+            <java_type name="LocalDate"/>
+            <java_type name="Date"/>
+            <java_type name="GregorianCalendar"/>
+        </column_type_mapping>
+        <column_type_mapping name="TIMESTAMP" omit_length_information="true">
+            <java_type name="LocalDateTime"/>
+            <java_type name="Date"/>
+            <java_type name="GregorianCalendar"/>
+        </column_type_mapping>
+        <column_type_mapping name="VARCHAR" omit_length_information="false">
+            <java_type name="String"/>
+            <java_type name="char"/>
+            <java_type name="UUID"/>
+        </column_type_mapping>
+        <column_type_mapping name="CHAR" omit_length_information="false">
+            <java_type name="String"/>
+            <java_type name="char"/>
+            <java_type name="UUID"/>
+        </column_type_mapping>
+        <column_type_mapping name="CHARACTER" omit_length_information="false">
+            <java_type name="String"/>
+            <java_type name="char"/>
+            <java_type name="UUID"/>
+        </column_type_mapping>
+        <column_type_mapping name="CHARACTER VARYING" omit_length_information="false">
+            <java_type name="String"/>
+            <java_type name="UUID"/>
+        </column_type_mapping>
+        <column_type_mapping name="BYTEA" omit_length_information="true">
+            <java_type name="byte[]"/>
+            <java_type name="Byte[]"/>
+            <java_type name="UUID"/>
+        </column_type_mapping>
+        <column_type_mapping name="TEXT" omit_length_information="true">
+            <java_type name="String"/>
+            <java_type name="UUID"/>
+        </column_type_mapping>
+        <column_type_mapping name="NUMERIC" omit_length_information="true">
+            <java_type name="double"/>
+            <java_type name="Double"/>
+            <java_type name="float"/>
+            <java_type name="Float"/>
+            <java_type name="BigDecimal"/>
+        </column_type_mapping>
+        <column_type_mapping name="DECIMAL" omit_length_information="true">
+            <java_type name="double"/>
+            <java_type name="Double"/>
+            <java_type name="float"/>
+            <java_type name="Float"/>
+            <java_type name="BigDecimal"/>
+        </column_type_mapping>
+        <column_type_mapping name="DOUBLE PRECISION" omit_length_information="true">
+            <java_type name="double"/>
+            <java_type name="Double"/>
+        </column_type_mapping>
+        <column_type_mapping name="TIMESTAMP WITH TIME ZONE" omit_length_information="true">
+            <java_type name="Date"/>
+            <java_type name="GregorianCalendar"/>
+        </column_type_mapping>
+        <column_type_mapping name="UUID" omit_length_information="true">
+            <java_type name="UUID"/>
+        </column_type_mapping>
+    </db_template>
+    <db_template vendor_group="MSSQL">
+        <driver_name>com.microsoft.sqlserver.jdbc.SQLServerDriver</driver_name>
+        <sample_url>jdbc:sqlserver://localhost;instance=[instancename];databaseName=[dbname]</sample_url>
+        <hibernate_dialect>org.hibernate.dialect.SQLServerDialect</hibernate_dialect>
+        <max_identifier_length>128</max_identifier_length>
+        <eclipselink_target_dbname>SQLServer</eclipselink_target_dbname>
+        <identifier_regex>[A-Za-z][A-Za-z0-9_]*</identifier_regex>
+        <default_schema_name></default_schema_name>
+        <comment>Microsoft SQL Server 2012</comment>
+        <reserved_words>ADD EXISTS PRECISION ALL EXIT PRIMARY ALTER EXTERNAL PRINT AND FETCH PROC ANY FILE PROCEDURE AS FILLFACTOR PUBLIC ASC FOR RAISERROR AUTHORIZATION FOREIGN READ BACKUP FREETEXT READTEXT BEGIN FREETEXTTABLE RECONFIGURE BETWEEN FROM REFERENCES BREAK FULL REPLICATION BROWSE FUNCTION RESTORE BULK GOTO RESTRICT BY GRANT RETURN CASCADE GROUP REVERT CASE HAVING REVOKE CHECK HOLDLOCK RIGHT CHECKPOINT IDENTITY ROLLBACK CLOSE IDENTITY_INSERT ROWCOUNT CLUSTERED IDENTITYCOL ROWGUIDCOL COALESCE IF RULE COLLATE IN SAVE COLUMN INDEX SCHEMA COMMIT INNER SECURITYAUDIT COMPUTE INSERT SELECT CONSTRAINT INTERSECT SESSION_USER CONTAINS INTO SET CONTAINSTABLE IS SETUSER CONTINUE JOIN SHUTDOWN CONVERT KEY SOME CREATE KILL STATISTICS CROSS LEFT SYSTEM_USER CURRENT LIKE TABLE CURRENT_DATE LINENO TABLESAMPLE CURRENT_TIME LOAD TEXTSIZE CURRENT_TIMESTAMP MERGE THEN CURRENT_USER NATIONAL TO CURSOR NOCHECK TOP DATABASE NONCLUSTERED TRAN DBCC NOT TRANSACTION DEALLOCATE NULL TRIGGER DECLARE NULLIF TRUNCATE DEFAULT OF TSEQUAL DELETE OFF UNION DENY OFFSETS UNIQUE DESC ON UNPIVOT DISK OPEN UPDATE DISTINCT OPENDATASOURCE UPDATETEXT DISTRIBUTED OPENQUERY USE DOUBLE OPENROWSET USER DROP OPENXML VALUES DUMP OPTION VARYING ELSE OR VIEW END ORDER WAITFOR ERRLVL OUTER WHEN ESCAPE OVER WHERE EXCEPT PERCENT WHILE EXEC PIVOT WITH EXECUTE PLAN WRITETEXT</reserved_words>
+        <identity_column_support>true</identity_column_support>
+        <sequence_support>true</sequence_support>
+        <conversion_type>LOWERCASE</conversion_type>
+        <column_type_mapping name="INT" omit_length_information="true">
+            <java_type name="int"/>
+            <java_type name="Integer"/>
+        </column_type_mapping>
+        <column_type_mapping name="SMALLINT" omit_length_information="true">
+            <java_type name="int"/>
+            <java_type name="Integer"/>
+            <java_type name="boolean"/>
+            <java_type name="Boolean"/>
+        </column_type_mapping>
+        <column_type_mapping name="TINYINT" omit_length_information="true">
+            <java_type name="boolean"/>
+            <java_type name="Boolean"/>
+        </column_type_mapping>
+        <column_type_mapping name="BIGINT" omit_length_information="true">
+            <java_type name="long"/>
+            <java_type name="Long"/>
+        </column_type_mapping>
+        <column_type_mapping name="VARCHAR" omit_length_information="false">
+            <java_type name="String"/>
+            <java_type name="UUID"/>
+        </column_type_mapping>
+        <column_type_mapping name="NVARCHAR" omit_length_information="false">
+            <java_type name="String"/>
+            <java_type name="UUID"/>
+        </column_type_mapping>
+        <column_type_mapping name="CHAR" omit_length_information="false">
+            <java_type name="String"/>
+            <java_type name="char"/>
+            <java_type name="UUID"/>
+        </column_type_mapping>
+        <column_type_mapping name="NCHAR" omit_length_information="false">
+            <java_type name="String"/>
+            <java_type name="char"/>
+            <java_type name="UUID"/>
+        </column_type_mapping>
+        <column_type_mapping name="TEXT" omit_length_information="true">
+            <java_type name="String"/>
+            <java_type name="UUID"/>
+        </column_type_mapping>
+        <column_type_mapping name="BIT" omit_length_information="true">
+            <java_type name="boolean"/>
+            <java_type name="Boolean"/>
+        </column_type_mapping>
+        <column_type_mapping name="NTEXT" omit_length_information="true">
+            <java_type name="String"/>
+            <java_type name="UUID"/>
+        </column_type_mapping>
+        <column_type_mapping name="NUMERIC" omit_length_information="true">
+            <java_type name="double"/>
+            <java_type name="Double"/>
+            <java_type name="float"/>
+            <java_type name="Float"/>
+            <java_type name="BigDecimal"/>
+        </column_type_mapping>
+        <column_type_mapping name="DECIMAL" omit_length_information="true">
+            <java_type name="double"/>
+            <java_type name="Double"/>
+            <java_type name="float"/>
+            <java_type name="Float"/>
+            <java_type name="BigDecimal"/>
+        </column_type_mapping>
+        <column_type_mapping name="DATE" omit_length_information="true">
+            <java_type name="LocalDate"/>
+            <java_type name="Date"/>
+            <java_type name="GregorianCalendar"/>
+        </column_type_mapping>
+        <column_type_mapping name="DATETIME" omit_length_information="true">
+            <java_type name="LocalDateTime"/>
+            <java_type name="Date"/>
+            <java_type name="GregorianCalendar"/>
+        </column_type_mapping>
+        <column_type_mapping name="DATETIME2" omit_length_information="true">
+            <java_type name="LocalDateTime"/>
+            <java_type name="Date"/>
+            <java_type name="GregorianCalendar"/>
+        </column_type_mapping>
+        <column_type_mapping name="BINARY" omit_length_information="true">
+            <java_type name="byte[]"/>
+            <java_type name="Byte[]"/>
+            <java_type name="UUID"/>
+        </column_type_mapping>
+        <column_type_mapping name="VARBINARY" omit_length_information="true">
+            <java_type name="byte[]"/>
+            <java_type name="Byte[]"/>
+            <java_type name="UUID"/>
+        </column_type_mapping>
+        <column_type_mapping name="IMAGE" omit_length_information="true">
+            <java_type name="byte[]"/>
+            <java_type name="Byte[]"/>
+        </column_type_mapping>
+        <column_type_mapping name="MONEY" omit_length_information="true">
+            <java_type name="double"/>
+            <java_type name="Double"/>
+            <java_type name="float"/>
+            <java_type name="Float"/>
+            <java_type name="BigDecimal"/>
+        </column_type_mapping>
+    </db_template>
+</db_templates>
