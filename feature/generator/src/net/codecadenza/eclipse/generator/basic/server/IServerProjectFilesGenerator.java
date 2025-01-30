@@ -1,0 +1,69 @@
+/*
+ * This file is part of CodeCadenza, a set of tools, libraries and plug-ins
+ * for modeling and creating Java-based enterprise applications.
+ * For more information visit:
+ *
+ * https://github.com/codecadenza/
+ *
+ * This software is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * This software is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this software; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
+ */
+package net.codecadenza.eclipse.generator.basic.server;
+
+/**
+ * <p>
+ * Interface for all generators that create basic server-related source and configuration files
+ * </p>
+ * <p>
+ * Copyright 2025 (C) by Martin Ganserer
+ * </p>
+ * @author Martin Ganserer
+ * @version 1.0.0
+ */
+public interface IServerProjectFilesGenerator {
+	/**
+	 * Create the data source file
+	 * @return the generated content
+	 */
+	String createDataSource();
+
+	/**
+	 * @return the vendor-specific file name
+	 */
+	String getVendorWebXMLName();
+
+	/**
+	 * Create the vendor-specific web.xml file
+	 * @return the generated content
+	 */
+	String createVendorWebXML();
+
+	/**
+	 * Create the web.xml
+	 * @return the generated content
+	 */
+	String createWebXML();
+
+	/**
+	 * Create the ejb-jar.xml
+	 * @return the generated content
+	 */
+	String createEJBJarXML();
+
+	/**
+	 * Create the jboss-deployment-structure.xml file
+	 * @return the generated content
+	 */
+	String createDeploymentStructureXML();
+}
