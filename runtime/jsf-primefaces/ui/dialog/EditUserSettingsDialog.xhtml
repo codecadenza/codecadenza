@@ -1,0 +1,58 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="jakarta.faces.facelets"
+	xmlns:h="jakarta.faces.html"
+	xmlns:f="jakarta.faces.core"
+	xmlns:p="http://primefaces.org/ui"
+	template="/templates/ui.xhtml">
+
+<ui:define name="title">#{i18n.form_editusersettingsdialog_title}</ui:define>
+
+<ui:define name="content">
+
+		<p:dialog header="#{i18n.feedback_dialog_header}" modal="true" widgetVar="msgBox" visible="#{(not empty facesContext.messageList)}" >
+			<p:messages id="messages" showDetail="false" showSummary="true"/>
+		</p:dialog>
+
+		<h:panelGrid columns="2">
+			<div class="pi pi-user-edit" style="font-size: 2em"/>
+			<h:outputText id="lblFormTitle" value="&#160;#{i18n.form_editusersettingsdialog_title}" styleClass="label-form-title"/>
+		</h:panelGrid>
+
+		<p:panel>
+		<h:panelGrid columns="2">
+
+			<h:outputLabel value="#{i18n.field_editusersettingsdialog_cbolocale} *:" styleClass="label-field-mandatory" for="cboLocale"/>
+			<p:selectOneMenu id="cboLocale" valueChangeListener="#{userSession.onLocaleChanged}" value="#{userSession.localeCode}">
+				<f:selectItems value="#{userSession.supportedLocales}" /> 
+			</p:selectOneMenu>
+
+			<h:outputLabel value="#{i18n.field_editusersettingsdialog_txtdateformat} *:" styleClass="label-field-mandatory" for="txtDateFormat"/>
+			<p:inputText id="txtDateFormat" value="#{userSession.dateFormat}">
+				<f:validateRequired/>
+			</p:inputText>
+
+			<h:outputLabel value="#{i18n.field_editusersettingsdialog_txtdatetimeformat} *:" styleClass="label-field-mandatory" for="txtDateTimeFormat"/>
+			<p:inputText id="txtDateTimeFormat" value="#{userSession.dateTimeFormat}">
+				<f:validateRequired/>
+			</p:inputText>
+
+			<h:outputLabel value="#{i18n.field_editusersettingsdialog_txtnumberformat} *:" styleClass="label-field-mandatory" for="txtNumberFormat"/>
+			<p:inputText id="txtNumberFormat" value="#{userSession.numberFormat}">
+				<f:validateRequired/>
+			</p:inputText>
+
+			<h:outputLabel value="#{i18n.field_editusersettingsdialog_cbotimezone} *:" styleClass="label-field-mandatory" for="cboTimeZone"/>
+			<p:selectOneMenu id="cboTimeZone" value="#{userSession.timeZone}" required="true">
+				<f:selectItems value="#{userSession.timeZones}" />
+			</p:selectOneMenu>
+
+		</h:panelGrid>
+		</p:panel>
+
+		<br/>
+
+		<h:panelGrid columns="1">
+			<p:commandButton value="#{i18n.command_save}" action="#{userSession.saveSettings}" ajax="false"/>
+		</h:panelGrid>
+</ui:define>
+</ui:composition>
