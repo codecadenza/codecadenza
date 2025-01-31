@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<site>
+   <description name="CodeCadenza update site" url="https://github.com/codecadenza/codecadenza/update/raw/master">
+      This is the update site for CodeCadenza!
+   </description>
+   <feature url="features/net.codecadenza.eclipse.feature_1.0.0.jar" id="net.codecadenza.eclipse.feature" version="1.0.0">
+      <category name="CodeCadenza"/>
+   </feature>
+   <category-def name="CodeCadenza" label="CodeCadenza"/>
+</site>
