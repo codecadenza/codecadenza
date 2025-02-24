@@ -185,10 +185,10 @@ public class JSFImportGenerator {
 					b.append("{\n");
 					b.append("tempFile = File.createTempFile(fileName, Long.toString(System.currentTimeMillis()));\n");
 					b.append("}\n");
-					b.append("catch (final IOException e)\n");
+					b.append("catch (final Exception e)\n");
 					b.append("{\n");
 
-					generator.addErrorLog(b, "Error while creating temporary file {}!", "e", "fileName");
+					generator.addErrorLog(b, "Error while creating temporary import file {}!", "e", "fileName");
 
 					b.append("\n");
 					b.append("MessageUtil.sendFacesMessage(bundle, FacesMessage.SEVERITY_ERROR, OPERATION_UPLOAD_FAIL, e);\n");
@@ -196,28 +196,45 @@ public class JSFImportGenerator {
 					b.append("}\n\n");
 					b.append("try(final var fout = new FileOutputStream(tempFile))\n");
 					b.append("{\n");
-					b.append("event.getFile().getInputStream().transferTo(fout);\n\n");
-
-					invocationGenerator.addInvocation("tempFile.getAbsolutePath()");
+					b.append("event.getFile().getInputStream().transferTo(fout);\n");
 				}
 				else {
 					generator.importClass("java.nio.charset.StandardCharsets");
 
-					b.append("// Convert input stream into string\n");
+					b.append("String fileContent = null;\n\n");
+					b.append("// Convert the input stream to a string\n");
 					b.append("try(final var scanner = new Scanner(event.getFile().getInputStream(), ");
 					b.append(exchangeMethod.getStandardCharset() + ").useDelimiter(\"\\\\A\"))\n");
 					b.append("{\n");
-					b.append("final String fileContent = scanner.hasNext() ? scanner.next() : \"\";\n\n");
-
-					invocationGenerator.addInvocation("fileContent");
+					b.append("fileContent = scanner.hasNext() ? scanner.next() : \"\";\n");
 				}
-			}
-			else {
-				b.append("try\n");
+
+				b.append("}\n");
+				b.append("catch (final Exception e)\n");
 				b.append("{\n");
 
-				invocationGenerator.addInvocation();
+				if (exchangeMethod.hasPathParameter())
+					generator.addErrorLog(b, "Error while saving import data to file!", "e");
+				else
+					generator.addErrorLog(b, "Error while reading data from input stream!", "e");
+
+				b.append("\n");
+				b.append("MessageUtil.sendFacesMessage(bundle, FacesMessage.SEVERITY_ERROR, OPERATION_IMPORT_FAIL, e);\n");
+				b.append("return;\n");
+				b.append("}\n\n");
 			}
+
+			b.append("try\n");
+			b.append("{\n");
+
+			if (processContent) {
+				if (exchangeMethod.hasPathParameter())
+					invocationGenerator.addInvocation("tempFile.getAbsolutePath()");
+				else
+					invocationGenerator.addInvocation("fileContent");
+			}
+			else
+				invocationGenerator.addInvocation();
 
 			b.append("\n");
 			b.append("MessageUtil.sendFacesMessage(bundle, FacesMessage.SEVERITY_INFO, OPERATION_IMPORT_OK);\n");

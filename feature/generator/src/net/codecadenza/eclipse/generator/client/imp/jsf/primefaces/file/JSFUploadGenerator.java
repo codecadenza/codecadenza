@@ -189,6 +189,8 @@ public class JSFUploadGenerator {
 	public void addUploadListenerMethods() {
 		final String modelObjectName = form.getDTO().getDomainObject().getLowerCaseName();
 		final Project project = form.getDTO().getNamespace().getProject();
+		final var uploadLogic = new StringBuilder();
+		var addTryCatchBlock = false;
 
 		for (final FormAction a : form.getActions()) {
 			if (a.getType() != ActionType.INDIRECT_UPLOAD && a.getType() != ActionType.DIRECT_UPLOAD)
@@ -220,7 +222,7 @@ public class JSFUploadGenerator {
 				b.append("{\n");
 				b.append("tempFile = File.createTempFile(fileName, Long.toString(System.currentTimeMillis()));\n");
 				b.append("}\n");
-				b.append("catch (final IOException e)\n");
+				b.append("catch (final Exception e)\n");
 				b.append("{\n");
 
 				generator.addErrorLog(b, "Error while creating temporary file '{}'!", "e", "fileName");
@@ -231,32 +233,40 @@ public class JSFUploadGenerator {
 				b.append("}\n\n");
 				b.append("try(final var fout = new FileOutputStream(tempFile))\n");
 				b.append("{\n");
-				b.append("event.getFile().getInputStream().transferTo(fout);\n\n");
+				b.append("event.getFile().getInputStream().transferTo(fout);\n");
+				b.append("}\n");
+				b.append("catch (final Exception e)\n");
+				b.append("{\n");
+
+				generator.addErrorLog(b, "Error while saving file '{}'!", "e", "fileName");
+
+				b.append("\n");
+				b.append("MessageUtil.sendFacesMessage(bundle, FacesMessage.SEVERITY_ERROR, OPERATION_UPLOAD_FAIL, e);\n");
+				b.append("return;\n");
+				b.append("}\n");
 			}
 
 			if (a.getType() == ActionType.INDIRECT_UPLOAD) {
-				new ServiceInvocationGenerator(a.getBoundaryMethod(), b).addInvocation(modelObjectName + "." + pkGetter,
-						"tempFile.getAbsolutePath()");
-
 				boolean isFirstEntry = true;
+				addTryCatchBlock = true;
+
+				new ServiceInvocationGenerator(a.getBoundaryMethod(), uploadLogic).addInvocation(modelObjectName + "." + pkGetter,
+						"tempFile.getAbsolutePath()");
 
 				for (final DTOBeanAttribute dtoAttr : form.getDTO().getAttributes()) {
 					if (dtoAttr.getDomainAttribute() == null || !dtoAttr.getDomainAttribute().isTrackVersion())
 						continue;
 
 					if (isFirstEntry) {
-						b.append("\n// We must increment the version field(s) manually in order to avoid optimistic\n");
-						b.append("// locking exceptions if user performs save operations upon same object afterwards!\n");
+						uploadLogic.append("\n// We must increment the version field(s) manually in order to avoid optimistic\n");
+						uploadLogic.append("// locking exceptions if user performs save operations upon same object afterwards!\n");
 
 						isFirstEntry = false;
 					}
 
-					b.append(modelObjectName + "." + dtoAttr.getModelSetterName() + "(" + modelObjectName);
-					b.append("." + dtoAttr.getModelGetterName() + " + 1);\n");
+					uploadLogic.append(modelObjectName + "." + dtoAttr.getModelSetterName() + "(" + modelObjectName);
+					uploadLogic.append("." + dtoAttr.getModelGetterName() + " + 1);\n");
 				}
-
-				if (!isFirstEntry)
-					b.append("\n");
 			}
 			else {
 				for (final DTOBeanAttribute attr : form.getDTO().getAttributes()) {
@@ -266,99 +276,85 @@ public class JSFUploadGenerator {
 					final AttributeTagEnumeration tag = attr.getDomainAttribute().getTag();
 
 					if (tag == AttributeTagEnumeration.DOCUMENT_NAME)
-						b.append(modelObjectName + "." + attr.getModelSetterName() + "(event.getFile().getFileName());\n");
+						uploadLogic.append(modelObjectName + "." + attr.getModelSetterName() + "(event.getFile().getFileName());\n");
 					else if (tag == AttributeTagEnumeration.DOCUMENT_REF || tag == AttributeTagEnumeration.DOCUMENT_DATA) {
 						if (!project.isBoundaryMode()) {
 							if (tag == AttributeTagEnumeration.DOCUMENT_DATA) {
-								b.append("\ntry\n");
-								b.append("{\n");
-								b.append(modelObjectName + "." + attr.getModelSetterName() + "(");
+								addTryCatchBlock = true;
+								uploadLogic.append(modelObjectName + "." + attr.getModelSetterName() + "(");
 
 								if (attr.getDomainAttribute().getJavaType().isType(JavaType.BYTE_OBJ_ARRAY))
-									b.append("FileUtil.convertToByteArray(");
+									uploadLogic.append("FileUtil.convertToByteArray(");
 
-								b.append("org.apache.commons.io.IOUtils.toByteArray(event.getFile().getInputStream())");
+								uploadLogic.append("org.apache.commons.io.IOUtils.toByteArray(event.getFile().getInputStream())");
 
 								if (attr.getDomainAttribute().getJavaType().isType(JavaType.BYTE_OBJ_ARRAY))
-									b.append(")");
+									uploadLogic.append(")");
 
-								b.append(");\n");
-								b.append("}\n");
-								b.append("catch (final IOException e)\n");
-								b.append("{\n");
-
-								generator.addErrorLog(b, "Error while writing file content to field!", "e");
-
-								b.append("\n");
-								b.append("MessageUtil.sendFacesMessage(bundle, FacesMessage.SEVERITY_ERROR, OPERATION_UPLOAD_FAIL, e);\n");
-								b.append("return;\n");
-								b.append("}\n\n");
+								uploadLogic.append(");\n");
 							}
 							else {
-								b.append(modelObjectName + "." + attr.getModelSetterName() + "(");
-								b.append("tempFile.getAbsolutePath());\n");
+								uploadLogic.append(modelObjectName + "." + attr.getModelSetterName() + "(");
+								uploadLogic.append("tempFile.getAbsolutePath());\n");
 							}
 						}
 						else
-							b.append(modelObjectName + "." + attr.getModelSetterName() + "(tempFile.getAbsolutePath());\n");
+							uploadLogic.append(modelObjectName + "." + attr.getModelSetterName() + "(tempFile.getAbsolutePath());\n");
 					}
 					else if (tag == AttributeTagEnumeration.DOCUMENT_SIZE) {
 						final JavaType type = attr.getDomainAttribute().getJavaType();
 
 						if (type.isInteger())
-							b.append(modelObjectName + "." + attr.getModelSetterName() + "((int) event.getFile().getSize());\n");
+							uploadLogic.append(modelObjectName + "." + attr.getModelSetterName() + "((int) event.getFile().getSize());\n");
 						else
-							b.append(modelObjectName + "." + attr.getModelSetterName() + "(event.getFile().getSize());\n");
+							uploadLogic.append(modelObjectName + "." + attr.getModelSetterName() + "(event.getFile().getSize());\n");
 					}
 					else if (tag == AttributeTagEnumeration.NONE && uploadAttr.equals(attr.getDomainAttribute())) {
 						if (!project.isBoundaryMode()) {
-							b.append("\ntry\n");
-							b.append("{\n");
-							b.append(modelObjectName + "." + attr.getModelSetterName() + "(");
+							addTryCatchBlock = true;
+
+							uploadLogic.append(modelObjectName + "." + attr.getModelSetterName() + "(");
 
 							if (attr.getDomainAttribute().getJavaType().isType(JavaType.BYTE_OBJ_ARRAY))
-								b.append("FileUtil.convertToByteArray(");
+								uploadLogic.append("FileUtil.convertToByteArray(");
 
-							b.append("org.apache.commons.io.IOUtils.toByteArray(event.getFile().getInputStream())");
+							uploadLogic.append("org.apache.commons.io.IOUtils.toByteArray(event.getFile().getInputStream())");
 
 							if (attr.getDomainAttribute().getJavaType().isType(JavaType.BYTE_OBJ_ARRAY))
-								b.append(")");
+								uploadLogic.append(")");
 
-							b.append(");\n");
-							b.append("}\n");
-							b.append("catch (final IOException e)\n");
-							b.append("{\n");
-
-							generator.addErrorLog(b, "Error while writing file content to field!", "e");
-
-							b.append("\n");
-							b.append("MessageUtil.sendFacesMessage(bundle, FacesMessage.SEVERITY_ERROR, OPERATION_UPLOAD_FAIL, e);\n");
-							b.append("return;\n");
-							b.append("}\n\n");
+							uploadLogic.append(");\n");
 						}
 						else {
-							b.append(modelObjectName + "." + attr.getModelSetterName() + "(");
-							b.append("tempFile.getAbsolutePath());\n");
+							uploadLogic.append(modelObjectName + "." + attr.getModelSetterName() + "(");
+							uploadLogic.append("tempFile.getAbsolutePath());\n");
 						}
 					}
 				}
 			}
 
-			b.append("\nMessageUtil.sendFacesMessage(bundle, FacesMessage.SEVERITY_INFO, OPERATION_UPLOAD_OK);\n");
+			b.append("\n");
 
-			if (a.getType() == ActionType.INDIRECT_UPLOAD || project.isBoundaryMode()
-					|| uploadAttr.getTag() == AttributeTagEnumeration.DOCUMENT_REF) {
+			if (addTryCatchBlock) {
+				b.append("try\n");
+				b.append("{\n");
+				b.append(uploadLogic.toString());
 				b.append("}\n");
-				b.append("catch (final IOException e)\n");
+				b.append("catch (final Exception e)\n");
 				b.append("{\n");
 
-				generator.addErrorLog(b, "Error while performing upload of file {}!", "e", "fileName");
+				generator.addErrorLog(b, "Error while performing upload of file '{}'!", "e", "event.getFile().getFileName()");
 
 				b.append("\n");
 				b.append("MessageUtil.sendFacesMessage(bundle, FacesMessage.SEVERITY_ERROR, OPERATION_UPLOAD_FAIL, e);\n");
+				b.append("return;\n");
 				b.append("}\n");
 			}
+			else
+				b.append(uploadLogic.toString());
 
+			b.append("\n");
+			b.append("MessageUtil.sendFacesMessage(bundle, FacesMessage.SEVERITY_INFO, OPERATION_UPLOAD_OK);\n");
 			b.append("}\n\n");
 
 			generator.addMethod(methodSignature, b.toString());
