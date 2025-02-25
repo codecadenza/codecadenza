@@ -100,6 +100,7 @@ public class SecurityConfigurationGenerator extends AbstractJavaSourceGenerator 
 			importPackage("org.springframework.context.annotation");
 			importPackage("org.springframework.security.config.annotation.web.builders");
 			importPackage("org.springframework.security.config.annotation.web.configuration");
+			importPackage("org.springframework.security.config.annotation.web.configurers");
 			importPackage("org.springframework.security.web");
 
 			if (securityEnabled) {
@@ -236,7 +237,7 @@ public class SecurityConfigurationGenerator extends AbstractJavaSourceGenerator 
 			b.append("http.authorizeHttpRequests(matcherRegistry -> matcherRegistry.anyRequest().permitAll());\n\n");
 
 		b.append("// CSRF is handled internally\n");
-		b.append("http.csrf(csrfConfig -> csrfConfig.disable());\n\n");
+		b.append("http.csrf(CsrfConfigurer::disable);\n\n");
 		b.append("return http.build();\n");
 		b.append("}\n\n");
 
