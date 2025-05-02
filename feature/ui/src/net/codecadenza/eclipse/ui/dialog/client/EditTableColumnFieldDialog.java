@@ -120,14 +120,17 @@ public class EditTableColumnFieldDialog extends CodeCadenzaDialog {
 		final var lblAttrName = new Label(panDialogArea, SWT.NONE);
 		lblAttrName.setText("DTO attribute name:");
 
+		final var gdAttrName = new GridData(SWT.FILL, SWT.CENTER, true, false);
+		gdAttrName.widthHint = 300;
+
 		txtAttrName = new Text(panDialogArea, SWT.BORDER);
-		txtAttrName.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
+		txtAttrName.setLayoutData(gdAttrName);
 
 		final var lblWidth = new Label(panDialogArea, SWT.NONE);
 		lblWidth.setText("Width:");
 
 		txtWidth = new Text(panDialogArea, SWT.BORDER);
-		txtWidth.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, false));
+		txtWidth.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
 
 		final var lblVisible = new Label(panDialogArea, SWT.NONE);
 		lblVisible.setText("Visible:");
