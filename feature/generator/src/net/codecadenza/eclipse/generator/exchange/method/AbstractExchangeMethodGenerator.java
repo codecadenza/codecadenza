@@ -256,7 +256,8 @@ public abstract class AbstractExchangeMethodGenerator {
 			b.append("{\n");
 			b.append("Thread.currentThread().interrupt();\n");
 
-			generator.addErrorLog(b, "Data exchange thread has been interrupted!", "ex");
+			if (generator != null)
+				generator.addErrorLog(b, "Data exchange thread has been interrupted!", "ex");
 
 			b.append("}\n\n");
 		}

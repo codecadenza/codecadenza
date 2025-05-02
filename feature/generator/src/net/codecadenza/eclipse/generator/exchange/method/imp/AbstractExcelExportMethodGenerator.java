@@ -229,7 +229,7 @@ public abstract class AbstractExcelExportMethodGenerator extends AbstractExportM
 				final String listTypeName = type.getWrapperTypeName();
 				final var listName = attr.getMappingAttribute().getName() + "ListEntries";
 
-				if (type.getNamespace() != null)
+				if (generator != null && type.getNamespace() != null)
 					generator.importPackage(type.getNamespace().toString());
 
 				// The developer is responsible to provide a valid query!
@@ -860,7 +860,8 @@ public abstract class AbstractExcelExportMethodGenerator extends AbstractExportM
 
 	/*
 	 * (non-Javadoc)
-	 * @see net.codecadenza.eclipse.generator.exchange.method.AbstractExportMethodGenerator#addMarshallerInvocation(java.lang.String)
+	 * @see net.codecadenza.eclipse.generator.exchange.method.AbstractExportMethodGenerator#
+	 * addMarshallerInvocation(java.lang.String)
 	 */
 	@Override
 	protected String addMarshallerInvocation(String marshalledObject) {
