@@ -33,12 +33,16 @@ import static net.codecadenza.eclipse.shared.Constants.JAVA_RESOURCE_SUFFIX;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import java.io.File;
+import java.io.FileInputStream;
 import java.net.URL;
 import java.net.URLClassLoader;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Properties;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipInputStream;
 import net.codecadenza.eclipse.model.db.DBVendorGroupEnumeration;
 import net.codecadenza.eclipse.model.java.Namespace;
 import net.codecadenza.eclipse.model.project.BuildArtifactType;
@@ -49,6 +53,7 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.IPath;
+import org.eclipse.jdt.core.IClasspathEntry;
 import org.eclipse.jdt.core.IJavaElement;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.IPackageFragment;
@@ -69,7 +74,12 @@ import org.hibernate.jpa.boot.internal.PersistenceUnitInfoDescriptor;
  * @version 1.0.0
  */
 public class PersistenceEngine {
+	private static final String CLASS_FILE_SUFFIX = ".class";
 	private static final String ECLIPSE_LINK_CONFIG_CLASS_NAME = ECLIPSE_LINK_CONFIG + JAVA_RESOURCE_SUFFIX;
+	private static final String LIB_JPA = "codecadenza-jpa";
+	private static final String LIB_UTIL = "codecadenza-util";
+	private static final String PACKAGE_FILTER_JPA = "net/codecadenza/runtime/jpa/converter";
+	private static final String PACKAGE_FILTER_UTIL = "net/codecadenza/runtime/util/conversion";
 
 	private EntityManagerFactory emf;
 
@@ -182,8 +192,8 @@ public class PersistenceEngine {
 	 */
 	private static List<String> getClassesOfPersistenceUnit(Project project, PersistenceEngine engine,
 			BuildArtifactType artifactType) throws Exception {
-		final IWorkspaceRoot wsRoot = ResourcesPlugin.getWorkspace().getRoot();
-		final IProject proj = wsRoot.getProject(project.getTargetProjectName(artifactType));
+		final IWorkspaceRoot workspaceRoot = ResourcesPlugin.getWorkspace().getRoot();
+		final IProject proj = workspaceRoot.getProject(project.getTargetProjectName(artifactType));
 		final IFolder folder = proj.getFolder(project.getSourceFolder());
 		final IJavaProject javaProject = JavaCore.create(proj);
 		final ClassLoader classLoader = engine.getClassLoader(javaProject, project, true);
@@ -210,7 +220,40 @@ public class PersistenceEngine {
 					classList.add(Class.forName(className, false, classLoader));
 				}
 
+		// Try to add the converter classes to the persistence unit
+		addClassesOfRuntimeLibrary(javaProject, classList, classLoader, LIB_JPA, PACKAGE_FILTER_JPA);
+		addClassesOfRuntimeLibrary(javaProject, classList, classLoader, LIB_UTIL, PACKAGE_FILTER_UTIL);
+
 		return classList.stream().map(Class::getName).toList();
+	}
+
+	/**
+	 * Add all necessary classes of the given library to the list of classes that must be added to the persistence context
+	 * @param javaProject the Java project
+	 * @param classList a list to add the classes to
+	 * @param classLoader the class loader
+	 * @param libraryName the name of the library
+	 * @param packageFilter the filter that controls what classes should be added
+	 * @throws Exception if a class could not be found
+	 */
+	private static void addClassesOfRuntimeLibrary(IJavaProject javaProject, ArrayList<Class<?>> classList, ClassLoader classLoader,
+			String libraryName, String packageFilter) throws Exception {
+		final URL runtimeLibURL = getRuntimeLibraryURL(javaProject, libraryName);
+
+		if (runtimeLibURL != null) {
+			final Path path = Path.of(runtimeLibURL.toURI());
+
+			try (final ZipInputStream zip = new ZipInputStream(new FileInputStream(path.toFile()))) {
+				for (ZipEntry entry = zip.getNextEntry(); entry != null; entry = zip.getNextEntry()) {
+					if (!entry.isDirectory() && entry.getName().contains(packageFilter) && entry.getName().endsWith(CLASS_FILE_SUFFIX)) {
+						String className = entry.getName().replace('/', '.');
+						className = className.substring(0, className.length() - CLASS_FILE_SUFFIX.length());
+
+						classList.add(Class.forName(className, true, classLoader));
+					}
+				}
+			}
+		}
 	}
 
 	/**
@@ -267,6 +310,15 @@ public class PersistenceEngine {
 			paths.add(driverFile.toURI().toURL());
 		}
 
+		final URL jpaLibURL = getRuntimeLibraryURL(javaProject, LIB_JPA);
+		final URL utilLibURL = getRuntimeLibraryURL(javaProject, LIB_UTIL);
+
+		if (jpaLibURL != null)
+			paths.add(jpaLibURL);
+
+		if (utilLibURL != null)
+			paths.add(utilLibURL);
+
 		return paths;
 	}
 
@@ -294,6 +346,34 @@ public class PersistenceEngine {
 			return new URLClassLoader(paths.toArray(new URL[paths.size()]), Thread.currentThread().getContextClassLoader());
 
 		return new URLClassLoader(paths.toArray(new URL[paths.size()]));
+	}
+
+	/**
+	 * Get the URL of the runtime library of the given project
+	 * @param project the project that contains the given library
+	 * @param libraryName the name of the library to search for
+	 * @return the URL of the given runtime library or null if it could not be found
+	 * @throws Exception if the URL could not be created
+	 */
+	private static URL getRuntimeLibraryURL(IJavaProject project, String libraryName) throws Exception {
+		final IWorkspaceRoot workspaceRoot = ResourcesPlugin.getWorkspace().getRoot();
+
+		for (final IClasspathEntry entry : project.getResolvedClasspath(true))
+			if (entry.getEntryKind() == IClasspathEntry.CPE_LIBRARY) {
+				final String entryPath = entry.getPath().toOSString();
+
+				if (entryPath.contains(libraryName)) {
+					final File libFile = new File(entryPath);
+
+					if (libFile.exists())
+						return libFile.toURI().toURL();
+
+					// In the case of an Eclipse RCP/RAP application the library path is relative to the workspace location!
+					return workspaceRoot.getLocation().append(libFile.getPath()).toFile().toURI().toURL();
+				}
+			}
+
+		return null;
 	}
 
 }

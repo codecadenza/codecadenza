@@ -89,6 +89,8 @@ public class VaadinFieldGeneratorFactory {
 			fieldGenerator = new VaadinLogOnFieldGenerator(field, formGenerator);
 		else if (type == FormFieldTypeEnumeration.SEARCHABLE_LIST)
 			fieldGenerator = new VaadinListFieldGenerator(field, formGenerator, !field.isReadonly());
+		else if (type == FormFieldTypeEnumeration.ELEMENT_COLLECTION_EDITOR)
+			fieldGenerator = new VaadinElementCollectionEditorFieldGenerator(field, formGenerator);
 		else
 			throw new IllegalStateException("A generator for the form field type '" + type + "' is not available!");
 

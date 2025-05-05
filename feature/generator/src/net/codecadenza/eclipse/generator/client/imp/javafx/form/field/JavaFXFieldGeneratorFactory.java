@@ -93,6 +93,8 @@ public class JavaFXFieldGeneratorFactory {
 			fieldGenerator = new JavaFXIntLinkFieldGenerator(field, formGenerator);
 		else if (type == FormFieldTypeEnumeration.SELECTION_BY_CLIENT)
 			fieldGenerator = new JavaFXSelectionByClientFieldGenerator(field, formGenerator);
+		else if (type == FormFieldTypeEnumeration.ELEMENT_COLLECTION_EDITOR)
+			fieldGenerator = new JavaFXElementCollectionEditorGenerator(field, formGenerator);
 		else
 			throw new IllegalStateException("A generator for the form field type '" + type + "' is not available!");
 

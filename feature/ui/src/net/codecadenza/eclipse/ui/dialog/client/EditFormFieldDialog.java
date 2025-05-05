@@ -268,6 +268,8 @@ public class EditFormFieldDialog extends CodeCadenzaDialog {
 				}
 			}
 		}
+		else if (field.getFieldType() == FormFieldTypeEnumeration.ELEMENT_COLLECTION_EDITOR)
+			cboType.add(FormFieldTypeEnumeration.ELEMENT_COLLECTION_EDITOR.name());
 
 		final var lblLabel = new Label(panDialogArea, SWT.NONE);
 		lblLabel.setText("Label:");

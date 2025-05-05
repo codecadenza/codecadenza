@@ -1488,7 +1488,8 @@ public class SwingSingleRecordFormGenerator extends AbstractSingleRecordFormGene
 			// Check if the panel provides a searchable list
 			for (final FormField field : panel.getFields())
 				if (field.getFieldType() == FormFieldTypeEnumeration.SEARCHABLE_LIST
-						|| field.getFieldType() == FormFieldTypeEnumeration.LIST) {
+						|| field.getFieldType() == FormFieldTypeEnumeration.LIST
+						|| field.getFieldType() == FormFieldTypeEnumeration.ELEMENT_COLLECTION_EDITOR) {
 					hasListField = true;
 					break;
 				}

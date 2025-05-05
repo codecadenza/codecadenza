@@ -46,6 +46,13 @@ public class I18NSwing {
 	public static final String ABSTRACT_DATA_TABLE_PANEL_MSG_RESULT = "abstract_data_table_panel.msg_result";
 	public static final String ABSTRACT_DATA_TABLE_PANEL_STATUS_FETCH_DATA = "abstract_data_table_panel.status_fetch_data";
 	public static final String ABSTRACT_DATA_TABLE_RENDERER_TABLE_NOT_SET = "abstract_data_table_renderer.table_not_set";
+	public static final String ELEMENT_COLLECTION_EDITOR_ACTION_DELETE = "element_collection_editor.action_delete";
+	public static final String ELEMENT_COLLECTION_EDITOR_ACTION_DELETE_ALL = "element_collection_editor.action_delete_all";
+	public static final String ELEMENT_COLLECTION_EDITOR_CMD_ADD = "element_collection_editor.cmd_add";
+	public static final String ELEMENT_COLLECTION_EDITOR_LBL_ADD = "element_collection_editor.lbl_add";
+	public static final String ELEMENT_COLLECTION_EDITOR_MSG_TITLE_CONVERSION = "element_collection_editor.msg_title_conversion";
+	public static final String ELEMENT_COLLECTION_EDITOR_MSG_CONVERSION_FAILED = "element_collection_editor.msg_conversion_failed";
+	public static final String ABSTRACT_COLUMN_SORT_LISTENER_MSG_ERR_COL_NOT_FOUND = "abstract_column_sort_listener.msg_err_col_not_found";
 	public static final String ABSTRACT_FILE_DOWNLOAD_OPERATION_BYTES_PROCESSED = "abstract_file_download_operation.bytes_processed";
 	public static final String ABSTRACT_FILE_DOWNLOAD_OPERATION_MSG_DOWNLOAD_ERROR = "abstract_file_download_operation.msg_download_error";
 	public static final String ABSTRACT_FILE_DOWNLOAD_OPERATION_MSG_DOWNLOAD_FINISHED = "abstract_file_download_operation.msg_download_finished";

@@ -87,6 +87,8 @@ public class AngularFieldGeneratorFactory {
 			return new AngularWebLinkFieldGenerator(field, formatter);
 		else if (type == FormFieldTypeEnumeration.MAIL_LINK)
 			return new AngularMailLinkFieldGenerator(field, formatter);
+		else if (type == FormFieldTypeEnumeration.ELEMENT_COLLECTION_EDITOR)
+			return new AngularElementCollectionEditorGenerator(field, formatter);
 
 		throw new IllegalStateException("A generator for the form field type '" + type + "' is not available!");
 	}

@@ -211,8 +211,35 @@ public class ProjectFilesGenerator {
 				}
 
 		if (project.isJavaSEApplication() || project.getPersistenceProvider() == PersistenceProviderEnumeration.ECLIPSELINK) {
+			b.append("\t\t<!-- Converters for fields that are mapped to a UUID -->\n");
 			b.append("\t\t<class>net.codecadenza.runtime.jpa.converter.UUIDByteArrayConverter</class>\n");
 			b.append("\t\t<class>net.codecadenza.runtime.jpa.converter.UUIDStringConverter</class>\n");
+			b.append("\t\t<!-- Converters for element collections that use a set -->\n");
+			b.append("\t\t<class>net.codecadenza.runtime.jpa.converter.element.set.BigDecimalSetToStringConverter</class>\n");
+			b.append("\t\t<class>net.codecadenza.runtime.jpa.converter.element.set.CharacterSetToStringConverter</class>\n");
+			b.append("\t\t<class>net.codecadenza.runtime.jpa.converter.element.set.DateSetToStringConverter</class>\n");
+			b.append("\t\t<class>net.codecadenza.runtime.jpa.converter.element.set.DoubleSetToStringConverter</class>\n");
+			b.append("\t\t<class>net.codecadenza.runtime.jpa.converter.element.set.FloatSetToStringConverter</class>\n");
+			b.append("\t\t<class>net.codecadenza.runtime.jpa.converter.element.set.GregorianCalendarSetToStringConverter</class>\n");
+			b.append("\t\t<class>net.codecadenza.runtime.jpa.converter.element.set.IntegerSetToStringConverter</class>\n");
+			b.append("\t\t<class>net.codecadenza.runtime.jpa.converter.element.set.LocalDateSetToStringConverter</class>\n");
+			b.append("\t\t<class>net.codecadenza.runtime.jpa.converter.element.set.LocalDateTimeSetToStringConverter</class>\n");
+			b.append("\t\t<class>net.codecadenza.runtime.jpa.converter.element.set.LongSetToStringConverter</class>\n");
+			b.append("\t\t<class>net.codecadenza.runtime.jpa.converter.element.set.StringSetToStringConverter</class>\n");
+			b.append("\t\t<class>net.codecadenza.runtime.jpa.converter.element.set.UUIDSetToStringConverter</class>\n");
+			b.append("\t\t<!-- Converters for element collections that use a list -->\n");
+			b.append("\t\t<class>net.codecadenza.runtime.jpa.converter.element.list.BigDecimalListToStringConverter</class>\n");
+			b.append("\t\t<class>net.codecadenza.runtime.jpa.converter.element.list.CharacterListToStringConverter</class>\n");
+			b.append("\t\t<class>net.codecadenza.runtime.jpa.converter.element.list.DateListToStringConverter</class>\n");
+			b.append("\t\t<class>net.codecadenza.runtime.jpa.converter.element.list.DoubleListToStringConverter</class>\n");
+			b.append("\t\t<class>net.codecadenza.runtime.jpa.converter.element.list.FloatListToStringConverter</class>\n");
+			b.append("\t\t<class>net.codecadenza.runtime.jpa.converter.element.list.GregorianCalendarListToStringConverter</class>\n");
+			b.append("\t\t<class>net.codecadenza.runtime.jpa.converter.element.list.IntegerListToStringConverter</class>\n");
+			b.append("\t\t<class>net.codecadenza.runtime.jpa.converter.element.list.LocalDateListToStringConverter</class>\n");
+			b.append("\t\t<class>net.codecadenza.runtime.jpa.converter.element.list.LocalDateTimeListToStringConverter</class>\n");
+			b.append("\t\t<class>net.codecadenza.runtime.jpa.converter.element.list.LongListToStringConverter</class>\n");
+			b.append("\t\t<class>net.codecadenza.runtime.jpa.converter.element.list.StringListToStringConverter</class>\n");
+			b.append("\t\t<class>net.codecadenza.runtime.jpa.converter.element.list.UUIDListToStringConverter</class>\n");
 		}
 
 		b.append("\t\t<properties>\n");

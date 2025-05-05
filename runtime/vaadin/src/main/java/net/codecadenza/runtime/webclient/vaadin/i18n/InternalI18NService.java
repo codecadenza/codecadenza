@@ -37,11 +37,17 @@ import java.util.ResourceBundle;
 public class InternalI18NService extends AbstractI18NService {
 	private static final long serialVersionUID = 6018555612223358244L;
 	public static final String ABSTRACT_DATA_GRID_ACTION_REFRESH = "abstract_data_grid.action_refresh";
+	public static final String ABSTRACT_ELEMENT_COLLECTION_EDITOR_LBL_ADD = "abstract_element_collection_editor.lbl_add";
+	public static final String ABSTRACT_ELEMENT_COLLECTION_EDITOR_MSG_TITLE_CONVERSION = "abstract_element_collection_editor.msg_title_conversion";
+	public static final String ABSTRACT_ELEMENT_COLLECTION_EDITOR_MSG_CONVERSION_FAILED = "abstract_element_collection_editor.msg_conversion_failed";
 	public static final String DUAL_LIST_FIELD_LEFT_COL = "dual_list_field.list_left_col";
 	public static final String DUAL_LIST_FIELD_RIGHT_COL = "dual_list_field.list_right_col";
 	public static final String DUAL_FILTERING_LIST_FIELD_LBL_INPUT = "dual_filtering_list_field.lbl_input";
+	public static final String CMD_ADD = "cmd_add";
 	public static final String CMD_CANCEL = "cmd_cancel";
 	public static final String CMD_COUNT = "cmd_count";
+	public static final String CMD_DELETE = "cmd_delete";
+	public static final String CMD_DELETE_ALL = "cmd_delete_all";
 	public static final String CMD_EXPORT = "cmd_export";
 	public static final String CMD_NO = "cmd_no";
 	public static final String CMD_OK = "cmd_ok";

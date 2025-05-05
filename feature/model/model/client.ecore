@@ -88,6 +88,7 @@
     <eLiterals name="MAIL_LINK" value="17"/>
     <eLiterals name="FORM_LINK" value="18"/>
     <eLiterals name="SELECTION_BY_CLIENT" value="19"/>
+    <eLiterals name="ELEMENT_COLLECTION_EDITOR" value="20"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="FormGroup">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>

@@ -22,6 +22,7 @@
 package net.codecadenza.eclipse.generator.domain;
 
 import static net.codecadenza.eclipse.shared.Constants.LISTENER_SUFFIX;
+import static net.codecadenza.eclipse.shared.Constants.PACK_JAVA_UTIL;
 import static net.codecadenza.eclipse.shared.Constants.PACK_VALIDATION;
 import static net.codecadenza.eclipse.shared.Constants.SUB_PACKAGE_LISTENER;
 
@@ -35,7 +36,10 @@ import net.codecadenza.eclipse.model.db.DBNamingUtil;
 import net.codecadenza.eclipse.model.db.DBTable;
 import net.codecadenza.eclipse.model.db.DBVendorGroupEnumeration;
 import net.codecadenza.eclipse.model.db.Database;
+import net.codecadenza.eclipse.model.db.ForeignKey;
 import net.codecadenza.eclipse.model.domain.AbstractDomainAssociation;
+import net.codecadenza.eclipse.model.domain.CollectionMappingStrategyEnumeration;
+import net.codecadenza.eclipse.model.domain.CollectionTypeEnumeration;
 import net.codecadenza.eclipse.model.domain.DomainAssociationComparator;
 import net.codecadenza.eclipse.model.domain.DomainAttribute;
 import net.codecadenza.eclipse.model.domain.DomainAttributeComparator;
@@ -120,17 +124,21 @@ public class DomainObjectGenerator extends AbstractJavaSourceGenerator {
 
 		importPackage("jakarta.persistence");
 
-		for (final DomainAttribute attr : domainObject.getAttributes())
+		for (final DomainAttribute attr : domainObject.getAttributes()) {
 			if (attr.getJavaType().getNamespace() != null
 					&& !attr.getJavaType().getNamespace().toString().equals(domainObject.getNamespace().toString()))
 				importPackage(attr.getJavaType().getNamespace().toString());
+
+			if (attr.getCollectionType() != CollectionTypeEnumeration.NONE)
+				importPackage(PACK_JAVA_UTIL);
+		}
 
 		if (domainObject.getPKAttribute().getJavaType().getNamespace() != null)
 			importPackage(domainObject.getPKAttribute().getJavaType().getNamespace().toString());
 
 		domainObject.getAssociations().forEach(assoc -> {
 			if (assoc instanceof ManyToManyAssociation || assoc instanceof OneToManyAssociation)
-				importPackage("java.util");
+				importPackage(PACK_JAVA_UTIL);
 
 			if (!domainObject.getNamespace().equals(assoc.getTarget().getNamespace()))
 				importPackage(assoc.getTarget().getNamespace().toString());
@@ -263,7 +271,12 @@ public class DomainObjectGenerator extends AbstractJavaSourceGenerator {
 
 		// Create fields for all domain attributes
 		domainObject.getAttributes().forEach(attr -> {
-			final JavaFieldGenerator fieldGenerator = addPrivateField(attr.getJavaType().getName(), attr.getName());
+			final JavaFieldGenerator fieldGenerator = addPrivateField(attr.getTypeName(), attr.getName());
+
+			if (attr.getCollectionType() == CollectionTypeEnumeration.LIST)
+				fieldGenerator.withDefaultValue("new ArrayList<>()");
+			else if (attr.getCollectionType() == CollectionTypeEnumeration.SET)
+				fieldGenerator.withDefaultValue("new HashSet<>()");
 
 			if (!domainObject.isPropertyAccess()) {
 				fieldGenerator.withAnnotations(addPersistenceAnnotations(attr));
@@ -332,7 +345,7 @@ public class DomainObjectGenerator extends AbstractJavaSourceGenerator {
 		addConstructor(domainObject.getName() + "()", b.toString());
 
 		if (domainObject.getParent() == null) {
-			var signature = domainObject.getName() + "(" + domainObject.getPKAttribute().getJavaType().getName() + " ";
+			var signature = domainObject.getName() + "(" + domainObject.getPKAttribute().getTypeName() + " ";
 			signature += domainObject.getPKAttribute().getName() + ")";
 
 			b = new StringBuilder();
@@ -350,9 +363,9 @@ public class DomainObjectGenerator extends AbstractJavaSourceGenerator {
 			final DomainAttribute displayAttribute = domainObject.getDisplayAttribute();
 
 			if (displayAttribute != null) {
-				signature = domainObject.getName() + "(" + domainObject.getPKAttribute().getJavaType().getName() + " ";
+				signature = domainObject.getName() + "(" + domainObject.getPKAttribute().getTypeName() + " ";
 				signature += domainObject.getPKAttribute().getName() + ", ";
-				signature += displayAttribute.getJavaType().getName() + " " + displayAttribute.getName() + ")";
+				signature += displayAttribute.getTypeName() + " " + displayAttribute.getName() + ")";
 
 				b = new StringBuilder();
 				b.append("/**\n * Constructor using primary key field and display attribute\n");
@@ -370,7 +383,7 @@ public class DomainObjectGenerator extends AbstractJavaSourceGenerator {
 			}
 		}
 		else {
-			var signature = domainObject.getName() + "(" + domainObject.getPKAttribute().getJavaType().getName() + " ";
+			var signature = domainObject.getName() + "(" + domainObject.getPKAttribute().getTypeName() + " ";
 			signature += domainObject.getPKAttribute().getName() + ")";
 
 			b = new StringBuilder();
@@ -388,9 +401,9 @@ public class DomainObjectGenerator extends AbstractJavaSourceGenerator {
 			final DomainAttribute displayAttribute = domainObject.getDisplayAttribute();
 
 			if (displayAttribute != null) {
-				signature = domainObject.getName() + "(" + domainObject.getPKAttribute().getJavaType().getName() + " ";
+				signature = domainObject.getName() + "(" + domainObject.getPKAttribute().getTypeName() + " ";
 				signature += domainObject.getPKAttribute().getName() + ", ";
-				signature += displayAttribute.getJavaType().getName() + " " + displayAttribute.getName() + ")";
+				signature += displayAttribute.getTypeName() + " " + displayAttribute.getName() + ")";
 
 				b = new StringBuilder();
 				b.append("/**\n * Constructor using primary key field and display attribute\n");
@@ -429,9 +442,8 @@ public class DomainObjectGenerator extends AbstractJavaSourceGenerator {
 
 		// Add getters and setters for all attributes
 		for (final DomainAttribute attr : domainObject.getAttributes()) {
-			final var setterIdentifier = "void " + attr.getSetterName() + "(" + attr.getJavaType().getName() + " " + attr.getName()
-					+ ")";
-			final var getterIdentifier = attr.getJavaType().getName() + " " + attr.getGetterName();
+			final var setterIdentifier = "void " + attr.getSetterName() + "(" + attr.getTypeName() + " " + attr.getName() + ")";
+			final var getterIdentifier = attr.getTypeName() + " " + attr.getGetterName();
 			b = new StringBuilder();
 
 			if (attr.getJavaType().isBoolean())
@@ -1089,140 +1101,243 @@ public class DomainObjectGenerator extends AbstractJavaSourceGenerator {
 	 */
 	private String addPersistenceAnnotations(DomainAttribute attr) {
 		final var b = new StringBuilder();
-		final DomainObject domainObjectOfAttr = attr.getDomainObject();
 
-		if (attr.isPk()) {
-			b.append("@Id\n");
+		if (!attr.isPersistent()) {
+			b.append("@Transient\n");
 
-			if (domainObjectOfAttr.getIDGenerator().getGeneratorType() == IDGeneratorTypeEnumeration.SEQUENCE
-					|| domainObjectOfAttr.getIDGenerator().getGeneratorType() == IDGeneratorTypeEnumeration.TABLE) {
-				b.append("@GeneratedValue(strategy=GenerationType." + domainObjectOfAttr.getIDGenerator().getGeneratorType().toString());
-				b.append(", generator=\"" + generatorName + "\")\n");
-			}
-			else if (domainObjectOfAttr.getIDGenerator().getGeneratorType() == IDGeneratorTypeEnumeration.UUID) {
-				if (project.getPersistenceProvider() == PersistenceProviderEnumeration.HIBERNATE) {
-					importClass("org.hibernate.annotations.UuidGenerator");
-
-					b.append("@UuidGenerator\n");
-				}
-				else {
-					importClass("org.eclipse.persistence.annotations.UuidGenerator");
-
-					b.append("@UuidGenerator(name=\"" + generatorName + "\")\n");
-				}
-
-				b.append("@GeneratedValue(generator=\"" + generatorName + "\")\n");
-			}
-			else if (domainObjectOfAttr.getIDGenerator().getGeneratorType() != IDGeneratorTypeEnumeration.NONE) {
-				b.append("@GeneratedValue(strategy=GenerationType.");
-				b.append(domainObjectOfAttr.getIDGenerator().getGeneratorType().toString() + ")\n");
-			}
+			return b.toString();
 		}
 
-		if (attr.isTrackVersion())
-			b.append("@Version\n");
+		if (attr.isPk()) {
+			b.append(addPrimaryKeyAnnotations(attr));
+			b.append(addConverterAnnotations(attr));
+		}
+		else if (attr.getCollectionMappingStrategy() != CollectionMappingStrategyEnumeration.TABLE) {
+			b.append(addStandardPersistenceAnnotations(attr));
+			b.append(addConverterAnnotations(attr));
+		}
+		else
+			b.append(addElementCollectionAnnotations(attr));
+
+		return b.toString();
+	}
+
+	/**
+	 * Add the annotations for the primary key attribute
+	 * @param attr
+	 * @return the generated content
+	 */
+	private String addPrimaryKeyAnnotations(DomainAttribute attr) {
+		final var b = new StringBuilder();
+		final DomainObject domainObjectOfAttr = attr.getDomainObject();
+
+		b.append("@Id\n");
+
+		if (domainObjectOfAttr.getIDGenerator().getGeneratorType() == IDGeneratorTypeEnumeration.SEQUENCE
+				|| domainObjectOfAttr.getIDGenerator().getGeneratorType() == IDGeneratorTypeEnumeration.TABLE) {
+			b.append("@GeneratedValue(strategy=GenerationType." + domainObjectOfAttr.getIDGenerator().getGeneratorType().toString());
+			b.append(", generator=\"" + generatorName + "\")\n");
+		}
+		else if (domainObjectOfAttr.getIDGenerator().getGeneratorType() == IDGeneratorTypeEnumeration.UUID) {
+			if (project.getPersistenceProvider() == PersistenceProviderEnumeration.HIBERNATE) {
+				importClass("org.hibernate.annotations.UuidGenerator");
+
+				b.append("@UuidGenerator\n");
+			}
+			else {
+				importClass("org.eclipse.persistence.annotations.UuidGenerator");
+
+				b.append("@UuidGenerator(name=\"" + generatorName + "\")\n");
+			}
+
+			b.append("@GeneratedValue(generator=\"" + generatorName + "\")\n");
+		}
+		else if (domainObjectOfAttr.getIDGenerator().getGeneratorType() != IDGeneratorTypeEnumeration.NONE) {
+			b.append("@GeneratedValue(strategy=GenerationType.");
+			b.append(domainObjectOfAttr.getIDGenerator().getGeneratorType().toString() + ")\n");
+		}
+
+		b.append("@Column(name=\"" + attr.getColumn().getMappingName() + "\")\n");
+
+		return b.toString();
+	}
+
+	/**
+	 * Add the standard persistence annotations
+	 * @param attr
+	 * @return the generated content
+	 */
+	private String addStandardPersistenceAnnotations(DomainAttribute attr) {
+		final var b = new StringBuilder();
 
 		if (attr.getJavaType().isEnum())
 			b.append("@Enumerated(EnumType.STRING)\n");
 
-		if (attr.isPersistent()) {
-			if (attr.isPk())
-				b.append("@Column(name=\"" + attr.getColumn().getMappingName() + "\"");
-			else {
-				if (!attr.getColumn().isNullable() || !attr.isFetchTypeEager()) {
-					b.append("@Basic(");
+		if (attr.isTrackVersion())
+			b.append("@Version\n");
 
-					if (!attr.getColumn().isNullable())
-						b.append("optional=false");
+		if (!attr.getColumn().isNullable() || !attr.isFetchTypeEager()) {
+			b.append("@Basic(");
 
-					if (!attr.isFetchTypeEager()) {
-						if (!attr.getColumn().isNullable())
-							b.append(", ");
+			if (!attr.getColumn().isNullable())
+				b.append("optional=false");
 
-						b.append("fetch=FetchType.LAZY");
-					}
+			if (!attr.isFetchTypeEager()) {
+				if (!attr.getColumn().isNullable())
+					b.append(", ");
 
-					b.append(")\n");
-				}
-
-				b.append("@Column(name=\"" + attr.getColumn().getMappingName() + "\", nullable=" + attr.getColumn().isNullable());
-				b.append(", updatable=" + attr.isUpdatable() + ", insertable=" + attr.isInsertable());
-
-				if (attr.getJavaType().isString() && attr.getDomainAttributeValidator().getMaxLength() != null)
-					b.append(", length=" + attr.getDomainAttributeValidator().getMaxLength());
-
-				if (attr.getColumn().getPrecision() != 0)
-					b.append(", precision=" + attr.getColumn().getPrecision());
-
-				if (attr.getColumn().getScale() != 0)
-					b.append(", scale=" + attr.getColumn().getScale());
-
-				DBTable table = domainObjectOfAttr.getDatabaseTable();
-
-				if (table == null)
-					table = domainObjectOfAttr.getRootParentDomainObject(false).getDatabaseTable();
-
-				if (table != null)
-					for (final DBIndex index : table.getIndexes()) {
-						if (!index.isUnique())
-							continue;
-
-						if (index.getColumns().size() == 1 && index.getColumns().contains(attr.getColumn())) {
-							b.append(", unique=true");
-							break;
-						}
-					}
+				b.append("fetch=FetchType.LAZY");
 			}
 
 			b.append(")\n");
+		}
 
-			if (attr.getTemporalType() != TemporalTypeEnumeration.NONE) {
-				final PersistenceProviderEnumeration provider = project.getPersistenceProvider();
-				boolean addTemporalType = true;
+		b.append(addColumnAnnotation(attr));
 
-				// The @Temporal annotation for GregorianCalendar fields is mandatory when using EclipseLink. But Hibernate will throw an
-				// exception if a GregorianCalendar field is annotated with @Temporal!
-				if (attr.getJavaType().isCalendar() && provider == PersistenceProviderEnumeration.HIBERNATE)
-					addTemporalType = false;
+		if (attr.getTemporalType() != TemporalTypeEnumeration.NONE
+				&& attr.getCollectionMappingStrategy() != CollectionMappingStrategyEnumeration.CONVERTER) {
+			final PersistenceProviderEnumeration provider = project.getPersistenceProvider();
+			boolean addTemporalType = true;
 
-				if (addTemporalType)
-					b.append("@Temporal(value=TemporalType." + attr.getTemporalType().toString() + ")\n");
-			}
+			// The @Temporal annotation for GregorianCalendar fields is mandatory when using EclipseLink. But Hibernate will throw
+			// an exception if a GregorianCalendar field is annotated with @Temporal!
+			if (attr.getJavaType().isCalendar() && provider == PersistenceProviderEnumeration.HIBERNATE)
+				addTemporalType = false;
 
-			if (attr.isLob()) {
-				b.append("@Lob\n");
+			if (addTemporalType)
+				b.append("@Temporal(value=TemporalType." + attr.getTemporalType().toString() + ")\n");
+		}
 
-				// A field that is mapped to a PostgreSQL column of type 'bytea' requires an additional Hibernate-specific annotation!
-				if (project.getDatabase().getVendorGroup() == DBVendorGroupEnumeration.POSTGRESQL
-						&& project.getPersistenceProvider() == PersistenceProviderEnumeration.HIBERNATE) {
-					importClass("org.hibernate.annotations.JdbcTypeCode");
-					importClass("org.hibernate.type.SqlTypes");
+		if (attr.isLob()) {
+			b.append("@Lob\n");
 
-					b.append("@JdbcTypeCode(SqlTypes.BINARY)\n");
-				}
-			}
-			else if (attr.getJavaType().isUUID() && !attr.getColumn().getColumnType().getName().equalsIgnoreCase(JavaType.UUID)) {
-				if (project.getPersistenceProvider() == PersistenceProviderEnumeration.HIBERNATE) {
-					final var jdbcType = attr.isWildcardFilteringSupported() ? "VARCHAR" : "BINARY";
+			// A field that is mapped to a PostgreSQL column of type 'bytea' requires an additional Hibernate-specific annotation!
+			if (project.getDatabase().getVendorGroup() == DBVendorGroupEnumeration.POSTGRESQL
+					&& project.getPersistenceProvider() == PersistenceProviderEnumeration.HIBERNATE) {
+				importClass("org.hibernate.annotations.JdbcTypeCode");
+				importClass("org.hibernate.type.SqlTypes");
 
-					importClass("org.hibernate.annotations.JdbcTypeCode");
-					importClass("org.hibernate.type.SqlTypes");
-
-					// It might be necessary to change the selected default type manually!
-					b.append("@JdbcTypeCode(SqlTypes." + jdbcType + ")\n");
-				}
-				else {
-					importPackage("net.codecadenza.runtime.jpa.converter");
-
-					if (attr.isWildcardFilteringSupported())
-						b.append("@Convert(converter=UUIDStringConverter.class)\n");
-					else
-						b.append("@Convert(converter=UUIDByteArrayConverter.class)\n");
-				}
+				b.append("@JdbcTypeCode(SqlTypes.BINARY)\n");
 			}
 		}
-		else
-			b.append("@Transient\n");
+
+		return b.toString();
+	}
+
+	/**
+	 * Add the annotation for the mapped column of a persistent field or property
+	 * @param attr
+	 * @return the generated content
+	 */
+	private String addColumnAnnotation(DomainAttribute attr) {
+		final var b = new StringBuilder();
+		final DomainObject domainObjectOfAttr = attr.getDomainObject();
+
+		b.append("@Column(name=\"" + attr.getColumn().getMappingName() + "\", nullable=" + attr.getColumn().isNullable());
+		b.append(", updatable=" + attr.isUpdatable() + ", insertable=" + attr.isInsertable());
+
+		if (attr.getJavaType().isString() && attr.getDomainAttributeValidator().getMaxLength() != null)
+			b.append(", length=" + attr.getDomainAttributeValidator().getMaxLength());
+
+		if (attr.getColumn().getPrecision() != 0)
+			b.append(", precision=" + attr.getColumn().getPrecision());
+
+		if (attr.getColumn().getScale() != 0)
+			b.append(", scale=" + attr.getColumn().getScale());
+
+		DBTable table = domainObjectOfAttr.getDatabaseTable();
+
+		if (table == null)
+			table = domainObjectOfAttr.getRootParentDomainObject(false).getDatabaseTable();
+
+		if (table != null)
+			for (final DBIndex index : table.getIndexes()) {
+				if (!index.isUnique())
+					continue;
+
+				if (index.getColumns().size() == 1 && index.getColumns().contains(attr.getColumn())) {
+					b.append(", unique=true");
+					break;
+				}
+			}
+
+		b.append(")\n");
+
+		return b.toString();
+	}
+
+	/**
+	 * Add the converter annotations
+	 * @param attr
+	 * @return the generated content
+	 */
+	private String addConverterAnnotations(DomainAttribute attr) {
+		final var b = new StringBuilder();
+
+		if (attr.getCollectionMappingStrategy() == CollectionMappingStrategyEnumeration.CONVERTER) {
+			if (attr.getCollectionType() == CollectionTypeEnumeration.LIST) {
+				importPackage("net.codecadenza.runtime.jpa.converter.element.list");
+				b.append("@Convert(converter=" + attr.getJavaType().getWrapperTypeName() + "ListToStringConverter.class)\n");
+			}
+			else {
+				importPackage("net.codecadenza.runtime.jpa.converter.element.set");
+				b.append("@Convert(converter=" + attr.getJavaType().getWrapperTypeName() + "SetToStringConverter.class)\n");
+			}
+		}
+		else if (attr.getJavaType().isUUID() && !attr.getColumn().getColumnType().getName().equalsIgnoreCase(JavaType.UUID)) {
+			if (project.getPersistenceProvider() == PersistenceProviderEnumeration.HIBERNATE) {
+				final var jdbcType = attr.isWildcardFilteringSupported() ? "VARCHAR" : "BINARY";
+
+				importClass("org.hibernate.annotations.JdbcTypeCode");
+				importClass("org.hibernate.type.SqlTypes");
+
+				// It might be necessary to change the selected default type manually!
+				b.append("@JdbcTypeCode(SqlTypes." + jdbcType + ")\n");
+			}
+			else {
+				importPackage("net.codecadenza.runtime.jpa.converter");
+
+				if (attr.isWildcardFilteringSupported())
+					b.append("@Convert(converter=UUIDStringConverter.class)\n");
+				else
+					b.append("@Convert(converter=UUIDByteArrayConverter.class)\n");
+			}
+		}
+
+		return b.toString();
+	}
+
+	/**
+	 * Add the annotations for an element collection
+	 * @param attr
+	 * @return the generated content
+	 */
+	private String addElementCollectionAnnotations(DomainAttribute attr) {
+		final var b = new StringBuilder();
+		final Optional<ForeignKey> foreignKey = attr.getCollectionTable().getForeignKeys().stream().findFirst();
+
+		if (!attr.isFetchTypeEager())
+			b.append("@Basic(fetch=FetchType.LAZY)\n");
+
+		if (attr.getJavaType().isUUID() && !attr.getColumn().getColumnType().getName().equalsIgnoreCase(JavaType.UUID)
+				&& project.getPersistenceProvider() == PersistenceProviderEnumeration.HIBERNATE) {
+			final var jdbcType = attr.isWildcardFilteringSupported() ? "VARCHAR" : "BINARY";
+
+			importClass("org.hibernate.annotations.JdbcTypeCode");
+			importClass("org.hibernate.type.SqlTypes");
+
+			// It might be necessary to change the selected default type manually!
+			b.append("@JdbcTypeCode(SqlTypes." + jdbcType + ")\n");
+		}
+
+		b.append("@ElementCollection\n");
+		b.append("@CollectionTable(name=\"" + attr.getCollectionTable().getName() + "\"");
+
+		if (foreignKey.isPresent())
+			b.append(", joinColumns=@JoinColumn(name=\"" + foreignKey.get().getColumn().getMappingName() + "\")");
+
+		b.append(")\n");
+		b.append("@Column(name=\"" + attr.getColumn().getMappingName() + "\")\n");
 
 		return b.toString();
 	}
@@ -1235,7 +1350,7 @@ public class DomainObjectGenerator extends AbstractJavaSourceGenerator {
 	private String addValidationAnnotations(DomainAttribute attr) {
 		final var b = new StringBuilder();
 
-		if (!attr.isPersistent())
+		if (!attr.isPersistent() || attr.getCollectionType() != CollectionTypeEnumeration.NONE)
 			return "";
 
 		if (!attr.isPk()) {

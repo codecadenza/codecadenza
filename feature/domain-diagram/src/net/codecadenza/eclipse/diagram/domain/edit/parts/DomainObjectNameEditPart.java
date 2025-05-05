@@ -24,7 +24,6 @@ package net.codecadenza.eclipse.diagram.domain.edit.parts;
 import static net.codecadenza.eclipse.shared.Constants.IMG_ABSTRACT_CLASS;
 import static net.codecadenza.eclipse.shared.Constants.IMG_DOMAIN_OBJECT;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import net.codecadenza.eclipse.diagram.domain.edit.policies.CodeCadenzaTextSelectionEditPolicy;
@@ -44,7 +43,6 @@ import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.Request;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.editpolicies.NonResizableEditPolicy;
-import org.eclipse.gef.handles.NonResizableHandleKit;
 import org.eclipse.gef.requests.DirectEditRequest;
 import org.eclipse.gef.tools.DirectEditManager;
 import org.eclipse.gmf.runtime.common.ui.services.parser.IParser;
@@ -108,18 +106,6 @@ public class DomainObjectNameEditPart extends CompartmentEditPart implements ITe
 		installEditPolicy(EditPolicy.DIRECT_EDIT_ROLE, new LabelDirectEditPolicy());
 
 		installEditPolicy(EditPolicy.PRIMARY_DRAG_ROLE, new NonResizableEditPolicy() {
-			/*
-			 * (non-Javadoc)
-			 * @see org.eclipse.gef.editpolicies.NonResizableEditPolicy#createSelectionHandles()
-			 */
-			@Override
-			protected List<?> createSelectionHandles() {
-				final var handles = new ArrayList<>();
-				NonResizableHandleKit.addMoveHandle(getHost(), handles);
-
-				return handles;
-			}
-
 			/*
 			 * (non-Javadoc)
 			 * @see org.eclipse.gef.editpolicies.NonResizableEditPolicy#getCommand(org.eclipse.gef.Request)
@@ -355,8 +341,8 @@ public class DomainObjectNameEditPart extends CompartmentEditPart implements ITe
 	public IParser getParser() {
 		if (parser == null) {
 			final String parserHint = ((View) getModel()).getType();
-			final var hintAdapter = new CodeCadenzaParserProvider.HintAdapter(CodeCadenzaElementTypes.DomainObject_2001, getParserElement(),
-					parserHint);
+			final var hintAdapter = new CodeCadenzaParserProvider.HintAdapter(CodeCadenzaElementTypes.DomainObject_2001,
+					getParserElement(), parserHint);
 
 			parser = ParserService.getInstance().getParser(hintAdapter);
 		}

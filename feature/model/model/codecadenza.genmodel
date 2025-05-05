@@ -99,6 +99,7 @@
       <genEnumLiterals ecoreEnumLiteral="client.ecore#//FormFieldTypeEnumeration/MAIL_LINK"/>
       <genEnumLiterals ecoreEnumLiteral="client.ecore#//FormFieldTypeEnumeration/FORM_LINK"/>
       <genEnumLiterals ecoreEnumLiteral="client.ecore#//FormFieldTypeEnumeration/SELECTION_BY_CLIENT"/>
+      <genEnumLiterals ecoreEnumLiteral="client.ecore#//FormFieldTypeEnumeration/ELEMENT_COLLECTION_EDITOR"/>
     </genEnums>
     <genEnums typeSafeEnumCompatible="false" ecoreEnum="client.ecore#//FormTypeEnumeration">
       <genEnumLiterals ecoreEnumLiteral="client.ecore#//FormTypeEnumeration/UPDATE"/>
@@ -461,6 +462,16 @@
       <genEnumLiterals ecoreEnumLiteral="domain.ecore#//AssociationTagEnumeration/SAVEDQUERY_OWNER"/>
       <genEnumLiterals ecoreEnumLiteral="domain.ecore#//AssociationTagEnumeration/CLIENT_REFERENCE"/>
     </genEnums>
+    <genEnums typeSafeEnumCompatible="false" ecoreEnum="domain.ecore#//CollectionTypeEnumeration">
+      <genEnumLiterals ecoreEnumLiteral="domain.ecore#//CollectionTypeEnumeration/NONE"/>
+      <genEnumLiterals ecoreEnumLiteral="domain.ecore#//CollectionTypeEnumeration/LIST"/>
+      <genEnumLiterals ecoreEnumLiteral="domain.ecore#//CollectionTypeEnumeration/SET"/>
+    </genEnums>
+    <genEnums typeSafeEnumCompatible="false" ecoreEnum="domain.ecore#//CollectionMappingStrategyEnumeration">
+      <genEnumLiterals ecoreEnumLiteral="domain.ecore#//CollectionMappingStrategyEnumeration/NONE"/>
+      <genEnumLiterals ecoreEnumLiteral="domain.ecore#//CollectionMappingStrategyEnumeration/CONVERTER"/>
+      <genEnumLiterals ecoreEnumLiteral="domain.ecore#//CollectionMappingStrategyEnumeration/TABLE"/>
+    </genEnums>
     <genClasses image="false" ecoreClass="domain.ecore#//AbstractDomainAssociation">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute domain.ecore#//AbstractDomainAssociation/name"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute domain.ecore#//AbstractDomainAssociation/owner"/>
@@ -522,6 +533,8 @@
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute domain.ecore#//DomainAttribute/removeWhitespaceCharacters"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute domain.ecore#//DomainAttribute/convertToUpperCase"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute domain.ecore#//DomainAttribute/convertToLowerCase"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute domain.ecore#//DomainAttribute/collectionType"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute domain.ecore#//DomainAttribute/collectionMappingStrategy"/>
     </genClasses>
     <genClasses ecoreClass="domain.ecore#//DomainAttributeValidator">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute domain.ecore#//DomainAttributeValidator/futureDate"/>

@@ -6,6 +6,7 @@ create table customer_tab(name varchar(50) not null, credit numeric not null, id
 create table role_tab(name varchar(50) not null, id bigint not null primary key);
 create table user_tab(name varchar(50) not null, active boolean not null, creation date not null, updated date not null, activation date not null, locking timestamp not null, external varchar(36) not null, license numeric not null, id bigint not null primary key);
 create table user_roles_tab(user_pk bigint not null, role_pk bigint not null);
+create table user_nicknames_tab(id bigint not null, nicknames varchar(500) not null);
 alter table configuration_item_tab add constraint fk_configuration_item_configuration_group foreign key (configuration_group) references configuration_group_tab(id) on delete cascade on update cascade;
 alter table configuration_item_tab add constraint fk_configuration_item_application foreign key (application) references application_tab(id) on delete cascade on update cascade;
 alter table customer_tab add constraint uk_customer_address unique (address);
@@ -13,6 +14,7 @@ alter table customer_tab add constraint fk_customer_address foreign key (address
 alter table user_roles_tab add constraint uk_user_roles unique (user_pk, role_pk);
 alter table user_roles_tab add constraint fk_user_roles_1 foreign key (user_pk) references user_tab(id) on delete cascade on update cascade;
 alter table user_roles_tab add constraint fk_user_roles_2 foreign key (role_pk) references role_tab(id) on delete cascade on update cascade;
+alter table user_nicknames_tab add constraint fk_user_nicknames foreign key (id) references user_tab(id) on delete cascade on update cascade;
 create sequence configurationgroup_seq minvalue 1 increment by 20;
 create sequence configurationitem_seq minvalue 1 increment by 20;
 create sequence application_seq minvalue 1 increment by 20;

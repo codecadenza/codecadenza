@@ -261,7 +261,7 @@ public class DomainModelTreeViewPanel extends Composite {
 			final DomainAttribute attr = revEngAttr.getDomainAttribute();
 
 			final var item = new TreeItem(parentItem, SWT.NONE);
-			item.setText(attr.getJavaType().getName() + " " + attr.getName());
+			item.setText(attr.getTypeName() + " " + attr.getName());
 			item.setData(revEngAttr);
 			item.setImage(CodeCadenzaResourcePlugin.getImage(IMG_ATTRIBUTE));
 

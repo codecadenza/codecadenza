@@ -279,16 +279,24 @@ public class ProjectView extends ViewPart implements GraphicalEditorEventListene
 				// Check if the table really exists! Tables for mapped superclasses should not be displayed!
 				boolean addToTree = false;
 
-				for (final DomainObject b : allDomainObjects) {
-					if (b.getDatabaseTable() == null || !b.getDatabaseTable().equals(table))
+				for (final DomainObject domainObj : allDomainObjects) {
+					if (!table.equals(domainObj.getDatabaseTable()))
 						continue;
 
-					if (b.isMappedSuperClass() || b.getPKAttribute() == null)
+					if (domainObj.isMappedSuperClass() || domainObj.getPKAttribute() == null)
 						continue;
 
 					addToTree = true;
 					break;
 				}
+
+				if (!addToTree)
+					for (final DomainObject domainObj : allDomainObjects)
+						for (final DomainAttribute attr : domainObj.getAllAttributes())
+							if (table.equals(attr.getCollectionTable())) {
+								addToTree = true;
+								break;
+							}
 
 				if (!addToTree)
 					continue;
@@ -564,11 +572,11 @@ public class ProjectView extends ViewPart implements GraphicalEditorEventListene
 
 		domainObj.getAttributes().forEach(attr -> {
 			final var item = new TreeItem(parentItem, SWT.NONE);
-			item.setText(attr.getJavaType().getName() + " " + attr.getName());
+			item.setText(attr.getTypeName() + " " + attr.getName());
 			item.setData(attr);
 			item.setImage(CodeCadenzaResourcePlugin.getImage(IMG_ATTRIBUTE));
 
-			if (!attr.getJavaType().isPrimitive() && attr.getColumn() != null && attr.getColumn().isNullable())
+			if (attr.isPersistent() && attr.getColumn().isNullable())
 				item.setForeground(Display.getCurrent().getSystemColor(SWT.COLOR_DARK_GRAY));
 		});
 
@@ -625,7 +633,7 @@ public class ProjectView extends ViewPart implements GraphicalEditorEventListene
 							+ attr.getName());
 			}
 			else if (attr.getDomainAttribute() != null)
-				item.setText(attr.getDomainAttribute().getJavaType().getName() + " " + attr.getName());
+				item.setText(attr.getDomainAttribute().getTypeName() + " " + attr.getName());
 		});
 	}
 
@@ -640,6 +648,9 @@ public class ProjectView extends ViewPart implements GraphicalEditorEventListene
 
 		mappingObj.getAttributes().forEach(attr -> {
 			String typeName = attr.getJavaType().getName();
+
+			if (attr.getDomainAttribute() != null)
+				typeName = attr.getDomainAttribute().getTypeName();
 
 			// By definition, we handle fields of type char by using a String with exactly one character!
 			if (typeName.equals(JavaType.CHAR))

@@ -33,6 +33,7 @@ import net.codecadenza.eclipse.generator.common.AbstractContentFormatter;
 import net.codecadenza.eclipse.generator.integration.method.imp.kafka.BasicKafkaMethodGenerator;
 import net.codecadenza.eclipse.model.boundary.BoundaryMethodTypeEnumeration;
 import net.codecadenza.eclipse.model.db.DBColumn;
+import net.codecadenza.eclipse.model.domain.CollectionTypeEnumeration;
 import net.codecadenza.eclipse.model.domain.DomainAttribute;
 import net.codecadenza.eclipse.model.domain.DomainObject;
 import net.codecadenza.eclipse.model.domain.ManyToOneAssociation;
@@ -198,13 +199,14 @@ public class KafkaIntegrationIDLGenerator extends AbstractContentFormatter {
 
 		for (final DTOBeanAttribute attr : dto.getAttributes()) {
 			boolean optional = false;
-			boolean asArray = false;
+			boolean isArray = false;
 			String dataTypeName;
 			var type = "";
 
 			if (attr.getDomainAttribute() != null) {
 				final var javaType = attr.getDomainAttribute().getJavaType();
 				dataTypeName = getAvroTypeName(javaType, attr.getModifier(), attr.getDomainAttribute().getColumn());
+				isArray = attr.getDomainAttribute().getCollectionType() != CollectionTypeEnumeration.NONE;
 
 				if (attr.getDomainAttribute().isPersistent())
 					optional = attr.getDomainAttribute().getDomainAttributeValidator().isNullable();
@@ -219,19 +221,15 @@ public class KafkaIntegrationIDLGenerator extends AbstractContentFormatter {
 				else if (attr.getAssociation() instanceof final ManyToOneAssociation mto)
 					optional = mto.isOptional();
 				else
-					asArray = true;
+					isArray = true;
 			}
 
-			if (asArray)
-				type = ARRAY + "<";
-
-			if (optional)
-				type += UNION + " {null, " + dataTypeName + "}";
+			if (isArray)
+				type = ARRAY + "<" + dataTypeName + ">";
 			else
-				type += dataTypeName;
+				type = dataTypeName;
 
-			if (asArray)
-				type += ">";
+			type += optional ? "?" : "";
 
 			addLine(type + " " + attr.getName() + ";");
 		}
@@ -257,6 +255,7 @@ public class KafkaIntegrationIDLGenerator extends AbstractContentFormatter {
 			final JavaType javaType = attr.getJavaType();
 			String dataTypeName = getAvroTypeName(javaType, attr.getModifier(), null);
 			boolean optional = false;
+			boolean isArray = false;
 			var type = "";
 
 			if (attr.getDomainAttribute() != null) {
@@ -265,6 +264,7 @@ public class KafkaIntegrationIDLGenerator extends AbstractContentFormatter {
 				else
 					optional = !attr.getJavaType().isPrimitive();
 
+				isArray = attr.getDomainAttribute().getCollectionType() != CollectionTypeEnumeration.NONE;
 				dataTypeName = getAvroTypeName(javaType, attr.getModifier(), attr.getDomainAttribute().getColumn());
 			}
 			else if (attr.getAssociation() != null) {
@@ -279,10 +279,12 @@ public class KafkaIntegrationIDLGenerator extends AbstractContentFormatter {
 				optional = !attr.getJavaType().isPrimitive();
 			}
 
-			if (optional)
-				type += UNION + " {null, " + dataTypeName + "}";
+			if (isArray)
+				type = ARRAY + "<" + dataTypeName + ">";
 			else
-				type += dataTypeName;
+				type = dataTypeName;
+
+			type += optional ? "?" : "";
 
 			addLine(type + " " + attr.getName() + ";");
 		});
@@ -407,8 +409,8 @@ public class KafkaIntegrationIDLGenerator extends AbstractContentFormatter {
 			avroTypeName = TYPE_DATE;
 		else if (javaType.isBigDecimal()) {
 			// Default values for the scale and the precision must be added if a BigDecimal attribute isn't mapped to a database column!
-			final int precision = column != null ? column.getPrecision() : 10;
-			final int scale = column != null ? column.getScale() : 4;
+			final int precision = column != null && column.getPrecision() != 0 ? column.getPrecision() : 10;
+			final int scale = column != null && column.getScale() != 0 ? column.getScale() : 4;
 
 			avroTypeName = TYPE_DECIMAL + "(" + precision + ", " + scale + ")";
 		}

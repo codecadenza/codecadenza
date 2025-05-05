@@ -1951,6 +1951,7 @@ public class ClientPackageImpl extends EPackageImpl implements ClientPackage {
 		addEEnumLiteral(formFieldTypeEnumerationEEnum, FormFieldTypeEnumeration.MAIL_LINK);
 		addEEnumLiteral(formFieldTypeEnumerationEEnum, FormFieldTypeEnumeration.FORM_LINK);
 		addEEnumLiteral(formFieldTypeEnumerationEEnum, FormFieldTypeEnumeration.SELECTION_BY_CLIENT);
+		addEEnumLiteral(formFieldTypeEnumerationEEnum, FormFieldTypeEnumeration.ELEMENT_COLLECTION_EDITOR);
 
 		initEEnum(formTypeEnumerationEEnum, FormTypeEnumeration.class, "FormTypeEnumeration");
 		addEEnumLiteral(formTypeEnumerationEEnum, FormTypeEnumeration.UPDATE);

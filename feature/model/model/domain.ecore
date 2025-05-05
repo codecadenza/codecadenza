@@ -89,6 +89,9 @@
         eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="convertToUpperCase" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="convertToLowerCase" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="collectionType" eType="#//CollectionTypeEnumeration"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="collectionMappingStrategy"
+        eType="#//CollectionMappingStrategyEnumeration"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="DomainAttributeValidator">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="futureDate" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
@@ -199,5 +202,15 @@
     <eLiterals name="LOGGING_USER" value="5"/>
     <eLiterals name="SAVEDQUERY_OWNER" value="2"/>
     <eLiterals name="CLIENT_REFERENCE" value="3"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="CollectionTypeEnumeration">
+    <eLiterals name="NONE"/>
+    <eLiterals name="LIST" value="1"/>
+    <eLiterals name="SET" value="2"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="CollectionMappingStrategyEnumeration">
+    <eLiterals name="NONE"/>
+    <eLiterals name="CONVERTER" value="1"/>
+    <eLiterals name="TABLE" value="2"/>
   </eClassifiers>
 </ecore:EPackage>

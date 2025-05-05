@@ -30,6 +30,8 @@ import net.codecadenza.eclipse.model.db.impl.DbPackageImpl;
 import net.codecadenza.eclipse.model.domain.AbstractDomainAssociation;
 import net.codecadenza.eclipse.model.domain.AssociationTagEnumeration;
 import net.codecadenza.eclipse.model.domain.AttributeTagEnumeration;
+import net.codecadenza.eclipse.model.domain.CollectionMappingStrategyEnumeration;
+import net.codecadenza.eclipse.model.domain.CollectionTypeEnumeration;
 import net.codecadenza.eclipse.model.domain.DiscriminatorColumnTypeEnumeration;
 import net.codecadenza.eclipse.model.domain.DomainAttribute;
 import net.codecadenza.eclipse.model.domain.DomainAttributeValidator;
@@ -174,6 +176,16 @@ public class DomainPackageImpl extends EPackageImpl implements DomainPackage {
 	 * @generated
 	 */
 	private EEnum associationTagEnumerationEEnum;
+
+	/**
+	 * @generated
+	 */
+	private EEnum collectionTypeEnumerationEEnum;
+
+	/**
+	 * @generated
+	 */
+	private EEnum collectionMappingStrategyEnumerationEEnum;
 
 	/**
 	 * Create an instance of the model <b>Package</b>, registered with {@link org.eclipse.emf.ecore.EPackage.Registry
@@ -873,6 +885,26 @@ public class DomainPackageImpl extends EPackageImpl implements DomainPackage {
 
 	/*
 	 * (non-Javadoc)
+	 * @see net.codecadenza.eclipse.model.domain.DomainPackage#getDomainAttribute_CollectionType()
+	 * @generated
+	 */
+	@Override
+	public EAttribute getDomainAttribute_CollectionType() {
+		return (EAttribute) domainAttributeEClass.getEStructuralFeatures().get(24);
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see net.codecadenza.eclipse.model.domain.DomainPackage#getDomainAttribute_CollectionMappingStrategy()
+	 * @generated
+	 */
+	@Override
+	public EAttribute getDomainAttribute_CollectionMappingStrategy() {
+		return (EAttribute) domainAttributeEClass.getEStructuralFeatures().get(25);
+	}
+
+	/*
+	 * (non-Javadoc)
 	 * @see net.codecadenza.eclipse.model.domain.DomainPackage#getDomainAttributeValidator()
 	 * @generated
 	 */
@@ -1303,6 +1335,26 @@ public class DomainPackageImpl extends EPackageImpl implements DomainPackage {
 
 	/*
 	 * (non-Javadoc)
+	 * @see net.codecadenza.eclipse.model.domain.DomainPackage#getCollectionTypeEnumeration()
+	 * @generated
+	 */
+	@Override
+	public EEnum getCollectionTypeEnumeration() {
+		return collectionTypeEnumerationEEnum;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see net.codecadenza.eclipse.model.domain.DomainPackage#getCollectionMappingStrategyEnumeration()
+	 * @generated
+	 */
+	@Override
+	public EEnum getCollectionMappingStrategyEnumeration() {
+		return collectionMappingStrategyEnumerationEEnum;
+	}
+
+	/*
+	 * (non-Javadoc)
 	 * @see net.codecadenza.eclipse.model.domain.DomainPackage#getDomainFactory()
 	 * @generated
 	 */
@@ -1388,6 +1440,8 @@ public class DomainPackageImpl extends EPackageImpl implements DomainPackage {
 		createEAttribute(domainAttributeEClass, DOMAIN_ATTRIBUTE__REMOVE_WHITESPACE_CHARACTERS);
 		createEAttribute(domainAttributeEClass, DOMAIN_ATTRIBUTE__CONVERT_TO_UPPER_CASE);
 		createEAttribute(domainAttributeEClass, DOMAIN_ATTRIBUTE__CONVERT_TO_LOWER_CASE);
+		createEAttribute(domainAttributeEClass, DOMAIN_ATTRIBUTE__COLLECTION_TYPE);
+		createEAttribute(domainAttributeEClass, DOMAIN_ATTRIBUTE__COLLECTION_MAPPING_STRATEGY);
 
 		domainAttributeValidatorEClass = createEClass(DOMAIN_ATTRIBUTE_VALIDATOR);
 		createEAttribute(domainAttributeValidatorEClass, DOMAIN_ATTRIBUTE_VALIDATOR__FUTURE_DATE);
@@ -1442,6 +1496,8 @@ public class DomainPackageImpl extends EPackageImpl implements DomainPackage {
 		domainTagEnumerationEEnum = createEEnum(DOMAIN_TAG_ENUMERATION);
 		attributeTagEnumerationEEnum = createEEnum(ATTRIBUTE_TAG_ENUMERATION);
 		associationTagEnumerationEEnum = createEEnum(ASSOCIATION_TAG_ENUMERATION);
+		collectionTypeEnumerationEEnum = createEEnum(COLLECTION_TYPE_ENUMERATION);
+		collectionMappingStrategyEnumerationEEnum = createEEnum(COLLECTION_MAPPING_STRATEGY_ENUMERATION);
 	}
 
 	/**
@@ -1637,6 +1693,12 @@ public class DomainPackageImpl extends EPackageImpl implements DomainPackage {
 		initEAttribute(getDomainAttribute_ConvertToLowerCase(), ecorePackage.getEBoolean(), "convertToLowerCase", null, 0, 1,
 				DomainAttribute.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED,
 				IS_ORDERED);
+		initEAttribute(getDomainAttribute_CollectionType(), this.getCollectionTypeEnumeration(), "collectionType", null, 0, 1,
+				DomainAttribute.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED,
+				IS_ORDERED);
+		initEAttribute(getDomainAttribute_CollectionMappingStrategy(), this.getCollectionMappingStrategyEnumeration(),
+				"collectionMappingStrategy", null, 0, 1, DomainAttribute.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE,
+				!IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(domainAttributeValidatorEClass, DomainAttributeValidator.class, "DomainAttributeValidator", !IS_ABSTRACT,
 				!IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
@@ -1807,6 +1869,17 @@ public class DomainPackageImpl extends EPackageImpl implements DomainPackage {
 		addEEnumLiteral(associationTagEnumerationEEnum, AssociationTagEnumeration.LOGGING_USER);
 		addEEnumLiteral(associationTagEnumerationEEnum, AssociationTagEnumeration.SAVEDQUERY_OWNER);
 		addEEnumLiteral(associationTagEnumerationEEnum, AssociationTagEnumeration.CLIENT_REFERENCE);
+
+		initEEnum(collectionTypeEnumerationEEnum, CollectionTypeEnumeration.class, "CollectionTypeEnumeration");
+		addEEnumLiteral(collectionTypeEnumerationEEnum, CollectionTypeEnumeration.NONE);
+		addEEnumLiteral(collectionTypeEnumerationEEnum, CollectionTypeEnumeration.LIST);
+		addEEnumLiteral(collectionTypeEnumerationEEnum, CollectionTypeEnumeration.SET);
+
+		initEEnum(collectionMappingStrategyEnumerationEEnum, CollectionMappingStrategyEnumeration.class,
+				"CollectionMappingStrategyEnumeration");
+		addEEnumLiteral(collectionMappingStrategyEnumerationEEnum, CollectionMappingStrategyEnumeration.NONE);
+		addEEnumLiteral(collectionMappingStrategyEnumerationEEnum, CollectionMappingStrategyEnumeration.CONVERTER);
+		addEEnumLiteral(collectionMappingStrategyEnumerationEEnum, CollectionMappingStrategyEnumeration.TABLE);
 
 		// Create resource
 		createResource(eNS_URI);

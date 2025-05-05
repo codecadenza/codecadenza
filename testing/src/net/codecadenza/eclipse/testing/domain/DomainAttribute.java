@@ -47,6 +47,24 @@ public class DomainAttribute {
 	private final String type;
 	private final boolean primaryKey;
 	private final boolean displayAttribute;
+	private final ElementCollectionType elementCollectionType;
+
+	/**
+	 * Constructor
+	 * @param name
+	 * @param type
+	 * @param primaryKey
+	 * @param displayAttribute
+	 * @param elementCollectionType
+	 */
+	public DomainAttribute(String name, String type, boolean primaryKey, boolean displayAttribute,
+			ElementCollectionType elementCollectionType) {
+		this.name = name;
+		this.type = type;
+		this.primaryKey = primaryKey;
+		this.displayAttribute = displayAttribute;
+		this.elementCollectionType = elementCollectionType;
+	}
 
 	/**
 	 * Constructor
@@ -56,10 +74,7 @@ public class DomainAttribute {
 	 * @param displayAttribute
 	 */
 	public DomainAttribute(String name, String type, boolean primaryKey, boolean displayAttribute) {
-		this.name = name;
-		this.type = type;
-		this.primaryKey = primaryKey;
-		this.displayAttribute = displayAttribute;
+		this(name, type, primaryKey, displayAttribute, ElementCollectionType.NONE);
 	}
 
 	/**
@@ -90,13 +105,32 @@ public class DomainAttribute {
 		return displayAttribute;
 	}
 
+	/**
+	 * @return the element collection type
+	 */
+	public ElementCollectionType getElementCollectionType() {
+		return elementCollectionType;
+	}
+
+	/**
+	 * @return the type name
+	 */
+	public String getTypeName() {
+		if (elementCollectionType == ElementCollectionType.NONE)
+			return type;
+		else if (elementCollectionType == ElementCollectionType.LIST)
+			return "List<" + type + ">";
+		else
+			return "Set<" + type + ">";
+	}
+
 	/*
 	 * (non-Javadoc)
 	 * @see java.lang.Object#toString()
 	 */
 	@Override
 	public String toString() {
-		return type + " " + name;
+		return getTypeName() + " " + name;
 	}
 
 }

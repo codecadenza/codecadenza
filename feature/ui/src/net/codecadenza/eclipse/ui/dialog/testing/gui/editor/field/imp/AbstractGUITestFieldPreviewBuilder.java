@@ -23,6 +23,7 @@ package net.codecadenza.eclipse.ui.dialog.testing.gui.editor.field.imp;
 
 import static net.codecadenza.eclipse.shared.Constants.MIN_FILTER_LENGTH;
 
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import net.codecadenza.eclipse.model.client.FormField;
@@ -59,6 +60,8 @@ import org.eclipse.swt.widgets.MenuItem;
  * @version 1.0.0
  */
 public abstract class AbstractGUITestFieldPreviewBuilder extends AbstractFieldPreviewBuilder {
+	protected static final String ITEM_DELIMITER = ";";
+
 	protected final Color colorInputCleared = new Color(shell.getDisplay(), 235, 245, 251);
 	protected final Color colorInputEntered = new Color(shell.getDisplay(), 254, 245, 231);
 	protected final Color colorValidateField = new Color(shell.getDisplay(), 234, 250, 241);
@@ -336,6 +339,18 @@ public abstract class AbstractGUITestFieldPreviewBuilder extends AbstractFieldPr
 		final JavaType type = formField.getDTOAttribute().getDomainAttribute().getJavaType();
 
 		return type.isString() || type.isIntegerOrLong() || type.isUUID();
+	}
+
+	/**
+	 * Convert a String array into an internal list representation for a test data object
+	 * @param items
+	 * @return a string that can be used to fill respective test data fields. It will return null if the array is empty!
+	 */
+	protected String convertArrayToItemString(String[] items) {
+		if (items == null || items.length == 0)
+			return null;
+
+		return Arrays.asList(items).stream().reduce((a, b) -> a + ITEM_DELIMITER + b).orElse(null);
 	}
 
 	/**

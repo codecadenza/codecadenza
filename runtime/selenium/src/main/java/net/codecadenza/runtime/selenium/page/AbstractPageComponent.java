@@ -428,4 +428,18 @@ public abstract class AbstractPageComponent {
 		jsExecutor.executeScript(SCROLL_SCRIPT, element);
 	}
 
+	/**
+	 * Check if both list contain the same items without checking if the ordering is correct
+	 * @param <T> the generic list type
+	 * @param expected the list with the expected items
+	 * @param actual the list with the actual items
+	 */
+	protected <T> void assertEqualsIgnoringOrder(List<T> expected, List<T> actual) {
+		for (final T item : expected)
+			assertTrue("List with actual items doesn't contain '" + item + "'!", actual.contains(item));
+
+		for (final T item : actual)
+			assertTrue("List with expected items doesn't contain '" + item + "'!", expected.contains(item));
+	}
+
 }

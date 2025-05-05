@@ -34,7 +34,9 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
+import java.util.stream.Collectors;
 import net.codecadenza.runtime.avro.types.Uuid;
 import org.apache.avro.Schema;
 import org.apache.avro.specific.SpecificRecordBase;
@@ -116,13 +118,17 @@ public class AvroObjectConverter {
 
 						fieldValue = valueOf.invoke(null, name.invoke(field.get(object)));
 					}
-					else if (sourceFieldType == Collection.class || sourceFieldType == List.class) {
+					else if (sourceFieldType == Collection.class || sourceFieldType == List.class || sourceFieldType == Set.class) {
 						final var objectList = (Collection<Object>) field.get(object);
 						final var elementType = avroField.schema().getElementType();
-						final var targetType = (Class<SpecificRecordBase>) Class.forName(elementType.getFullName());
 
-						// It is assumed that a list contains complex objects!
-						fieldValue = objectList.stream().map(item -> toAvro(item, targetType)).toList();
+						if (elementType.getType() == Schema.Type.RECORD) {
+							final var targetType = (Class<SpecificRecordBase>) Class.forName(elementType.getFullName());
+
+							fieldValue = objectList.stream().map(item -> toAvro(item, targetType)).toList();
+						}
+						else
+							fieldValue = objectList.stream().map(AvroObjectConverter::toAvroElement).toList();
 					}
 					else {
 						String typeName = avroField.schema().getFullName();
@@ -197,12 +203,8 @@ public class AvroObjectConverter {
 							fieldValue = GregorianCalendar.from(ZonedDateTime.ofInstant(instant, ZoneId.systemDefault()));
 						else if (targetFieldType == Date.class)
 							fieldValue = Date.from(instant);
-						else if (targetFieldType == LocalDate.class)
-							fieldValue = LocalDate.ofInstant(instant, ZoneId.systemDefault());
-						else if (targetFieldType == LocalDateTime.class)
-							fieldValue = LocalDateTime.ofInstant(instant, ZoneId.systemDefault());
 						else
-							fieldValue = avroRecord.get(avroField.name());
+							fieldValue = LocalDateTime.ofInstant(instant, ZoneId.systemDefault());
 					}
 					else if (sourceFieldType == String.class && targetFieldType == char.class) {
 						final var string = (String) avroRecord.get(avroField.name());
@@ -217,12 +219,26 @@ public class AvroObjectConverter {
 						fieldValue = valueOf.invoke(null, name.invoke(avroRecord.get(avroField.name())));
 					}
 					else if (avroRecord.get(avroField.name()) instanceof List) {
-						// It is assumed that a list contains complex objects
 						final var paramType = (ParameterizedType) targetField.getGenericType();
 						final var targetType = Class.forName(paramType.getActualTypeArguments()[0].getTypeName());
-						final var avroList = (List<SpecificRecordBase>) avroRecord.get(avroField.name());
+						final var elementType = avroField.schema().getElementType();
 
-						fieldValue = avroList.stream().map(item -> toObject(item, targetType)).toList();
+						if (elementType.getType() == Schema.Type.RECORD) {
+							final var avroList = (List<SpecificRecordBase>) avroRecord.get(avroField.name());
+
+							if (targetField.getType() == List.class)
+								fieldValue = avroList.stream().map(item -> toObject(item, targetType)).toList();
+							else
+								fieldValue = avroList.stream().map(item -> toObject(item, targetType)).collect(Collectors.toSet());
+						}
+						else {
+							final var objectList = (List<?>) avroRecord.get(avroField.name());
+
+							if (targetField.getType() == List.class)
+								fieldValue = objectList.stream().map(item -> toElement(item, targetType)).toList();
+							else
+								fieldValue = objectList.stream().map(item -> toElement(item, targetType)).collect(Collectors.toSet());
+						}
 					}
 					else if (avroRecord.get(avroField.name()) instanceof final SpecificRecordBase specificRecordBase)
 						fieldValue = toObject(specificRecordBase, targetFieldType);
@@ -265,6 +281,61 @@ public class AvroObjectConverter {
 		return type == int.class || type == long.class || type == float.class || type == double.class || type == boolean.class
 				|| type == Boolean.class || type == Long.class || type == Integer.class || type == String.class || type == Double.class
 				|| type == Float.class || type == LocalDate.class || type == BigDecimal.class;
+	}
+
+	/**
+	 * Convert the element to a type that is supported by Avro
+	 * @param element
+	 * @return the converted Avro object
+	 */
+	private static Object toAvroElement(Object element) {
+		final var itemType = element.getClass();
+		Object avroObject = element;
+
+		if (itemType == GregorianCalendar.class)
+			avroObject = ((GregorianCalendar) element).toInstant();
+		else if (itemType == Date.class)
+			avroObject = ((Date) element).toInstant();
+		else if (itemType == LocalDateTime.class)
+			avroObject = ((LocalDateTime) element).atZone(ZoneId.systemDefault()).toInstant();
+		else if (itemType == UUID.class)
+			avroObject = UuidConverter.from((UUID) element);
+		else if (itemType == Character.class)
+			avroObject = String.valueOf(((char) element));
+
+		return avroObject;
+	}
+
+	/**
+	 * Convert the Avro element to the given target type
+	 * @param avroElement
+	 * @param objectType
+	 * @return the converted value
+	 */
+	private static Object toElement(Object avroElement, Class<?> objectType) {
+		final var targetType = avroElement.getClass();
+		Object object = null;
+
+		if (targetType == Instant.class) {
+			final var instant = (Instant) avroElement;
+
+			if (objectType == GregorianCalendar.class)
+				object = GregorianCalendar.from(ZonedDateTime.ofInstant(instant, ZoneId.systemDefault()));
+			else if (objectType == Date.class)
+				object = Date.from(instant);
+			else
+				object = LocalDateTime.ofInstant(instant, ZoneId.systemDefault());
+		}
+		else if (targetType == String.class && objectType == Character.class) {
+			final var string = (String) avroElement;
+			object = string.charAt(0);
+		}
+		else if (targetType == Uuid.class)
+			object = UuidConverter.getUUID((Uuid) avroElement);
+		else
+			object = avroElement;
+
+		return object;
 	}
 
 }

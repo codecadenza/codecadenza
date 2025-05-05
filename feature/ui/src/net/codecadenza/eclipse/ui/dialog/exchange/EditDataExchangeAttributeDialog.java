@@ -27,6 +27,7 @@ import static net.codecadenza.eclipse.shared.Constants.MIN_FILTER_LENGTH;
 import java.math.BigDecimal;
 import java.util.Collection;
 import net.codecadenza.eclipse.model.domain.AbstractDomainAssociation;
+import net.codecadenza.eclipse.model.domain.CollectionTypeEnumeration;
 import net.codecadenza.eclipse.model.domain.DomainAttribute;
 import net.codecadenza.eclipse.model.domain.ManyToOneAssociation;
 import net.codecadenza.eclipse.model.exchange.ContentTypeEnumeration;
@@ -112,6 +113,7 @@ public class EditDataExchangeAttributeDialog extends CodeCadenzaDialog {
 	private Composite panDialogArea;
 	private Text txtFormat;
 	private final String title;
+	private boolean mappedToElementCollection;
 
 	/**
 	 * Constructor
@@ -157,6 +159,7 @@ public class EditDataExchangeAttributeDialog extends CodeCadenzaDialog {
 				final AbstractDomainAssociation assoc = exchangeAttribute.getMappingAttribute().getAssociation();
 
 				isMappedToDomainAttribute = true;
+				mappedToElementCollection = domainAttribute.getCollectionType() != CollectionTypeEnumeration.NONE;
 
 				// In case of import operations we must check if the attribute controls a many-to-one association in order to show further
 				// fields!
@@ -260,12 +263,13 @@ public class EditDataExchangeAttributeDialog extends CodeCadenzaDialog {
 		else
 			dataExchangeAttribute.setFormat(null);
 
-		for (final String item : listValueListEntries.getItems()) {
-			final ValueListEntry entry = ExchangeFactory.eINSTANCE.createValueListEntry();
-			entry.setItemText(item);
+		if (listValueListEntries != null)
+			for (final String item : listValueListEntries.getItems()) {
+				final ValueListEntry entry = ExchangeFactory.eINSTANCE.createValueListEntry();
+				entry.setItemText(item);
 
-			dataExchangeAttribute.getValueListEntries().add(entry);
-		}
+				dataExchangeAttribute.getValueListEntries().add(entry);
+			}
 	}
 
 	/**
@@ -592,49 +596,51 @@ public class EditDataExchangeAttributeDialog extends CodeCadenzaDialog {
 			txtSelectionListStatement.setToolTipText("Enter a valid query statement, e.g. select a.name from Object a order by a.name");
 		}
 
-		final var lblValueListEntries = new Label(panDialogArea, SWT.NONE);
-		lblValueListEntries.setLayoutData(new GridData(SWT.LEFT, SWT.TOP, false, false));
-		lblValueListEntries.setText("Value list entries:");
+		if (!mappedToElementCollection) {
+			final var lblValueListEntries = new Label(panDialogArea, SWT.NONE);
+			lblValueListEntries.setLayoutData(new GridData(SWT.LEFT, SWT.TOP, false, false));
+			lblValueListEntries.setText("Value list entries:");
 
-		listValueListEntries = new List(panDialogArea, SWT.BORDER);
-		listValueListEntries.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, true, 3, 1));
+			listValueListEntries = new List(panDialogArea, SWT.BORDER);
+			listValueListEntries.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, true, 3, 1));
 
-		final var menu = new Menu(listValueListEntries);
-		listValueListEntries.setMenu(menu);
+			final var menu = new Menu(listValueListEntries);
+			listValueListEntries.setMenu(menu);
 
-		final var mnuAdd = new MenuItem(menu, SWT.NONE);
-		mnuAdd.setText("Add");
+			final var mnuAdd = new MenuItem(menu, SWT.NONE);
+			mnuAdd.setText("Add");
 
-		mnuAdd.addSelectionListener(new SelectionAdapter() {
-			/*
-			 * (non-Javadoc)
-			 * @see org.eclipse.swt.events.SelectionAdapter#widgetSelected(org.eclipse.swt.events.SelectionEvent)
-			 */
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-				final var msgTitle = "Create new entry";
-				final var dlg = new InputDialog(getShell(), msgTitle, "Enter the name of a new list item:", "", null);
+			mnuAdd.addSelectionListener(new SelectionAdapter() {
+				/*
+				 * (non-Javadoc)
+				 * @see org.eclipse.swt.events.SelectionAdapter#widgetSelected(org.eclipse.swt.events.SelectionEvent)
+				 */
+				@Override
+				public void widgetSelected(SelectionEvent e) {
+					final var msgTitle = "Create new entry";
+					final var dlg = new InputDialog(getShell(), msgTitle, "Enter the name of a new list item:", "", null);
 
-				if (dlg.open() == Window.OK && !dlg.getValue().isEmpty())
-					listValueListEntries.add(dlg.getValue());
-			}
-		});
+					if (dlg.open() == Window.OK && !dlg.getValue().isEmpty())
+						listValueListEntries.add(dlg.getValue());
+				}
+			});
 
-		final var mnuRemove = new MenuItem(menu, SWT.NONE);
-		mnuRemove.setText("Remove");
+			final var mnuRemove = new MenuItem(menu, SWT.NONE);
+			mnuRemove.setText("Remove");
 
-		mnuRemove.addSelectionListener(new SelectionAdapter() {
-			/*
-			 * (non-Javadoc)
-			 * @see org.eclipse.swt.events.SelectionAdapter#widgetSelected(org.eclipse.swt.events.SelectionEvent)
-			 */
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-				listValueListEntries.remove(listValueListEntries.getSelectionIndex());
-			}
-		});
+			mnuRemove.addSelectionListener(new SelectionAdapter() {
+				/*
+				 * (non-Javadoc)
+				 * @see org.eclipse.swt.events.SelectionAdapter#widgetSelected(org.eclipse.swt.events.SelectionEvent)
+				 */
+				@Override
+				public void widgetSelected(SelectionEvent e) {
+					listValueListEntries.remove(listValueListEntries.getSelectionIndex());
+				}
+			});
+		}
 
-		if (!editMode) {
+		if (!editMode && !mappedToElementCollection) {
 			final var lblDefaultValue = new Label(panDialogArea, SWT.NONE);
 			lblDefaultValue.setText("Default value:");
 
@@ -660,14 +666,16 @@ public class EditDataExchangeAttributeDialog extends CodeCadenzaDialog {
 			glCustomQuery.marginWidth = 0;
 			glCustomQuery.marginHeight = 0;
 
-			final var panCustomQuery = new Composite(panDialogArea, SWT.NONE);
-			panCustomQuery.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 4, 1));
-			panCustomQuery.setLayout(glCustomQuery);
+			if (!mappedToElementCollection) {
+				final var panCustomQuery = new Composite(panDialogArea, SWT.NONE);
+				panCustomQuery.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 4, 1));
+				panCustomQuery.setLayout(glCustomQuery);
 
-			final var lblCustomQuery = new Label(panCustomQuery, SWT.NONE);
-			lblCustomQuery.setText("Use for custom queries to search for root domain objects:");
+				final var lblCustomQuery = new Label(panCustomQuery, SWT.NONE);
+				lblCustomQuery.setText("Use for custom queries to search for root domain objects:");
 
-			chkCustomQuery = new Button(panCustomQuery, SWT.CHECK);
+				chkCustomQuery = new Button(panCustomQuery, SWT.CHECK);
+			}
 		}
 
 		if (editMode) {
@@ -711,10 +719,12 @@ public class EditDataExchangeAttributeDialog extends CodeCadenzaDialog {
 				if (txtSelectionListStatement != null && mappingAttribute.getSelectionListStatement() != null)
 					txtSelectionListStatement.setText(mappingAttribute.getSelectionListStatement());
 
-				final var lblDefaultValue = new Label(panDialogArea, SWT.NONE);
-				lblDefaultValue.setText("Default value:");
+				if (!mappedToElementCollection) {
+					final var lblDefaultValue = new Label(panDialogArea, SWT.NONE);
+					lblDefaultValue.setText("Default value:");
 
-				setFieldForDefaultType(mappingAttribute.getJavaType());
+					setFieldForDefaultType(mappingAttribute.getJavaType());
+				}
 			}
 			else if (txtType != null)
 				txtType.setText(dataExchangeAttribute.getDataType().getName());

@@ -451,6 +451,7 @@ public class JSFClientProjectFilesGenerator extends AbstractClientProjectFilesGe
 		b.append("action_export_pdf=As pdf-file\n");
 		b.append("action_fetch_data=Fetching data...\n");
 		b.append("result_total_number_records=Total number of records: \n");
+		b.append("command_add=Add\n");
 		b.append("command_save=Save\n");
 		b.append("command_cancel=Cancel\n");
 		b.append("command_back=Go back\n");
@@ -552,6 +553,10 @@ public class JSFClientProjectFilesGenerator extends AbstractClientProjectFilesGe
 		b.append("msg_session_exp_dlg=Your session has expired!\n");
 		b.append("msg_session_exp_title=The application has been left inactive for a while!\n");
 		b.append("msg_session_exp_desc=Due to security reasons it is necessary that you login again!\n");
+		b.append("element_collection_editor_lbl_add=Value for a new element\n");
+		b.append("element_collection_editor_col_header_element=Element\n");
+		b.append("element_collection_editor_action_delete=Delete\n");
+		b.append("element_collection_editor_action_delete_all=Delete all\n");
 
 		return b.toString();
 	}

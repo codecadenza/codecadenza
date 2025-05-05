@@ -27,6 +27,7 @@ import net.codecadenza.eclipse.ui.preview.VisualFormEditorPreviewBuilder;
 import net.codecadenza.eclipse.ui.preview.field.imp.CheckboxPreviewBuilder;
 import net.codecadenza.eclipse.ui.preview.field.imp.ComboboxPreviewBuilder;
 import net.codecadenza.eclipse.ui.preview.field.imp.DatePreviewBuilder;
+import net.codecadenza.eclipse.ui.preview.field.imp.ElementCollectionEditorPreviewBuilder;
 import net.codecadenza.eclipse.ui.preview.field.imp.LOVPreviewBuilder;
 import net.codecadenza.eclipse.ui.preview.field.imp.LabelPreviewBuilder;
 import net.codecadenza.eclipse.ui.preview.field.imp.LinkPreviewBuilder;
@@ -86,6 +87,8 @@ public class FieldPreviewBuilderFactory {
 			builder = new LOVPreviewBuilder(formPreviewBuilder, field, formPanel);
 		else if (type == FormFieldTypeEnumeration.LIST || type == FormFieldTypeEnumeration.SEARCHABLE_LIST)
 			builder = new ListPreviewBuilder(formPreviewBuilder, field, formPanel);
+		else if (type == FormFieldTypeEnumeration.ELEMENT_COLLECTION_EDITOR)
+			builder = new ElementCollectionEditorPreviewBuilder(formPreviewBuilder, field, formPanel);
 		else
 			throw new IllegalStateException("A preview builder for the form field type '" + type + "' is not available!");
 

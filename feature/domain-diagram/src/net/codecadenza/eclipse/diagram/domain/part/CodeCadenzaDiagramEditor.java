@@ -357,6 +357,7 @@ public class CodeCadenzaDiagramEditor extends DiagramDocumentEditor
 	 * @see org.eclipse.gmf.runtime.diagram.ui.resources.editor.parts.DiagramDocumentEditor#initializeGraphicalViewer()
 	 */
 	@Override
+	@SuppressWarnings("removal")
 	protected void initializeGraphicalViewer() {
 		super.initializeGraphicalViewer();
 

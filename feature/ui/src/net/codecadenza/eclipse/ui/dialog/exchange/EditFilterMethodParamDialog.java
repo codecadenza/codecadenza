@@ -22,6 +22,7 @@
 package net.codecadenza.eclipse.ui.dialog.exchange;
 
 import net.codecadenza.eclipse.model.domain.AbstractDomainAssociation;
+import net.codecadenza.eclipse.model.domain.CollectionTypeEnumeration;
 import net.codecadenza.eclipse.model.domain.DomainAttribute;
 import net.codecadenza.eclipse.model.domain.DomainFactory;
 import net.codecadenza.eclipse.model.domain.DomainObject;
@@ -120,9 +121,9 @@ public class EditFilterMethodParamDialog extends CodeCadenzaDialog {
 	private BasicEList<DomainAttribute> getValidAttributes(DomainObject obj) {
 		final var attrList = new BasicEList<DomainAttribute>();
 
-		// Transient and LOB attributes are not supported!
+		// Non-persistent, element collection and LOB attributes are not supported!
 		for (final DomainAttribute attr : obj.getAllAttributes())
-			if (!attr.isLob() && attr.isPersistent())
+			if (!attr.isLob() && attr.isPersistent() && attr.getCollectionType() == CollectionTypeEnumeration.NONE)
 				attrList.add(attr);
 
 		return attrList;

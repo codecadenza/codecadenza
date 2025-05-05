@@ -35,6 +35,10 @@ import java.math.BigDecimal;
 import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZoneOffset;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
@@ -239,60 +243,65 @@ public class JPAQueryEditor extends EditorPart {
 	}
 
 	/**
-	 * Add the items of a persistent bag (e.g. Collection) to the tree item
-	 * @param item
+	 * Add the items of a persistent bag (e.g. Collection) to the given parent tree item
+	 * @param parentItem
+	 * @return true if the {@link PersistentBag} contained entities that were added to the tree. It will return false if the objects
+	 *         were not added to the tree, since the {@link PersistentBag} was an element collection.
 	 */
-	protected void addPersistentBagItems(TreeItem item) {
-		item.removeAll();
-		final var b = (PersistentBag<?>) item.getData();
+	protected boolean addPersistentBagItems(TreeItem parentItem) {
+		parentItem.removeAll();
+
+		final var persistentBag = (PersistentBag<?>) parentItem.getData();
 		int count = 1;
 
-		for (final Object o : b.toArray()) {
-			final var i = new TreeItem(item, SWT.NONE);
-			final String className = o.getClass().getName().substring(o.getClass().getName().lastIndexOf('.') + 1);
+		for (final Object persistentObject : persistentBag.toArray()) {
+			final Class<?> objectClass = persistentObject.getClass();
 
-			i.setText(className + " [" + count++ + "]");
-			i.setImage(JavaUI.getSharedImages().getImage(org.eclipse.jdt.ui.ISharedImages.IMG_OBJS_PUBLIC));
-			i.setData(o);
+			if (isSupportedFieldType(objectClass))
+				return false;
 
-			new TreeItem(i, SWT.NONE);
+			final String className = objectClass.getName().substring(objectClass.getName().lastIndexOf('.') + 1);
+
+			final var arrayTreeItem = new TreeItem(parentItem, SWT.NONE);
+			arrayTreeItem.setText(className + " [" + count++ + "]");
+			arrayTreeItem.setImage(JavaUI.getSharedImages().getImage(org.eclipse.jdt.ui.ISharedImages.IMG_OBJS_PUBLIC));
+			arrayTreeItem.setData(persistentObject);
+
+			new TreeItem(arrayTreeItem, SWT.NONE);
 		}
+
+		return true;
 	}
 
 	/**
 	 * Add the associations to the tree item
-	 * @param i the treeItem to open
+	 * @param parentItem the treeItem to open
 	 */
-	private void addAssociations(TreeItem i) {
-		final Object o = i.getData();
+	private void addAssociations(TreeItem parentItem) {
+		final Object object = parentItem.getData();
 
 		try {
-			for (final Method m : o.getClass().getMethods()) {
-				if (m.getName().startsWith("get") && m.getParameterTypes().length == 0 && !METHOD_NAME_GET_CLASS.equals(m.getName())
-						&& !m.getName().toUpperCase().contains(HIBERNATE_LAZY_INIT)) {
-					final Object ret = m.invoke(o);
+			for (final Method method : object.getClass().getMethods()) {
+				if (method.getName().startsWith("get") && method.getParameterTypes().length == 0
+						&& !METHOD_NAME_GET_CLASS.equals(method.getName()) && !method.getName().toUpperCase().contains(HIBERNATE_LAZY_INIT)) {
+					final Object ret = method.invoke(object);
 
-					if (m.getReturnType() != Integer.class && m.getReturnType() != int.class && m.getReturnType() != Long.class
-							&& m.getReturnType() != long.class && m.getReturnType() != Double.class && m.getReturnType() != double.class
-							&& m.getReturnType() != Float.class && m.getReturnType() != float.class && m.getReturnType() != Boolean.class
-							&& m.getReturnType() != boolean.class && m.getReturnType() != String.class && m.getReturnType() != char.class
-							&& m.getReturnType() != BigDecimal.class && m.getReturnType() != Date.class
-							&& m.getReturnType() != GregorianCalendar.class && m.getReturnType() != UUID.class && !(ret instanceof Enum)) {
-						final var a = new TreeItem(i, SWT.NONE);
-
-						String assocName = m.getName().substring(3);
+					if (!isSupportedFieldType(method.getReturnType()) && !(ret instanceof Enum)) {
+						String assocName = method.getName().substring(3);
 						assocName = assocName.substring(0, 1).toLowerCase() + assocName.substring(1);
-						final String retTypeName = m.getReturnType().getName().substring(m.getReturnType().getName().lastIndexOf('.') + 1);
+						final String retTypeName = method.getReturnType().getName()
+								.substring(method.getReturnType().getName().lastIndexOf('.') + 1);
 
-						a.setImage(JavaUI.getSharedImages().getImage(org.eclipse.jdt.ui.ISharedImages.IMG_OBJS_PUBLIC));
+						final var treeItem = new TreeItem(parentItem, SWT.NONE);
+						treeItem.setImage(JavaUI.getSharedImages().getImage(org.eclipse.jdt.ui.ISharedImages.IMG_OBJS_PUBLIC));
 
 						if (ret != null) {
-							a.setData(ret);
-							a.setText(retTypeName + " " + assocName);
-							new TreeItem(a, SWT.NONE);
+							treeItem.setData(ret);
+							treeItem.setText(retTypeName + " " + assocName);
+							new TreeItem(treeItem, SWT.NONE);
 						}
 						else
-							a.setText(retTypeName + " " + assocName + " = " + JPAQueryService.NULL_VALUE);
+							treeItem.setText(retTypeName + " " + assocName + " = " + JPAQueryService.NULL_VALUE);
 					}
 				}
 			}
@@ -301,6 +310,20 @@ public class JPAQueryEditor extends EditorPart {
 			final var s = new Status(IStatus.WARNING, CodeCadenzaToolsPlugin.PLUGIN_ID, 0, "Error while fetching data!", e);
 			StatusManager.getManager().handle(s, StatusManager.LOG | StatusManager.SHOW);
 		}
+	}
+
+	/**
+	 * Check if the given class is a supported type for persistent attributes
+	 * @param objectClass
+	 * @return true if the class is supported for persistent attributes
+	 */
+	private boolean isSupportedFieldType(Class<?> objectClass) {
+		return (objectClass == Integer.class || objectClass == int.class || objectClass == Long.class || objectClass == long.class
+				|| objectClass == Double.class || objectClass == double.class || objectClass == Float.class || objectClass == float.class
+				|| objectClass == Boolean.class || objectClass == boolean.class || objectClass == String.class
+				|| objectClass == char.class || objectClass == BigDecimal.class || objectClass == Date.class
+				|| objectClass == LocalDateTime.class || objectClass == LocalDate.class || objectClass == GregorianCalendar.class
+				|| objectClass == UUID.class);
 	}
 
 	/**
@@ -350,112 +373,98 @@ public class JPAQueryEditor extends EditorPart {
 
 	/**
 	 * Add the attributes to the tree item
-	 * @param i the treeItem to open
+	 * @param parentItem the treeItem to open
+	 * @return false if the items of an element collection has been added
 	 */
-	private void addAttributes(TreeItem i) {
-		final Object o = i.getData();
+	private boolean addAttributes(TreeItem parentItem) {
+		final Object object = parentItem.getData();
 
 		try {
-			for (final Method m : o.getClass().getMethods()) {
-				if ((m.getName().startsWith("get") || m.getName().startsWith("is")) && m.getParameterTypes().length == 0
-						&& !METHOD_NAME_GET_CLASS.equals(m.getName()) && !m.getName().toUpperCase().contains(HIBERNATE_LAZY_INIT)) {
-					final Object ret = m.invoke(o);
+			if (object instanceof final Iterable<?> iterable) {
+				iterable.forEach(item -> {
+					final var listItem = new TreeItem(parentItem, SWT.NONE);
+					listItem.setImage(CodeCadenzaResourcePlugin.getImage(IMG_ATTRIBUTE));
 
-					if (m.getReturnType() == Integer.class || m.getReturnType() == int.class || m.getReturnType() == Long.class
-							|| m.getReturnType() == long.class || m.getReturnType() == UUID.class) {
-						final var a = new TreeItem(i, SWT.NONE);
-						a.setImage(CodeCadenzaResourcePlugin.getImage(IMG_ATTRIBUTE));
+					if (item != null)
+						listItem.setText(item.toString());
+					else
+						listItem.setText(JPAQueryService.NULL_VALUE);
+				});
 
-						if (ret == null)
-							a.setText(createItemText(m.getReturnType(), m.getName(), null));
-						else
-							a.setText(createItemText(m.getReturnType(), m.getName(), ret.toString()));
+				return false;
+			}
+
+			for (final Method method : object.getClass().getMethods()) {
+				if ((method.getName().startsWith("get") || method.getName().startsWith("is")) && method.getParameterTypes().length == 0
+						&& !METHOD_NAME_GET_CLASS.equals(method.getName()) && !method.getName().toUpperCase().contains(HIBERNATE_LAZY_INIT)) {
+					final Object returnValue = method.invoke(object);
+					String convertedValue = null;
+					boolean addItem = false;
+
+					if (method.getReturnType() == Double.class || method.getReturnType() == double.class) {
+						final var value = (Double) returnValue;
+						convertedValue = value != null ? decimalFormatter.format(value) : null;
+						addItem = true;
 					}
-					else if (m.getReturnType() == Double.class || m.getReturnType() == double.class) {
-						final var a = new TreeItem(i, SWT.NONE);
-						a.setImage(CodeCadenzaResourcePlugin.getImage(IMG_ATTRIBUTE));
+					else if (method.getReturnType() == Float.class || method.getReturnType() == float.class) {
+						final var value = (Float) returnValue;
+						convertedValue = value != null ? decimalFormatter.format(value) : null;
+						addItem = true;
+					}
+					else if (method.getReturnType() == BigDecimal.class) {
+						final var value = (BigDecimal) returnValue;
+						convertedValue = value != null ? decimalFormatter.format(value) : null;
+						addItem = true;
+					}
+					else if (method.getReturnType() == String.class) {
+						final var value = (String) returnValue;
+						convertedValue = value;
+						addItem = true;
+					}
+					else if (method.getReturnType() == Date.class) {
+						final var value = (Date) returnValue;
+						convertedValue = value != null ? dateTimeFormatter.format(value) : null;
+						addItem = true;
+					}
+					else if (method.getReturnType() == LocalDateTime.class) {
+						final var value = (LocalDateTime) returnValue;
+						addItem = true;
 
-						if (ret == null)
-							a.setText(createItemText(m.getReturnType(), m.getName(), null));
-						else {
-							final var in = (Double) ret;
-							a.setText(createItemText(m.getReturnType(), m.getName(), decimalFormatter.format(in)));
+						if (value != null) {
+							final Date date = Date.from(value.atZone(ZoneId.systemDefault()).toInstant());
+							convertedValue = dateTimeFormatter.format(date);
 						}
 					}
-					else if (m.getReturnType() == Float.class || m.getReturnType() == float.class) {
-						final var a = new TreeItem(i, SWT.NONE);
-						a.setImage(CodeCadenzaResourcePlugin.getImage(IMG_ATTRIBUTE));
+					else if (method.getReturnType() == LocalDate.class) {
+						final var value = (LocalDate) returnValue;
+						addItem = true;
 
-						if (ret == null)
-							a.setText(createItemText(m.getReturnType(), m.getName(), null));
-						else {
-							final var in = (Float) ret;
-							a.setText(createItemText(m.getReturnType(), m.getName(), decimalFormatter.format(in)));
+						if (value != null) {
+							final Date date = Date.from(value.atStartOfDay(ZoneOffset.systemDefault()).toInstant());
+							convertedValue = dateTimeFormatter.format(date);
 						}
 					}
-					else if (m.getReturnType() == BigDecimal.class) {
-						final var a = new TreeItem(i, SWT.NONE);
-						a.setImage(CodeCadenzaResourcePlugin.getImage(IMG_ATTRIBUTE));
-
-						if (ret == null)
-							a.setText(createItemText(m.getReturnType(), m.getName(), null));
-						else {
-							final var in = (BigDecimal) ret;
-							a.setText(createItemText(m.getReturnType(), m.getName(), decimalFormatter.format(in)));
-						}
+					else if (method.getReturnType() == GregorianCalendar.class) {
+						final var value = (GregorianCalendar) returnValue;
+						addItem = true;
+						convertedValue = value != null ? dateTimeFormatter.format(value.getTime()) : null;
 					}
-					else if (m.getReturnType() == Boolean.class || m.getReturnType() == boolean.class) {
-						final var a = new TreeItem(i, SWT.NONE);
-						a.setImage(CodeCadenzaResourcePlugin.getImage(IMG_ATTRIBUTE));
+					else if (returnValue instanceof Enum) {
+						final var value = (Enum<?>) returnValue;
+						addItem = true;
 
-						if (ret == null)
-							a.setText(createItemText(m.getReturnType(), m.getName(), null));
-						else {
-							final var in = (Boolean) ret;
-							a.setText(m.getName().substring(2).toUpperCase());
-							a.setText(createItemText(m.getReturnType(), m.getName(), in.toString()));
-						}
+						if (value != null)
+							convertedValue = value.name();
 					}
-					else if (m.getReturnType() == String.class) {
-						final var a = new TreeItem(i, SWT.NONE);
-						a.setImage(CodeCadenzaResourcePlugin.getImage(IMG_ATTRIBUTE));
+					else if (method.getReturnType() == Integer.class || method.getReturnType() == int.class
+							|| method.getReturnType() == Long.class || method.getReturnType() == long.class
+							|| method.getReturnType() == UUID.class) {
+						addItem = true;
+						convertedValue = returnValue != null ? returnValue.toString() : null;
+					}
 
-						if (ret == null)
-							a.setText(createItemText(m.getReturnType(), m.getName(), null));
-						else {
-							final var in = (String) ret;
-							a.setText(createItemText(m.getReturnType(), m.getName(), in));
-						}
-					}
-					else if (m.getReturnType() == Date.class) {
-						final var a = new TreeItem(i, SWT.NONE);
-						a.setImage(CodeCadenzaResourcePlugin.getImage(IMG_ATTRIBUTE));
-
-						if (ret == null)
-							a.setText(createItemText(m.getReturnType(), m.getName(), null));
-						else {
-							final var in = (Date) ret;
-							a.setText(createItemText(m.getReturnType(), m.getName(), dateTimeFormatter.format(in)));
-						}
-					}
-					else if (m.getReturnType() == GregorianCalendar.class) {
-						final var a = new TreeItem(i, SWT.NONE);
-						a.setImage(CodeCadenzaResourcePlugin.getImage(IMG_ATTRIBUTE));
-
-						if (ret == null)
-							a.setText(createItemText(m.getReturnType(), m.getName(), null));
-						else {
-							final var in = (GregorianCalendar) ret;
-							a.setText(createItemText(m.getReturnType(), m.getName(), dateTimeFormatter.format(in.getTime())));
-						}
-					}
-					else if (ret instanceof Enum) {
-						final var a = new TreeItem(i, SWT.NONE);
-						a.setImage(CodeCadenzaResourcePlugin.getImage(IMG_ATTRIBUTE));
-
-						final var in = (Enum<?>) ret;
-						a.setText(createItemText(m.getReturnType(), m.getName(), in.name()));
-					}
+					if (addItem)
+						addAttributeItem(parentItem, method.getReturnType(), method.getName(), convertedValue);
 				}
 			}
 		}
@@ -463,17 +472,34 @@ public class JPAQueryEditor extends EditorPart {
 			final var s = new Status(IStatus.WARNING, CodeCadenzaToolsPlugin.PLUGIN_ID, 0, "Error while fetching data!", e);
 			StatusManager.getManager().handle(s, StatusManager.LOG | StatusManager.SHOW);
 		}
+
+		return true;
 	}
 
 	/**
 	 * Add the association child items to the tree item
-	 * @param i the treeItem to open
+	 * @param parentItem the parent item
 	 */
-	private void addAssociationChildItems(TreeItem i) {
-		i.removeAll();
+	private void addAssociationChildItems(TreeItem parentItem) {
+		parentItem.removeAll();
 
-		addAttributes(i);
-		addAssociations(i);
+		final boolean addAssociations = addAttributes(parentItem);
+
+		if (addAssociations)
+			addAssociations(parentItem);
+	}
+
+	/**
+	 * Add an item that represents a persistent attribute to the given parent item
+	 * @param parentItem the parent item
+	 * @param returnType the return type
+	 * @param methodName the method name
+	 * @param value the attribute value
+	 */
+	private void addAttributeItem(TreeItem parentItem, Class<?> returnType, String methodName, String value) {
+		final var attributeItem = new TreeItem(parentItem, SWT.NONE);
+		attributeItem.setImage(CodeCadenzaResourcePlugin.getImage(IMG_ATTRIBUTE));
+		attributeItem.setText(createItemText(returnType, methodName, value));
 	}
 
 	/**
@@ -702,10 +728,10 @@ public class JPAQueryEditor extends EditorPart {
 				if (item.getData() == null)
 					return;
 
-				if (item.getData().getClass() == PersistentBag.class)
-					addPersistentBagItems(item);
-				else
-					addAssociationChildItems(item);
+				if (item.getData().getClass() == PersistentBag.class && addPersistentBagItems(item))
+					return;
+
+				addAssociationChildItems(item);
 			}
 
 			/*

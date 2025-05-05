@@ -173,10 +173,17 @@ public class DomainObjectService {
 		// Test if the attribute may be deleted!
 		checkAttribute(attribute);
 
-		// Remove respective indexes from the table
 		if (attribute.isPersistent()) {
-			removeIndexesAndForeignKeysOfColumn(attribute.getColumn());
-			attribute.getColumn().getDatabaseTable().getColumns().remove(attribute.getColumn());
+			if (attribute.getCollectionTable() == null) {
+				// Remove respective indexes from the table
+				removeIndexesAndForeignKeysOfColumn(attribute.getColumn());
+				attribute.getColumn().getDatabaseTable().getColumns().remove(attribute.getColumn());
+			}
+			else {
+				// Remove the element collection table
+				project.getDatabase().getDatabaseTables().remove(attribute.getCollectionTable());
+				attribute.eResource().getContents().remove(attribute.getCollectionTable());
+			}
 		}
 
 		attribute.getDomainObject().getAttributes().remove(attribute);
@@ -256,6 +263,14 @@ public class DomainObjectService {
 		// Delete the database table
 		if (domainObject.getDatabaseTable() != null) {
 			final Database database = domainObject.getDatabaseTable().getDatabase();
+
+			for (final DomainAttribute attribute : domainObject.getAttributes()) {
+				if (attribute.getCollectionTable() != null) {
+					database.getDatabaseTables().remove(attribute.getCollectionTable());
+					attribute.eResource().getContents().remove(attribute.getCollectionTable());
+				}
+			}
+
 			database.getDatabaseTables().remove(domainObject.getDatabaseTable());
 			project.eResource().getContents().remove(domainObject.getDatabaseTable());
 		}

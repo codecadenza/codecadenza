@@ -29,6 +29,7 @@ import java.util.Set;
 import net.codecadenza.eclipse.model.boundary.BoundaryMethodTypeEnumeration;
 import net.codecadenza.eclipse.model.domain.AbstractDomainAssociation;
 import net.codecadenza.eclipse.model.domain.AttributeTagEnumeration;
+import net.codecadenza.eclipse.model.domain.CollectionTypeEnumeration;
 import net.codecadenza.eclipse.model.domain.DomainAttribute;
 import net.codecadenza.eclipse.model.domain.IDGeneratorTypeEnumeration;
 import net.codecadenza.eclipse.model.domain.ManyToManyAssociation;
@@ -422,11 +423,8 @@ public class DTOInlineConversionGenerator {
 			if (domainAttribute != null) {
 				final AbstractDomainAssociation domainAssoc = attr.getAssociation();
 
-				if (domainAssoc == null) {
-					final String domainGetter = domainAttribute.getGetterName();
-
-					b.append(dtoName + "." + dtoSetter + "(" + domainObjName + "." + domainGetter + ");\n");
-				}
+				if (domainAssoc == null)
+					b.append(createReverseSetter(attr, domainAttribute.getGetterName()));
 				else {
 					// In this mode we have to take care of deeply cascaded association lists in order to prevent NullPointerExceptions
 					// when accessing optional associations!
@@ -439,7 +437,7 @@ public class DTOInlineConversionGenerator {
 						b.append(nullCheck);
 					}
 
-					b.append(dtoName + "." + dtoSetter + "(" + domainObjName + "." + getter + ");\n");
+					b.append(createReverseSetter(attr, getter));
 
 					if (!nullCheck.isEmpty()) {
 						if (domainAssoc instanceof final ManyToOneAssociation mto && mto.isOptional() && domainAttribute.isPk()
@@ -562,6 +560,33 @@ public class DTOInlineConversionGenerator {
 				b.append(dtoName + "." + setter + "(" + domainObjName + "." + getter + ");\n");
 			}
 		}
+
+		return b.toString();
+	}
+
+	/**
+	 * Create the statement for setting a DTO attribute with the value of the respective domain attribute
+	 * @param attr
+	 * @param getter
+	 * @return the generated content
+	 */
+	private String createReverseSetter(DTOBeanAttribute attr, String getter) {
+		final var b = new StringBuilder();
+		final DomainAttribute domainAttribute = attr.getDomainAttribute();
+
+		b.append(dtoName + "." + attr.getSetterName() + "(" + domainObjName + "." + getter);
+
+		if (domainAttribute.getCollectionType() != CollectionTypeEnumeration.NONE)
+			imports.add("import java.util.stream.*;");
+
+		// A list or a set of an element collection must be converted, because it is unclear whether the implementation used by the
+		// persistence provider can be serialized!
+		if (domainAttribute.getCollectionType() == CollectionTypeEnumeration.SET)
+			b.append(".stream().collect(Collectors.toCollection(HashSet::new))");
+		else if (domainAttribute.getCollectionType() == CollectionTypeEnumeration.LIST)
+			b.append(".stream().collect(Collectors.toCollection(ArrayList::new))");
+
+		b.append(");\n");
 
 		return b.toString();
 	}

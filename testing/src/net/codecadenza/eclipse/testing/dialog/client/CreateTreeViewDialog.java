@@ -83,7 +83,7 @@ public class CreateTreeViewDialog extends AbstractDialog {
 		boolean displayAttributeSet = false;
 
 		for (final var domainAttribute : domainObject.getAllAttributes()) {
-			final var attrTreeItemText = "a." + domainAttribute.getName() + " (" + domainAttribute.getType() + ")";
+			final var attrTreeItemText = "a." + domainAttribute.getName() + " (" + domainAttribute.getTypeName() + ")";
 			final var attrTreeItem = domainObjectTreeView.getTreeItem(domainObject.getName()).getNode(attrTreeItemText);
 
 			attrTreeItem.dragAndDrop(quickSearchItemsTreeItem);
@@ -109,7 +109,7 @@ public class CreateTreeViewDialog extends AbstractDialog {
 
 				// Add all attributes of the target domain object as tree nodes to the target tree structure
 				for (final var targetAttribute : targetDomainObject.getAllAttributes()) {
-					final var attrDragTreeItemName = "b." + targetAttribute.getName() + " (" + targetAttribute.getType() + ")";
+					final var attrDragTreeItemName = "b." + targetAttribute.getName() + " (" + targetAttribute.getTypeName() + ")";
 					final var attrTreeItem = assocRootTreeItem.getNode(attrDragTreeItemName);
 
 					attrTreeItem.dragAndDrop(treeNodesTreeItem);
@@ -134,7 +134,7 @@ public class CreateTreeViewDialog extends AbstractDialog {
 				final var subItemDisplayAttributeTreeItem = subTreeItem.getNode(TREE_ITEM_DISPLAY_ATTRIBUTES);
 
 				for (final var targetAttribute : targetDomainObject.getAllAttributes()) {
-					final var attrTreeItemText = "a." + targetAttribute.getName() + " (" + targetAttribute.getType() + ")";
+					final var attrTreeItemText = "a." + targetAttribute.getName() + " (" + targetAttribute.getTypeName() + ")";
 					final var attrTreeItem = assocRootTreeItem.getNode(attrTreeItemText);
 
 					if (targetAttribute.getType().equals(DomainAttribute.TYPE_STRING) && !displayAttributeSet) {

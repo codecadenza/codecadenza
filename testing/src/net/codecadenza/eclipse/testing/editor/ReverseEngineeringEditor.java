@@ -30,6 +30,7 @@ import net.codecadenza.eclipse.testing.domain.AssociationType;
 import net.codecadenza.eclipse.testing.domain.DatabaseVendor;
 import net.codecadenza.eclipse.testing.domain.DomainAssociation;
 import net.codecadenza.eclipse.testing.domain.DomainAttribute;
+import net.codecadenza.eclipse.testing.domain.ElementCollectionType;
 import net.codecadenza.eclipse.testing.domain.Project;
 import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 import org.eclipse.swtbot.eclipse.finder.widgets.SWTBotEditor;
@@ -173,6 +174,9 @@ public class ReverseEngineeringEditor extends AbstractBot {
 				for (final var node : rootTreeItem.getNodes())
 					if (node.equals(domainObject.getName())) {
 						String existingAttribute = null;
+
+						if (domainAttribute.getElementCollectionType() != ElementCollectionType.NONE)
+							continue;
 
 						if (domainAttribute.getType().equals(DomainAttribute.TYPE_UUID))
 							existingAttribute = DomainAttribute.TYPE_STRING + " " + domainAttribute.getName();

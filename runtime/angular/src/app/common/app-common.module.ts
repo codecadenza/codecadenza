@@ -35,6 +35,7 @@ import { LovInputField } from './components/lov-input-field/lov-input-field';
 import { ErrorDialog } from './components/error-dialog/error-dialog';
 import { WelcomePage } from './pages/welcome/welcome-page';
 import { MultiSelectionList } from './components/multi-selection-list/multi-selection-list';
+import { ElementCollectionEditor } from './components/element-collection-editor/element-collection-editor';
 import { NotFoundPage } from './pages/not-found/not-found-page';
 import { LoginPage } from './pages/login/login-page';
 import { AuthGuardService } from './services/auth-guard.service';
@@ -82,12 +83,12 @@ const routes: Routes = [
   imports: [
     CommonModule, FormsModule, ReactiveFormsModule, DialogModule, SliderModule,
     ConfirmDialogModule, CheckboxModule, DropdownModule, CalendarModule, FieldsetModule,
-    PickListModule, TreeModule, ToastModule, ButtonModule, InputTextModule, ScrollPanelModule,
+    PickListModule, TreeModule, ToastModule, ButtonModule, TableModule, InputTextModule, ScrollPanelModule,
     MessageModule, PasswordModule, ListboxModule, ContextMenuModule, RouterModule.forChild(routes)
   ],
   declarations: [
     WelcomePage, TreeNavigator, UserSettingsPage, SearchInputDialog, ErrorDialog, ViewContainer,
-    FormContainerComponent, FormLink, MailLink, WebLink, LovInputField, MultiSelectionList, NotFoundPage,
+    FormContainerComponent, FormLink, MailLink, WebLink, LovInputField, MultiSelectionList, ElementCollectionEditor, NotFoundPage,
     LoginPage, ChangePasswordPage, FormControlContainerComponent, FormContainerComponent,
     FormButtonContainerComponent, SaveSearchDialog, SavedSearchSelectionDialog, DateTimeFormatterDirective,
     DateFormatterDirective, NumberFormatterDirective
@@ -97,7 +98,7 @@ const routes: Routes = [
     ButtonModule, CalendarModule, CheckboxModule, ConfirmDialogModule, ContextMenuModule, DialogModule,
     DropdownModule, FieldsetModule, FileUploadModule, InputTextareaModule, InputTextModule, MessageModule,
     MessagesModule, PanelModule, ProgressBarModule, TableModule, TabViewModule, TreeModule, ToastModule,
-    ScrollPanelModule, TreeNavigator, SearchInputDialog, LovInputField, MultiSelectionList, ViewContainer,
+    ScrollPanelModule, TreeNavigator, SearchInputDialog, LovInputField, MultiSelectionList, ElementCollectionEditor, ViewContainer,
     FormContainerComponent, FormLink, MailLink, WebLink, ErrorDialog, LoginPage, ChangePasswordPage,
     FormControlContainerComponent, FormButtonContainerComponent, SaveSearchDialog, SavedSearchSelectionDialog,
     DateTimeFormatterDirective, DateFormatterDirective, NumberFormatterDirective

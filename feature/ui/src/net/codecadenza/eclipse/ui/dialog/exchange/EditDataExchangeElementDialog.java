@@ -25,6 +25,7 @@ import static net.codecadenza.eclipse.shared.Constants.DEFAULT_VALUE_FLAG;
 
 import java.math.BigDecimal;
 import net.codecadenza.eclipse.model.domain.AbstractDomainAssociation;
+import net.codecadenza.eclipse.model.domain.CollectionTypeEnumeration;
 import net.codecadenza.eclipse.model.domain.DomainAttribute;
 import net.codecadenza.eclipse.model.domain.ManyToOneAssociation;
 import net.codecadenza.eclipse.model.domain.OneToManyAssociation;
@@ -105,6 +106,7 @@ public class EditDataExchangeElementDialog extends CodeCadenzaDialog {
 	private List listValueListEntries;
 	private Text txtSelListStatement;
 	private boolean processSingleObject;
+	private boolean mappedToElementCollection;
 
 	/**
 	 * Constructor
@@ -131,6 +133,7 @@ public class EditDataExchangeElementDialog extends CodeCadenzaDialog {
 
 		if (mappingAttribute.getDomainAttribute() != null) {
 			mappedToDomainAttribute = true;
+			mappedToElementCollection = mappingAttribute.getDomainAttribute().getCollectionType() != CollectionTypeEnumeration.NONE;
 
 			final DomainAttribute domainAttribute = mappingAttribute.getDomainAttribute();
 			final AbstractDomainAssociation assoc = mappingAttribute.getAssociation();
@@ -443,7 +446,7 @@ public class EditDataExchangeElementDialog extends CodeCadenzaDialog {
 		txtMaxOccurrences = new Text(panDialogArea, SWT.BORDER);
 		txtMaxOccurrences.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
 
-		if (rootElement || mappedToDomainAttribute)
+		if (rootElement || !mappedToElementCollection)
 			txtMaxOccurrences.setEditable(false);
 
 		final var lblElementOrder = new Label(panDialogArea, SWT.NONE);
@@ -562,7 +565,7 @@ public class EditDataExchangeElementDialog extends CodeCadenzaDialog {
 			}
 		}
 
-		if (!dataExchangeElement.isContainer()) {
+		if (!dataExchangeElement.isContainer() && !mappedToElementCollection) {
 			final var lblValueListEntries = new Label(panDialogArea, SWT.NONE);
 			lblValueListEntries.setLayoutData(new GridData(SWT.LEFT, SWT.TOP, false, false));
 			lblValueListEntries.setText("Value list entries:");
@@ -625,18 +628,20 @@ public class EditDataExchangeElementDialog extends CodeCadenzaDialog {
 
 			chkDisableExtMapping = new Button(panDisableExtMapping, SWT.CHECK);
 
-			final var glCustomQuery = new GridLayout(2, false);
-			glCustomQuery.marginWidth = 0;
-			glCustomQuery.marginHeight = 0;
+			if (!mappedToElementCollection) {
+				final var glCustomQuery = new GridLayout(2, false);
+				glCustomQuery.marginWidth = 0;
+				glCustomQuery.marginHeight = 0;
 
-			final var panCustomQuery = new Composite(panDialogArea, SWT.NONE);
-			panCustomQuery.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 4, 1));
-			panCustomQuery.setLayout(glCustomQuery);
+				final var panCustomQuery = new Composite(panDialogArea, SWT.NONE);
+				panCustomQuery.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 4, 1));
+				panCustomQuery.setLayout(glCustomQuery);
 
-			final var lblCustomQuery = new Label(panCustomQuery, SWT.NONE);
-			lblCustomQuery.setText("Use for custom queries to search for root domain objects:");
+				final var lblCustomQuery = new Label(panCustomQuery, SWT.NONE);
+				lblCustomQuery.setText("Use for custom queries to search for root domain objects:");
 
-			chkCustomQuery = new Button(panCustomQuery, SWT.CHECK);
+				chkCustomQuery = new Button(panCustomQuery, SWT.CHECK);
+			}
 		}
 
 		txtName.setText(dataExchangeElement.getName());
@@ -705,7 +710,7 @@ public class EditDataExchangeElementDialog extends CodeCadenzaDialog {
 		if (listValueListEntries != null)
 			dataExchangeElement.getValueListEntries().forEach(entry -> listValueListEntries.add(entry.getItemText()));
 
-		if (mappingAttribute != null && !dataExchangeElement.isContainer()) {
+		if (mappingAttribute != null && !dataExchangeElement.isContainer() && !mappedToElementCollection) {
 			final var lblDefaultValue = new Label(panDialogArea, SWT.NONE);
 			lblDefaultValue.setText("Default value:");
 

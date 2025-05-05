@@ -25,6 +25,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import net.codecadenza.eclipse.model.db.DBColumnType;
+import net.codecadenza.eclipse.model.domain.CollectionMappingStrategyEnumeration;
+import net.codecadenza.eclipse.model.domain.CollectionTypeEnumeration;
 import net.codecadenza.eclipse.model.domain.DomainAttribute;
 import net.codecadenza.eclipse.model.domain.DomainFactory;
 import net.codecadenza.eclipse.model.domain.DomainObject;
@@ -32,6 +34,7 @@ import net.codecadenza.eclipse.model.domain.EnumAssociation;
 import net.codecadenza.eclipse.model.domain.TemporalTypeEnumeration;
 import net.codecadenza.eclipse.model.java.JavaEnum;
 import net.codecadenza.eclipse.model.java.JavaType;
+import net.codecadenza.eclipse.model.project.PersistenceProviderEnumeration;
 import net.codecadenza.eclipse.model.project.Project;
 import net.codecadenza.eclipse.shared.dialog.CodeCadenzaDialog;
 import net.codecadenza.eclipse.tools.ide.EclipseIDEService;
@@ -50,6 +53,7 @@ import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
+import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
@@ -96,6 +100,8 @@ public class EditDomainAttributeDialog extends CodeCadenzaDialog {
 	private Button chkNullable;
 	private Button chkVersion;
 	private Button chkDisplayAttribute;
+	private Combo cboCollectionType;
+	private Text txtCollectionStrategy;
 	private final DomainAttribute domainAttribute;
 	private final boolean editMode;
 
@@ -174,7 +180,7 @@ public class EditDomainAttributeDialog extends CodeCadenzaDialog {
 			 */
 			@Override
 			public void onSelectionChanged(JavaType type) {
-				if (type == null) {
+				if (type == null || !editMode) {
 					disableAllFields();
 					return;
 				}
@@ -183,6 +189,31 @@ public class EditDomainAttributeDialog extends CodeCadenzaDialog {
 				temporalTypes.add(TemporalTypeEnumeration.NONE);
 
 				cboTemporalType.setData(temporalTypes);
+
+				final CollectionMappingStrategyEnumeration selectedStrategy = domainAttribute.getCollectionMappingStrategy();
+
+				if (selectedStrategy != CollectionMappingStrategyEnumeration.TABLE) {
+					cboCollectionType.removeAll();
+
+					if (type.isString() && project.getPersistenceProvider() != PersistenceProviderEnumeration.ECLIPSELINK) {
+						for (final CollectionTypeEnumeration collectionType : CollectionTypeEnumeration.values())
+							cboCollectionType.add(collectionType.toString());
+					}
+					else
+						cboCollectionType.add(CollectionTypeEnumeration.NONE.toString());
+				}
+
+				boolean collectionTypeSelected = false;
+
+				for (int i = 0; i < cboCollectionType.getItemCount(); i++)
+					if (cboCollectionType.getItem(i).equals(domainAttribute.getCollectionType().getName())) {
+						cboCollectionType.select(i);
+						collectionTypeSelected = true;
+						break;
+					}
+
+				if (!collectionTypeSelected)
+					cboCollectionType.select(0);
 
 				enableFields(type);
 
@@ -348,6 +379,39 @@ public class EditDomainAttributeDialog extends CodeCadenzaDialog {
 
 		cboTemporalType.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
 
+		final var lblCollectionType = new Label(groupBasicData, SWT.NONE);
+		lblCollectionType.setText("Collection type:");
+
+		cboCollectionType = new Combo(groupBasicData, SWT.READ_ONLY);
+		cboCollectionType.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
+
+		cboCollectionType.addSelectionListener(new SelectionAdapter() {
+			/*
+			 * (non-Javadoc)
+			 * @see org.eclipse.swt.events.SelectionAdapter#widgetSelected(org.eclipse.swt.events.SelectionEvent)
+			 */
+			@Override
+			public void widgetSelected(final SelectionEvent e) {
+				final CollectionTypeEnumeration selectedCollectionType = CollectionTypeEnumeration
+						.valueOf(cboCollectionType.getItem(cboCollectionType.getSelectionIndex()));
+
+				if (domainAttribute.getCollectionMappingStrategy() == CollectionMappingStrategyEnumeration.TABLE)
+					return;
+
+				if (selectedCollectionType == CollectionTypeEnumeration.NONE)
+					txtCollectionStrategy.setText(CollectionMappingStrategyEnumeration.NONE.toString());
+				else
+					txtCollectionStrategy.setText(CollectionMappingStrategyEnumeration.CONVERTER.toString());
+			}
+		});
+
+		final var lblCollectionStrategy = new Label(groupBasicData, SWT.NONE);
+		lblCollectionStrategy.setText("Collection strategy:");
+
+		txtCollectionStrategy = new Text(groupBasicData, SWT.BORDER);
+		txtCollectionStrategy.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
+		txtCollectionStrategy.setEditable(false);
+
 		final var groupValidation = new Group(panDialogArea, SWT.NONE);
 		groupValidation.setLayout(new GridLayout(4, false));
 		groupValidation.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
@@ -396,18 +460,44 @@ public class EditDomainAttributeDialog extends CodeCadenzaDialog {
 		txtName.setSelection(0, txtName.getText().length());
 		txtName.setFocus();
 
+		if (domainAttribute.getCollectionMappingStrategy() == CollectionMappingStrategyEnumeration.TABLE
+				|| domainAttribute.getCollectionMappingStrategy() == CollectionMappingStrategyEnumeration.CONVERTER) {
+			for (final CollectionTypeEnumeration type : CollectionTypeEnumeration.values())
+				if (type != CollectionTypeEnumeration.NONE)
+					cboCollectionType.add(type.toString());
+		}
+		else if (domainAttribute.getJavaType().isString()) {
+			for (final CollectionTypeEnumeration type : CollectionTypeEnumeration.values())
+				cboCollectionType.add(type.toString());
+		}
+		else
+			cboCollectionType.add(CollectionTypeEnumeration.NONE.toString());
+
+		for (int i = 0; i < cboCollectionType.getItemCount(); i++) {
+			final String type = cboCollectionType.getItem(i);
+
+			if (type.equals(domainAttribute.getCollectionType().name())) {
+				cboCollectionType.select(i);
+				break;
+			}
+		}
+
 		// Add all Java types that are mapped to the attribute's database column type
 		for (final DBColumnType colType : project.getDatabase().getAllSupportedColumnTypes())
 			if (colType.getName().equalsIgnoreCase(domainAttribute.getColumn().getColumnType().getName())) {
 				final List<JavaType> types = colType.getJavaTypes();
 
 				// If the list of valid types contains type String we must add all existing Java enumerations
-				for (final JavaType type : types)
-					if (type.isString() && !domainAttribute.getDomainAttributeValidator().isNullable()) {
-						revEngModel.getEnumerations().forEach(obj -> types.add(obj.getJavaEnum()));
+				if (domainAttribute.getCollectionType() == CollectionTypeEnumeration.NONE) {
+					for (final JavaType type : types)
+						if (type.isString() && !domainAttribute.getDomainAttributeValidator().isNullable()) {
+							revEngModel.getEnumerations().forEach(obj -> types.add(obj.getJavaEnum()));
 
-						break;
-					}
+							break;
+						}
+				}
+				else if (domainAttribute.getCollectionMappingStrategy() == CollectionMappingStrategyEnumeration.CONVERTER)
+					types.add(domainAttribute.getJavaType());
 
 				cboType.setData(types);
 				cboType.setSelectedItem(domainAttribute.getJavaType());
@@ -431,6 +521,7 @@ public class EditDomainAttributeDialog extends CodeCadenzaDialog {
 		chkPastDate.setSelection(domainAttribute.getDomainAttributeValidator().isPastDate());
 		chkSetDateOnPersist.setSelection(domainAttribute.isSetDateOnPersist());
 		chkSetDateOnUpdate.setSelection(domainAttribute.isSetDateOnUpdate());
+		txtCollectionStrategy.setText(domainAttribute.getCollectionMappingStrategy().toString());
 		txtDBColumnName.setText(domainAttribute.getColumn().getName());
 		txtDBColumnType.setText(domainAttribute.getColumn().getColumnType().getName());
 
@@ -472,6 +563,7 @@ public class EditDomainAttributeDialog extends CodeCadenzaDialog {
 			chkSetDateOnUpdate.setEnabled(false);
 			cboTemporalType.setEnabled(false);
 			cboType.setEnabled(false);
+			cboCollectionType.setEnabled(false);
 		}
 
 		return panDialogArea;
@@ -686,6 +778,10 @@ public class EditDomainAttributeDialog extends CodeCadenzaDialog {
 	private boolean validateAndSaveInput() {
 		final IStatus status = EclipseIDEService.validateFieldName(txtName.getText());
 		final JavaType selType = cboType.getSelectedItem();
+		final CollectionTypeEnumeration collectionType = CollectionTypeEnumeration
+				.valueOf(cboCollectionType.getItem(cboCollectionType.getSelectionIndex()));
+		final CollectionMappingStrategyEnumeration selectedStrategy = CollectionMappingStrategyEnumeration
+				.valueOf(txtCollectionStrategy.getText());
 		Integer minLength = null;
 		Integer maxLength = null;
 
@@ -763,6 +859,8 @@ public class EditDomainAttributeDialog extends CodeCadenzaDialog {
 		domainAttribute.setUpdatable(chkUpdatable.getSelection());
 		domainAttribute.setTrackVersion(chkVersion.getSelection());
 		domainAttribute.setDisplayAttribute(chkDisplayAttribute.getSelection());
+		domainAttribute.setCollectionType(collectionType);
+		domainAttribute.setCollectionMappingStrategy(selectedStrategy);
 		domainAttribute.getDomainAttributeValidator().setFutureDate(chkFutureDate.getSelection());
 		domainAttribute.getDomainAttributeValidator().setNullable(chkNullable.getSelection());
 		domainAttribute.getDomainAttributeValidator().setPastDate(chkPastDate.getSelection());

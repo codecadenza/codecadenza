@@ -52,6 +52,7 @@ public class SeleniumFormPageObjectGenerator extends AbstractJavaSourceGenerator
 	private static final String GRID_PANEL_PREFIX = "gridPanel";
 	private static final String RESOURCE_PATH = "RESOURCE_PATH";
 	private static final String LIST_TYPE = "DualDataListComponent";
+	private static final String ELEMENT_COLLECTION_EDITOR_TYPE = "ElementCollectionEditorComponent";
 
 	private final Form form;
 	private final Project project;
@@ -135,13 +136,16 @@ public class SeleniumFormPageObjectGenerator extends AbstractJavaSourceGenerator
 				addPublicConstant(JavaType.STRING, fieldName, fieldValue).create();
 			});
 
-			// Create fields for all list fields of a single-record form
+			// Create fields for all list and element collection editor fields of a single-record form
 			for (final FormField field : form.getAllFormFields()) {
-				if (field.isHidden() || (field.getFieldType() != FormFieldTypeEnumeration.LIST
-						&& field.getFieldType() != FormFieldTypeEnumeration.SEARCHABLE_LIST))
+				if (field.isHidden())
 					continue;
 
-				addPrivateField(LIST_TYPE, field.getName()).withFinalModifier().create();
+				if (field.getFieldType() == FormFieldTypeEnumeration.LIST
+						|| field.getFieldType() == FormFieldTypeEnumeration.SEARCHABLE_LIST)
+					addPrivateField(LIST_TYPE, field.getName()).withFinalModifier().create();
+				else if (field.getFieldType() == FormFieldTypeEnumeration.ELEMENT_COLLECTION_EDITOR)
+					addPrivateField(ELEMENT_COLLECTION_EDITOR_TYPE, field.getName()).withFinalModifier().create();
 			}
 
 			// Create fields for all grid panels
@@ -226,11 +230,14 @@ public class SeleniumFormPageObjectGenerator extends AbstractJavaSourceGenerator
 		b.append("{\n");
 		b.append("super(testContext);\n");
 
-		// Initialize list fields of a single-record form
+		// Initialize list and element collection editor fields of a single-record form
 		for (final FormField field : form.getAllFormFields()) {
 			if (field.isHidden() || (field.getFieldType() != FormFieldTypeEnumeration.LIST
-					&& field.getFieldType() != FormFieldTypeEnumeration.SEARCHABLE_LIST))
+					&& field.getFieldType() != FormFieldTypeEnumeration.SEARCHABLE_LIST
+					&& field.getFieldType() != FormFieldTypeEnumeration.ELEMENT_COLLECTION_EDITOR))
 				continue;
+
+			final String fieldId = FIELD_ID_PREFIX + field.getName().toUpperCase();
 
 			if (firstField) {
 				b.append("\n");
@@ -238,14 +245,17 @@ public class SeleniumFormPageObjectGenerator extends AbstractJavaSourceGenerator
 				firstField = false;
 			}
 
-			final String fieldId = FIELD_ID_PREFIX + field.getName().toUpperCase();
+			if (field.getFieldType() == FormFieldTypeEnumeration.LIST
+					|| field.getFieldType() == FormFieldTypeEnumeration.SEARCHABLE_LIST) {
+				b.append(field.getName() + " = new " + LIST_TYPE + "(this, " + fieldId + ", ");
 
-			b.append(field.getName() + " = new " + LIST_TYPE + "(this, " + fieldId + ", ");
-
-			if (field.getFieldType() == FormFieldTypeEnumeration.LIST)
-				b.append("false");
-			else
-				b.append("true");
+				if (field.getFieldType() == FormFieldTypeEnumeration.LIST)
+					b.append("false");
+				else
+					b.append("true");
+			}
+			else if (field.getFieldType() == FormFieldTypeEnumeration.ELEMENT_COLLECTION_EDITOR)
+				b.append(field.getName() + " = new " + ELEMENT_COLLECTION_EDITOR_TYPE + "(this, " + fieldId);
 
 			b.append(");\n");
 		}
@@ -280,16 +290,23 @@ public class SeleniumFormPageObjectGenerator extends AbstractJavaSourceGenerator
 	@Override
 	protected void addMethods() {
 		if (formType != FormTypeEnumeration.SEARCHABLE_VIEW && formType != FormTypeEnumeration.SIMPLE_VIEW) {
-			// Add getters for all list fields
+			// Add getters for all list and element collection editor fields
 			for (final FormField field : form.getAllFormFields()) {
-				if (field.isHidden() || (field.getFieldType() != FormFieldTypeEnumeration.LIST
-						&& field.getFieldType() != FormFieldTypeEnumeration.SEARCHABLE_LIST))
+				if (field.isHidden())
 					continue;
 
-				final var comment = "the " + field.getDTOAttribute().getReferencedDTOBean().getDomainObject().getLabel()
-						+ " selection list field";
+				if (field.getFieldType() == FormFieldTypeEnumeration.LIST
+						|| field.getFieldType() == FormFieldTypeEnumeration.SEARCHABLE_LIST) {
+					final var comment = "the " + field.getDTOAttribute().getReferencedDTOBean().getDomainObject().getLabel()
+							+ " selection list field";
 
-				addGetter(LIST_TYPE, field.getName(), comment);
+					addGetter(LIST_TYPE, field.getName(), comment);
+				}
+				else if (field.getFieldType() == FormFieldTypeEnumeration.ELEMENT_COLLECTION_EDITOR) {
+					final var comment = "the element collection editor for the " + field.getDTOAttribute().getDomainAttribute().getLabel();
+
+					addGetter(ELEMENT_COLLECTION_EDITOR_TYPE, field.getName(), comment);
+				}
 			}
 
 			// Add getters for all grid panels

@@ -1251,7 +1251,8 @@ public class JavaFXSingleRecordFormGenerator extends AbstractSingleRecordFormGen
 					continue;
 
 				if (field.getFieldType() == FormFieldTypeEnumeration.SEARCHABLE_LIST
-						|| field.getFieldType() == FormFieldTypeEnumeration.LIST)
+						|| field.getFieldType() == FormFieldTypeEnumeration.LIST
+						|| field.getFieldType() == FormFieldTypeEnumeration.ELEMENT_COLLECTION_EDITOR)
 					listFieldCount++;
 				else
 					standardFieldCount++;

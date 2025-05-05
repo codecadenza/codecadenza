@@ -65,8 +65,6 @@ import org.eclipse.swt.widgets.Text;
  * @version 1.0.0
  */
 public class ListPreviewBuilder extends AbstractGUITestFieldPreviewBuilder {
-	private static final String ITEM_DELIMITER = ";";
-
 	private List listSelectedItems;
 	private List listExpectedItems;
 
@@ -392,18 +390,6 @@ public class ListPreviewBuilder extends AbstractGUITestFieldPreviewBuilder {
 				return element;
 			}
 		};
-	}
-
-	/**
-	 * Convert a String array into an internal list representation for a test data object
-	 * @param items
-	 * @return a string that can be used to fill respective test data fields. It will return null if the array is empty!
-	 */
-	private String convertArrayToItemString(String[] items) {
-		if (items == null || items.length == 0)
-			return null;
-
-		return Arrays.asList(items).stream().reduce((a, b) -> a + ITEM_DELIMITER + b).orElse(null);
 	}
 
 }

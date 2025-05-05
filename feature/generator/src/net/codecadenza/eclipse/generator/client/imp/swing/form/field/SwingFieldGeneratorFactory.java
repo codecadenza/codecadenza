@@ -91,6 +91,8 @@ public class SwingFieldGeneratorFactory {
 			fieldGenerator = new SwingIntLinkFieldGenerator(field, formGenerator);
 		else if (type == FormFieldTypeEnumeration.SELECTION_BY_CLIENT)
 			fieldGenerator = new SwingSelectionByClientFieldGenerator(field, formGenerator);
+		else if (type == FormFieldTypeEnumeration.ELEMENT_COLLECTION_EDITOR)
+			fieldGenerator = new SwingElementCollectionEditorFieldGenerator(field, formGenerator);
 		else
 			throw new IllegalStateException("A generator for the form field type '" + type + "' is not available!");
 

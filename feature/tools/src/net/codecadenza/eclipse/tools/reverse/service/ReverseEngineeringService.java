@@ -22,8 +22,10 @@
 package net.codecadenza.eclipse.tools.reverse.service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import net.codecadenza.eclipse.model.db.DBColumn;
 import net.codecadenza.eclipse.model.db.DBColumnType;
@@ -36,6 +38,8 @@ import net.codecadenza.eclipse.model.db.PrimaryKey;
 import net.codecadenza.eclipse.model.domain.AbstractDomainAssociation;
 import net.codecadenza.eclipse.model.domain.AssociationTagEnumeration;
 import net.codecadenza.eclipse.model.domain.AttributeTagEnumeration;
+import net.codecadenza.eclipse.model.domain.CollectionMappingStrategyEnumeration;
+import net.codecadenza.eclipse.model.domain.CollectionTypeEnumeration;
 import net.codecadenza.eclipse.model.domain.DomainAttribute;
 import net.codecadenza.eclipse.model.domain.DomainAttributeValidator;
 import net.codecadenza.eclipse.model.domain.DomainFactory;
@@ -59,8 +63,8 @@ import net.codecadenza.eclipse.tools.reverse.model.RevEngDomainObject;
 import net.codecadenza.eclipse.tools.reverse.model.RevEngEnum;
 import net.codecadenza.eclipse.tools.reverse.model.ReverseEngineeringConfig;
 import net.codecadenza.eclipse.tools.reverse.model.ReverseEngineeringLogEntry;
-import net.codecadenza.eclipse.tools.reverse.model.ReverseEngineeringModel;
 import net.codecadenza.eclipse.tools.reverse.model.ReverseEngineeringLogEntry.Status;
+import net.codecadenza.eclipse.tools.reverse.model.ReverseEngineeringModel;
 import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.emf.transaction.RecordingCommand;
 import org.eclipse.emf.transaction.TransactionalEditingDomain;
@@ -86,6 +90,7 @@ public class ReverseEngineeringService {
 	private final Project project;
 	private final Database sourceDBModel;
 	private final List<DBTable> manyToManyTables = new ArrayList<>();
+	private final List<DBTable> elementCollectionTables = new ArrayList<>();
 	private final List<ReverseEngineeringLogEntry> logEntries = new ArrayList<>();
 	private final Namespace defaultNamespace;
 	private ReverseEngineeringModel revEngModel = new ReverseEngineeringModel();
@@ -130,7 +135,7 @@ public class ReverseEngineeringService {
 					existingTable -> existingTable.getName() != null && existingTable.getConvertedName().equals(table.getConvertedName()));
 
 			// Check if the table represents an association table for a many-to-many association
-			if (isManyToManyAssoc(table))
+			if (isManyToManyAssoc(table) || isElementCollectionTable(table))
 				continue;
 
 			if (table.getPrimaryKey() == null) {
@@ -157,6 +162,9 @@ public class ReverseEngineeringService {
 		// Initialize all many-to-many associations
 		initManyToManyAssociations();
 
+		// Initialize all element collections
+		initElementCollections();
+
 		return revEngModel;
 	}
 
@@ -167,6 +175,8 @@ public class ReverseEngineeringService {
 	 */
 	public List<ReverseEngineeringLogEntry> saveDomainModel(ReverseEngineeringModel revEngModel) {
 		this.revEngModel = revEngModel;
+
+		final Map<DBTable, String> collectionTables = new HashMap<>();
 
 		for (final RevEngDomainObject obj : revEngModel.getDomainObjects()) {
 			final DomainObject domainObject = obj.getDomainObject();
@@ -187,6 +197,29 @@ public class ReverseEngineeringService {
 				attr.setDomainObject(domainObject);
 
 				domainObject.getAttributes().add(attr);
+
+				if (attrObj.getDomainAttribute().getCollectionTable() != null) {
+					final DBTable actualTable = attr.getCollectionTable();
+					final DBTable newTable = actualTable.copyTableToDatabase(project.getDatabase());
+
+					for (final DBColumn col : newTable.getColumns()) {
+						boolean usedInForeignKey = false;
+
+						for (final ForeignKey foreignKey : newTable.getForeignKeys())
+							if (foreignKey.getColumn().equals(col)) {
+								usedInForeignKey = true;
+								break;
+							}
+
+						// Use the first column that isn't used by a foreign key!
+						if (!usedInForeignKey) {
+							attr.setColumn(col);
+							break;
+						}
+					}
+
+					collectionTables.put(newTable, obj.getNamespaceName());
+				}
 			}
 
 			// Add the associations to the respective domain object
@@ -243,8 +276,12 @@ public class ReverseEngineeringService {
 			final DomainObject domainObject = revEngObject.getDomainObject();
 			final DBTable dbTable = domainObject.getDatabaseTable();
 
-			domainObject.getAttributes()
-					.forEach(attr -> attr.setColumn(dbTable.getColumnByConvertedName(attr.getColumn().getConvertedName())));
+			domainObject.getAttributes().forEach(attr -> {
+				if (attr.getCollectionTable() != null)
+					attr.setColumn(attr.getCollectionTable().getColumnByConvertedName(attr.getColumn().getConvertedName()));
+				else
+					attr.setColumn(dbTable.getColumnByConvertedName(attr.getColumn().getConvertedName()));
+			});
 
 			domainObject.getAssociations().forEach(assoc -> {
 				if (assoc instanceof final ManyToOneAssociation mto)
@@ -345,6 +382,15 @@ public class ReverseEngineeringService {
 			 */
 			@Override
 			protected void doExecute() {
+				for (final Map.Entry<DBTable, String> entry : collectionTables.entrySet()) {
+					for (final Namespace existingNamespace : project.getDomainNamespace().getChildNamespaces())
+						if (existingNamespace.getName().equals(entry.getValue())) {
+							final var namespace = (DomainNamespace) existingNamespace;
+							namespace.eResource().getContents().add(entry.getKey());
+							break;
+						}
+				}
+
 				// Add the domain objects to the namespaces they belong to
 				for (final RevEngDomainObject revEngObject : revEngModel.getDomainObjects()) {
 					if (!revEngObject.isCreatedByReverseEngineering())
@@ -580,6 +626,23 @@ public class ReverseEngineeringService {
 			manyToManyTables.add(table);
 
 		return createManyToMany;
+	}
+
+	/**
+	 * @param table
+	 * @return true if it is likely that the given table represents an element collection table
+	 */
+	private boolean isElementCollectionTable(DBTable table) {
+		boolean createElementCollectionTable = false;
+
+		// An element collection table must not have a primary key as it could also be a table for a simple domain object!
+		if (table.getPrimaryKey() == null && table.getColumns().size() == 2 && table.getForeignKeys().size() == 1)
+			createElementCollectionTable = true;
+
+		if (createElementCollectionTable)
+			elementCollectionTables.add(table);
+
+		return createElementCollectionTable;
 	}
 
 	/**
@@ -1046,6 +1109,78 @@ public class ReverseEngineeringService {
 			addLog("New many-to-many association '" + mtmOwner.getName() + "' initialized!", Status.INFO);
 			addLog("New many-to-many association '" + mtmReverse.getName() + "' initialized!", Status.INFO);
 		}
+	}
+
+	/**
+	 * Initialize all element collection attributes
+	 */
+	private void initElementCollections() {
+		elementCollectionTables.forEach(this::initElementCollection);
+	}
+
+	/**
+	 * Try to create a domain attribute based on the given element collection table
+	 * @param elementCollectionTable
+	 */
+	private void initElementCollection(DBTable elementCollectionTable) {
+		RevEngDomainObject revEngObj = null;
+		DomainObject domainObject = null;
+		DBColumn valueColumn = null;
+
+		if (!initColumnTypes(elementCollectionTable))
+			return;
+
+		for (final DBColumn column : elementCollectionTable.getColumns()) {
+			boolean usedByForeignKey = false;
+
+			for (final ForeignKey foreignKey : elementCollectionTable.getForeignKeys()) {
+				if (foreignKey.getColumn().equals(column)) {
+					usedByForeignKey = true;
+					domainObject = getAssociationTarget(elementCollectionTable, foreignKey.getColumn());
+					break;
+				}
+			}
+
+			if (!usedByForeignKey) {
+				valueColumn = column;
+				break;
+			}
+		}
+
+		if (domainObject != null)
+			revEngObj = revEngModel.searchRevEngObjectByDomainObject(domainObject);
+
+		if (valueColumn == null || revEngObj == null)
+			return;
+
+		final DomainAttribute attr = DomainFactory.eINSTANCE.createDomainAttribute();
+		attr.setInsertable(true);
+		attr.setUpdatable(true);
+		attr.setName(convertToJavaName(valueColumn.getName(), false, false));
+		attr.setColumn(valueColumn);
+		attr.setLabel(EclipseIDEService.buildDefaultLabel(attr.getName()));
+		attr.setLabelPlural(attr.getLabel());
+		attr.setPersistent(true);
+		attr.setTag(AttributeTagEnumeration.NONE);
+		attr.setJavaType(getJavaTypeForColumn(valueColumn));
+		attr.setFetchTypeEager(true);
+		attr.setCollectionType(CollectionTypeEnumeration.LIST);
+		attr.setCollectionMappingStrategy(CollectionMappingStrategyEnumeration.TABLE);
+
+		final DomainAttributeValidator validator = DomainFactory.eINSTANCE.createDomainAttributeValidator();
+		validator.setRegularExpression("");
+		validator.setMinValue("");
+		validator.setMaxValue("");
+
+		if (valueColumn.getLength() > 0)
+			validator.setMaxLength(valueColumn.getLength());
+
+		attr.setDomainAttributeValidator(validator);
+
+		if (!revEngObj.isCreatedByReverseEngineering())
+			addLog("New attribute '" + attr.getName() + "' initialized!", Status.INFO);
+
+		revEngObj.addAttribute(attr, true);
 	}
 
 	/**

@@ -533,11 +533,25 @@ public interface DomainPackage extends EPackage {
 	int DOMAIN_ATTRIBUTE__CONVERT_TO_LOWER_CASE = 23;
 
 	/**
+	 * The feature ID for the '<em><b>Collection Type</b></em>' attribute
+	 * @generated
+	 * @ordered
+	 */
+	int DOMAIN_ATTRIBUTE__COLLECTION_TYPE = 24;
+
+	/**
+	 * The feature ID for the '<em><b>Collection Mapping Strategy</b></em>' attribute
+	 * @generated
+	 * @ordered
+	 */
+	int DOMAIN_ATTRIBUTE__COLLECTION_MAPPING_STRATEGY = 25;
+
+	/**
 	 * The number of structural features of the '<em>Domain Attribute</em>' class
 	 * @generated
 	 * @ordered
 	 */
-	int DOMAIN_ATTRIBUTE_FEATURE_COUNT = 24;
+	int DOMAIN_ATTRIBUTE_FEATURE_COUNT = 26;
 
 	/**
 	 * The meta object ID for the '{@link net.codecadenza.eclipse.model.domain.impl.DomainAttributeValidatorImpl <em>Attribute
@@ -1332,6 +1346,24 @@ public interface DomainPackage extends EPackage {
 	int ASSOCIATION_TAG_ENUMERATION = 18;
 
 	/**
+	 * The meta object ID for the '{@link net.codecadenza.eclipse.model.domain.CollectionTypeEnumeration <em>Collection Type
+	 * Enumeration</em>}' enum
+	 * @see net.codecadenza.eclipse.model.domain.CollectionTypeEnumeration
+	 * @see net.codecadenza.eclipse.model.domain.impl.DomainPackageImpl#getCollectionTypeEnumeration()
+	 * @generated
+	 */
+	int COLLECTION_TYPE_ENUMERATION = 19;
+
+	/**
+	 * The meta object ID for the '{@link net.codecadenza.eclipse.model.domain.CollectionMappingStrategyEnumeration <em>Collection
+	 * Mapping Strategy Enumeration</em>}' enum
+	 * @see net.codecadenza.eclipse.model.domain.CollectionMappingStrategyEnumeration
+	 * @see net.codecadenza.eclipse.model.domain.impl.DomainPackageImpl#getCollectionMappingStrategyEnumeration()
+	 * @generated
+	 */
+	int COLLECTION_MAPPING_STRATEGY_ENUMERATION = 20;
+
+	/**
 	 * Return the meta object for class '{@link net.codecadenza.eclipse.model.domain.AbstractDomainAssociation <em>Abstract Domain
 	 * Association</em>}'
 	 * @return the meta object for class '<em>Abstract Domain Association</em>'
@@ -1913,6 +1945,27 @@ public interface DomainPackage extends EPackage {
 	EAttribute getDomainAttribute_ConvertToLowerCase();
 
 	/**
+	 * Return the meta object for the attribute '{@link net.codecadenza.eclipse.model.domain.DomainAttribute#getCollectionType
+	 * <em>Collection Type</em>}'
+	 * @return the meta object for the attribute '<em>Collection Type</em>'
+	 * @see net.codecadenza.eclipse.model.domain.DomainAttribute#getCollectionType()
+	 * @see #getDomainAttribute()
+	 * @generated
+	 */
+	EAttribute getDomainAttribute_CollectionType();
+
+	/**
+	 * Return the meta object for the attribute
+	 * '{@link net.codecadenza.eclipse.model.domain.DomainAttribute#getCollectionMappingStrategy <em>Collection Mapping
+	 * Strategy</em>}'
+	 * @return the meta object for the attribute '<em>Collection Mapping Strategy</em>'
+	 * @see net.codecadenza.eclipse.model.domain.DomainAttribute#getCollectionMappingStrategy()
+	 * @see #getDomainAttribute()
+	 * @generated
+	 */
+	EAttribute getDomainAttribute_CollectionMappingStrategy();
+
+	/**
 	 * Return the meta object for class '{@link net.codecadenza.eclipse.model.domain.DomainAttributeValidator <em>Attribute
 	 * Validator</em>}'
 	 * @return the meta object for class '<em>Attribute Validator</em>'
@@ -2321,6 +2374,24 @@ public interface DomainPackage extends EPackage {
 	EEnum getAssociationTagEnumeration();
 
 	/**
+	 * Return the meta object for enum '{@link net.codecadenza.eclipse.model.domain.CollectionTypeEnumeration <em>Collection Type
+	 * Enumeration</em>}'
+	 * @return the meta object for enum '<em>Collection Type Enumeration</em>'
+	 * @see net.codecadenza.eclipse.model.domain.CollectionTypeEnumeration
+	 * @generated
+	 */
+	EEnum getCollectionTypeEnumeration();
+
+	/**
+	 * Return the meta object for enum '{@link net.codecadenza.eclipse.model.domain.CollectionMappingStrategyEnumeration
+	 * <em>Collection Mapping Strategy Enumeration</em>}'
+	 * @return the meta object for enum '<em>Collection Mapping Strategy Enumeration</em>'
+	 * @see net.codecadenza.eclipse.model.domain.CollectionMappingStrategyEnumeration
+	 * @generated
+	 */
+	EEnum getCollectionMappingStrategyEnumeration();
+
+	/**
 	 * @return the factory that creates the instances of the model
 	 * @generated
 	 */
@@ -2700,6 +2771,18 @@ public interface DomainPackage extends EPackage {
 		EAttribute DOMAIN_ATTRIBUTE__CONVERT_TO_LOWER_CASE = eINSTANCE.getDomainAttribute_ConvertToLowerCase();
 
 		/**
+		 * The meta object literal for the '<em><b>Collection Type</b></em>' attribute feature
+		 * @generated
+		 */
+		EAttribute DOMAIN_ATTRIBUTE__COLLECTION_TYPE = eINSTANCE.getDomainAttribute_CollectionType();
+
+		/**
+		 * The meta object literal for the '<em><b>Collection Mapping Strategy</b></em>' attribute feature
+		 * @generated
+		 */
+		EAttribute DOMAIN_ATTRIBUTE__COLLECTION_MAPPING_STRATEGY = eINSTANCE.getDomainAttribute_CollectionMappingStrategy();
+
+		/**
 		 * The meta object literal for the '{@link net.codecadenza.eclipse.model.domain.impl.DomainAttributeValidatorImpl
 		 * <em>Attribute Validator</em>}' class
 		 * @see net.codecadenza.eclipse.model.domain.impl.DomainAttributeValidatorImpl
@@ -3004,6 +3087,24 @@ public interface DomainPackage extends EPackage {
 		 * @generated
 		 */
 		EEnum ASSOCIATION_TAG_ENUMERATION = eINSTANCE.getAssociationTagEnumeration();
+
+		/**
+		 * The meta object literal for the '{@link net.codecadenza.eclipse.model.domain.CollectionTypeEnumeration <em>Collection Type
+		 * Enumeration</em>}' enum
+		 * @see net.codecadenza.eclipse.model.domain.CollectionTypeEnumeration
+		 * @see net.codecadenza.eclipse.model.domain.impl.DomainPackageImpl#getCollectionTypeEnumeration()
+		 * @generated
+		 */
+		EEnum COLLECTION_TYPE_ENUMERATION = eINSTANCE.getCollectionTypeEnumeration();
+
+		/**
+		 * The meta object literal for the '{@link net.codecadenza.eclipse.model.domain.CollectionMappingStrategyEnumeration
+		 * <em>Collection Mapping Strategy Enumeration</em>}' enum
+		 * @see net.codecadenza.eclipse.model.domain.CollectionMappingStrategyEnumeration
+		 * @see net.codecadenza.eclipse.model.domain.impl.DomainPackageImpl#getCollectionMappingStrategyEnumeration()
+		 * @generated
+		 */
+		EEnum COLLECTION_MAPPING_STRATEGY_ENUMERATION = eINSTANCE.getCollectionMappingStrategyEnumeration();
 
 	}
 

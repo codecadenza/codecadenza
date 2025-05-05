@@ -33,6 +33,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import net.codecadenza.eclipse.model.domain.AbstractDomainAssociation;
+import net.codecadenza.eclipse.model.domain.CollectionTypeEnumeration;
 import net.codecadenza.eclipse.model.domain.DomainAttribute;
 import net.codecadenza.eclipse.model.domain.DomainObject;
 import net.codecadenza.eclipse.model.domain.ManyToManyAssociation;
@@ -477,7 +478,8 @@ public class DomainObjectTreePanel extends Composite {
 			var itemText = "";
 
 			if (mode == Mode.VIEW || mode == Mode.GRID || mode == Mode.TREE) {
-				if (attr.isLob() || !attr.isPersistent())
+				if (attr.isLob() || !attr.isPersistent()
+						|| (mode != Mode.TREE && attr.getCollectionType() != CollectionTypeEnumeration.NONE))
 					continue;
 
 				if (parentItem.getData() instanceof AbstractDomainAssociation) {
@@ -487,10 +489,10 @@ public class DomainObjectTreePanel extends Composite {
 				else
 					itemText = AssociationHelper.INITIAL_ALIAS + "." + attr.getName();
 
-				itemText += " (" + attr.getJavaType().getName() + ")";
+				itemText += " (" + attr.getTypeName() + ")";
 			}
 			else
-				itemText = attr.getJavaType().getName() + " " + attr.getName();
+				itemText = attr.getTypeName() + " " + attr.getName();
 
 			final var item = new TreeItem(parentItem, SWT.NONE);
 			item.setText(itemText);

@@ -190,7 +190,15 @@ public enum FormFieldTypeEnumeration implements Enumerator {
 	 * @generated
 	 * @ordered
 	 */
-	SELECTION_BY_CLIENT(19, "SELECTION_BY_CLIENT", "SELECTION_BY_CLIENT");
+	SELECTION_BY_CLIENT(19, "SELECTION_BY_CLIENT", "SELECTION_BY_CLIENT"),
+
+	/**
+	 * The '<em><b>ELEMENT COLLECTION EDITOR</b></em>' literal object
+	 * @see #ELEMENT_COLLECTION_EDITOR_VALUE
+	 * @generated
+	 * @ordered
+	 */
+	ELEMENT_COLLECTION_EDITOR(20, "ELEMENT_COLLECTION_EDITOR", "ELEMENT_COLLECTION_EDITOR");
 
 	/**
 	 * The '<em><b>SIMPLE TEXT</b></em>' literal value
@@ -373,12 +381,22 @@ public enum FormFieldTypeEnumeration implements Enumerator {
 	public static final int SELECTION_BY_CLIENT_VALUE = 19;
 
 	/**
+	 * The '<em><b>ELEMENT COLLECTION EDITOR</b></em>' literal value
+	 * @see #ELEMENT_COLLECTION_EDITOR
+	 * @model
+	 * @generated
+	 * @ordered
+	 */
+	public static final int ELEMENT_COLLECTION_EDITOR_VALUE = 20;
+
+	/**
 	 * An array of all the '<em><b>Form Field Type Enumeration</b></em>' enumerators
 	 * @generated
 	 */
 	private static final FormFieldTypeEnumeration[] VALUES_ARRAY = { SIMPLE_TEXT, LABEL, CHECKBOX, DATE_TIME, MULTI_LINE_TEXT,
 			COMBOBOX, LOV, DATE, LIST, SEARCHABLE_LIST, SELECTION_BY_PARENT_FORM, SELECTION_BY_SECURITY_DTO, PROPOSAL_TEXT,
-			ENUM_COMBOBOX, DOCUMENT_SIZE_FIELD, MULTI_LINE_LABEL, WEB_LINK, MAIL_LINK, FORM_LINK, SELECTION_BY_CLIENT };
+			ENUM_COMBOBOX, DOCUMENT_SIZE_FIELD, MULTI_LINE_LABEL, WEB_LINK, MAIL_LINK, FORM_LINK, SELECTION_BY_CLIENT,
+			ELEMENT_COLLECTION_EDITOR };
 
 	/**
 	 * A public read-only list of all the '<em><b>Form Field Type Enumeration</b></em>' enumerators
@@ -451,6 +469,8 @@ public enum FormFieldTypeEnumeration implements Enumerator {
 				return FORM_LINK;
 			case SELECTION_BY_CLIENT_VALUE:
 				return SELECTION_BY_CLIENT;
+			case ELEMENT_COLLECTION_EDITOR_VALUE:
+				return ELEMENT_COLLECTION_EDITOR;
 		}
 
 		return null;

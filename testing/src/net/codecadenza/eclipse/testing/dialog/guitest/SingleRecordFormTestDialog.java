@@ -29,7 +29,10 @@ import net.codecadenza.eclipse.testing.dialog.AbstractDialog;
 import net.codecadenza.eclipse.testing.domain.AssociationType;
 import net.codecadenza.eclipse.testing.domain.DomainAttribute;
 import net.codecadenza.eclipse.testing.domain.DomainObject;
+import net.codecadenza.eclipse.testing.domain.ElementCollectionType;
+import net.codecadenza.eclipse.testing.domain.FormType;
 import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
+import org.eclipse.swtbot.swt.finder.widgets.SWTBotText;
 
 /**
  * <p>
@@ -50,19 +53,24 @@ public class SingleRecordFormTestDialog extends AbstractDialog {
 	private static final String DEFAULT_INTEGER = "1";
 	private static final String DEFAULT_ITEM = "item";
 	private static final String DEFAULT_NUMBER = "1.0";
+	private static final String LBL_ELEMENT_COLLECTION_EDITOR_CHECK = "Value for an expected element";
+	private static final String LBL_ELEMENT_COLLECTION_EDITOR_ADD = "Value for a new element";
 
 	private final DomainObject domainObject;
+	private final FormType formType;
 
 	/**
 	 * Constructor
 	 * @param bot
 	 * @param domainObject
 	 * @param title
+	 * @param formType
 	 */
-	public SingleRecordFormTestDialog(SWTWorkbenchBot bot, DomainObject domainObject, String title) {
+	public SingleRecordFormTestDialog(SWTWorkbenchBot bot, DomainObject domainObject, String title, FormType formType) {
 		super(bot, title);
 
 		this.domainObject = domainObject;
+		this.formType = formType;
 	}
 
 	/*
@@ -73,37 +81,32 @@ public class SingleRecordFormTestDialog extends AbstractDialog {
 	public void enterData() {
 		for (final DomainAttribute attribute : domainObject.getAllAttributes()) {
 			final var fieldLabel = createFieldLabel(attribute.getName());
+			final var typeName = attribute.getTypeName();
+			final var defaultValue = getDefaultValue(attribute.getType());
 
-			if (attribute.getType().equals(DomainAttribute.TYPE_STRING)) {
-				final var txtField = bot.textWithLabel(fieldLabel);
-				txtField.typeText(DEFAULT_TEXT);
+			// It is assumed that fields mapped to auto-generated primary key attributes aren't visible
+			if (defaultValue == null
+					|| (typeName.equals(DomainAttribute.TYPE_LONG) && attribute.isPrimaryKey() && formType == FormType.CREATE))
+				continue;
+
+			if (attribute.getElementCollectionType() != ElementCollectionType.NONE) {
+				final SWTBotText txtField;
+
+				if (formType == FormType.READONLY)
+					txtField = bot.textWithLabel(LBL_ELEMENT_COLLECTION_EDITOR_CHECK);
+				else
+					txtField = bot.textWithLabel(LBL_ELEMENT_COLLECTION_EDITOR_ADD);
+
+				txtField.typeText(defaultValue);
+				bot.button(CMD_ADD).click();
 			}
-			else if (attribute.getType().equals(DomainAttribute.TYPE_LONG) && !attribute.isPrimaryKey()) {
-				final var txtField = bot.textWithLabel(fieldLabel);
-				txtField.typeText(DEFAULT_INTEGER);
-			}
-			else if (attribute.getType().equals(DomainAttribute.TYPE_DOUBLE)
-					|| attribute.getType().equals(DomainAttribute.TYPE_BIG_DECIMAL)) {
-				final var txtField = bot.textWithLabel(fieldLabel);
-				txtField.typeText(DEFAULT_NUMBER);
-			}
-			else if (attribute.getType().equals(DomainAttribute.TYPE_BOOLEAN)) {
+			else if (typeName.equals(DomainAttribute.TYPE_BOOLEAN)) {
 				final var cboField = bot.comboBoxWithLabel(fieldLabel);
-				cboField.setSelection(Boolean.TRUE.toString());
+				cboField.setSelection(defaultValue);
 			}
-			else if (attribute.getType().equals(DomainAttribute.TYPE_LOCAL_DATE)) {
+			else {
 				final var txtField = bot.textWithLabel(fieldLabel);
-				txtField.typeText(DATE_FORMATTER.format(Instant.now()));
-			}
-			else if (attribute.getType().equals(DomainAttribute.TYPE_UUID)) {
-				final var txtField = bot.textWithLabel(fieldLabel);
-				txtField.typeText(UUID.randomUUID().toString());
-			}
-			else if (attribute.getType().equals(DomainAttribute.TYPE_DATE)
-					|| attribute.getType().equals(DomainAttribute.TYPE_LOCAL_DATE_TIME)
-					|| attribute.getType().equals(DomainAttribute.TYPE_CALENDAR)) {
-				final var txtField = bot.textWithLabel(fieldLabel);
-				txtField.typeText(DATE_TIME_FORMATTER.format(Instant.now()));
+				txtField.typeText(defaultValue);
 			}
 		}
 
@@ -135,6 +138,31 @@ public class SingleRecordFormTestDialog extends AbstractDialog {
 	 */
 	private String createFieldLabel(String name) {
 		return name.substring(0, 1).toUpperCase() + name.substring(1) + " :";
+	}
+
+	/**
+	 * Get the default value that should be entered into a field
+	 * @param typeName
+	 * @return the default value or null if the field should not be set (e.g. in the case of an enumeration)
+	 */
+	private String getDefaultValue(String typeName) {
+		if (typeName.equals(DomainAttribute.TYPE_STRING))
+			return DEFAULT_TEXT;
+		else if (typeName.equals(DomainAttribute.TYPE_LONG))
+			return DEFAULT_INTEGER;
+		else if (typeName.equals(DomainAttribute.TYPE_DOUBLE) || typeName.equals(DomainAttribute.TYPE_BIG_DECIMAL))
+			return DEFAULT_NUMBER;
+		else if (typeName.equals(DomainAttribute.TYPE_LOCAL_DATE))
+			return DATE_FORMATTER.format(Instant.now());
+		else if (typeName.equals(DomainAttribute.TYPE_DATE) || typeName.equals(DomainAttribute.TYPE_LOCAL_DATE_TIME)
+				|| typeName.equals(DomainAttribute.TYPE_CALENDAR))
+			return DATE_TIME_FORMATTER.format(Instant.now());
+		else if (typeName.equals(DomainAttribute.TYPE_UUID))
+			return UUID.randomUUID().toString();
+		else if (typeName.equals(DomainAttribute.TYPE_BOOLEAN))
+			return Boolean.TRUE.toString();
+
+		return null;
 	}
 
 }

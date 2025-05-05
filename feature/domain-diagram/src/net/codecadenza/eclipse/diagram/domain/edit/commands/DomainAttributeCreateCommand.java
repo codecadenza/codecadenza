@@ -29,11 +29,13 @@ import net.codecadenza.eclipse.diagram.domain.part.CodeCadenzaDiagramEditorPlugi
 import net.codecadenza.eclipse.model.db.DBColumn;
 import net.codecadenza.eclipse.model.db.DBIndex;
 import net.codecadenza.eclipse.model.db.DBTable;
+import net.codecadenza.eclipse.model.db.Database;
 import net.codecadenza.eclipse.model.db.DbFactory;
 import net.codecadenza.eclipse.model.db.PrimaryKey;
 import net.codecadenza.eclipse.model.domain.AbstractDomainAssociation;
 import net.codecadenza.eclipse.model.domain.AssociationTagEnumeration;
 import net.codecadenza.eclipse.model.domain.AttributeTagEnumeration;
+import net.codecadenza.eclipse.model.domain.CollectionMappingStrategyEnumeration;
 import net.codecadenza.eclipse.model.domain.DomainAttribute;
 import net.codecadenza.eclipse.model.domain.DomainInheritance;
 import net.codecadenza.eclipse.model.domain.DomainObject;
@@ -44,6 +46,7 @@ import net.codecadenza.eclipse.model.project.Project;
 import net.codecadenza.eclipse.service.domain.DomainObjectService;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.gmf.runtime.emf.type.core.commands.CreateElementCommand;
 import org.eclipse.gmf.runtime.emf.type.core.requests.CreateElementRequest;
 import org.eclipse.gmf.runtime.notation.View;
@@ -112,7 +115,12 @@ public class DomainAttributeCreateCommand extends CreateElementCommand {
 		attribute = dlg.getDomainAttribute();
 
 		try {
-			initAttribute(attribute, dlg.isUnique());
+			if (attribute.getCollectionMappingStrategy() != CollectionMappingStrategyEnumeration.TABLE)
+				initAttribute(attribute, dlg.isUnique());
+			else
+				initCollectionTable(attribute, dlg.getCollectionTableName(), dlg.isUnique());
+
+			attribute.getDomainObject().getAttributes().add(attribute);
 		}
 		catch (final Exception e) {
 			CodeCadenzaDiagramEditorPlugin.getInstance().handleInternalError(e);
@@ -132,80 +140,80 @@ public class DomainAttributeCreateCommand extends CreateElementCommand {
 	}
 
 	/**
-	 * @param att
+	 * @param attr
 	 * @param addUniqueKey
 	 */
-	private void initAttribute(DomainAttribute att, boolean addUniqueKey) {
+	private void initAttribute(DomainAttribute attr, boolean addUniqueKey) {
 		final Shell shell = Display.getCurrent().getActiveShell();
 
 		// Check if the attribute may be added!
-		for (final DomainAttribute a : att.getDomainObject().getAllAttributes()) {
-			if (a.equals(att))
+		for (final DomainAttribute a : attr.getDomainObject().getAllAttributes()) {
+			if (a.equals(attr))
 				continue;
 
-			if (att.isPk() && a.isPk())
+			if (attr.isPk() && a.isPk())
 				throw new IllegalStateException("A primary key attribute ('" + a.getName() + "') already exists!");
 
-			if (att.isDisplayAttribute() && a.isDisplayAttribute())
+			if (attr.isDisplayAttribute() && a.isDisplayAttribute())
 				throw new IllegalStateException("A display attribute ('" + a.getName() + "') already exists!");
 
-			if (a.getName().equals(att.getName()))
+			if (a.getName().equals(attr.getName()))
 				throw new IllegalStateException("An attribute with the same name already exists!");
 		}
 
-		for (final AbstractDomainAssociation assoc : att.getDomainObject().getAllAssociations())
-			if (assoc.getName().equals(att.getName()))
+		for (final AbstractDomainAssociation assoc : attr.getDomainObject().getAllAssociations())
+			if (assoc.getName().equals(attr.getName()))
 				throw new IllegalStateException("An association with the same name already exists!");
 
-		if (att.isPersistent()) {
-			DBTable table = att.getDomainObject().getDatabaseTable();
+		if (attr.isPersistent()) {
+			DBTable table = attr.getDomainObject().getDatabaseTable();
 
-			if (table == null && att.getDomainObject().getParent() != null)
-				table = att.getDomainObject().getRootParentDomainObject(false).getDatabaseTable();
+			if (table == null && attr.getDomainObject().getParent() != null)
+				table = attr.getDomainObject().getRootParentDomainObject(false).getDatabaseTable();
 
 			// Set the proper database table
-			att.getColumn().setDatabaseTable(table);
+			attr.getColumn().setDatabaseTable(table);
 
-			if (att.getDomainObject().getParent() != null
-					&& !att.getDomainObject().equals(att.getDomainObject().getRootParentDomainObject(false))
-					&& att.getDomainObject().getInheritanceType() == InheritanceTypeEnumeration.SINGLE_TABLE)
-				att.getColumn().setNullable(true);
+			if (attr.getDomainObject().getParent() != null
+					&& !attr.getDomainObject().equals(attr.getDomainObject().getRootParentDomainObject(false))
+					&& attr.getDomainObject().getInheritanceType() == InheritanceTypeEnumeration.SINGLE_TABLE)
+				attr.getColumn().setNullable(true);
 
 			// Add a primary key if necessary
-			if (att.isPk()) {
+			if (attr.isPk()) {
 				final PrimaryKey pk = DbFactory.eINSTANCE.createPrimaryKey();
-				pk.setColumn(att.getColumn());
+				pk.setColumn(attr.getColumn());
 				pk.setTable(table);
 				pk.setName(DB_PRIMARY_KEY_PREFIX + table.getName());
 
 				table.setPrimaryKey(pk);
 			}
 			else
-				att.setPk(false);
+				attr.setPk(false);
 
 			// Add a unique key if necessary
 			if (addUniqueKey) {
-				final var keyName = DB_UNIQUE_KEY_PREFIX + table.getShortTableName() + "_" + att.getColumn().getName();
+				final var keyName = DB_UNIQUE_KEY_PREFIX + table.getShortTableName() + "_" + attr.getColumn().getName();
 
 				final DBIndex index = DbFactory.eINSTANCE.createDBIndex();
 				index.setName(keyName);
-				index.getColumns().add(att.getColumn());
+				index.getColumns().add(attr.getColumn());
 				index.setUnique(true);
 				index.setTable(table);
 
 				table.getIndexes().add(index);
 			}
 
-			if (att.getTag() == AttributeTagEnumeration.CLIENT_DISPLAY) {
+			if (attr.getTag() == AttributeTagEnumeration.CLIENT_DISPLAY) {
 				// If the domain object directly references the client domain object a unique key can be added!
-				for (final AbstractDomainAssociation assoc : att.getDomainObject().getAssociations())
+				for (final AbstractDomainAssociation assoc : attr.getDomainObject().getAssociations())
 					if (assoc instanceof final ManyToOneAssociation mto && assoc.getTag() == AssociationTagEnumeration.CLIENT_REFERENCE) {
-						final var keyName = DB_UNIQUE_KEY_PREFIX + table.getShortTableName() + "_" + att.getColumn().getName() + "_"
+						final var keyName = DB_UNIQUE_KEY_PREFIX + table.getShortTableName() + "_" + attr.getColumn().getName() + "_"
 								+ mto.getColumn().getName();
 
 						final DBIndex index = DbFactory.eINSTANCE.createDBIndex();
 						index.setName(keyName);
-						index.getColumns().add(att.getColumn());
+						index.getColumns().add(attr.getColumn());
 						index.getColumns().add(mto.getColumn());
 						index.setUnique(true);
 						index.setTable(table);
@@ -215,8 +223,8 @@ public class DomainAttributeCreateCommand extends CreateElementCommand {
 			}
 
 			// Add further columns to all derived beans if the attribute belongs to a mapped superclass
-			if (att.getDomainObject().isMappedSuperClass()) {
-				for (final DomainInheritance i : att.getDomainObject().getTargetInheritances()) {
+			if (attr.getDomainObject().isMappedSuperClass()) {
+				for (final DomainInheritance i : attr.getDomainObject().getTargetInheritances()) {
 					final DomainObject bean = i.getSource();
 
 					DBTable thisTable;
@@ -228,7 +236,7 @@ public class DomainAttributeCreateCommand extends CreateElementCommand {
 
 					// Check if a derived class has a column with the same name
 					for (final DBColumn tmp : thisTable.getColumns()) {
-						if (tmp.getConvertedName().equals(att.getColumn().getConvertedName())) {
+						if (tmp.getConvertedName().equals(attr.getColumn().getConvertedName())) {
 							final var msg = "A column with the same name already exists in table '" + bean.getDatabaseTable().getConvertedName()
 									+ "'!";
 
@@ -238,19 +246,80 @@ public class DomainAttributeCreateCommand extends CreateElementCommand {
 					}
 
 					final DBColumn col = DbFactory.eINSTANCE.createDBColumn();
-					col.setColumnType(att.getColumn().getColumnType());
-					col.setLength(att.getColumn().getLength());
-					col.setName(att.getColumn().getName());
-					col.setNullable(att.getColumn().isNullable());
-					col.setPrecision(att.getColumn().getPrecision());
-					col.setScale(att.getColumn().getScale());
+					col.setColumnType(attr.getColumn().getColumnType());
+					col.setLength(attr.getColumn().getLength());
+					col.setName(attr.getColumn().getName());
+					col.setNullable(attr.getColumn().isNullable());
+					col.setPrecision(attr.getColumn().getPrecision());
+					col.setScale(attr.getColumn().getScale());
 					col.setDatabaseTable(thisTable);
 					thisTable.getColumns().add(col);
 				}
 			}
 		}
+	}
 
-		att.getDomainObject().getAttributes().add(att);
+	/**
+	 * @param attr
+	 * @param tableName
+	 * @param addUniqueKey
+	 */
+	private void initCollectionTable(DomainAttribute attr, String tableName, boolean addUniqueKey) {
+		final DBColumn valueColumn = attr.getColumn();
+		DBTable refTable = attr.getDomainObject().getDatabaseTable();
+
+		if (refTable == null && attr.getDomainObject().getParent() != null)
+			refTable = attr.getDomainObject().getRootParentDomainObject(false).getDatabaseTable();
+
+		if (refTable == null)
+			throw new IllegalStateException("A collection table without the table of the owning domain object cannot be created!");
+
+		final PrimaryKey refPrimaryKey = refTable.getPrimaryKey();
+
+		if (refPrimaryKey == null)
+			throw new IllegalStateException(
+					"A collection table without a primary key attribute of the owning domain object cannot be created!");
+
+		final DBColumn refPkColumn = refPrimaryKey.getColumn();
+		final Database database = refTable.getDatabase();
+
+		final DBTable collectionTable = DbFactory.eINSTANCE.createDBTable();
+		collectionTable.setSchemaName(refTable.getSchemaName());
+		collectionTable.setCatalogName(refTable.getCatalogName());
+		collectionTable.setDatabase(database);
+		collectionTable.setName(tableName);
+
+		final DBColumn joinColumn = DbFactory.eINSTANCE.createDBColumn();
+		joinColumn.setColumnType(refPkColumn.getColumnType());
+		joinColumn.setDatabaseTable(collectionTable);
+		joinColumn.setLength(refPkColumn.getLength());
+		joinColumn.setName(refPkColumn.getName());
+		joinColumn.setNullable(false);
+		joinColumn.setPrecision(refPkColumn.getPrecision());
+		joinColumn.setScale(refPkColumn.getScale());
+		joinColumn.addForeignKey(refPkColumn, addUniqueKey);
+
+		if (addUniqueKey) {
+			final var keyName = DB_UNIQUE_KEY_PREFIX + collectionTable.getShortTableName();
+
+			final DBIndex index = DbFactory.eINSTANCE.createDBIndex();
+			index.setName(keyName);
+			index.getColumns().add(joinColumn);
+			index.getColumns().add(valueColumn);
+			index.setUnique(true);
+			index.setTable(collectionTable);
+
+			collectionTable.getIndexes().add(index);
+		}
+
+		collectionTable.getColumns().add(joinColumn);
+		collectionTable.getColumns().add(valueColumn);
+
+		final Resource eResource = attr.eResource();
+		eResource.getContents().add(collectionTable);
+
+		database.getDatabaseTables().add(collectionTable);
+		valueColumn.setDatabaseTable(collectionTable);
 	}
 
 }

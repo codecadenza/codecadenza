@@ -26,6 +26,8 @@ import java.util.Collection;
 import net.codecadenza.eclipse.generator.common.AbstractJavaSourceGenerator;
 import net.codecadenza.eclipse.generator.common.JavaFieldGenerator;
 import net.codecadenza.eclipse.model.domain.AbstractDomainAssociation;
+import net.codecadenza.eclipse.model.domain.CollectionTypeEnumeration;
+import net.codecadenza.eclipse.model.domain.DomainAttribute;
 import net.codecadenza.eclipse.model.domain.ManyToManyAssociation;
 import net.codecadenza.eclipse.model.domain.OneToManyAssociation;
 import net.codecadenza.eclipse.model.dto.DTOBean;
@@ -78,6 +80,9 @@ public class DTOBeanGenerator extends AbstractJavaSourceGenerator {
 					// Add imports for enumerations and date values
 					importPackage(attr.getDomainAttribute().getJavaType().getNamespace().toString());
 				}
+
+				if (attr.getDomainAttribute().getCollectionType() != CollectionTypeEnumeration.NONE)
+					importPackage(Constants.PACK_JAVA_UTIL);
 			}
 			else if (!attr.getDTOBean().getNamespace().equals(attr.getReferencedDTOBean().getNamespace())) {
 				// Add imports for referenced DTOs
@@ -138,10 +143,12 @@ public class DTOBeanGenerator extends AbstractJavaSourceGenerator {
 			if (attr.getDomainAttribute() != null) {
 				final JavaType type = attr.getSearchType();
 
-				if (type.isByteArray())
-					fieldGenerator = addPrivateField(JavaType.STRING, attr.getName());
-				else
-					fieldGenerator = addPrivateField(type.getName(), attr.getName());
+				fieldGenerator = addPrivateField(getTypeName(attr), attr.getName());
+
+				if (attr.getDomainAttribute().getCollectionType() == CollectionTypeEnumeration.LIST)
+					fieldGenerator.withDefaultValue("new ArrayList<>()");
+				else if (attr.getDomainAttribute().getCollectionType() == CollectionTypeEnumeration.SET)
+					fieldGenerator.withDefaultValue("new HashSet<>()");
 
 				if (dto.addJAXBAnnotations() && project.getDefaultXMLMappingType() == XMLMappingType.ATTRIBUTE) {
 					fieldGenerator.withAnnotations("@XmlAttribute\n");
@@ -244,48 +251,26 @@ public class DTOBeanGenerator extends AbstractJavaSourceGenerator {
 		// Add all getters and setters
 		for (final DTOBeanAttribute attr : dto.getAttributes()) {
 			if (attr.getDomainAttribute() != null) {
-				final JavaType type = attr.getSearchType();
+				final String typeName = getTypeName(attr);
 
 				// Add the getter
-				if (type.isByteArray()) {
-					b = new StringBuilder();
-					b.append(createComment(attr, true));
-					b.append(getAnnotationForGeneratedElement());
-					b.append("public " + JavaType.STRING + " " + attr.getGetterName() + "\n{\nreturn this." + attr.getName() + ";\n}\n\n");
+				b = new StringBuilder();
+				b.append(createComment(attr, true));
+				b.append(getAnnotationForGeneratedElement());
+				b.append("public " + typeName + " " + attr.getGetterName());
+				b.append("\n{\nreturn this." + attr.getName() + ";\n}\n\n");
 
-					addMethod(JavaType.STRING + " " + attr.getGetterName(), b.toString());
-				}
-				else {
-					b = new StringBuilder();
-					b.append(createComment(attr, true));
-					b.append(getAnnotationForGeneratedElement());
-					b.append("public " + type.getName() + " " + attr.getGetterName());
-					b.append("\n{\nreturn this." + attr.getName() + ";\n}\n\n");
-
-					addMethod(attr.getDomainAttribute().getJavaType().getName() + " " + attr.getGetterName(), b.toString());
-				}
+				addMethod(typeName + " " + attr.getGetterName(), b.toString());
 
 				// Add the setter
-				if (type.isByteArray()) {
-					b = new StringBuilder();
-					b.append(createComment(attr, false));
-					b.append(getAnnotationForGeneratedElement());
-					b.append("public void " + attr.getSetterName() + "(" + JavaType.STRING + " " + attr.getName());
-					b.append(")\n{\nthis." + attr.getName() + " = " + attr.getName() + ";\n}\n\n");
+				b = new StringBuilder();
+				b.append(createComment(attr, false));
+				b.append(getAnnotationForGeneratedElement());
+				b.append("public void " + attr.getSetterName() + "(");
+				b.append(typeName + " " + attr.getName());
+				b.append(")\n{\nthis." + attr.getName() + " = " + attr.getName() + ";\n}\n\n");
 
-					addMethod("void " + attr.getSetterName() + "(" + JavaType.STRING + " " + attr.getName() + ")", b.toString());
-				}
-				else {
-					b = new StringBuilder();
-					b.append(createComment(attr, false));
-					b.append(getAnnotationForGeneratedElement());
-					b.append("public void " + attr.getSetterName() + "(");
-					b.append(type.getName() + " " + attr.getName());
-					b.append(")\n{\nthis." + attr.getName() + " = " + attr.getName() + ";\n}\n\n");
-
-					addMethod("void " + attr.getSetterName() + "(" + attr.getDomainAttribute().getJavaType().getName() + " "
-							+ attr.getName() + ")", b.toString());
-				}
+				addMethod("void " + attr.getSetterName() + "(" + typeName + " " + attr.getName() + ")", b.toString());
 			}
 			else {
 				final AbstractDomainAssociation assoc = attr.getAssociation();
@@ -426,18 +411,12 @@ public class DTOBeanGenerator extends AbstractJavaSourceGenerator {
 			if (attr.getDomainAttribute() == null)
 				continue;
 
-			final JavaType type = attr.getSearchType();
-
 			if (firstParam)
 				firstParam = false;
 			else
 				allParameters.append(", ");
 
-			// Attributes of type byte[] or Byte[] must be handled in a special way!
-			if (type.isByteArray())
-				allParameters.append(JavaType.STRING + " " + attr.getName());
-			else
-				allParameters.append(type.getName() + " " + attr.getName());
+			allParameters.append(getTypeName(attr) + " " + attr.getName());
 
 			allAttributes.append("this." + attr.getName() + " = " + attr.getName() + ";\n");
 			allCommentParameters.append(" * @param " + attr.getName() + "\n");
@@ -514,6 +493,24 @@ public class DTOBeanGenerator extends AbstractJavaSourceGenerator {
 		comment.append("\n */\n");
 
 		return comment.toString();
+	}
+
+	/**
+	 * @param attr
+	 * @return the name of the type for a given DTO attribute
+	 */
+	private String getTypeName(DTOBeanAttribute attr) {
+		final DomainAttribute domainAttribute = attr.getDomainAttribute();
+		final JavaType type = attr.getSearchType();
+
+		// Attributes of type byte[] or Byte[] must be handled in a special way!
+		if (type.isByteArray())
+			return JavaType.STRING;
+
+		if (domainAttribute.getCollectionType() == CollectionTypeEnumeration.NONE)
+			return type.getName();
+
+		return domainAttribute.getTypeName();
 	}
 
 }

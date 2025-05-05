@@ -28,6 +28,7 @@ import java.util.Collections;
 import java.util.List;
 import net.codecadenza.eclipse.generator.common.AbstractJavaSourceGenerator;
 import net.codecadenza.eclipse.generator.common.JavaFieldGenerator;
+import net.codecadenza.eclipse.model.domain.CollectionTypeEnumeration;
 import net.codecadenza.eclipse.model.exchange.ContentTypeEnumeration;
 import net.codecadenza.eclipse.model.exchange.DataExchangeAttribute;
 import net.codecadenza.eclipse.model.exchange.DataExchangeElement;
@@ -86,7 +87,8 @@ public class ExchangeMappingObjectGenerator extends AbstractJavaSourceGenerator 
 			if (attr.getJavaType().getNamespace() != null && !attr.getJavaType().getNamespace().equals(mappingObject.getNamespace()))
 				importPackage(attr.getJavaType().getNamespace().toString());
 
-			if (attr.getModifier() != JavaTypeModifierEnumeration.NONE)
+			if (attr.getModifier() != JavaTypeModifierEnumeration.NONE || (attr.getDomainAttribute() != null
+					&& attr.getDomainAttribute().getCollectionType() != CollectionTypeEnumeration.NONE))
 				importPackage(PACK_JAVA_UTIL);
 		});
 	}
@@ -114,12 +116,7 @@ public class ExchangeMappingObjectGenerator extends AbstractJavaSourceGenerator 
 		mappingObject.getAttributes().forEach(attr -> {
 			final JavaType type = attr.getJavaType();
 			final JavaTypeModifierEnumeration modifier = attr.getModifier();
-			String typeName = type.getName();
-
-			// By definition, we handle fields of type char by using a String with exactly one character!
-			if (type.isChar())
-				typeName = JavaType.STRING;
-
+			final String typeName = getTypeName(attr);
 			JavaFieldGenerator fieldGenerator;
 
 			if (modifier == JavaTypeModifierEnumeration.NONE) {
@@ -211,11 +208,7 @@ public class ExchangeMappingObjectGenerator extends AbstractJavaSourceGenerator 
 		for (final ExchangeMappingAttribute attr : mappingObject.getAttributes()) {
 			final var comment = new StringBuilder();
 			final JavaTypeModifierEnumeration modifier = attr.getModifier();
-			String typeName = attr.getJavaType().getName();
-
-			// By definition, we handle fields of type char by using a String with exactly one character!
-			if (typeName.equals(JavaType.CHAR))
-				typeName = JavaType.STRING;
+			final String typeName = getTypeName(attr);
 
 			if (modifier == JavaTypeModifierEnumeration.NONE) {
 				if (attr.getDomainAttribute() != null) {
@@ -359,7 +352,6 @@ public class ExchangeMappingObjectGenerator extends AbstractJavaSourceGenerator 
 		final var allParameters = new StringBuilder();
 		final var allAttributes = new StringBuilder();
 		final var allCommentParameters = new StringBuilder();
-
 		boolean firstParam = true;
 
 		for (final ExchangeMappingAttribute attr : attrList) {
@@ -532,6 +524,31 @@ public class ExchangeMappingObjectGenerator extends AbstractJavaSourceGenerator 
 		}
 
 		return b.toString();
+	}
+
+	/**
+	 * Get the type name that should be used for the given exchange attribute
+	 * @param attr
+	 * @return the type name
+	 */
+	private String getTypeName(ExchangeMappingAttribute attr) {
+		final JavaType type = attr.getJavaType();
+
+		// By definition, we handle fields of type char by using a String with exactly one character!
+		if (type.isChar()) {
+			if (attr.getDomainAttribute() == null || attr.getDomainAttribute().getCollectionType() == CollectionTypeEnumeration.NONE)
+				return JavaType.STRING;
+
+			if (attr.getDomainAttribute().getCollectionType() == CollectionTypeEnumeration.LIST)
+				return "List<" + JavaType.STRING + ">";
+			else
+				return "Set<" + JavaType.STRING + ">";
+		}
+
+		if (attr.getDomainAttribute() != null)
+			return attr.getDomainAttribute().getTypeName();
+
+		return type.getName();
 	}
 
 }

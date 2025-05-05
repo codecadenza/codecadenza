@@ -21,8 +21,11 @@
  */
 package net.codecadenza.eclipse.generator.exchange.method;
 
+import static net.codecadenza.eclipse.shared.Constants.PACK_JAVA_UTIL;
+
 import net.codecadenza.eclipse.generator.common.AbstractJavaSourceGenerator;
 import net.codecadenza.eclipse.model.domain.AbstractDomainAssociation;
+import net.codecadenza.eclipse.model.domain.CollectionTypeEnumeration;
 import net.codecadenza.eclipse.model.domain.DomainAttribute;
 import net.codecadenza.eclipse.model.domain.ManyToManyAssociation;
 import net.codecadenza.eclipse.model.domain.ManyToOneAssociation;
@@ -161,7 +164,7 @@ public abstract class AbstractExportMethodGenerator extends AbstractExchangeMeth
 			return;
 
 		if (!method.isProcessSingleObject())
-			generator.importPackage("java.util");
+			generator.importPackage(PACK_JAVA_UTIL);
 
 		if (project.isSpringBootApplication())
 			generator.importPackage("org.springframework.transaction.annotation");
@@ -343,15 +346,35 @@ public abstract class AbstractExportMethodGenerator extends AbstractExchangeMeth
 	protected String createMapping(ExchangeMappingAttribute attr, String targetMappingObjectName, String sourceDomainObjectName,
 			String getter, String setter) {
 		final var b = new StringBuilder();
+		final DomainAttribute domainAttr = attr.getDomainAttribute();
+
 		b.append(targetMappingObjectName + "." + setter + "(");
 
+		if (generator != null && domainAttr != null && domainAttr.getCollectionType() != CollectionTypeEnumeration.NONE)
+			generator.importPackage("java.util.stream");
+
 		// By definition, we handle fields of type char by using a String with exactly one character!
-		if (attr.getJavaType().isChar())
+		if (attr.getJavaType().isChar() && (domainAttr == null || domainAttr.getCollectionType() == CollectionTypeEnumeration.NONE))
 			b.append("String.valueOf(");
 
 		b.append(sourceDomainObjectName + "." + getter);
 
-		if (attr.getJavaType().isChar())
+		if (domainAttr != null && domainAttr.getCollectionType() != CollectionTypeEnumeration.NONE) {
+			if (generator != null)
+				generator.importPackage("java.util");
+
+			b.append(".stream().");
+
+			if (attr.getJavaType().isChar())
+				b.append("map(Object::toString).");
+
+			if (domainAttr.getCollectionType() == CollectionTypeEnumeration.SET)
+				b.append("collect(Collectors.toCollection(HashSet::new))");
+			else if (domainAttr.getCollectionType() == CollectionTypeEnumeration.LIST)
+				b.append("collect(Collectors.toCollection(ArrayList::new))");
+		}
+
+		if (attr.getJavaType().isChar() && (domainAttr == null || domainAttr.getCollectionType() == CollectionTypeEnumeration.NONE))
 			b.append(")");
 
 		b.append(");\n");

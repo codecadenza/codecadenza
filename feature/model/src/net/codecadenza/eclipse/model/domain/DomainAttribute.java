@@ -23,6 +23,7 @@ package net.codecadenza.eclipse.model.domain;
 
 import java.util.Optional;
 import net.codecadenza.eclipse.model.db.DBColumn;
+import net.codecadenza.eclipse.model.db.DBTable;
 import net.codecadenza.eclipse.model.java.JavaType;
 import org.eclipse.emf.ecore.EObject;
 
@@ -57,6 +58,9 @@ import org.eclipse.emf.ecore.EObject;
  * Characters</em>}</li>
  * <li>{@link net.codecadenza.eclipse.model.domain.DomainAttribute#isConvertToUpperCase <em>Convert To Upper Case</em>}</li>
  * <li>{@link net.codecadenza.eclipse.model.domain.DomainAttribute#isConvertToLowerCase <em>Convert To Lower Case</em>}</li>
+ * <li>{@link net.codecadenza.eclipse.model.domain.DomainAttribute#getCollectionType <em>Collection Type</em>}</li>
+ * <li>{@link net.codecadenza.eclipse.model.domain.DomainAttribute#getCollectionMappingStrategy <em>Collection Mapping
+ * Strategy</em>}</li>
  * </ul>
  * </p>
  * @see net.codecadenza.eclipse.model.domain.DomainPackage#getDomainAttribute()
@@ -148,7 +152,8 @@ public interface DomainAttribute extends EObject {
 	boolean isPersistent();
 
 	/**
-	 * Set the value of the '{@link net.codecadenza.eclipse.model.domain.DomainAttribute#isPersistent <em>Persistent</em>}' attribute
+	 * Set the value of the '{@link net.codecadenza.eclipse.model.domain.DomainAttribute#isPersistent <em>Persistent</em>}'
+	 * attribute
 	 * @param value the new value of the '<em>Persistent</em>' attribute
 	 * @see #isPersistent()
 	 * @generated
@@ -166,8 +171,8 @@ public interface DomainAttribute extends EObject {
 	boolean isFetchTypeEager();
 
 	/**
-	 * Set the value of the '{@link net.codecadenza.eclipse.model.domain.DomainAttribute#isFetchTypeEager <em>Fetch Type Eager</em>}'
-	 * attribute
+	 * Set the value of the '{@link net.codecadenza.eclipse.model.domain.DomainAttribute#isFetchTypeEager <em>Fetch Type
+	 * Eager</em>}' attribute
 	 * @param value the new value of the '<em>Fetch Type Eager</em>' attribute
 	 * @see #isFetchTypeEager()
 	 * @generated
@@ -185,7 +190,8 @@ public interface DomainAttribute extends EObject {
 	boolean isInsertable();
 
 	/**
-	 * Set the value of the '{@link net.codecadenza.eclipse.model.domain.DomainAttribute#isInsertable <em>Insertable</em>}' attribute
+	 * Set the value of the '{@link net.codecadenza.eclipse.model.domain.DomainAttribute#isInsertable <em>Insertable</em>}'
+	 * attribute
 	 * @param value the new value of the '<em>Insertable</em>' attribute
 	 * @see #isInsertable()
 	 * @generated
@@ -519,6 +525,48 @@ public interface DomainAttribute extends EObject {
 	void setConvertToLowerCase(boolean value);
 
 	/**
+	 * Return the value of the '<em><b>Collection Type</b></em>' attribute
+	 * @return the value of the '<em>Collection Type</em>' attribute
+	 * @see net.codecadenza.eclipse.model.domain.CollectionTypeEnumeration
+	 * @see #setCollectionType(CollectionTypeEnumeration)
+	 * @see net.codecadenza.eclipse.model.domain.DomainPackage#getDomainAttribute_CollectionType()
+	 * @model
+	 * @generated
+	 */
+	CollectionTypeEnumeration getCollectionType();
+
+	/**
+	 * Set the value of the '{@link net.codecadenza.eclipse.model.domain.DomainAttribute#getCollectionType <em>Collection
+	 * Type</em>}' attribute
+	 * @param value the new value of the '<em>Collection Type</em>' attribute
+	 * @see net.codecadenza.eclipse.model.domain.CollectionTypeEnumeration
+	 * @see #getCollectionType()
+	 * @generated
+	 */
+	void setCollectionType(CollectionTypeEnumeration value);
+
+	/**
+	 * Return the value of the '<em><b>Collection Mapping Strategy</b></em>' attribute
+	 * @return the value of the '<em>Collection Mapping Strategy</em>' attribute
+	 * @see net.codecadenza.eclipse.model.domain.CollectionMappingStrategyEnumeration
+	 * @see #setCollectionMappingStrategy(CollectionMappingStrategyEnumeration)
+	 * @see net.codecadenza.eclipse.model.domain.DomainPackage#getDomainAttribute_CollectionMappingStrategy()
+	 * @model
+	 * @generated
+	 */
+	CollectionMappingStrategyEnumeration getCollectionMappingStrategy();
+
+	/**
+	 * Set the value of the '{@link net.codecadenza.eclipse.model.domain.DomainAttribute#getCollectionMappingStrategy <em>Collection
+	 * Mapping Strategy</em>}' attribute
+	 * @param value the new value of the '<em>Collection Mapping Strategy</em>' attribute
+	 * @see net.codecadenza.eclipse.model.domain.CollectionMappingStrategyEnumeration
+	 * @see #getCollectionMappingStrategy()
+	 * @generated
+	 */
+	void setCollectionMappingStrategy(CollectionMappingStrategyEnumeration value);
+
+	/**
 	 * @return the upper-case name of this attribute (e.g. Value)
 	 * @generated not
 	 */
@@ -626,5 +674,17 @@ public interface DomainAttribute extends EObject {
 	 * @generated not
 	 */
 	String getMaxFileSize();
+
+	/**
+	 * @return the full type name
+	 * @generated not
+	 */
+	String getTypeName();
+
+	/**
+	 * @return the element collection table or null if this attribute is not mapped to an element collection
+	 * @generated not
+	 */
+	DBTable getCollectionTable();
 
 }

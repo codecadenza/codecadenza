@@ -49,6 +49,7 @@ import net.codecadenza.eclipse.model.client.FormTypeEnumeration;
 import net.codecadenza.eclipse.model.client.TreeView;
 import net.codecadenza.eclipse.model.client.TreeViewItem;
 import net.codecadenza.eclipse.model.domain.AttributeTagEnumeration;
+import net.codecadenza.eclipse.model.domain.CollectionTypeEnumeration;
 import net.codecadenza.eclipse.model.domain.DomainAttribute;
 import net.codecadenza.eclipse.model.domain.DomainObject;
 import net.codecadenza.eclipse.model.domain.OneToManyAssociation;
@@ -626,14 +627,51 @@ public class AngularTreeViewGenerator extends AbstractTypeScriptSourceGenerator 
 			formatter.addBlankLine();
 		}
 
-		if (!treeItem.getNodes().isEmpty())
-			formatter.addLineComment("Add sub-nodes");
-
 		treeItem.getNodes().forEach(subNode -> {
-			createItemLabel(formatter, subNode.getDTOAttribute(), false, false, subNode.getLabel());
+			final DTOBeanAttribute attr = subNode.getDTOAttribute();
 
-			formatter.addBlankLine();
-			formatter.addLine(nodeName + ".children.push( { label: itemLabel, droppable: false, draggable: false } );");
+			if (attr.getDomainAttribute().getCollectionType() != CollectionTypeEnumeration.NONE) {
+				final var subNodeName = subNode.getDTOAttribute().getName() + "Node";
+				final var transKey = attr.getDTOBean().getName() + "_" + attr.getName();
+				final var itemListAccessor = attr.getDTOBean().getDomainObject().getLowerCaseName() + "." + attr.getName();
+				final JavaType type = attr.getDomainAttribute().getJavaType();
+				final TemporalTypeEnumeration temporalType = attr.getDomainAttribute().getTemporalType();
+				final String label = i18n.getI18NMessage(transKey.toLowerCase(), subNode.getLabel());
+				final String itemLabel;
+
+				formatter.addLineComment("Add elements of attribute '" + attr.getName() + "'");
+				formatter.addLine("const " + subNodeName + ": TreeNode = { label: " + label + " };");
+				formatter.addLine(subNodeName + ".children = [];");
+				formatter.addLine(nodeName + ".children.push(" + subNodeName + ");");
+				formatter.addBlankLine();
+				formatter.addLine("for (const element of " + itemListAccessor + ") {");
+				formatter.increaseIndent();
+
+				if (type.isDecimalNumber())
+					itemLabel = "this.formatterService.formatNumber(element) ?? ''";
+				else if (type.isTemporalType())
+					if (type.isLocalDate() || temporalType == TemporalTypeEnumeration.DATE)
+						itemLabel = "this.formatterService.formatDate(element) ?? ''";
+					else
+						itemLabel = "this.formatterService.formatDateTime(element) ?? ''";
+				else if (type.isIntegerOrLong())
+					itemLabel = "element.toString()";
+				else
+					itemLabel = "element";
+
+				formatter.addLine(subNodeName + ".children.push( { label: " + itemLabel + " } );");
+				formatter.decreaseIndent();
+				formatter.addLine("}");
+			}
+			else {
+				formatter.addLineComment("Add node for attribute '" + attr.getName() + "'");
+
+				createItemLabel(formatter, attr, false, false, subNode.getLabel());
+
+				formatter.addBlankLine();
+				formatter.addLine(nodeName + ".children.push( { label: itemLabel } );");
+			}
+
 			formatter.addBlankLine();
 		});
 

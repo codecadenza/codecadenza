@@ -48,6 +48,7 @@ import net.codecadenza.eclipse.model.client.Form;
 import net.codecadenza.eclipse.model.client.TreeSearchItem;
 import net.codecadenza.eclipse.model.client.TreeView;
 import net.codecadenza.eclipse.model.client.TreeViewItem;
+import net.codecadenza.eclipse.model.domain.CollectionTypeEnumeration;
 import net.codecadenza.eclipse.model.domain.DomainAttribute;
 import net.codecadenza.eclipse.model.domain.DomainObject;
 import net.codecadenza.eclipse.model.domain.ManyToManyAssociation;
@@ -1132,7 +1133,7 @@ public class SwingTreeViewGenerator extends AbstractTreeViewGenerator {
 
 		// Add item nodes
 		item.getNodes().forEach(node -> {
-			final var nodeName = "item" + node.getDTOAttribute().getUpperCaseName();
+			var nodeName = "item" + node.getDTOAttribute().getUpperCaseName();
 			final JavaType type = node.getDTOAttribute().getSearchType();
 			final String getter = "i." + node.getDTOAttribute().getGetterName();
 			final boolean addNullCheck = !type.isPrimitive();
@@ -1142,7 +1143,23 @@ public class SwingTreeViewGenerator extends AbstractTreeViewGenerator {
 				b.append("{");
 			}
 
-			if (type.isBoolean()) {
+			if (node.getDTOAttribute().getDomainAttribute().getCollectionType() != CollectionTypeEnumeration.NONE) {
+				final var parentNodeName = "parent" + node.getDTOAttribute().getUpperCaseName();
+
+				b.append("\n");
+				b.append("final var " + parentNodeName + " = new DataTreeNode(" + i18n.getI18N(node.getDTOAttribute(), node.getLabel()));
+				b.append(", ImageLoader.getImage(ImageLoader.FOLDER));\n\n");
+				b.append("for(final var element : " + getter + ")\n");
+				b.append("{\n");
+				b.append("final var " + nodeName + " = new DataTreeNode(");
+				b.append(node.getDTOAttribute().getDomainAttribute().convertToString("element"));
+				b.append(", ImageLoader.getImage(ImageLoader.TREE_DATA));\n");
+				b.append(FIELD_NAME_TREE + ".addNodeToParent(" + nodeName + ", " + parentNodeName + ");\n");
+				b.append("}\n");
+
+				nodeName = parentNodeName;
+			}
+			else if (type.isBoolean()) {
 				b.append("\n");
 				b.append("final var " + nodeName + " = new DataTreeNode(");
 				b.append(i18n.getI18N(node.getDTOAttribute(), node.getLabel()) + ", null);\n\n");

@@ -41,6 +41,9 @@ public class I18NEclipse {
 	public static final String ABSTRACT_CHANGE_PASSWORD_DIALOG_LBL_PASSWORD_CONFIRM = "abstract_change_password_dialog.lbl_password_confirm";
 	public static final String ABSTRACT_CHANGE_PASSWORD_DIALOG_TITLE = "abstract_change_password_dialog.title";
 	public static final String ABSTRACT_CHANGE_PASSWORD_DIALOG_TITLE_MESSAGE = "abstract_change_password_dialog.title_message";
+	public static final String ABSTRACT_ELEMENT_COLLECTION_EDITOR_LBL_ADD = "abstract_element_collection_editor.lbl_add";
+	public static final String ABSTRACT_ELEMENT_COLLECTION_EDITOR_MSG_TITLE_CONVERSION = "abstract_element_collection_editor.msg_title_conversion";
+	public static final String ABSTRACT_ELEMENT_COLLECTION_EDITOR_MSG_CONVERSION_FAILED = "abstract_element_collection_editor.msg_conversion_failed";
 	public static final String ABSTRACT_COLUMN_SORT_LISTENER_MSG_ERR_COL_NOT_FOUND = "abstract_column_sort_listener.msg_err_col_not_found";
 	public static final String ABSTRACT_FILE_DOWNLOAD_OPERATION_MSG_DOWNLOAD_ERROR = "abstract_file_download_operation.msg_download_error";
 	public static final String ABSTRACT_FILE_DOWNLOAD_OPERATION_MSG_FILE_NOT_FOUND = "abstract_file_download_operation.msg_file_not_found";
@@ -66,7 +69,10 @@ public class I18NEclipse {
 	public static final String ABSTRACT_SEARCH_RESULT_VIEW_ACTION_NAME_SUSPEND = "abstract_search_result_view.action_name_suspend";
 	public static final String CHECKBOX_DATA_GRID_COMPOSITE_CMD_DESELECT_ALL = "checkbox_data_grid_composite.cmd_deselect_all";
 	public static final String CHECKBOX_DATA_GRID_COMPOSITE_CMD_SELECT_ALL = "checkbox_data_grid_composite.cmd_select_all";
+	public static final String CMD_ADD = "cmd_add";
 	public static final String CMD_CANCEL = "cmd_cancel";
+	public static final String CMD_DELETE = "cmd_delete";
+	public static final String CMD_DELETE_ALL = "cmd_delete_all";
 	public static final String CMD_EXPORT = "cmd_export";
 	public static final String CMD_OK = "cmd_ok";
 	public static final String CMD_REFRESH = "cmd_refresh";

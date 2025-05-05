@@ -23,6 +23,7 @@ package net.codecadenza.eclipse.service.form.init;
 
 import static net.codecadenza.eclipse.shared.Constants.ADMIN_PANEL_TITLE;
 import static net.codecadenza.eclipse.shared.Constants.BASIC_PANEL_TITLE;
+import static net.codecadenza.eclipse.shared.Constants.EDITOR_PREFIX;
 import static net.codecadenza.eclipse.shared.Constants.CHECKBOX_PREFIX;
 import static net.codecadenza.eclipse.shared.Constants.COMBO_PREFIX;
 import static net.codecadenza.eclipse.shared.Constants.CREATE_DTO_SUFFIX;
@@ -48,6 +49,7 @@ import net.codecadenza.eclipse.model.client.FormTypeEnumeration;
 import net.codecadenza.eclipse.model.domain.AbstractDomainAssociation;
 import net.codecadenza.eclipse.model.domain.AssociationTagEnumeration;
 import net.codecadenza.eclipse.model.domain.AttributeTagEnumeration;
+import net.codecadenza.eclipse.model.domain.CollectionTypeEnumeration;
 import net.codecadenza.eclipse.model.domain.DomainAttribute;
 import net.codecadenza.eclipse.model.domain.DomainAttributeValidator;
 import net.codecadenza.eclipse.model.domain.DomainObject;
@@ -417,73 +419,81 @@ public class UpdateFormInitService {
 		final FormField field = ClientFactory.eINSTANCE.createFormField();
 		field.setDTOAttribute(dtoAttribute);
 
-		// Check if the attribute represents an auto-incremented primary key
-		if (attr.isPk() && attr.getDomainObject().getIDGenerator().getGeneratorType() != IDGeneratorTypeEnumeration.NONE
-				&& (formType == FormTypeEnumeration.CREATE || formType == FormTypeEnumeration.ADD))
-			field.setVisible(false);
-		else
-			field.setVisible(!((formType == FormTypeEnumeration.CREATE || formType == FormTypeEnumeration.ADD)
-					&& (attr.isTrackVersion() || attr.isSetDateOnPersist())));
-
-		if (attr.getJavaType().isBoolean()) {
-			field.setName(CHECKBOX_PREFIX + fieldName);
-			field.setFieldType(FormFieldTypeEnumeration.CHECKBOX);
-
-			if (formType == FormTypeEnumeration.ADD || formType == FormTypeEnumeration.CREATE)
-				field.setDefaultValue(DEFAULT_VALUE_FLAG);
-		}
-		else if (attr.getJavaType().isNumber() || attr.getJavaType().isChar()) {
-			field.setWidth(120);
-			field.setName(TEXT_PREFIX + fieldName);
-
-			if (attr.getTag() == AttributeTagEnumeration.DOCUMENT_SIZE)
-				field.setFieldType(FormFieldTypeEnumeration.DOCUMENT_SIZE_FIELD);
+		if (attr.getCollectionType() == CollectionTypeEnumeration.NONE) {
+			// Check if the attribute represents an auto-incremented primary key
+			if (attr.isPk() && attr.getDomainObject().getIDGenerator().getGeneratorType() != IDGeneratorTypeEnumeration.NONE
+					&& (formType == FormTypeEnumeration.CREATE || formType == FormTypeEnumeration.ADD))
+				field.setVisible(false);
 			else
+				field.setVisible(!((formType == FormTypeEnumeration.CREATE || formType == FormTypeEnumeration.ADD)
+						&& (attr.isTrackVersion() || attr.isSetDateOnPersist())));
+
+			if (attr.getJavaType().isBoolean()) {
+				field.setName(CHECKBOX_PREFIX + fieldName);
+				field.setFieldType(FormFieldTypeEnumeration.CHECKBOX);
+
+				if (formType == FormTypeEnumeration.ADD || formType == FormTypeEnumeration.CREATE)
+					field.setDefaultValue(DEFAULT_VALUE_FLAG);
+			}
+			else if (attr.getJavaType().isNumber() || attr.getJavaType().isChar()) {
+				field.setWidth(120);
+				field.setName(TEXT_PREFIX + fieldName);
+
+				if (attr.getTag() == AttributeTagEnumeration.DOCUMENT_SIZE)
+					field.setFieldType(FormFieldTypeEnumeration.DOCUMENT_SIZE_FIELD);
+				else
+					field.setFieldType(FormFieldTypeEnumeration.SIMPLE_TEXT);
+			}
+			else if (attr.getJavaType().isTemporalType()) {
+				if (attr.getJavaType().isLocalDate() || attr.getTemporalType() == TemporalTypeEnumeration.DATE) {
+					field.setWidth(100);
+					field.setFieldType(FormFieldTypeEnumeration.DATE);
+				}
+				else {
+					field.setWidth(120);
+					field.setFieldType(FormFieldTypeEnumeration.DATE_TIME);
+				}
+
+				field.setName(TEXT_PREFIX + fieldName);
+
+				if ((formType == FormTypeEnumeration.ADD || formType == FormTypeEnumeration.CREATE) && !attr.isSetDateOnPersist())
+					field.setDefaultValue(DEFAULT_VALUE_FLAG);
+			}
+			else if (attr.getJavaType().isString()) {
+				field.setName(TEXT_PREFIX + fieldName);
+
+				final DomainAttributeValidator validator = attr.getDomainAttributeValidator();
+
 				field.setFieldType(FormFieldTypeEnumeration.SIMPLE_TEXT);
-		}
-		else if (attr.getJavaType().isTemporalType()) {
-			if (attr.getJavaType().isLocalDate() || attr.getTemporalType() == TemporalTypeEnumeration.DATE) {
-				field.setWidth(100);
-				field.setFieldType(FormFieldTypeEnumeration.DATE);
+				final int stringLength = validator.getMaxLength() == null ? LONG_TEXT_SIZE : validator.getMaxLength();
+
+				if (stringLength >= LONG_TEXT_SIZE) {
+					field.setSpanCols(true);
+					field.setFieldType(FormFieldTypeEnumeration.MULTI_LINE_TEXT);
+				}
+				else if (stringLength > MEDIUM_TEXT_SIZE)
+					field.setSpanCols(true);
+				else if (stringLength < SMALL_TEXT_SIZE)
+					field.setWidth(100);
+				else
+					field.setWidth(140);
+			}
+			else if (attr.getJavaType().isUUID()) {
+				field.setWidth(UUID_TEXT_SIZE);
+				field.setName(TEXT_PREFIX + fieldName);
+				field.setFieldType(FormFieldTypeEnumeration.SIMPLE_TEXT);
 			}
 			else {
-				field.setWidth(120);
-				field.setFieldType(FormFieldTypeEnumeration.DATE_TIME);
-			}
-
-			field.setName(TEXT_PREFIX + fieldName);
-
-			if ((formType == FormTypeEnumeration.ADD || formType == FormTypeEnumeration.CREATE) && !attr.isSetDateOnPersist())
-				field.setDefaultValue(DEFAULT_VALUE_FLAG);
-		}
-		else if (attr.getJavaType().isString()) {
-			field.setName(TEXT_PREFIX + fieldName);
-
-			final DomainAttributeValidator validator = attr.getDomainAttributeValidator();
-
-			field.setFieldType(FormFieldTypeEnumeration.SIMPLE_TEXT);
-			final int stringLength = validator.getMaxLength() == null ? LONG_TEXT_SIZE : validator.getMaxLength();
-
-			if (stringLength >= LONG_TEXT_SIZE) {
-				field.setSpanCols(true);
-				field.setFieldType(FormFieldTypeEnumeration.MULTI_LINE_TEXT);
-			}
-			else if (stringLength > MEDIUM_TEXT_SIZE)
-				field.setSpanCols(true);
-			else if (stringLength < SMALL_TEXT_SIZE)
-				field.setWidth(100);
-			else
+				field.setName(COMBO_PREFIX + fieldName);
+				field.setFieldType(FormFieldTypeEnumeration.ENUM_COMBOBOX);
 				field.setWidth(140);
-		}
-		else if (attr.getJavaType().isUUID()) {
-			field.setWidth(UUID_TEXT_SIZE);
-			field.setName(TEXT_PREFIX + fieldName);
-			field.setFieldType(FormFieldTypeEnumeration.SIMPLE_TEXT);
+			}
 		}
 		else {
-			field.setName(COMBO_PREFIX + fieldName);
-			field.setFieldType(FormFieldTypeEnumeration.ENUM_COMBOBOX);
-			field.setWidth(140);
+			field.setName(EDITOR_PREFIX + fieldName);
+			field.setFieldType(FormFieldTypeEnumeration.ELEMENT_COLLECTION_EDITOR);
+			field.setSpanCols(true);
+			field.setWidth(300);
 		}
 
 		if (forceReadonly || (formType == FormTypeEnumeration.READONLY))
@@ -559,6 +569,7 @@ public class UpdateFormInitService {
 		boolean hasSearchableListPanel = false;
 		boolean hasTablePanel = false;
 		boolean hasAdminPanel = false;
+		boolean hasElementCollectionPanel = false;
 		namespaceMap = new HashMap<>();
 		listDTOMap = new HashMap<>();
 		addDTOMap = new HashMap<>();
@@ -665,7 +676,21 @@ public class UpdateFormInitService {
 					&& attr.getTag() == AttributeTagEnumeration.USER_PASSWORD)
 				continue;
 
-			if (adminFieldCount < 2)
+			if (attr.getCollectionType() != CollectionTypeEnumeration.NONE) {
+				hasElementCollectionPanel = true;
+
+				final FormPanel collectionEditorPanel = ClientFactory.eINSTANCE.createFormPanel();
+				collectionEditorPanel.setColIndex(panelColIndex2++);
+				collectionEditorPanel.setRowIndex(2);
+				collectionEditorPanel.setName(PANEL_PREFIX + attr.getUpperCaseName());
+				collectionEditorPanel.setLabel(attr.getLabel().substring(0, 1).toUpperCase() + attr.getLabel().substring(1));
+				collectionEditorPanel.setForm(form);
+
+				form.getFormPanels().add(collectionEditorPanel);
+
+				addFormField(formDTO, collectionEditorPanel, attr, "", !attr.isPersistent(), null);
+			}
+			else if (adminFieldCount < 2)
 				addFormField(formDTO, formPanel, attr, "", !attr.isPersistent(), null);
 			else if (attr.isTrackVersion() || attr.isSetDateOnUpdate() || attr.isSetDateOnPersist()
 					|| (attr.isPk() && attr.getDomainObject().getIDGenerator().getGeneratorType() != IDGeneratorTypeEnumeration.NONE))
@@ -810,7 +835,7 @@ public class UpdateFormInitService {
 		FormLayoutOptimizer.optimizeLayout(formPanel);
 
 		if (isOpenedInNewWindow())
-			calculateFormSizeProposal(form, formPanel, hasSearchableListPanel, hasTablePanel, hasAdminPanel);
+			calculateFormSizeProposal(form, formPanel, hasSearchableListPanel, hasTablePanel, hasAdminPanel, hasElementCollectionPanel);
 	}
 
 	/**
@@ -819,9 +844,10 @@ public class UpdateFormInitService {
 	 * @param hasSearchableListPanel
 	 * @param hasTablePanel
 	 * @param hasAdminPanel
+	 * @param hasElementCollectionPanel
 	 */
 	private void calculateFormSizeProposal(Form form, FormPanel mainPanel, boolean hasSearchableListPanel, boolean hasTablePanel,
-			boolean hasAdminPanel) {
+			boolean hasAdminPanel, boolean hasElementCollectionPanel) {
 		int formHeight = DEFAULT_FORM_HEIGHT;
 		int formWidth;
 		int currentRowIndex = 0;
@@ -845,7 +871,7 @@ public class UpdateFormInitService {
 			currentRowIndex = f.getRowIndex();
 		}
 
-		if (hasSearchableListPanel || hasTablePanel) {
+		if (hasSearchableListPanel || hasTablePanel || hasElementCollectionPanel) {
 			// By default, list or grid panels are placed in the second row! We have to increase the form height accordingly!
 			form.setResizable(true);
 			formHeight += 300;

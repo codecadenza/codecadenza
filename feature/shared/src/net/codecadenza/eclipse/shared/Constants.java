@@ -322,6 +322,7 @@ public class Constants {
 	public static final String DRIVER_MSSQL = "com.microsoft.sqlserver.jdbc.SQLServerDriver";
 
 	public static final String CHECKBOX_PREFIX = "chk";
+	public static final String EDITOR_PREFIX = "editor";
 	public static final String LIST_PREFIX = "list";
 	public static final String TEXT_PREFIX = "txt";
 	public static final String COMBO_PREFIX = "cbo";

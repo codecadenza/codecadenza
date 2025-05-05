@@ -29,6 +29,10 @@ import jakarta.persistence.EntityManager;
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZoneOffset;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -158,6 +162,14 @@ public class JPAQueryService {
 						final var in = new Date(((java.sql.Timestamp) o).getTime());
 						ds.add(dateTimeFormatter.format(in));
 					}
+					else if (o.getClass() == LocalDateTime.class) {
+						final var in = (LocalDateTime) o;
+						ds.add(dateTimeFormatter.format(Date.from(in.atZone(ZoneId.systemDefault()).toInstant())));
+					}
+					else if (o.getClass() == LocalDate.class) {
+						final var in = (LocalDate) o;
+						ds.add(dateTimeFormatter.format(Date.from(in.atStartOfDay(ZoneOffset.systemDefault()).toInstant())));
+					}
 					else if (o instanceof final Enum<?> enumeration)
 						ds.add(enumeration.name());
 					else
@@ -213,6 +225,14 @@ public class JPAQueryService {
 				else if (value.getClass() == java.sql.Timestamp.class) {
 					final var in = new Date(((java.sql.Timestamp) value).getTime());
 					ds.add(dateTimeFormatter.format(in));
+				}
+				else if (value.getClass() == LocalDateTime.class) {
+					final var in = (LocalDateTime) value;
+					ds.add(dateTimeFormatter.format(Date.from(in.atZone(ZoneId.systemDefault()).toInstant())));
+				}
+				else if (value.getClass() == LocalDate.class) {
+					final var in = (LocalDate) value;
+					ds.add(dateTimeFormatter.format(Date.from(in.atStartOfDay(ZoneOffset.systemDefault()).toInstant())));
 				}
 				else if (value instanceof Enum) {
 					final var in = (Enum<?>) value;

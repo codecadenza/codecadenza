@@ -24,6 +24,7 @@ package net.codecadenza.eclipse.generator.exchange.method;
 import static net.codecadenza.eclipse.shared.Constants.DEFAULT_MAPPING_OBJ_NAME;
 import static net.codecadenza.eclipse.shared.Constants.DEFAULT_ROOT_MAPPING_OBJ_NAME;
 import static net.codecadenza.eclipse.shared.Constants.EXCHANGE_PATH_PARAM;
+import static net.codecadenza.eclipse.shared.Constants.PACK_JAVA_UTIL;
 import static net.codecadenza.eclipse.shared.Constants.REPO_METHOD_NAME_DELETE;
 import static net.codecadenza.eclipse.shared.Constants.REPO_METHOD_NAME_DELETE_ENTITY;
 import static net.codecadenza.eclipse.shared.Constants.REPO_METHOD_NAME_GET_REFERENCE;
@@ -36,6 +37,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import net.codecadenza.eclipse.generator.common.AbstractJavaSourceGenerator;
 import net.codecadenza.eclipse.model.domain.AbstractDomainAssociation;
+import net.codecadenza.eclipse.model.domain.CollectionTypeEnumeration;
 import net.codecadenza.eclipse.model.domain.DomainAttribute;
 import net.codecadenza.eclipse.model.domain.DomainObject;
 import net.codecadenza.eclipse.model.domain.DomainTagEnumeration;
@@ -327,7 +329,7 @@ public abstract class AbstractImportMethodGenerator extends AbstractExchangeMeth
 		final String targetDomainObjectName = domainObject.getLowerCaseName();
 
 		if (generator != null)
-			generator.importPackage("java.util");
+			generator.importPackage(PACK_JAVA_UTIL);
 
 		// Create the query statement
 		b.append("final var queryStatement = \"select a from " + domainObject.getName() + " a where ");
@@ -449,13 +451,10 @@ public abstract class AbstractImportMethodGenerator extends AbstractExchangeMeth
 				if (!autoGenKey) {
 					b.append(targetDomainObjectName + "." + domainAttr.getSetterName() + "(" + DEFAULT_MAPPING_OBJ_NAME + getter);
 
-					if (attr.getDomainAttribute().convertAttribute())
+					if (domainAttr.convertAttribute())
 						b.append(" != null ? " + DEFAULT_MAPPING_OBJ_NAME + getter + domainAttr.getConverterExpression() + " : null");
 
-					// By definition, we handle fields of type char by using a String with exactly one character!
-					if (attr.getJavaType().isChar())
-						b.append(".charAt(0)");
-
+					b.append(addTypeConversion(domainAttr));
 					b.append(");\n");
 				}
 			}
@@ -831,12 +830,12 @@ public abstract class AbstractImportMethodGenerator extends AbstractExchangeMeth
 
 			b.append("\n");
 
-			if (method.getContentType() == ContentTypeEnumeration.XML) {
+			if (generator != null && method.getContentType() == ContentTypeEnumeration.XML) {
 				generator.importClass("java.nio.charset.StandardCharsets");
 
 				b.append("inputReader = new InputStreamReader(fileInputStream, " + method.getStandardCharset() + ");\n");
 			}
-			else if (method.getContentType() == ContentTypeEnumeration.CSV) {
+			else if (generator != null && method.getContentType() == ContentTypeEnumeration.CSV) {
 				generator.importClass("java.nio.charset.StandardCharsets");
 
 				b.append("var fileContent = \"\";\n\n");
@@ -1168,10 +1167,7 @@ public abstract class AbstractImportMethodGenerator extends AbstractExchangeMeth
 				b.append(attr.getDomainAttribute().getConverterExpression() + " : null");
 			}
 
-			// By definition, we handle fields of type char by using a String with exactly one character!
-			if (attr.getJavaType().isChar())
-				b.append(".charAt(0)");
-
+			b.append(addTypeConversion(attr.getDomainAttribute()));
 			b.append(");\n");
 		}
 
@@ -1218,10 +1214,7 @@ public abstract class AbstractImportMethodGenerator extends AbstractExchangeMeth
 			b.append(attr.getDomainAttribute().getConverterExpression() + " : null");
 		}
 
-		// By definition, we handle fields of type char by using a String with exactly one character!
-		if (attr.getJavaType().isChar())
-			b.append(".charAt(0)");
-
+		b.append(addTypeConversion(attr.getDomainAttribute()));
 		b.append(");\n");
 
 		return b.toString();
@@ -1705,7 +1698,7 @@ public abstract class AbstractImportMethodGenerator extends AbstractExchangeMeth
 				+ DEFAULT_MAPPING_OBJ_NAME + ")";
 
 		if (generator != null)
-			generator.importPackage("java.util");
+			generator.importPackage(PACK_JAVA_UTIL);
 
 		b.append("/**\n");
 		b.append(" * Find " + domainObject.getLabel() + " by fields of given mapping object.\n");
@@ -2173,7 +2166,6 @@ public abstract class AbstractImportMethodGenerator extends AbstractExchangeMeth
 				b.append(
 						createFinderFragment(finderAttr, mappingObject.getDomainObject(), DEFAULT_MAPPING_OBJ_NAME + "." + getter, false));
 				b.append(";\n\n");
-
 			}
 			else
 				b.append(FINDER_METHOD_PREFIX + mappingObject.getDomainObject().getName() + "(" + DEFAULT_MAPPING_OBJ_NAME + ");\n\n");
@@ -2329,6 +2321,27 @@ public abstract class AbstractImportMethodGenerator extends AbstractExchangeMeth
 			return getFinderMethod(mappingObject.getDisplayAttribute(), mappingObject.getDomainObject());
 
 		return null;
+	}
+
+	/**
+	 * Perform the conversion of the mapping type to the type of the domain attribute
+	 * @param domainAttribute
+	 * @return the generated content
+	 */
+	private String addTypeConversion(DomainAttribute domainAttribute) {
+		if (!domainAttribute.getJavaType().isChar())
+			return "";
+
+		if (domainAttribute.getCollectionType() == CollectionTypeEnumeration.SET) {
+			if (generator != null)
+				generator.importPackage("java.util.stream");
+
+			return ".stream().map(s -> s.charAt(0)).collect(Collectors.toSet())";
+		}
+		else if (domainAttribute.getCollectionType() == CollectionTypeEnumeration.LIST)
+			return ".stream().map(s -> s.charAt(0)).toList()";
+
+		return ".charAt(0)";
 	}
 
 }

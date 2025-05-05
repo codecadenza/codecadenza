@@ -31,6 +31,7 @@ import net.codecadenza.eclipse.generator.client.imp.angular.common.AbstractTypeS
 import net.codecadenza.eclipse.generator.client.imp.angular.common.AngularContentFormatter;
 import net.codecadenza.eclipse.generator.client.imp.angular.common.TypeScriptFieldGenerator;
 import net.codecadenza.eclipse.model.domain.AbstractDomainAssociation;
+import net.codecadenza.eclipse.model.domain.CollectionTypeEnumeration;
 import net.codecadenza.eclipse.model.domain.ManyToManyAssociation;
 import net.codecadenza.eclipse.model.domain.ManyToOneAssociation;
 import net.codecadenza.eclipse.model.dto.DTOBean;
@@ -102,17 +103,26 @@ public class AngularDomainObjectGenerator extends AbstractTypeScriptSourceGenera
 
 			if (attr.getDomainAttribute() != null) {
 				final JavaType type = attr.getDomainAttribute().getJavaType();
+				String typeName = "";
+
+				if (attr.getDomainAttribute().getCollectionType() != CollectionTypeEnumeration.NONE)
+					typeName = ARRAY + "<";
 
 				if (type.isBoolean())
-					fieldGenerator = addField(BOOLEAN, attr.getName());
+					typeName += BOOLEAN;
 				else if (type.isNumber())
-					fieldGenerator = addField(NUMBER, attr.getName());
+					typeName += NUMBER;
 				else if (type.isTemporalType())
-					fieldGenerator = addField(DATE, attr.getName());
+					typeName += DATE;
 				else if (type.isEnum())
-					fieldGenerator = addField(type.getName(), attr.getName());
+					typeName += type.getName();
 				else
-					fieldGenerator = addField(STRING, attr.getName());
+					typeName += STRING;
+
+				if (attr.getDomainAttribute().getCollectionType() != CollectionTypeEnumeration.NONE)
+					typeName += ">";
+
+				fieldGenerator = addField(typeName, attr.getName());
 			}
 			else {
 				final AbstractDomainAssociation assoc = attr.getAssociation();

@@ -33,6 +33,7 @@ import net.codecadenza.eclipse.testing.domain.DatabaseVendor;
 import net.codecadenza.eclipse.testing.domain.DomainAssociation;
 import net.codecadenza.eclipse.testing.domain.DomainAttribute;
 import net.codecadenza.eclipse.testing.domain.DomainObject;
+import net.codecadenza.eclipse.testing.domain.ElementCollectionType;
 import net.codecadenza.eclipse.testing.domain.EnumAssociation;
 import net.codecadenza.eclipse.testing.domain.Enumeration;
 import net.codecadenza.eclipse.testing.domain.Project;
@@ -278,6 +279,8 @@ public class ProjectFactory {
 		final var attrLockDate = new DomainAttribute("locking", DomainAttribute.TYPE_LOCAL_DATE_TIME, false, false);
 		final var attrExternalId = new DomainAttribute("external", DomainAttribute.TYPE_UUID, false, false);
 		final var attrLicenseCosts = new DomainAttribute("license", DomainAttribute.TYPE_BIG_DECIMAL, false, false);
+		final var attrNicknames = new DomainAttribute("nicknames", DomainAttribute.TYPE_STRING, false, false,
+				ElementCollectionType.LIST);
 		final var mtmRoles = new DomainAssociation("roles", roleDomainObject, AssociationType.MANY_TO_MANY, false);
 
 		final var userDomainObject = new DomainObject(DOMAIN_OBJECT_USER);
@@ -290,6 +293,7 @@ public class ProjectFactory {
 		userDomainObject.addAttribute(attrExternalId);
 		userDomainObject.addAttribute(attrLicenseCosts);
 		userDomainObject.addAttribute(attrId);
+		userDomainObject.addAttribute(attrNicknames);
 		userDomainObject.addAssociation(mtmRoles);
 		userDomainObject.setStartXPosition(20);
 		userDomainObject.setStartYPosition(startYPosition != null ? startYPosition : DEFAULT_START_Y_POS);

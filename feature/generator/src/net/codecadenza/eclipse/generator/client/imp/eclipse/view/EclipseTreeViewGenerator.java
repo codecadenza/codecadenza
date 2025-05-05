@@ -50,6 +50,7 @@ import net.codecadenza.eclipse.model.client.Form;
 import net.codecadenza.eclipse.model.client.TreeSearchItem;
 import net.codecadenza.eclipse.model.client.TreeView;
 import net.codecadenza.eclipse.model.client.TreeViewItem;
+import net.codecadenza.eclipse.model.domain.CollectionTypeEnumeration;
 import net.codecadenza.eclipse.model.domain.DomainAttribute;
 import net.codecadenza.eclipse.model.domain.DomainObject;
 import net.codecadenza.eclipse.model.domain.ManyToManyAssociation;
@@ -1004,25 +1005,46 @@ public class EclipseTreeViewGenerator extends AbstractTreeViewGenerator {
 				b.append("{");
 			}
 
-			b.append("\nfinal var " + nodeName + " = new TreeItem(" + itemName + ", SWT.NONE);\n");
+			if (node.getDTOAttribute().getDomainAttribute().getCollectionType() != CollectionTypeEnumeration.NONE) {
+				final var parentNodeName = "parent" + node.getDTOAttribute().getUpperCaseName();
 
-			if (type.isBoolean()) {
-				b.append(nodeName + ".setText(" + i18n.getI18N(node.getDTOAttribute(), node.getLabel()) + ");\n\n");
-				b.append("if(" + getter + ")\n");
-				b.append(nodeName + ".setImage(ImageCache.getImage(ImageCache.IMG_CHECKED));\n");
-				b.append("else\n");
-				b.append(nodeName + ".setImage(ImageCache.getImage(ImageCache.IMG_UNCHECKED));\n\n");
-			}
-			else {
-				b.append(nodeName + ".setText(" + i18n.getI18N(node.getDTOAttribute(), node.getLabel()));
-				b.append(" + ITEM_LABEL_SEPARATOR + ");
-				b.append(node.getDTOAttribute().getDomainAttribute().convertToString(getter) + ");\n");
+				b.append("\nfinal var " + parentNodeName + " = new TreeItem(" + itemName + ", SWT.NONE);\n");
+				b.append(parentNodeName + ".setText(" + i18n.getI18N(node.getDTOAttribute(), node.getLabel()) + ");\n");
+				b.append(parentNodeName + ".setImage(ImageCache.getImage(ImageCache.IMG_TREE_ITEMS));\n\n");
+				b.append("for(final var element : " + getter + ")\n");
+				b.append("{\n");
+				b.append("final var " + nodeName + " = new TreeItem(" + parentNodeName + ", SWT.NONE);\n");
+				b.append(nodeName + ".setText(" + node.getDTOAttribute().getDomainAttribute().convertToString("element") + ");\n");
 				b.append(nodeName + ".setImage(ImageCache.getImage(ImageCache.");
 
 				if (type.isTemporalType())
 					b.append("IMG_CALENDAR));\n");
 				else
 					b.append("IMG_TREE_DATA));\n");
+
+				b.append("}\n");
+			}
+			else {
+				b.append("\nfinal var " + nodeName + " = new TreeItem(" + itemName + ", SWT.NONE);\n");
+
+				if (type.isBoolean()) {
+					b.append(nodeName + ".setText(" + i18n.getI18N(node.getDTOAttribute(), node.getLabel()) + ");\n\n");
+					b.append("if(" + getter + ")\n");
+					b.append(nodeName + ".setImage(ImageCache.getImage(ImageCache.IMG_CHECKED));\n");
+					b.append("else\n");
+					b.append(nodeName + ".setImage(ImageCache.getImage(ImageCache.IMG_UNCHECKED));\n\n");
+				}
+				else {
+					b.append(nodeName + ".setText(" + i18n.getI18N(node.getDTOAttribute(), node.getLabel()));
+					b.append(" + ITEM_LABEL_SEPARATOR + ");
+					b.append(node.getDTOAttribute().getDomainAttribute().convertToString(getter) + ");\n");
+					b.append(nodeName + ".setImage(ImageCache.getImage(ImageCache.");
+
+					if (type.isTemporalType())
+						b.append("IMG_CALENDAR));\n");
+					else
+						b.append("IMG_TREE_DATA));\n");
+				}
 			}
 
 			if (addNullCheck)

@@ -46,6 +46,7 @@ import net.codecadenza.eclipse.model.client.FormTypeEnumeration;
 import net.codecadenza.eclipse.model.client.TableColumnField;
 import net.codecadenza.eclipse.model.client.TableColumnFieldTypeEnumeration;
 import net.codecadenza.eclipse.model.domain.AbstractDomainAssociation;
+import net.codecadenza.eclipse.model.domain.CollectionTypeEnumeration;
 import net.codecadenza.eclipse.model.domain.DomainAttribute;
 import net.codecadenza.eclipse.model.domain.DomainObject;
 import net.codecadenza.eclipse.model.domain.IDGeneratorTypeEnumeration;
@@ -166,7 +167,7 @@ public class GridPanelInitService {
 			if (attr.isPk())
 				isPK = true;
 
-			if (attr.isTrackVersion())
+			if (attr.isTrackVersion() || attr.getCollectionType() != CollectionTypeEnumeration.NONE)
 				continue;
 
 			// Add the attribute as a table column field

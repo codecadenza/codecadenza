@@ -26,6 +26,7 @@ import static net.codecadenza.eclipse.shared.Constants.IMG_ATTRIBUTE;
 import java.util.Arrays;
 import java.util.List;
 import net.codecadenza.eclipse.model.domain.AbstractDomainAssociation;
+import net.codecadenza.eclipse.model.domain.CollectionTypeEnumeration;
 import net.codecadenza.eclipse.model.domain.DomainAttribute;
 import net.codecadenza.eclipse.model.domain.DomainObject;
 import net.codecadenza.eclipse.model.domain.IDGeneratorTypeEnumeration;
@@ -572,7 +573,6 @@ public class EditDataExchangeElementPanel extends Composite {
 		mappingObject.getAttributes().add(mappingAttribute);
 
 		final DataExchangeElement element = ExchangeFactory.eINSTANCE.createDataExchangeElement();
-		element.setMaxOccurrences(1);
 		element.setName(mappingAttribute.getName());
 		element.setMappingAttribute(mappingAttribute);
 		element.setParentElement(parentElement);
@@ -580,7 +580,10 @@ public class EditDataExchangeElementPanel extends Composite {
 		element.setContainer(false);
 		element.setMinOccurrences(1);
 
-		if (isOptional(mappingAttribute))
+		if (attribute.getCollectionType() == CollectionTypeEnumeration.NONE)
+			element.setMaxOccurrences(1);
+
+		if (isOptional(mappingAttribute) || attribute.getCollectionType() != CollectionTypeEnumeration.NONE)
 			element.setMinOccurrences(0);
 
 		parentElement.getSubElements().add(element);
@@ -1383,11 +1386,15 @@ public class EditDataExchangeElementPanel extends Composite {
 		domainObjectTreePanel = new DomainObjectTreePanel(panDomainObjectTree, DomainObjectTreePanel.Mode.EXCHANGE) {
 			/*
 			 * (non-Javadoc)
-			 * @see net.codecadenza.eclipse.ui.dialog.util.DomainObjectTreePanel#addDomainAttribute(net.codecadenza.eclipse.model.domain.
-			 * DomainAttribute)
+			 * @see net.codecadenza.eclipse.ui.dialog.util.DomainObjectTreePanel#addDomainAttribute(net.codecadenza.eclipse.model.
+			 * domain.DomainAttribute)
 			 */
 			@Override
 			protected boolean addDomainAttribute(DomainAttribute attr) {
+				// Domain attributes that are mapped to an element collection are only supported for XML and JSON!
+				if (attr.getCollectionType() != CollectionTypeEnumeration.NONE)
+					return contentType == ContentTypeEnumeration.XML || contentType == ContentTypeEnumeration.JSON;
+
 				return !attr.isLob();
 			}
 
@@ -1549,8 +1556,10 @@ public class EditDataExchangeElementPanel extends Composite {
 						return;
 
 					if (itemDrop.getData() instanceof DataExchangeElement) {
-						if (selItem.getData() instanceof DomainAttribute) {
-							if (itemDrop.getText().equals(ITEM_ATTRIBUTES_LABEL))
+						if (selItem.getData() instanceof final DomainAttribute domainAttribute) {
+							if (itemDrop.getText().equals(ITEM_ATTRIBUTES_LABEL)
+									&& (domainAttribute.getCollectionType() == CollectionTypeEnumeration.NONE
+											|| contentType == ContentTypeEnumeration.JSON))
 								addNewDataExchangeAttribute(itemDrop, selItem);
 							else if (itemDrop.getText().equals(ITEM_ELEMENTS_LABEL) && contentType == ContentTypeEnumeration.XML)
 								addNewDataExchangeElement(itemDrop, selItem);

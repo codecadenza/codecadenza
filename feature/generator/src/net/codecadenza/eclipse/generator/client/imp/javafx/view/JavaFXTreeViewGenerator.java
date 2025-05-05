@@ -48,6 +48,7 @@ import net.codecadenza.eclipse.model.client.Form;
 import net.codecadenza.eclipse.model.client.TreeSearchItem;
 import net.codecadenza.eclipse.model.client.TreeView;
 import net.codecadenza.eclipse.model.client.TreeViewItem;
+import net.codecadenza.eclipse.model.domain.CollectionTypeEnumeration;
 import net.codecadenza.eclipse.model.domain.DomainAttribute;
 import net.codecadenza.eclipse.model.domain.DomainObject;
 import net.codecadenza.eclipse.model.domain.ManyToManyAssociation;
@@ -873,7 +874,7 @@ public class JavaFXTreeViewGenerator extends AbstractTreeViewGenerator {
 
 		// Add item nodes
 		item.getNodes().forEach(node -> {
-			final var nodeName = "item" + node.getDTOAttribute().getUpperCaseName();
+			var nodeName = "item" + node.getDTOAttribute().getUpperCaseName();
 			final JavaType type = node.getDTOAttribute().getSearchType();
 			final String getter = "i." + node.getDTOAttribute().getGetterName();
 			final boolean addNullCheck = !type.isPrimitive();
@@ -883,7 +884,23 @@ public class JavaFXTreeViewGenerator extends AbstractTreeViewGenerator {
 				b.append("{");
 			}
 
-			if (type.isBoolean()) {
+			if (node.getDTOAttribute().getDomainAttribute().getCollectionType() != CollectionTypeEnumeration.NONE) {
+				final var parentNodeName = "parent" + node.getDTOAttribute().getUpperCaseName();
+
+				b.append("\nfinal var " + parentNodeName + " = new TreeDataItem(");
+				b.append(i18n.getI18N(node.getDTOAttribute(), node.getLabel()));
+				b.append(", ImageLoader.getImage(ImageLoader.IMG_FOLDER));\n\n");
+				b.append("for(final var element : " + getter + ")\n");
+				b.append("{\n");
+				b.append("final var " + nodeName + " = new TreeDataItem(");
+				b.append(node.getDTOAttribute().getDomainAttribute().convertToString("element") + ", ");
+				b.append("ImageLoader.getImage(ImageLoader.IMG_TREE_DATA));\n\n");
+				b.append(parentNodeName + ".getChildren().add(" + nodeName + ");\n");
+				b.append("}\n");
+
+				nodeName = parentNodeName;
+			}
+			else if (type.isBoolean()) {
 				b.append("\n");
 				b.append("TreeDataItem " + nodeName + ";\n\n");
 				b.append("if(" + getter + ")\n");
@@ -892,7 +909,6 @@ public class JavaFXTreeViewGenerator extends AbstractTreeViewGenerator {
 				b.append("else\n");
 				b.append(nodeName + " = new TreeDataItem(" + i18n.getI18N(node.getDTOAttribute(), node.getLabel()) + ", ");
 				b.append("ImageLoader.getImage(ImageLoader.IMG_UNCHECKED));\n");
-				b.append("\n");
 			}
 			else {
 				b.append("\nfinal var " + nodeName + " = new TreeDataItem(");

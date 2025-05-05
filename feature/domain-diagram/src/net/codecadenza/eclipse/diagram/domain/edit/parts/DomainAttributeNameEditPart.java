@@ -25,7 +25,6 @@ import static net.codecadenza.eclipse.shared.Constants.IMG_ATTRIBUTE;
 import static net.codecadenza.eclipse.shared.Constants.IMG_ID_ATTRIBUTE;
 import static net.codecadenza.eclipse.shared.Constants.IMG_UK_ATTRIBUTE;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import net.codecadenza.eclipse.diagram.domain.edit.policies.CodeCadenzaTextSelectionEditPolicy;
@@ -49,7 +48,6 @@ import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.Request;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.editpolicies.NonResizableEditPolicy;
-import org.eclipse.gef.handles.NonResizableHandleKit;
 import org.eclipse.gef.requests.DirectEditRequest;
 import org.eclipse.gef.tools.DirectEditManager;
 import org.eclipse.gmf.runtime.common.ui.services.parser.IParser;
@@ -112,18 +110,6 @@ public class DomainAttributeNameEditPart extends CompartmentEditPart implements 
 
 		installEditPolicy(EditPolicy.DIRECT_EDIT_ROLE, new LabelDirectEditPolicy());
 		installEditPolicy(EditPolicy.PRIMARY_DRAG_ROLE, new NonResizableEditPolicy() {
-			/*
-			 * (non-Javadoc)
-			 * @see org.eclipse.gef.editpolicies.NonResizableEditPolicy#createSelectionHandles()
-			 */
-			@Override
-			protected List<?> createSelectionHandles() {
-				final var handles = new ArrayList<>();
-				NonResizableHandleKit.addMoveHandle(getHost(), handles);
-
-				return handles;
-			}
-
 			/*
 			 * (non-Javadoc)
 			 * @see org.eclipse.gef.editpolicies.NonResizableEditPolicy#getCommand(org.eclipse.gef.Request)
@@ -264,9 +250,9 @@ public class DomainAttributeNameEditPart extends CompartmentEditPart implements 
 
 		if (parserElement != null && getParser() != null) {
 			if (attribute.getTag() == AttributeTagEnumeration.NONE)
-				text = attribute.getJavaType().getName() + " : " + attribute.getName();
+				text = attribute.getTypeName() + " : " + attribute.getName();
 			else
-				text = attribute.getJavaType().getName() + " : " + attribute.getName() + " [" + attribute.getTag().getName() + "]";
+				text = attribute.getTypeName() + " : " + attribute.getName() + " [" + attribute.getTag().getName() + "]";
 		}
 
 		if (text == null || text.isEmpty())
@@ -372,8 +358,8 @@ public class DomainAttributeNameEditPart extends CompartmentEditPart implements 
 	public IParser getParser() {
 		if (parser == null) {
 			final String parserHint = ((View) getModel()).getType();
-			final var hintAdapter = new CodeCadenzaParserProvider.HintAdapter(CodeCadenzaElementTypes.DomainAttribute_3001, getParserElement(),
-					parserHint);
+			final var hintAdapter = new CodeCadenzaParserProvider.HintAdapter(CodeCadenzaElementTypes.DomainAttribute_3001,
+					getParserElement(), parserHint);
 
 			parser = ParserService.getInstance().getParser(hintAdapter);
 		}

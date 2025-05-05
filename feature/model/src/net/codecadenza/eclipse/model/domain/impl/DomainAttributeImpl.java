@@ -25,7 +25,10 @@ import static net.codecadenza.eclipse.shared.Constants.PACK_JAVA_TIME;
 
 import java.util.Optional;
 import net.codecadenza.eclipse.model.db.DBColumn;
+import net.codecadenza.eclipse.model.db.DBTable;
 import net.codecadenza.eclipse.model.domain.AttributeTagEnumeration;
+import net.codecadenza.eclipse.model.domain.CollectionMappingStrategyEnumeration;
+import net.codecadenza.eclipse.model.domain.CollectionTypeEnumeration;
 import net.codecadenza.eclipse.model.domain.DomainAttribute;
 import net.codecadenza.eclipse.model.domain.DomainAttributeValidator;
 import net.codecadenza.eclipse.model.domain.DomainObject;
@@ -71,6 +74,15 @@ import org.eclipse.emf.ecore.util.EcoreUtil;
  * <li>{@link net.codecadenza.eclipse.model.domain.impl.DomainAttributeImpl#isLob <em>Lob</em>}</li>
  * <li>{@link net.codecadenza.eclipse.model.domain.impl.DomainAttributeImpl#getInternalComment <em>Internal Comment</em>}</li>
  * <li>{@link net.codecadenza.eclipse.model.domain.impl.DomainAttributeImpl#getUserComment <em>User Comment</em>}</li>
+ * <li>{@link net.codecadenza.eclipse.model.domain.impl.DomainAttributeImpl#isRemoveWhitespaceCharacters <em>Remove Whitespace
+ * Characters</em>}</li>
+ * <li>{@link net.codecadenza.eclipse.model.domain.impl.DomainAttributeImpl#isConvertToUpperCase <em>Convert To Upper
+ * Case</em>}</li>
+ * <li>{@link net.codecadenza.eclipse.model.domain.impl.DomainAttributeImpl#isConvertToLowerCase <em>Convert To Lower
+ * Case</em>}</li>
+ * <li>{@link net.codecadenza.eclipse.model.domain.impl.DomainAttributeImpl#getCollectionType <em>Collection Type</em>}</li>
+ * <li>{@link net.codecadenza.eclipse.model.domain.impl.DomainAttributeImpl#getCollectionMappingStrategy <em>Collection Mapping
+ * Strategy</em>}</li>
  * </ul>
  * </p>
  * @generated
@@ -419,6 +431,38 @@ public class DomainAttributeImpl extends EObjectImpl implements DomainAttribute 
 	 * @ordered
 	 */
 	protected boolean convertToLowerCase = CONVERT_TO_LOWER_CASE_EDEFAULT;
+
+	/**
+	 * The default value of the '{@link #getCollectionType() <em>Collection Type</em>}' attribute
+	 * @see #getCollectionType()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final CollectionTypeEnumeration COLLECTION_TYPE_EDEFAULT = CollectionTypeEnumeration.NONE;
+
+	/**
+	 * The cached value of the '{@link #getCollectionType() <em>Collection Type</em>}' attribute
+	 * @see #getCollectionType()
+	 * @generated
+	 * @ordered
+	 */
+	protected CollectionTypeEnumeration collectionType = COLLECTION_TYPE_EDEFAULT;
+
+	/**
+	 * The default value of the '{@link #getCollectionMappingStrategy() <em>Collection Mapping Strategy</em>}' attribute
+	 * @see #getCollectionMappingStrategy()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final CollectionMappingStrategyEnumeration COLLECTION_MAPPING_STRATEGY_EDEFAULT = CollectionMappingStrategyEnumeration.NONE;
+
+	/**
+	 * The cached value of the '{@link #getCollectionMappingStrategy() <em>Collection Mapping Strategy</em>}' attribute
+	 * @see #getCollectionMappingStrategy()
+	 * @generated
+	 * @ordered
+	 */
+	protected CollectionMappingStrategyEnumeration collectionMappingStrategy = COLLECTION_MAPPING_STRATEGY_EDEFAULT;
 
 	/**
 	 * @generated
@@ -969,7 +1013,8 @@ public class DomainAttributeImpl extends EObjectImpl implements DomainAttribute 
 
 	/*
 	 * (non-Javadoc)
-	 * @see net.codecadenza.eclipse.model.domain.DomainAttribute#setTag(net.codecadenza.eclipse.model.domain.AttributeTagEnumeration)
+	 * @see net.codecadenza.eclipse.model.domain.DomainAttribute#
+	 * setTag(net.codecadenza.eclipse.model.domain.AttributeTagEnumeration)
 	 * @generated
 	 */
 	@Override
@@ -1132,6 +1177,59 @@ public class DomainAttributeImpl extends EObjectImpl implements DomainAttribute 
 
 	/*
 	 * (non-Javadoc)
+	 * @see net.codecadenza.eclipse.model.domain.DomainAttribute#getCollectionType()
+	 * @generated
+	 */
+	@Override
+	public CollectionTypeEnumeration getCollectionType() {
+		return collectionType;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see net.codecadenza.eclipse.model.domain.DomainAttribute#setCollectionType(net.codecadenza.eclipse.model.domain.
+	 * CollectionTypeEnumeration)
+	 * @generated
+	 */
+	@Override
+	public void setCollectionType(CollectionTypeEnumeration newCollectionType) {
+		final CollectionTypeEnumeration oldCollectionType = collectionType;
+		collectionType = newCollectionType == null ? COLLECTION_TYPE_EDEFAULT : newCollectionType;
+
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, DomainPackage.DOMAIN_ATTRIBUTE__COLLECTION_TYPE, oldCollectionType,
+					collectionType));
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see net.codecadenza.eclipse.model.domain.DomainAttribute#getCollectionMappingStrategy()
+	 * @generated
+	 */
+	@Override
+	public CollectionMappingStrategyEnumeration getCollectionMappingStrategy() {
+		return collectionMappingStrategy;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see net.codecadenza.eclipse.model.domain.DomainAttribute#setCollectionType(net.codecadenza.eclipse.model.domain.
+	 * CollectionMappingStrategyEnumeration)
+	 * @generated
+	 */
+	@Override
+	public void setCollectionMappingStrategy(CollectionMappingStrategyEnumeration newCollectionMappingStrategy) {
+		final CollectionMappingStrategyEnumeration oldCollectionMappingStrategy = collectionMappingStrategy;
+		collectionMappingStrategy = newCollectionMappingStrategy == null ? COLLECTION_MAPPING_STRATEGY_EDEFAULT
+				: newCollectionMappingStrategy;
+
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, DomainPackage.DOMAIN_ATTRIBUTE__COLLECTION_MAPPING_STRATEGY,
+					oldCollectionMappingStrategy, collectionMappingStrategy));
+	}
+
+	/*
+	 * (non-Javadoc)
 	 * @see org.eclipse.emf.ecore.impl.BasicEObjectImpl#eInverseAdd(org.eclipse.emf.ecore.InternalEObject, int,
 	 * org.eclipse.emf.common.notify.NotificationChain)
 	 * @generated
@@ -1245,6 +1343,10 @@ public class DomainAttributeImpl extends EObjectImpl implements DomainAttribute 
 				return isConvertToUpperCase();
 			case DomainPackage.DOMAIN_ATTRIBUTE__CONVERT_TO_LOWER_CASE:
 				return isConvertToLowerCase();
+			case DomainPackage.DOMAIN_ATTRIBUTE__COLLECTION_TYPE:
+				return getCollectionType();
+			case DomainPackage.DOMAIN_ATTRIBUTE__COLLECTION_MAPPING_STRATEGY:
+				return getCollectionMappingStrategy();
 		}
 
 		return super.eGet(featureID, resolve, coreType);
@@ -1329,6 +1431,12 @@ public class DomainAttributeImpl extends EObjectImpl implements DomainAttribute 
 				return;
 			case DomainPackage.DOMAIN_ATTRIBUTE__CONVERT_TO_LOWER_CASE:
 				setConvertToLowerCase((boolean) newValue);
+				return;
+			case DomainPackage.DOMAIN_ATTRIBUTE__COLLECTION_TYPE:
+				setCollectionType((CollectionTypeEnumeration) newValue);
+				return;
+			case DomainPackage.DOMAIN_ATTRIBUTE__COLLECTION_MAPPING_STRATEGY:
+				setCollectionMappingStrategy((CollectionMappingStrategyEnumeration) newValue);
 				return;
 		}
 
@@ -1415,6 +1523,12 @@ public class DomainAttributeImpl extends EObjectImpl implements DomainAttribute 
 			case DomainPackage.DOMAIN_ATTRIBUTE__CONVERT_TO_LOWER_CASE:
 				setConvertToLowerCase(CONVERT_TO_LOWER_CASE_EDEFAULT);
 				return;
+			case DomainPackage.DOMAIN_ATTRIBUTE__COLLECTION_TYPE:
+				setCollectionType(COLLECTION_TYPE_EDEFAULT);
+				return;
+			case DomainPackage.DOMAIN_ATTRIBUTE__COLLECTION_MAPPING_STRATEGY:
+				setCollectionMappingStrategy(COLLECTION_MAPPING_STRATEGY_EDEFAULT);
+				return;
 		}
 
 		super.eUnset(featureID);
@@ -1476,6 +1590,10 @@ public class DomainAttributeImpl extends EObjectImpl implements DomainAttribute 
 				return convertToUpperCase != CONVERT_TO_UPPER_CASE_EDEFAULT;
 			case DomainPackage.DOMAIN_ATTRIBUTE__CONVERT_TO_LOWER_CASE:
 				return convertToLowerCase != CONVERT_TO_LOWER_CASE_EDEFAULT;
+			case DomainPackage.DOMAIN_ATTRIBUTE__COLLECTION_TYPE:
+				return collectionType != COLLECTION_TYPE_EDEFAULT;
+			case DomainPackage.DOMAIN_ATTRIBUTE__COLLECTION_MAPPING_STRATEGY:
+				return collectionMappingStrategy != COLLECTION_MAPPING_STRATEGY_EDEFAULT;
 		}
 
 		return super.eIsSet(featureID);
@@ -1532,6 +1650,10 @@ public class DomainAttributeImpl extends EObjectImpl implements DomainAttribute 
 		result.append(convertToUpperCase);
 		result.append(", convertToLowerCase: ");
 		result.append(convertToLowerCase);
+		result.append(", collectionType: ");
+		result.append(collectionType);
+		result.append(", collectionMappingStrategy: ");
+		result.append(collectionMappingStrategy);
 		result.append(')');
 
 		return result.toString();
@@ -1594,7 +1716,7 @@ public class DomainAttributeImpl extends EObjectImpl implements DomainAttribute 
 	@Override
 	public boolean convertAttribute() {
 		// All currently available converters are only supported for attributes of type String!
-		if (!getJavaType().isString())
+		if (!getJavaType().isString() || getCollectionType() != CollectionTypeEnumeration.NONE)
 			return false;
 
 		return removeWhitespaceCharacters || convertToLowerCase || convertToUpperCase;
@@ -1849,6 +1971,34 @@ public class DomainAttributeImpl extends EObjectImpl implements DomainAttribute 
 			return Integer.toString(maxSize);
 
 		return "Integer.MAX_VALUE";
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see net.codecadenza.eclipse.model.domain.DomainAttribute#getTypeName()
+	 * @generated not
+	 */
+	@Override
+	public String getTypeName() {
+		if (getCollectionType() == CollectionTypeEnumeration.NONE)
+			return getJavaType().getName();
+		else if (getCollectionType() == CollectionTypeEnumeration.LIST)
+			return "List<" + getJavaType().getWrapperTypeName() + ">";
+		else
+			return "Set<" + getJavaType().getWrapperTypeName() + ">";
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see net.codecadenza.eclipse.model.domain.DomainAttribute#getCollectionTable()
+	 * @generated not
+	 */
+	@Override
+	public DBTable getCollectionTable() {
+		if (getCollectionMappingStrategy() == CollectionMappingStrategyEnumeration.TABLE)
+			return getColumn().getDatabaseTable();
+
+		return null;
 	}
 
 }

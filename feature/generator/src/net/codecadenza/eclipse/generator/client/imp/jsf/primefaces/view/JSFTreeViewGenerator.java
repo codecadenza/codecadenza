@@ -44,6 +44,7 @@ import static net.codecadenza.eclipse.shared.Constants.UI_TREE_FOLDER;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.List;
 import net.codecadenza.eclipse.generator.client.common.service.ServiceDeclarationGenerator;
 import net.codecadenza.eclipse.generator.client.common.service.ServiceInvocationGenerator;
 import net.codecadenza.eclipse.generator.client.common.tree.AbstractTreeViewGenerator;
@@ -54,9 +55,11 @@ import net.codecadenza.eclipse.model.boundary.BoundaryBean;
 import net.codecadenza.eclipse.model.boundary.BoundaryMethod;
 import net.codecadenza.eclipse.model.client.Form;
 import net.codecadenza.eclipse.model.client.FormTypeEnumeration;
+import net.codecadenza.eclipse.model.client.TreeNode;
 import net.codecadenza.eclipse.model.client.TreeSearchItem;
 import net.codecadenza.eclipse.model.client.TreeView;
 import net.codecadenza.eclipse.model.client.TreeViewItem;
+import net.codecadenza.eclipse.model.domain.CollectionTypeEnumeration;
 import net.codecadenza.eclipse.model.domain.DomainAttribute;
 import net.codecadenza.eclipse.model.domain.DomainTagEnumeration;
 import net.codecadenza.eclipse.model.domain.OneToManyAssociation;
@@ -830,14 +833,7 @@ public class JSFTreeViewGenerator extends AbstractTreeViewGenerator {
 		b.append("new TreeNavigatorItem(");
 		b.append(domainAttribute.convertToString("item." + pkAttr.getGetterName()));
 		b.append(", itemText.toString(), null), " + SELECTED_NODE_NAME + ");\n");
-
-		treeItem.getNodes().forEach(node -> {
-			b.append("\n// Add \"" + node.getLabel() + "\" tree node\n");
-			b.append("itemText = new StringBuilder();\n");
-			b.append(createItemText(node.getDTOAttribute(), false, node.getLabel()));
-			b.append("new DefaultTreeNode<>(" + NODE_TYPE_DATA + ", new TreeNavigatorItem(itemText.toString()), node);\n");
-		});
-
+		b.append(addTreeNodes(treeItem.getNodes()));
 		b.append(addSubItemFolderNodes(treeItem));
 		b.append("}\n");
 		b.append("}\n\n");
@@ -1036,19 +1032,46 @@ public class JSFTreeViewGenerator extends AbstractTreeViewGenerator {
 		b.append("new TreeNavigatorItem(");
 		b.append(domainAttribute.convertToString("item." + pkAttr.getGetterName()));
 		b.append(", itemText.toString(), null), " + ROOT_NODE_NAME + ");\n");
-
-		treeItem.getNodes().forEach(node -> {
-			b.append("\n// Add \"" + node.getLabel() + "\" tree node\n");
-			b.append("itemText = new StringBuilder();\n");
-			b.append(createItemText(node.getDTOAttribute(), false, node.getLabel()));
-			b.append("new DefaultTreeNode<>(" + NODE_TYPE_DATA + ", new TreeNavigatorItem(itemText.toString()), node);\n");
-		});
-
+		b.append(addTreeNodes(treeItem.getNodes()));
 		b.append(addSubItemFolderNodes(treeItem));
 		b.append("}\n");
 		b.append("}\n\n");
 
 		addMethod(methodSignature, b.toString());
+	}
+
+	/**
+	 * Add all nodes of a {@link TreeViewItem} to the tree
+	 * @param nodes
+	 * @return the generated content
+	 */
+	private String addTreeNodes(List<TreeNode> nodes) {
+		final var b = new StringBuilder();
+
+		nodes.forEach(node -> {
+			final DTOBeanAttribute attr = node.getDTOAttribute();
+
+			b.append("\n// Add the \"" + node.getLabel() + "\" tree node\n");
+
+			if (attr.getDomainAttribute().getCollectionType() != CollectionTypeEnumeration.NONE) {
+				final var parentNodeName = "node" + attr.getUpperCaseName();
+				final var translationKey = attr.getDTOBean().getName() + "_" + attr.getName();
+
+				b.append("final var " + parentNodeName + " = ");
+				b.append("new DefaultTreeNode<>(" + NODE_TYPE_DATA + ", new TreeNavigatorItem(");
+				b.append(i18n.getBundleFragment(translationKey, node.getLabel()) + "), node);\n\n");
+				b.append("for(final var element : item." + attr.getModelGetterName() + ")\n");
+				b.append("new DefaultTreeNode<>(" + NODE_TYPE_DATA + ", new TreeNavigatorItem(");
+				b.append(node.getDTOAttribute().getDomainAttribute().convertToString("element") + "), " + parentNodeName + ");\n");
+			}
+			else {
+				b.append("itemText = new StringBuilder();\n");
+				b.append(createItemText(attr, false, node.getLabel()));
+				b.append("new DefaultTreeNode<>(" + NODE_TYPE_DATA + ", new TreeNavigatorItem(itemText.toString()), node);\n");
+			}
+		});
+
+		return b.toString();
 	}
 
 	/**

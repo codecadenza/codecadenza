@@ -60,6 +60,7 @@ public class I18NJavaFX {
 	public static final String ABSTRACT_VIEW_NAVIGATOR_SAVED_QUERIES_LABEL = "abstract_view_navigator.saved_queries_label";
 	public static final String ACTION_COPY_TITLE = "action_copy.title";
 	public static final String ACTION_DELETE_TITLE = "action_delete.title";
+	public static final String ACTION_DELETE_ALL_TITLE = "action_delete_all.title";
 	public static final String ACTION_EXPORT_DIALOG_TITLE = "action_export.dialog_title";
 	public static final String ACTION_EXPORT_MSG_EXPORT_ERROR = "action_export.msg_export_error";
 	public static final String ACTION_EXPORT_TITLE = "action_export.title";
@@ -77,6 +78,7 @@ public class I18NJavaFX {
 	public static final String ACTION_SAVE_QUERY_TITLE = "action_save_query.title";
 	public static final String ACTION_SEARCH_TITLE = "action_search.title";
 	public static final String ACTION_SUSPEND_TITLE = "action_suspend.title";
+	public static final String CMD_ADD = "cmd_add";
 	public static final String CMD_CANCEL = "cmd_cancel";
 	public static final String CMD_COUNT = "cmd_count";
 	public static final String CMD_NO = "cmd_no";
@@ -88,6 +90,9 @@ public class I18NJavaFX {
 	public static final String DATA_FETCH_ACTION_RESULT_WITH_COUNT = "data_fetch_action.result_with_count";
 	public static final String DATA_FETCH_ACTION_STATUS_FETCH_DATA = "data_fetch_action.status_fetch_data";
 	public static final String DATA_FETCH_ACTION_STATUS_OP_CANCELED = "data_fetch_action.status_op_canceled";
+	public static final String ELEMENT_COLLECTION_EDITOR_LBL_ADD = "element_collection_editor.lbl_add";
+	public static final String ELEMENT_COLLECTION_EDITOR_MSG_TITLE_CONVERSION = "element_collection_editor.msg_title_conversion";
+	public static final String ELEMENT_COLLECTION_EDITOR_MSG_CONVERSION_FAILED = "element_collection_editor.msg_conversion_failed";
 	public static final String FILE_DOWNLOAD_DIALOG_BYTES_PROCESSED = "file_download_dialog.bytes_processed";
 	public static final String FILE_DOWNLOAD_DIALOG_TITLE = "file_download_dialog.title";
 	public static final String FILE_UPLOAD_DIALOG_BYTES_PROCESSED = "file_upload_dialog.bytes_processed";

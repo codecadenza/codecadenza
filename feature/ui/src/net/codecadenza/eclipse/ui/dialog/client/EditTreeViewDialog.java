@@ -36,6 +36,7 @@ import net.codecadenza.eclipse.model.client.TreeSearchItem;
 import net.codecadenza.eclipse.model.client.TreeView;
 import net.codecadenza.eclipse.model.client.TreeViewItem;
 import net.codecadenza.eclipse.model.domain.AbstractDomainAssociation;
+import net.codecadenza.eclipse.model.domain.CollectionTypeEnumeration;
 import net.codecadenza.eclipse.model.domain.DomainAttribute;
 import net.codecadenza.eclipse.model.domain.DomainObject;
 import net.codecadenza.eclipse.model.dto.DTOBean;
@@ -880,7 +881,7 @@ public class EditTreeViewDialog extends CodeCadenzaTitleAreaDialog {
 
 			if (itemDrop.getText().equals(LABEL_QUICK_SEARCH)) {
 				// Quick-search fields are only supported for attributes of type java.lang.String!
-				if (!selAttribute.getJavaType().isString())
+				if (!selAttribute.getJavaType().isString() || selAttribute.getCollectionType() != CollectionTypeEnumeration.NONE)
 					return;
 
 				if (doEdit && !treeViewService.canAddSearchItem()) {
@@ -902,6 +903,9 @@ public class EditTreeViewDialog extends CodeCadenzaTitleAreaDialog {
 				itemQuickSearch.setData(treeItem);
 			}
 			else if (itemDrop.getText().equals(LABEL_ADV_SEARCH)) {
+				if (selAttribute.getCollectionType() != CollectionTypeEnumeration.NONE)
+					return;
+
 				if (doEdit && !treeViewService.canAddSearchItem()) {
 					final var msg = "An advanced search item cannot be added because this would leave an "
 							+ "improper configuration of a corresponding integration method!";
@@ -923,6 +927,9 @@ public class EditTreeViewDialog extends CodeCadenzaTitleAreaDialog {
 				itemAdvSearch.setData(treeItem);
 			}
 			else if (itemDrop.getText().equals(LABEL_DISPLAY_ATTRIBUTES)) {
+				if (selAttribute.getCollectionType() != CollectionTypeEnumeration.NONE)
+					return;
+
 				final var treeItem = (TreeViewItem) itemDrop.getParentItem().getData();
 				selDTO = treeItem.getItemDTO();
 

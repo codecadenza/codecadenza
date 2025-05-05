@@ -23,6 +23,7 @@ package net.codecadenza.eclipse.testing.dialog.guitest;
 
 import net.codecadenza.eclipse.testing.dialog.AbstractDialog;
 import net.codecadenza.eclipse.testing.domain.DomainObject;
+import net.codecadenza.eclipse.testing.domain.FormType;
 import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 
 /**
@@ -59,7 +60,7 @@ public class ViewFormTestDialog extends AbstractDialog {
 	public void enterData() {
 		// Open the dialog for creating a new object
 		bot.toolbarButtonWithTooltip(domainObject.getCreateFormTitle()).click();
-		new SingleRecordFormTestDialog(bot, domainObject, domainObject.getCreateFormTitle()).enterData();
+		new SingleRecordFormTestDialog(bot, domainObject, domainObject.getCreateFormTitle(), FormType.CREATE).enterData();
 		activateShellWithTitle(domainObject.getViewFormTitle());
 
 		// Open the search dialog
@@ -74,7 +75,7 @@ public class ViewFormTestDialog extends AbstractDialog {
 		new RowSelectionDialog(bot, false).enterData();
 
 		// Update data
-		new SingleRecordFormTestDialog(bot, domainObject, domainObject.getEditFormTitle()).enterData();
+		new SingleRecordFormTestDialog(bot, domainObject, domainObject.getEditFormTitle(), FormType.UPDATE).enterData();
 		activateShellWithTitle(domainObject.getViewFormTitle());
 
 		// Refresh the view
@@ -87,7 +88,7 @@ public class ViewFormTestDialog extends AbstractDialog {
 		new RowSelectionDialog(bot, true).enterData();
 
 		// Verify data
-		new SingleRecordFormTestDialog(bot, domainObject, domainObject.getReadonlyFormTitle()).enterData();
+		new SingleRecordFormTestDialog(bot, domainObject, domainObject.getReadonlyFormTitle(), FormType.READONLY).enterData();
 		activateShellWithTitle(domainObject.getViewFormTitle());
 
 		// Delete an object

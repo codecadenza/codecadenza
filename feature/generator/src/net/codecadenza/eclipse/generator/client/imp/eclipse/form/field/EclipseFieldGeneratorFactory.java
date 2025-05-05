@@ -103,6 +103,8 @@ public class EclipseFieldGeneratorFactory {
 			else
 				fieldGenerator = new RAPExtLinkFieldGenerator(field, formGenerator);
 		}
+		else if (type == FormFieldTypeEnumeration.ELEMENT_COLLECTION_EDITOR)
+			fieldGenerator = new EclipseElementCollectionEditorGenerator(field, formGenerator);
 		else
 			throw new IllegalStateException("A generator for the form field type '" + type + "' is not available!");
 

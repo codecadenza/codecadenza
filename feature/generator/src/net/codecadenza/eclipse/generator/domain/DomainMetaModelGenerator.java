@@ -22,10 +22,12 @@
 package net.codecadenza.eclipse.generator.domain;
 
 import net.codecadenza.eclipse.generator.common.AbstractJavaSourceGenerator;
+import net.codecadenza.eclipse.model.domain.CollectionTypeEnumeration;
 import net.codecadenza.eclipse.model.domain.DomainAttribute;
 import net.codecadenza.eclipse.model.domain.DomainObject;
 import net.codecadenza.eclipse.model.domain.ManyToManyAssociation;
 import net.codecadenza.eclipse.model.domain.OneToManyAssociation;
+import net.codecadenza.eclipse.shared.Constants;
 
 /**
  * <p>
@@ -73,6 +75,9 @@ public class DomainMetaModelGenerator extends AbstractJavaSourceGenerator {
 		});
 
 		for (final DomainAttribute attr : domainObject.getAttributes()) {
+			if (attr.getCollectionType() != CollectionTypeEnumeration.NONE)
+				importPackage(Constants.PACK_JAVA_UTIL);
+
 			if (attr.getJavaType().getNamespace() == null)
 				continue;
 
@@ -103,7 +108,12 @@ public class DomainMetaModelGenerator extends AbstractJavaSourceGenerator {
 	@Override
 	protected void addFields() {
 		domainObject.getAttributes().forEach(attr -> {
-			final String attrTypeName = attr.getJavaType().getWrapperTypeName();
+			final String attrTypeName;
+
+			if (attr.getCollectionType() == CollectionTypeEnumeration.NONE)
+				attrTypeName = attr.getJavaType().getWrapperTypeName();
+			else
+				attrTypeName = attr.getTypeName();
 
 			addPublicField("SingularAttribute<" + domainObject.getName() + ", " + attrTypeName + ">", attr.getName())
 					.withStaticModifier().withVolatileModifier().create();

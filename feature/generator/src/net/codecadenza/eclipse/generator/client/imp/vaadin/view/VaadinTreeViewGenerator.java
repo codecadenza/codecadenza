@@ -53,9 +53,11 @@ import net.codecadenza.eclipse.model.boundary.BoundaryMethod;
 import net.codecadenza.eclipse.model.boundary.BoundaryMethodTypeEnumeration;
 import net.codecadenza.eclipse.model.client.Form;
 import net.codecadenza.eclipse.model.client.FormTypeEnumeration;
+import net.codecadenza.eclipse.model.client.TreeNode;
 import net.codecadenza.eclipse.model.client.TreeSearchItem;
 import net.codecadenza.eclipse.model.client.TreeView;
 import net.codecadenza.eclipse.model.client.TreeViewItem;
+import net.codecadenza.eclipse.model.domain.CollectionTypeEnumeration;
 import net.codecadenza.eclipse.model.domain.DomainAttribute;
 import net.codecadenza.eclipse.model.domain.DomainTagEnumeration;
 import net.codecadenza.eclipse.model.domain.OneToManyAssociation;
@@ -812,20 +814,7 @@ public class VaadinTreeViewGenerator extends AbstractTreeViewGenerator {
 		b.append(", " + itemTypeName + ", itemText.toString());\n");
 		b.append("treeItem.setIcon(VaadinIcon.FOLDER);\n\n");
 		b.append("addItem(null, treeItem);\n");
-
-		treeItem.getNodes().forEach(node -> {
-			final var itemName = "treeItem" + node.getDTOAttribute().getUpperCaseName();
-
-			b.append("\n// Add tree view item \"" + node.getLabel() + "\"\n");
-			b.append("itemText = new StringBuilder();\n");
-			b.append(createItemText(node.getDTOAttribute(), false, node.getLabel()) + "\n");
-			b.append("final var " + itemName + " = new TreeItem(");
-			b.append(pkAttr.getDomainAttribute().convertToString("item." + pkAttr.getGetterName()));
-			b.append(", " + NODE_TYPE_DATA + ", itemText.toString());\n");
-			b.append(itemName + ".setIcon(VaadinIcon.FILE);\n\n");
-			b.append("addItem(treeItem, " + itemName + ");\n");
-		});
-
+		b.append(addTreeNodes(pkAttr, treeItem.getNodes()));
 		b.append(addSubItemFolderNodes(treeItem));
 		b.append("}\n\n");
 		b.append("refreshTree();\n");
@@ -946,26 +935,59 @@ public class VaadinTreeViewGenerator extends AbstractTreeViewGenerator {
 		b.append(", " + itemTypeName + ", itemText.toString());\n");
 		b.append("treeItem.setIcon(VaadinIcon.FOLDER);\n\n");
 		b.append("addItem(parentItem, treeItem);\n");
-
-		treeItem.getNodes().forEach(node -> {
-			final var itemName = "treeItem" + node.getDTOAttribute().getUpperCaseName();
-
-			b.append("\n// Add tree view item \"" + node.getLabel() + "\"\n");
-			b.append("itemText = new StringBuilder();\n");
-			b.append(createItemText(node.getDTOAttribute(), false, node.getLabel()) + "\n");
-			b.append("final var " + itemName + " = new TreeItem(");
-			b.append(pkAttr.getDomainAttribute().convertToString("item." + pkAttr.getGetterName()));
-			b.append(", " + NODE_TYPE_DATA + ", itemText.toString());\n");
-			b.append(itemName + ".setIcon(VaadinIcon.FILE);\n\n");
-			b.append("addItem(treeItem, " + itemName + ");\n");
-		});
-
+		b.append(addTreeNodes(pkAttr, treeItem.getNodes()));
 		b.append(addSubItemFolderNodes(treeItem));
 		b.append("}\n\n");
 		b.append("refreshTree();\n");
 		b.append("}\n\n");
 
 		addMethod(methodSignature, b.toString());
+	}
+
+	/**
+	 * Add all nodes of a {@link TreeViewItem} to the tree
+	 * @param pkAttr
+	 * @param nodes
+	 * @return the generated content
+	 */
+	private String addTreeNodes(DTOBeanAttribute pkAttr, List<TreeNode> nodes) {
+		final var b = new StringBuilder();
+
+		nodes.forEach(node -> {
+			final DTOBeanAttribute attr = node.getDTOAttribute();
+			final var itemName = "treeItem" + attr.getUpperCaseName();
+
+			b.append("\n// Add tree view item \"" + node.getLabel() + "\"\n");
+
+			if (attr.getDomainAttribute().getCollectionType() != CollectionTypeEnumeration.NONE) {
+				final var parentNodeName = "parent" + attr.getUpperCaseName();
+
+				b.append("final var " + parentNodeName + " = new TreeItem(");
+				b.append(pkAttr.getDomainAttribute().convertToString("item." + pkAttr.getGetterName()));
+				b.append(", " + NODE_TYPE_DATA + ", " + i18n.getI18N(attr, node.getLabel()) + ");\n");
+				b.append(parentNodeName + ".setIcon(VaadinIcon.FOLDER);\n\n");
+				b.append("addItem(treeItem, " + parentNodeName + ");\n\n");
+				b.append("for(final var element : item." + attr.getModelGetterName() + ")\n");
+				b.append("{\n");
+				b.append("final var itemElement = new TreeItem(");
+				b.append(pkAttr.getDomainAttribute().convertToString("item." + pkAttr.getGetterName()));
+				b.append(", " + NODE_TYPE_DATA + ", " + attr.getDomainAttribute().convertToString("element") + ");\n");
+				b.append("itemElement.setIcon(VaadinIcon.FILE);\n\n");
+				b.append("addItem(" + parentNodeName + ", itemElement);\n");
+				b.append("}\n");
+			}
+			else {
+				b.append("itemText = new StringBuilder();\n");
+				b.append(createItemText(attr, false, node.getLabel()) + "\n");
+				b.append("final var " + itemName + " = new TreeItem(");
+				b.append(pkAttr.getDomainAttribute().convertToString("item." + pkAttr.getGetterName()));
+				b.append(", " + NODE_TYPE_DATA + ", itemText.toString());\n");
+				b.append(itemName + ".setIcon(VaadinIcon.FILE);\n\n");
+				b.append("addItem(treeItem, " + itemName + ");\n");
+			}
+		});
+
+		return b.toString();
 	}
 
 	/**

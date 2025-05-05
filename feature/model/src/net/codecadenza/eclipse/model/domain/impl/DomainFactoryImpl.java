@@ -23,6 +23,8 @@ package net.codecadenza.eclipse.model.domain.impl;
 
 import net.codecadenza.eclipse.model.domain.AssociationTagEnumeration;
 import net.codecadenza.eclipse.model.domain.AttributeTagEnumeration;
+import net.codecadenza.eclipse.model.domain.CollectionMappingStrategyEnumeration;
+import net.codecadenza.eclipse.model.domain.CollectionTypeEnumeration;
 import net.codecadenza.eclipse.model.domain.DiscriminatorColumnTypeEnumeration;
 import net.codecadenza.eclipse.model.domain.DomainAttribute;
 import net.codecadenza.eclipse.model.domain.DomainAttributeValidator;
@@ -110,6 +112,9 @@ public class DomainFactoryImpl extends EFactoryImpl implements DomainFactory {
 			case DomainPackage.DOMAIN_TAG_ENUMERATION -> createDomainTagEnumerationFromString(eDataType, initialValue);
 			case DomainPackage.ATTRIBUTE_TAG_ENUMERATION -> createAttributeTagEnumerationFromString(eDataType, initialValue);
 			case DomainPackage.ASSOCIATION_TAG_ENUMERATION -> createAssociationTagEnumerationFromString(eDataType, initialValue);
+			case DomainPackage.COLLECTION_TYPE_ENUMERATION -> createCollectionTypeEnumerationFromString(eDataType, initialValue);
+			case DomainPackage.COLLECTION_MAPPING_STRATEGY_ENUMERATION -> createCollectionMappingStrategyEnumerationFromString(
+					eDataType, initialValue);
 			default -> throw new IllegalArgumentException("The datatype '" + eDataType.getName() + "' is not a valid classifier");
 		};
 	}
@@ -130,6 +135,9 @@ public class DomainFactoryImpl extends EFactoryImpl implements DomainFactory {
 			case DomainPackage.DOMAIN_TAG_ENUMERATION -> convertDomainTagEnumerationToString(eDataType, instanceValue);
 			case DomainPackage.ATTRIBUTE_TAG_ENUMERATION -> convertAttributeTagEnumerationToString(eDataType, instanceValue);
 			case DomainPackage.ASSOCIATION_TAG_ENUMERATION -> convertAssociationTagEnumerationToString(eDataType, instanceValue);
+			case DomainPackage.COLLECTION_TYPE_ENUMERATION -> convertCollectionTypeEnumerationToString(eDataType, instanceValue);
+			case DomainPackage.COLLECTION_MAPPING_STRATEGY_ENUMERATION -> convertCollectionMappingStrategyEnumerationToString(eDataType,
+					instanceValue);
 			default -> throw new IllegalArgumentException("The datatype '" + eDataType.getName() + "' is not a valid classifier");
 		};
 	}
@@ -431,6 +439,62 @@ public class DomainFactoryImpl extends EFactoryImpl implements DomainFactory {
 	 */
 	@SuppressWarnings("unused")
 	public String convertAssociationTagEnumerationToString(EDataType eDataType, Object instanceValue) {
+		return instanceValue == null ? null : instanceValue.toString();
+	}
+
+	/**
+	 * @param eDataType
+	 * @param instanceValue
+	 * @return the String value
+	 * @generated
+	 */
+	@SuppressWarnings("unused")
+	public CollectionTypeEnumeration createCollectionTypeEnumerationFromString(EDataType eDataType, String instanceValue) {
+		final CollectionTypeEnumeration result = CollectionTypeEnumeration.get(instanceValue);
+
+		if (result == null)
+			throw new IllegalArgumentException(
+					"The value '" + instanceValue + "' is not a valid enumerator of '" + eDataType.getName() + "'");
+
+		return result;
+	}
+
+	/**
+	 * @param eDataType
+	 * @param instanceValue
+	 * @return the String value
+	 * @generated
+	 */
+	@SuppressWarnings("unused")
+	public String convertCollectionTypeEnumerationToString(EDataType eDataType, Object instanceValue) {
+		return instanceValue == null ? null : instanceValue.toString();
+	}
+
+	/**
+	 * @param eDataType
+	 * @param instanceValue
+	 * @return the String value
+	 * @generated
+	 */
+	public CollectionMappingStrategyEnumeration createCollectionMappingStrategyEnumerationFromString(EDataType eDataType,
+			String instanceValue) {
+		final CollectionMappingStrategyEnumeration result = CollectionMappingStrategyEnumeration.get(instanceValue);
+
+		if (result == null)
+			throw new IllegalArgumentException(
+					"The value '" + instanceValue + "' is not a valid enumerator of '" + eDataType.getName() + "'");
+
+		return result;
+	}
+
+	/**
+	 * @param eDataType
+	 * @param instanceValue
+	 * @return the String value
+	 * @generated
+	 */
+	@SuppressWarnings("unused")
+	public String convertCollectionMappingStrategyEnumerationToString(EDataType eDataType, Object instanceValue) {
 		return instanceValue == null ? null : instanceValue.toString();
 	}
 

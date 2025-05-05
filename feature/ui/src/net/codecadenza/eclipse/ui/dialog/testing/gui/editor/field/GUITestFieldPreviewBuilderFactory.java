@@ -24,6 +24,7 @@ package net.codecadenza.eclipse.ui.dialog.testing.gui.editor.field;
 import net.codecadenza.eclipse.model.client.FormFieldTypeEnumeration;
 import net.codecadenza.eclipse.model.testing.GUITestData;
 import net.codecadenza.eclipse.ui.dialog.testing.gui.editor.field.imp.CheckboxPreviewBuilder;
+import net.codecadenza.eclipse.ui.dialog.testing.gui.editor.field.imp.ElementCollectionEditorPreviewBuilder;
 import net.codecadenza.eclipse.ui.dialog.testing.gui.editor.field.imp.EnumComboboxPreviewBuilder;
 import net.codecadenza.eclipse.ui.dialog.testing.gui.editor.field.imp.ItemSelectionPreviewBuilder;
 import net.codecadenza.eclipse.ui.dialog.testing.gui.editor.field.imp.ListPreviewBuilder;
@@ -83,6 +84,8 @@ public class GUITestFieldPreviewBuilderFactory {
 			builder = new ReadonlyFieldPreviewBuilder(testData, formPanel, maintainTestData, enableDatabaseLookup);
 		else if (type == FormFieldTypeEnumeration.LIST || type == FormFieldTypeEnumeration.SEARCHABLE_LIST)
 			builder = new ListPreviewBuilder(testData, formPanel, maintainTestData, enableDatabaseLookup);
+		else if (type == FormFieldTypeEnumeration.ELEMENT_COLLECTION_EDITOR)
+			builder = new ElementCollectionEditorPreviewBuilder(testData, formPanel, maintainTestData);
 		else
 			throw new IllegalStateException("A preview builder for the form field type '" + type + "' is not available!");
 

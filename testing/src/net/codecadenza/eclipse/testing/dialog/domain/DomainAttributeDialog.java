@@ -23,6 +23,7 @@ package net.codecadenza.eclipse.testing.dialog.domain;
 
 import net.codecadenza.eclipse.testing.dialog.AbstractDialog;
 import net.codecadenza.eclipse.testing.domain.DomainAttribute;
+import net.codecadenza.eclipse.testing.domain.ElementCollectionType;
 import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 import org.eclipse.swtbot.swt.finder.keyboard.Keystrokes;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotText;
@@ -39,9 +40,13 @@ import org.eclipse.swtbot.swt.finder.widgets.SWTBotText;
  */
 public class DomainAttributeDialog extends AbstractDialog {
 	private static final String SHELL_TITLE = "Create new domain attribute";
+	private static final String LBL_ELEMENT_COLLECTION_TYPE = "Collection type:";
+	private static final String LBL_ELEMENT_COLLECTION_STRATEGY = "Collection strategy:";
 	private static final String LBL_PRIMARY_KEY = "Primary key:";
 	private static final String LBL_JAVA_TYPE = "Java type:";
 	private static final String LBL_NAME = "Name:";
+	private static final String TAB_ITEM_ELEMENT_COLLECTION = "Element collection";
+	private static final String ELEMENT_COLLECTION_STRATEGY_TABLE = "TABLE";
 
 	private final DomainAttribute domainAttribute;
 
@@ -70,6 +75,12 @@ public class DomainAttributeDialog extends AbstractDialog {
 
 		if (domainAttribute.isPrimaryKey())
 			bot.checkBoxWithLabel(LBL_PRIMARY_KEY).select();
+
+		if (domainAttribute.getElementCollectionType() != ElementCollectionType.NONE) {
+			bot.tabItem(TAB_ITEM_ELEMENT_COLLECTION).activate();
+			bot.comboBoxWithLabel(LBL_ELEMENT_COLLECTION_TYPE).setSelection(domainAttribute.getElementCollectionType().name());
+			bot.comboBoxWithLabel(LBL_ELEMENT_COLLECTION_STRATEGY).setSelection(ELEMENT_COLLECTION_STRATEGY_TABLE);
+		}
 
 		bot.button(CMD_OK).click();
 	}

@@ -124,7 +124,8 @@ public class SpringBootApplicationGenerator extends AbstractJavaSourceGenerator 
 		if (project.hasEclipseClient() || project.hasJavaFXClient() || project.hasSwingClient())
 			b.append("@ServletComponentScan(\"net.codecadenza.runtime.server.transport\")\n");
 
-		b.append("@EntityScan(\"" + project.getDomainNamespace().toString() + "\")\n");
+		b.append("@EntityScan({\"" + project.getDomainNamespace().toString() + "\", ");
+		b.append("\"net.codecadenza.runtime.jpa.converter\"})\n");
 
 		if (project.hasVaadinClient()) {
 			b.append("@PWA(name = \"My generated Application\", shortName=\"My App\")\n");

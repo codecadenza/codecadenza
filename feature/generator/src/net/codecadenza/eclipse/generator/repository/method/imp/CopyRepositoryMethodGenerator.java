@@ -33,6 +33,8 @@ import net.codecadenza.eclipse.generator.repository.method.BasicRepositoryMethod
 import net.codecadenza.eclipse.model.boundary.BoundaryBean;
 import net.codecadenza.eclipse.model.domain.AbstractDomainAssociation;
 import net.codecadenza.eclipse.model.domain.AttributeTagEnumeration;
+import net.codecadenza.eclipse.model.domain.CollectionMappingStrategyEnumeration;
+import net.codecadenza.eclipse.model.domain.CollectionTypeEnumeration;
 import net.codecadenza.eclipse.model.domain.DomainAttribute;
 import net.codecadenza.eclipse.model.domain.DomainObject;
 import net.codecadenza.eclipse.model.domain.DomainTagEnumeration;
@@ -194,15 +196,25 @@ public class CopyRepositoryMethodGenerator extends BasicRepositoryMethodGenerato
 				continue;
 			}
 
-			b.append(TARGET_OBJ_NAME + "." + attr.getSetterName() + "(");
+			if (attr.getCollectionType() == CollectionTypeEnumeration.NONE
+					|| attr.getCollectionMappingStrategy() == CollectionMappingStrategyEnumeration.CONVERTER) {
+				b.append(TARGET_OBJ_NAME + "." + attr.getSetterName() + "(");
 
-			if (attr.isDisplayAttribute()) {
-				b.append("\"N/A\"");
-				b.append(");\n");
-				continue;
+				if (attr.isDisplayAttribute()) {
+					b.append("\"N/A\"");
+					b.append(");\n");
+					continue;
+				}
+
+				b.append(SOURCE_OBJ_NAME + "." + attr.getGetterName() + ");\n");
 			}
-
-			b.append(SOURCE_OBJ_NAME + "." + attr.getGetterName() + ");\n");
+			else {
+				// Copy every item one by one as the persistence provider is tracking the owner which must be a single entity
+				b.append("\n");
+				b.append("for(final var item : ");
+				b.append(SOURCE_OBJ_NAME + "." + attr.getGetterName() + ")\n");
+				b.append(TARGET_OBJ_NAME + "." + attr.getGetterName() + ".add(item);\n\n");
+			}
 		}
 
 		for (final AbstractDomainAssociation assoc : domainObject.getAllAssociations()) {

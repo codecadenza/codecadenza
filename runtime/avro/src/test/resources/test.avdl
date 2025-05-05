@@ -1,0 +1,36 @@
+@namespace("net.codecadenza.runtime.avro.namespace")
+protocol TestDomain {
+
+	enum ObjectStatus {
+		OPEN, CLOSED
+	}
+
+	record ValueObject {
+		long id;
+		long longValue;
+		string stringValue;
+		string characterValue;
+		double doubleValue;
+		float floatValue;
+		boolean booleanValue;
+		decimal(10, 4) bigDecimalValue;
+		timestamp_ms dateValue;
+		timestamp_ms dateTimeValue;
+		date localDateValue;
+		timestamp_ms calendarValue;
+		union {null, ReferenceObject} singleReference;
+		ObjectStatus status;
+		array<ReferenceObject> references;
+		array<date> localDateList;
+		array<timestamp_ms> dateList;
+		array<timestamp_ms> calendarList;
+		array<timestamp_ms> dateTimeList;
+		array<string> characterSet;
+	}
+
+	record ReferenceObject {
+		long id;
+		string name;
+	}
+
+}

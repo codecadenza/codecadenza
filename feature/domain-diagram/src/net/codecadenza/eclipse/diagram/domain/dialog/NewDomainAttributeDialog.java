@@ -21,22 +21,27 @@
  */
 package net.codecadenza.eclipse.diagram.domain.dialog;
 
+import static net.codecadenza.eclipse.shared.Constants.DB_TABLE_SUFFIX;
 import static net.codecadenza.eclipse.shared.Constants.MIN_FILTER_LENGTH;
 
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Set;
+import net.codecadenza.eclipse.model.db.DBColumn;
 import net.codecadenza.eclipse.model.db.DBColumnType;
 import net.codecadenza.eclipse.model.db.DBTable;
 import net.codecadenza.eclipse.model.db.Database;
 import net.codecadenza.eclipse.model.db.DbFactory;
 import net.codecadenza.eclipse.model.domain.AttributeTagEnumeration;
+import net.codecadenza.eclipse.model.domain.CollectionMappingStrategyEnumeration;
+import net.codecadenza.eclipse.model.domain.CollectionTypeEnumeration;
 import net.codecadenza.eclipse.model.domain.DomainAttribute;
 import net.codecadenza.eclipse.model.domain.DomainAttributeValidator;
 import net.codecadenza.eclipse.model.domain.DomainFactory;
 import net.codecadenza.eclipse.model.domain.TemporalTypeEnumeration;
 import net.codecadenza.eclipse.model.java.JavaType;
 import net.codecadenza.eclipse.model.java.JavaTypeComparator;
+import net.codecadenza.eclipse.model.project.PersistenceProviderEnumeration;
 import net.codecadenza.eclipse.model.project.Project;
 import net.codecadenza.eclipse.resource.CodeCadenzaResourcePlugin;
 import net.codecadenza.eclipse.shared.dialog.CodeCadenzaDialog;
@@ -115,11 +120,16 @@ public class NewDomainAttributeDialog extends CodeCadenzaDialog {
 	private Button chkRemoveWhitespaceCharacters;
 	private Button chkConvertToUpperCase;
 	private Button chkConvertToLowerCase;
+	private Combo cboCollectionType;
+	private Combo cboCollectionStrategy;
+	private Text txtCollectionTable;
 	private final DomainAttribute domainAttribute;
 	private final Project project;
+	private final boolean enableElementCollection;
 	private HashMap<String, DBColumnType> columnTypeMap = new HashMap<>();
 	private Button chkUnique;
 	private boolean unique;
+	private String collectionTableName;
 
 	/**
 	 * Create the dialog
@@ -132,12 +142,16 @@ public class NewDomainAttributeDialog extends CodeCadenzaDialog {
 
 		this.project = project;
 		this.domainAttribute = domainAttribute;
+
+		// Element collections are not supported for mapped superclasses!
+		this.enableElementCollection = !domainAttribute.getDomainObject().isMappedSuperClass();
 	}
 
 	/**
 	 * Disable all input fields
+	 * @param resetCollectionType
 	 */
-	private void disableAllFields() {
+	private void disableAllFields(boolean resetCollectionType) {
 		cboTag.setEnabled(false);
 		cboAttributeTemporalType.select(0);
 		chkAttributeFetchTypeEager.setEnabled(false);
@@ -188,6 +202,18 @@ public class NewDomainAttributeDialog extends CodeCadenzaDialog {
 		chkConvertToLowerCase.setEnabled(false);
 		chkConvertToLowerCase.setSelection(false);
 		cboTag.select(0);
+		cboCollectionType.setEnabled(false);
+		cboCollectionStrategy.setEnabled(false);
+		txtCollectionTable.setText("");
+		txtCollectionTable.setEnabled(false);
+
+		if (resetCollectionType) {
+			cboCollectionStrategy.removeAll();
+			cboCollectionStrategy.add(CollectionMappingStrategyEnumeration.NONE.toString());
+			cboCollectionStrategy.select(0);
+
+			cboCollectionType.select(0);
+		}
 	}
 
 	/**
@@ -195,8 +221,6 @@ public class NewDomainAttributeDialog extends CodeCadenzaDialog {
 	 * @param type
 	 */
 	private void enableFields(JavaType type) {
-		disableAllFields();
-
 		// Set the selected column type
 		cboDBColumnType.removeAll();
 		columnTypeMap = new HashMap<>();
@@ -222,60 +246,69 @@ public class NewDomainAttributeDialog extends CodeCadenzaDialog {
 		if (!type.isPrimitive())
 			chkValidatorNullable.setEnabled(true);
 
-		setDefaultLengthConstraints();
+		setDefaultLengthConstraints(propType.getSelectedItem());
 	}
 
 	/**
 	 * Enable fields for the type java.lang.String
 	 * @param type
+	 * @param collectionType
 	 */
-	private void enableFieldsForString(JavaType type) {
+	private void enableFieldsForString(JavaType type, CollectionTypeEnumeration collectionType) {
 		enableFields(type);
 
-		chkAttributePrimaryKey.setEnabled(true);
 		txtValidatorMinLength.setEnabled(true);
 		txtValidatorMaxLength.setEnabled(true);
-		chkDisplayAttribute.setEnabled(true);
-		txtValidatorRegularExpression.setEnabled(true);
-		chkRemoveWhitespaceCharacters.setEnabled(true);
-		chkRemoveWhitespaceCharacters.setSelection(true);
-		chkConvertToUpperCase.setEnabled(true);
-		chkConvertToLowerCase.setEnabled(true);
+		cboCollectionType.setEnabled(enableElementCollection);
+		cboCollectionStrategy.setEnabled(collectionType != CollectionTypeEnumeration.NONE);
+		chkAttributePrimaryKey.setEnabled(collectionType == CollectionTypeEnumeration.NONE);
+		chkDisplayAttribute.setEnabled(collectionType == CollectionTypeEnumeration.NONE);
+		txtValidatorRegularExpression.setEnabled(collectionType == CollectionTypeEnumeration.NONE);
+		chkRemoveWhitespaceCharacters.setEnabled(collectionType == CollectionTypeEnumeration.NONE);
+		chkRemoveWhitespaceCharacters.setSelection(collectionType == CollectionTypeEnumeration.NONE);
+		chkConvertToUpperCase.setEnabled(collectionType == CollectionTypeEnumeration.NONE);
+		chkConvertToLowerCase.setEnabled(collectionType == CollectionTypeEnumeration.NONE);
 	}
 
 	/**
 	 * Enable fields for all numeric types (e.g. int, Integer, double...)
 	 * @param type
+	 * @param collectionType
 	 */
-	private void enableFieldsForNumericTypes(JavaType type) {
+	private void enableFieldsForNumericTypes(JavaType type, CollectionTypeEnumeration collectionType) {
 		enableFields(type);
 
 		txtDBColumnPrecision.setEnabled(true);
 		txtDBColumnScale.setEnabled(true);
-		txtValidatorMaxValue.setEnabled(true);
-		txtValidatorMinValue.setEnabled(true);
+		cboCollectionType.setEnabled(enableElementCollection);
+		cboCollectionStrategy.setEnabled(collectionType != CollectionTypeEnumeration.NONE);
+		txtValidatorMaxValue.setEnabled(collectionType == CollectionTypeEnumeration.NONE);
+		txtValidatorMinValue.setEnabled(collectionType == CollectionTypeEnumeration.NONE);
 
 		if (type.isIntegerOrLong()) {
-			chkAttributePrimaryKey.setEnabled(true);
+			chkAttributePrimaryKey.setEnabled(collectionType == CollectionTypeEnumeration.NONE);
 
 			// A whole number has no decimal places. Thus, we should omit the scale!
 			txtDBColumnScale.setEnabled(false);
 			txtDBColumnScale.setText("");
-			chkAttributeVersion.setEnabled(true);
+			chkAttributeVersion.setEnabled(collectionType == CollectionTypeEnumeration.NONE);
 		}
 	}
 
 	/**
 	 * Enable fields for all date types
 	 * @param type
+	 * @param collectionType
 	 */
-	private void enableFieldsForDateTypes(JavaType type) {
+	private void enableFieldsForDateTypes(JavaType type, CollectionTypeEnumeration collectionType) {
 		enableFields(type);
 
-		chkValidatorFutureDate.setEnabled(true);
-		chkValidatorPastDate.setEnabled(true);
-		chkAttributeSetDateOnPersist.setEnabled(true);
-		chkAttributeSetDateOnUpdate.setEnabled(true);
+		cboCollectionType.setEnabled(enableElementCollection);
+		cboCollectionStrategy.setEnabled(collectionType != CollectionTypeEnumeration.NONE);
+		chkValidatorFutureDate.setEnabled(collectionType == CollectionTypeEnumeration.NONE);
+		chkValidatorPastDate.setEnabled(collectionType == CollectionTypeEnumeration.NONE);
+		chkAttributeSetDateOnPersist.setEnabled(collectionType == CollectionTypeEnumeration.NONE);
+		chkAttributeSetDateOnUpdate.setEnabled(collectionType == CollectionTypeEnumeration.NONE);
 
 		if (type.isDateOrCalendar()) {
 			cboAttributeTemporalType.setEnabled(true);
@@ -290,10 +323,13 @@ public class NewDomainAttributeDialog extends CodeCadenzaDialog {
 	/**
 	 * Enable fields for the char type
 	 * @param type
+	 * @param collectionType
 	 */
-	private void enableFieldsForCharType(JavaType type) {
+	private void enableFieldsForCharType(JavaType type, CollectionTypeEnumeration collectionType) {
 		enableFields(type);
 
+		cboCollectionType.setEnabled(enableElementCollection);
+		cboCollectionStrategy.setEnabled(collectionType != CollectionTypeEnumeration.NONE);
 		txtValidatorMinLength.setEnabled(true);
 	}
 
@@ -306,7 +342,6 @@ public class NewDomainAttributeDialog extends CodeCadenzaDialog {
 
 		chkUnique.setEnabled(false);
 		chkAttributeFetchTypeEager.setSelection(false);
-
 		txtValidatorMinLength.setEnabled(true);
 		txtValidatorMaxLength.setEnabled(true);
 	}
@@ -324,19 +359,21 @@ public class NewDomainAttributeDialog extends CodeCadenzaDialog {
 	/**
 	 * Enable fields for the type java.util.UUID
 	 * @param type
+	 * @param collectionType
 	 */
-	private void enableFieldsForUUID(JavaType type) {
+	private void enableFieldsForUUID(JavaType type, CollectionTypeEnumeration collectionType) {
 		enableFields(type);
 
-		chkAttributePrimaryKey.setEnabled(true);
+		cboCollectionType.setEnabled(enableElementCollection);
+		cboCollectionStrategy.setEnabled(enableElementCollection);
+		chkAttributePrimaryKey.setEnabled(collectionType == CollectionTypeEnumeration.NONE);
 	}
 
 	/**
 	 * Set the default minimum and maximum length depending on the column and Java type
+	 * @param selType
 	 */
-	private void setDefaultLengthConstraints() {
-		final JavaType selType = propType.getSelectedItem();
-
+	private void setDefaultLengthConstraints(JavaType selType) {
 		if (selType == null || !chkAttributePersistent.getSelection())
 			return;
 
@@ -364,12 +401,18 @@ public class NewDomainAttributeDialog extends CodeCadenzaDialog {
 				maxLength = enteredMaxLength == null ? DEFAULT_BYTE_ARRAY_LENGTH : enteredMaxLength;
 		}
 		else if (selType.isUUID()) {
-			final DBColumnType columnType = columnTypeMap.get(cboDBColumnType.getItem(cboDBColumnType.getSelectionIndex()));
+			final int colTypeIndex = cboDBColumnType.getSelectionIndex();
 
-			maxLength = UUID_LENGTH;
+			if (colTypeIndex > 0) {
+				final DBColumnType columnType = columnTypeMap.get(cboDBColumnType.getItem(cboDBColumnType.getSelectionIndex()));
 
-			if (columnType.getJavaTypes().stream().anyMatch(type -> type.getName().equals(JavaType.STRING)))
-				maxLength = UUID_STRING_LENGTH;
+				maxLength = UUID_LENGTH;
+
+				if (columnType.getJavaTypes().stream().anyMatch(type -> type.getName().equals(JavaType.STRING)))
+					maxLength = UUID_STRING_LENGTH;
+			}
+			else
+				maxLength = DEFAULT_STRING_LENGTH;
 		}
 		else if (selType.isChar()) {
 			minLength = DEFAULT_CHAR_LENGTH;
@@ -412,8 +455,16 @@ public class NewDomainAttributeDialog extends CodeCadenzaDialog {
 			 */
 			@Override
 			public void focusLost(FocusEvent e) {
+				final CollectionTypeEnumeration selectedType = CollectionTypeEnumeration
+						.valueOf(cboCollectionType.getItem(cboCollectionType.getSelectionIndex()));
+
 				txtAttributeLabel.setText(EclipseIDEService.buildDefaultLabel(txtAttributeName.getText()));
-				txtAttributeLabelPlural.setText(EclipseIDEService.buildDefaultPluralLabel(txtAttributeName.getText()));
+
+				if (selectedType == CollectionTypeEnumeration.NONE)
+					txtAttributeLabelPlural.setText(txtAttributeLabel.getText());
+				else
+					txtAttributeLabelPlural.setText(EclipseIDEService.buildDefaultPluralLabel(txtAttributeName.getText()));
+
 				txtDBColumnName.setText(EclipseIDEService.buildDefaultColumnName(txtAttributeName.getText()));
 			}
 		});
@@ -454,7 +505,7 @@ public class NewDomainAttributeDialog extends CodeCadenzaDialog {
 			 */
 			@Override
 			public void onProposalAccepted(JavaType element) {
-				initOnTypeChange();
+				initOnTypeChange(true);
 			}
 		};
 
@@ -476,7 +527,14 @@ public class NewDomainAttributeDialog extends CodeCadenzaDialog {
 			 */
 			@Override
 			public void focusLost(FocusEvent e) {
-				txtAttributeLabelPlural.setText(EclipseIDEService.buildDefaultPluralForm(txtAttributeLabel.getText()));
+				final CollectionTypeEnumeration selectedType = CollectionTypeEnumeration
+						.valueOf(cboCollectionType.getItem(cboCollectionType.getSelectionIndex()));
+
+				if (selectedType == CollectionTypeEnumeration.NONE)
+					txtAttributeLabelPlural.setText(txtAttributeLabel.getText());
+				else
+					txtAttributeLabelPlural.setText(EclipseIDEService.buildDefaultPluralForm(txtAttributeLabel.getText()));
+
 				txtDBColumnName.setText(txtAttributeLabel.getText().toLowerCase().replace(" ", "_").replace(".", ""));
 			}
 		});
@@ -505,11 +563,11 @@ public class NewDomainAttributeDialog extends CodeCadenzaDialog {
 			@Override
 			public void widgetSelected(final SelectionEvent e) {
 				if (!chkAttributePersistent.getSelection()) {
-					disableAllFields();
+					disableAllFields(true);
 					return;
 				}
 
-				initOnTypeChange();
+				initOnTypeChange(true);
 			}
 		});
 
@@ -679,7 +737,7 @@ public class NewDomainAttributeDialog extends CodeCadenzaDialog {
 			 */
 			@Override
 			public void widgetSelected(final SelectionEvent e) {
-				setDefaultLengthConstraints();
+				setDefaultLengthConstraints(propType.getSelectedItem());
 			}
 		});
 
@@ -776,7 +834,7 @@ public class NewDomainAttributeDialog extends CodeCadenzaDialog {
 			 */
 			@Override
 			public void widgetSelected(final SelectionEvent e) {
-				setDefaultLengthConstraints();
+				setDefaultLengthConstraints(propType.getSelectedItem());
 			}
 		});
 
@@ -829,44 +887,127 @@ public class NewDomainAttributeDialog extends CodeCadenzaDialog {
 			}
 		});
 
+		final var tabItemCollection = new TabItem(tabFolderAddData, SWT.NONE);
+		tabItemCollection.setText("Element collection");
+
+		final var panCollection = new Composite(tabFolderAddData, SWT.NONE);
+		panCollection.setLayout(new GridLayout(2, false));
+
+		tabItemCollection.setControl(panCollection);
+
+		final var lblCollectionType = new Label(panCollection, SWT.NONE);
+		lblCollectionType.setText("Collection type:");
+
+		cboCollectionType = new Combo(panCollection, SWT.READ_ONLY);
+		cboCollectionType.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
+
+		for (final CollectionTypeEnumeration type : CollectionTypeEnumeration.values())
+			cboCollectionType.add(type.toString());
+
+		cboCollectionType.select(0);
+
+		cboCollectionType.addSelectionListener(new SelectionAdapter() {
+			/*
+			 * (non-Javadoc)
+			 * @see org.eclipse.swt.events.SelectionAdapter#widgetSelected(org.eclipse.swt.events.SelectionEvent)
+			 */
+			@Override
+			public void widgetSelected(final SelectionEvent e) {
+				final CollectionTypeEnumeration selectedCollectionType = CollectionTypeEnumeration
+						.valueOf(cboCollectionType.getItem(cboCollectionType.getSelectionIndex()));
+
+				initOnTypeChange(false);
+
+				cboCollectionStrategy.removeAll();
+
+				if (selectedCollectionType != CollectionTypeEnumeration.NONE) {
+					if (project.getPersistenceProvider() != PersistenceProviderEnumeration.ECLIPSELINK)
+						cboCollectionStrategy.add(CollectionMappingStrategyEnumeration.CONVERTER.toString());
+
+					cboCollectionStrategy.add(CollectionMappingStrategyEnumeration.TABLE.toString());
+
+					txtAttributeLabelPlural.setText(txtAttributeLabel.getText());
+				}
+				else {
+					cboCollectionStrategy.add(CollectionMappingStrategyEnumeration.NONE.toString());
+
+					txtAttributeLabelPlural.setText(EclipseIDEService.buildDefaultPluralLabel(txtAttributeName.getText()));
+				}
+
+				cboCollectionStrategy.select(0);
+
+				changeCollectionStrategy();
+			}
+		});
+
+		final var lblCollectionStrategy = new Label(panCollection, SWT.NONE);
+		lblCollectionStrategy.setText("Collection strategy:");
+
+		cboCollectionStrategy = new Combo(panCollection, SWT.READ_ONLY);
+		cboCollectionStrategy.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
+		cboCollectionStrategy.setEnabled(false);
+
+		cboCollectionStrategy.addSelectionListener(new SelectionAdapter() {
+			/*
+			 * (non-Javadoc)
+			 * @see org.eclipse.swt.events.SelectionAdapter#widgetSelected(org.eclipse.swt.events.SelectionEvent)
+			 */
+			@Override
+			public void widgetSelected(final SelectionEvent e) {
+				changeCollectionStrategy();
+			}
+		});
+
+		cboCollectionStrategy.add(CollectionMappingStrategyEnumeration.NONE.toString());
+
+		final var lblCollectionTable = new Label(panCollection, SWT.NONE);
+		lblCollectionTable.setText("Collection table name:");
+
+		txtCollectionTable = new Text(panCollection, SWT.BORDER);
+		txtCollectionTable.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
+		txtCollectionTable.setEnabled(false);
+
 		txtAttributeName.setText("newAttribute");
 		txtAttributeName.setSelection(0, txtAttributeName.getText().length());
 		txtAttributeName.setFocus();
 
 		// We disable all fields initially!
-		disableAllFields();
+		disableAllFields(true);
 
 		return panDialogArea;
 	}
 
 	/**
 	 * Enable all respective fields depending on the selected attribute type
+	 * @param resetCollectionType
 	 */
-	private void initOnTypeChange() {
+	private void initOnTypeChange(boolean resetCollectionType) {
 		final JavaType type = propType.getSelectedItem();
+		final CollectionTypeEnumeration selectedCollectionType = CollectionTypeEnumeration
+				.valueOf(cboCollectionType.getItem(cboCollectionType.getSelectionIndex()));
 
-		if (type == null) {
-			disableAllFields();
+		disableAllFields(resetCollectionType);
+
+		if (type == null)
 			return;
-		}
 
 		cboDBColumnType.removeAll();
 		chkAttributePersistent.setSelection(true);
 
 		if (type.isTemporalType())
-			enableFieldsForDateTypes(type);
+			enableFieldsForDateTypes(type, selectedCollectionType);
 		else if (type.isString())
-			enableFieldsForString(type);
+			enableFieldsForString(type, selectedCollectionType);
 		else if (type.isNumber())
-			enableFieldsForNumericTypes(type);
+			enableFieldsForNumericTypes(type, selectedCollectionType);
 		else if (type.isChar())
-			enableFieldsForCharType(type);
+			enableFieldsForCharType(type, selectedCollectionType);
 		else if (type.isByteArray())
 			enableFieldsForLobTypes(type);
 		else if (type.isBoolean())
 			enableFieldsForBooleanTypes(type);
 		else if (type.isUUID())
-			enableFieldsForUUID(type);
+			enableFieldsForUUID(type, selectedCollectionType);
 	}
 
 	/*
@@ -895,6 +1036,13 @@ public class NewDomainAttributeDialog extends CodeCadenzaDialog {
 		return unique;
 	}
 
+	/**
+	 * @return the name of the collection table
+	 */
+	public String getCollectionTableName() {
+		return collectionTableName;
+	}
+
 	/*
 	 * (non-Javadoc)
 	 * @see org.eclipse.jface.dialogs.Dialog#buttonPressed(int)
@@ -912,9 +1060,14 @@ public class NewDomainAttributeDialog extends CodeCadenzaDialog {
 	 * @return true if the validation was successful
 	 */
 	private boolean writeInputsToObject() {
-		boolean isLob = false;
-
 		final IStatus status = EclipseIDEService.validateFieldName(txtAttributeName.getText());
+		final JavaType selType = propType.getSelectedItem();
+		final AttributeTagEnumeration attributeTag = AttributeTagEnumeration.valueOf(cboTag.getItem(cboTag.getSelectionIndex()));
+		final CollectionTypeEnumeration collectionType = CollectionTypeEnumeration
+				.valueOf(cboCollectionType.getItem(cboCollectionType.getSelectionIndex()));
+		final CollectionMappingStrategyEnumeration selectedStrategy = CollectionMappingStrategyEnumeration
+				.valueOf(cboCollectionStrategy.getItem(cboCollectionStrategy.getSelectionIndex()));
+		boolean isLob = false;
 
 		if (status.getSeverity() > IStatus.INFO) {
 			MessageDialog.openInformation(getShell(), DLG_TITLE, status.getMessage());
@@ -937,8 +1090,6 @@ public class NewDomainAttributeDialog extends CodeCadenzaDialog {
 
 		domainAttribute.setLabelPlural(txtAttributeLabelPlural.getText());
 
-		final JavaType selType = propType.getSelectedItem();
-
 		if (selType == null) {
 			MessageDialog.openInformation(getShell(), DLG_TITLE, "A valid Java type must be selected!");
 			propType.getControl().setFocus();
@@ -946,15 +1097,14 @@ public class NewDomainAttributeDialog extends CodeCadenzaDialog {
 		}
 
 		// This check is redundant as the dialog should prevent us from setting primitive types to be nullable!
-		if (selType.isPrimitive() && chkValidatorNullable.getSelection()) {
+		if (selType.isPrimitive() && chkValidatorNullable.getSelection()
+				&& selectedStrategy != CollectionMappingStrategyEnumeration.CONVERTER) {
 			MessageDialog.openInformation(getShell(), DLG_TITLE, "A primitive type cannot be nullable!");
 			return false;
 		}
 
 		if (selType.isByteArray())
 			isLob = true;
-
-		final AttributeTagEnumeration attributeTag = AttributeTagEnumeration.valueOf(cboTag.getItem(cboTag.getSelectionIndex()));
 
 		// Check if the type is valid for the selected tag!
 		if (attributeTag != AttributeTagEnumeration.NONE) {
@@ -967,6 +1117,33 @@ public class NewDomainAttributeDialog extends CodeCadenzaDialog {
 			}
 		}
 
+		if (collectionType != CollectionTypeEnumeration.NONE) {
+			if (selectedStrategy == CollectionMappingStrategyEnumeration.NONE) {
+				MessageDialog.openInformation(getShell(), DLG_TITLE, "A valid element collection strategy must be selected!");
+				return false;
+			}
+			else if (selectedStrategy == CollectionMappingStrategyEnumeration.TABLE) {
+				final Database db = project.getDatabase();
+
+				if (project.getPersistenceProvider() == PersistenceProviderEnumeration.ECLIPSELINK
+						&& (selType.isChar() || selType.isCalendar())) {
+					// Internally, EclipseLink uses different types (e.g. String instead of Character) which cause ClassCastExceptions when
+					// trying to iterate over the elements of the collection!
+					final var message = "The type '" + selType.getName() + "' is not supported for an element collection!";
+					MessageDialog.openInformation(getShell(), DLG_TITLE, message);
+					return false;
+				}
+
+				try {
+					new DBSynchService(db).validateTableName(db.getSchemaName(), db.getCatalogName(), txtCollectionTable.getText());
+				}
+				catch (final DBObjectValidationException e) {
+					MessageDialog.openInformation(getShell(), DLG_TITLE, e.getMessage());
+					return false;
+				}
+			}
+		}
+
 		domainAttribute.setJavaType(selType);
 		domainAttribute.setFetchTypeEager(chkAttributeFetchTypeEager.getSelection());
 		domainAttribute.setInsertable(chkAttributeInsertable.getSelection());
@@ -975,6 +1152,7 @@ public class NewDomainAttributeDialog extends CodeCadenzaDialog {
 		domainAttribute.setTag(attributeTag);
 
 		unique = chkUnique.getSelection();
+		collectionTableName = txtCollectionTable.getText();
 
 		domainAttribute.setSetDateOnPersist(chkAttributeSetDateOnPersist.getSelection());
 		domainAttribute.setSetDateOnUpdate(chkAttributeSetDateOnUpdate.getSelection());
@@ -991,6 +1169,8 @@ public class NewDomainAttributeDialog extends CodeCadenzaDialog {
 			domainAttribute.setDisplayAttribute(true);
 
 		domainAttribute.setLob(isLob);
+		domainAttribute.setCollectionType(collectionType);
+		domainAttribute.setCollectionMappingStrategy(selectedStrategy);
 
 		final DomainAttributeValidator validator = DomainFactory.eINSTANCE.createDomainAttributeValidator();
 
@@ -1003,16 +1183,24 @@ public class NewDomainAttributeDialog extends CodeCadenzaDialog {
 		domainAttribute.getDomainAttributeValidator().setRegularExpression(txtValidatorRegularExpression.getText());
 
 		if (chkAttributePersistent.getSelection()) {
-			domainAttribute.setColumn(DbFactory.eINSTANCE.createDBColumn());
+			final DBColumn column = DbFactory.eINSTANCE.createDBColumn();
+
+			domainAttribute.setColumn(column);
 
 			try {
 				final Database db = project.getDatabase();
-				DBTable table = domainAttribute.getDomainObject().getDatabaseTable();
+				final var dbSyncService = new DBSynchService(db);
 
-				if (table == null)
-					table = domainAttribute.getDomainObject().getRootParentDomainObject(false).getDatabaseTable();
+				if (selectedStrategy != CollectionMappingStrategyEnumeration.TABLE) {
+					DBTable table = domainAttribute.getDomainObject().getDatabaseTable();
 
-				new DBSynchService(db).validateColumnName(table, txtDBColumnName.getText());
+					if (table == null)
+						table = domainAttribute.getDomainObject().getRootParentDomainObject(false).getDatabaseTable();
+
+					dbSyncService.validateColumnName(table, txtDBColumnName.getText());
+				}
+				else
+					dbSyncService.validateIdentifier(txtDBColumnName.getText());
 			}
 			catch (final DBObjectValidationException ex) {
 				MessageDialog.openInformation(getShell(), DLG_TITLE, ex.getMessage());
@@ -1021,15 +1209,15 @@ public class NewDomainAttributeDialog extends CodeCadenzaDialog {
 				return false;
 			}
 
-			domainAttribute.getColumn().setName(txtDBColumnName.getText());
+			column.setName(txtDBColumnName.getText());
 
 			if (cboDBColumnType.getSelectionIndex() == -1) {
 				MessageDialog.openInformation(getShell(), DLG_TITLE, "A database column type must be selected!");
 				return false;
 			}
 
-			domainAttribute.getColumn().setNullable(domainAttribute.getDomainAttributeValidator().isNullable());
-			domainAttribute.getColumn().setColumnType(columnTypeMap.get(cboDBColumnType.getItem(cboDBColumnType.getSelectionIndex())));
+			column.setNullable(domainAttribute.getDomainAttributeValidator().isNullable());
+			column.setColumnType(columnTypeMap.get(cboDBColumnType.getItem(cboDBColumnType.getSelectionIndex())));
 
 			Integer minLength = null;
 			Integer maxLength = null;
@@ -1057,7 +1245,7 @@ public class NewDomainAttributeDialog extends CodeCadenzaDialog {
 			}
 
 			try {
-				final boolean requiresLength = !domainAttribute.getColumn().getColumnType().isOmitSizeInformation();
+				final boolean requiresLength = !column.getColumnType().isOmitSizeInformation();
 
 				if (txtValidatorMaxLength.isEnabled() && (requiresLength || !txtValidatorMaxLength.getText().isEmpty())) {
 					maxLength = Integer.parseInt(txtValidatorMaxLength.getText());
@@ -1066,12 +1254,12 @@ public class NewDomainAttributeDialog extends CodeCadenzaDialog {
 						throw new IllegalArgumentException();
 
 					if (requiresLength)
-						domainAttribute.getColumn().setLength(maxLength);
+						column.setLength(maxLength);
 
 					domainAttribute.getDomainAttributeValidator().setMaxLength(maxLength);
 				}
 				else if (domainAttribute.getJavaType().isUUID() && requiresLength)
-					domainAttribute.getColumn().setLength(Integer.parseInt(txtValidatorMaxLength.getText()));
+					column.setLength(Integer.parseInt(txtValidatorMaxLength.getText()));
 			}
 			catch (final RuntimeException e) {
 				MessageDialog.openInformation(getShell(), DLG_TITLE, "The max. length requires a positive integer value!");
@@ -1095,7 +1283,7 @@ public class NewDomainAttributeDialog extends CodeCadenzaDialog {
 					if (precision < 1)
 						throw new IllegalArgumentException();
 
-					domainAttribute.getColumn().setPrecision(precision);
+					column.setPrecision(precision);
 				}
 				catch (final RuntimeException e) {
 					MessageDialog.openInformation(getShell(), DLG_TITLE, "The precision requires a positive integer value!");
@@ -1110,7 +1298,7 @@ public class NewDomainAttributeDialog extends CodeCadenzaDialog {
 						if (scale < 1)
 							throw new IllegalArgumentException();
 
-						domainAttribute.getColumn().setScale(scale);
+						column.setScale(scale);
 					}
 					catch (final RuntimeException e) {
 						MessageDialog.openInformation(getShell(), DLG_TITLE, "The scale requires a positive integer value!");
@@ -1127,6 +1315,60 @@ public class NewDomainAttributeDialog extends CodeCadenzaDialog {
 		}
 
 		return true;
+	}
+
+	/**
+	 * Update all necessary fields when the collection strategy has been changed
+	 */
+	private void changeCollectionStrategy() {
+		final CollectionMappingStrategyEnumeration selectedStrategy = CollectionMappingStrategyEnumeration
+				.valueOf(cboCollectionStrategy.getItem(cboCollectionStrategy.getSelectionIndex()));
+		final JavaType selectedType = propType.getSelectedItem();
+
+		cboDBColumnType.removeAll();
+		columnTypeMap = new HashMap<>();
+
+		selectedType.getDBColumnTypes(project).forEach(colType -> {
+			columnTypeMap.put(colType.getName(), colType);
+			cboDBColumnType.add(colType.getName());
+		});
+
+		setDefaultLengthConstraints(selectedType);
+
+		txtValidatorMinLength.setEnabled(selectedType.isString() || selectedType.isByteArray());
+		txtValidatorMaxLength.setEnabled(selectedType.isString() || selectedType.isByteArray());
+		chkValidatorNullable.setEnabled(!selectedType.isPrimitive());
+		txtCollectionTable.setText("");
+		txtCollectionTable.setEnabled(false);
+
+		if (selectedStrategy == CollectionMappingStrategyEnumeration.CONVERTER) {
+			final JavaType stringType = project.getJavaTypeByName(JavaType.STRING);
+			cboDBColumnType.removeAll();
+			columnTypeMap = new HashMap<>();
+
+			stringType.getDBColumnTypes(project).forEach(colType -> {
+				columnTypeMap.put(colType.getName(), colType);
+				cboDBColumnType.add(colType.getName());
+			});
+
+			txtValidatorMinLength.setEnabled(true);
+			txtValidatorMaxLength.setEnabled(true);
+			chkValidatorNullable.setEnabled(false);
+			chkValidatorNullable.setSelection(true);
+
+			setDefaultLengthConstraints(stringType);
+		}
+		else if (selectedStrategy == CollectionMappingStrategyEnumeration.TABLE) {
+			final String defaultCollectionTableName = domainAttribute.getDomainObject().getLabel().replace(" ", "_") + "_"
+					+ EclipseIDEService.buildDefaultColumnName(txtAttributeName.getText()) + DB_TABLE_SUFFIX;
+
+			chkValidatorNullable.setEnabled(false);
+			chkValidatorNullable.setSelection(false);
+			txtCollectionTable.setEnabled(true);
+			txtCollectionTable.setText(defaultCollectionTableName);
+		}
+
+		cboDBColumnType.select(0);
 	}
 
 }

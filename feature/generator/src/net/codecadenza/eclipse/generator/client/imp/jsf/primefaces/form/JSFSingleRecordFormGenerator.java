@@ -584,7 +584,7 @@ public class JSFSingleRecordFormGenerator extends AbstractSingleRecordFormGenera
 		b.append("<ui:define name=\"title\">#{" + managedBeanName + "." + FORM_TITLE + "}</ui:define>\n\n");
 		b.append("<ui:define name=\"content\">\n");
 		b.append("\t<p:dialog header=\"#{" + EL_I18N_VAR);
-		b.append(".feedback_dialog_header}\" modal=\"true\" widgetVar=\"msgBox\" ");
+		b.append(".feedback_dialog_header}\" modal=\"true\" id=\"msgBox\" ");
 		b.append("visible=\"#{(not empty facesContext.messageList)}\">\n");
 		b.append("\t\t<p:messages id=\"messages\" showDetail=\"true\" showSummary=\"true\"/>\n");
 		b.append("\t</p:dialog>\n\n");

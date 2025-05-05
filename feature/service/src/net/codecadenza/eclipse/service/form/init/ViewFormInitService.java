@@ -44,6 +44,7 @@ import net.codecadenza.eclipse.model.client.FormTypeEnumeration;
 import net.codecadenza.eclipse.model.client.TableColumnField;
 import net.codecadenza.eclipse.model.client.TableColumnFieldTypeEnumeration;
 import net.codecadenza.eclipse.model.domain.AbstractDomainAssociation;
+import net.codecadenza.eclipse.model.domain.CollectionTypeEnumeration;
 import net.codecadenza.eclipse.model.domain.DomainAttribute;
 import net.codecadenza.eclipse.model.domain.DomainObject;
 import net.codecadenza.eclipse.model.domain.DomainTagEnumeration;
@@ -195,7 +196,7 @@ public class ViewFormInitService {
 				isPK = true;
 
 			// Non-persistent columns cannot be supported due to the constructor conversion of DTOs!
-			if (attr.isTrackVersion() || !attr.isPersistent())
+			if (attr.isTrackVersion() || !attr.isPersistent() || attr.getCollectionType() != CollectionTypeEnumeration.NONE)
 				continue;
 
 			// Add the attribute as a table column field

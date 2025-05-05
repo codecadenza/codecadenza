@@ -146,6 +146,8 @@ public class EnterDataSeleniumTestActionGenerator extends AbstractSeleniumTestAc
 					b.append("validateCheckBoxValue");
 				else if (fieldType == FormFieldTypeEnumeration.LIST || fieldType == FormFieldTypeEnumeration.SEARCHABLE_LIST)
 					b.append(fieldGetter + "().validateSelection");
+				else if (fieldType == FormFieldTypeEnumeration.ELEMENT_COLLECTION_EDITOR)
+					b.append(fieldGetter + "().validateElements");
 				else if (fieldType == FormFieldTypeEnumeration.FORM_LINK && !project.hasJSFClient())
 					b.append("validateInternalLinkText");
 				else if (fieldType == FormFieldTypeEnumeration.MAIL_LINK && project.hasAngularClient())
@@ -208,9 +210,20 @@ public class EnterDataSeleniumTestActionGenerator extends AbstractSeleniumTestAc
 					b.append("setCheckBoxValue");
 				else if (fieldType == FormFieldTypeEnumeration.LIST || fieldType == FormFieldTypeEnumeration.SEARCHABLE_LIST)
 					b.append(fieldGetter + ".selectItems");
+				else if (fieldType == FormFieldTypeEnumeration.ELEMENT_COLLECTION_EDITOR)
+					b.append(fieldGetter + ".addElements");
 
 				b.append("(testData.getElementTestDataById(");
-				b.append(form.getName() + ".FIELD_ID_" + testData.getFormField().getName().toUpperCase() + "));\n");
+				b.append(form.getName() + ".FIELD_ID_" + testData.getFormField().getName().toUpperCase() + ")");
+
+				if (fieldType == FormFieldTypeEnumeration.ELEMENT_COLLECTION_EDITOR) {
+					if (form.getFormType() == FormTypeEnumeration.UPDATE)
+						b.append(", true");
+					else
+						b.append(", false");
+				}
+
+				b.append(");\n");
 			}
 		}
 
