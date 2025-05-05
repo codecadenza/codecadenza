@@ -44,7 +44,7 @@ public class CSVExporter implements IExportable {
 		final var output = new StringBuilder();
 
 		for (final String colName : colNames) {
-			output.append(colName);
+			output.append("\"" + colName + "\"");
 			output.append(';');
 		}
 
@@ -61,7 +61,7 @@ public class CSVExporter implements IExportable {
 				if (cellValue.indexOf(';') > -1)
 					cellValue = cellValue.replace(';', ' ');
 
-				output.append(cellValue);
+				output.append("\"" + cellValue + "\"");
 				output.append(';');
 			});
 
