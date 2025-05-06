@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## Unreleased
+### Fixed
+2025-05-06: Replace invalid characters in the translation files of different runtime libraries
 ### Changed
 2025-05-06: Use the XLSX export format instead of XLS in JSF data tables
 ### Added
