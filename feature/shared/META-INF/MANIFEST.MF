@@ -3,7 +3,7 @@ Automatic-Module-Name: net.codecadenza.eclipse.shared
 Bundle-ManifestVersion: 2
 Bundle-Name: CodeCadenza plug-in for shared functionality
 Bundle-SymbolicName: net.codecadenza.eclipse.shared;singleton:=true
-Bundle-Version: 1.0.0
+Bundle-Version: 1.1.0
 Bundle-Activator: net.codecadenza.eclipse.shared.CodeCadenzaSharedPlugin
 Require-Bundle: org.eclipse.ui;bundle-version="3.111.0",
  org.eclipse.core.runtime;bundle-version="3.15.100",
@@ -19,10 +19,10 @@ Export-Package: jakarta.xml.bind,
  net.codecadenza.eclipse.shared.event
 Bundle-Vendor: Martin Ganserer
 Bundle-ClassPath: .,
- lib/codecadenza-util-1.0.0.jar,
- lib/codecadenza-eclipse-1.0.0.jar,
- lib/codecadenza-rcp-1.0.0.jar,
- lib/codecadenza-richclient-1.0.0.jar,
+ lib/codecadenza-util-1.1.0.jar,
+ lib/codecadenza-eclipse-1.1.0.jar,
+ lib/codecadenza-rcp-1.1.0.jar,
+ lib/codecadenza-richclient-1.1.0.jar,
  lib/slf4j-api-2.0.16.jar,
  lib/slf4j-nop-2.0.16.jar,
  lib/poi-5.3.0.jar,
