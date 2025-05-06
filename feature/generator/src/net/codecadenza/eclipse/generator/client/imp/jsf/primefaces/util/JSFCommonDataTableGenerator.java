@@ -1891,8 +1891,8 @@ public class JSFCommonDataTableGenerator {
 
 		// Add a menu item to export the content of the data table
 		b.append("\t\t<p:submenu icon=\"pi pi-print\" label=\"#{" + EL_I18N_VAR + ".mnu_export}\">\n");
-		b.append("\t\t\t<p:menuitem value=\"#{" + EL_I18N_VAR + ".action_export_xls}\" ajax=\"false\" icon=\"pi pi-file-excel\">\n");
-		b.append("\t\t\t\t<p:dataExporter type=\"xls\" target=\"" + panelId + "\" fileName=\"");
+		b.append("\t\t\t<p:menuitem value=\"#{" + EL_I18N_VAR + ".action_export_xlsx}\" ajax=\"false\" icon=\"pi pi-file-excel\">\n");
+		b.append("\t\t\t\t<p:dataExporter type=\"xlsx\" target=\"" + panelId + "\" fileName=\"");
 		b.append(dto.getDomainObject().getName() + "List\"/>\n");
 		b.append("\t\t\t</p:menuitem>\n");
 		b.append("\t\t\t<p:menuitem value=\"#{" + EL_I18N_VAR + ".action_export_pdf}\" ajax=\"false\" icon=\"pi pi-file-pdf\">\n");

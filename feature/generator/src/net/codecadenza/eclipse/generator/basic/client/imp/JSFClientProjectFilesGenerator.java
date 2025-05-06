@@ -447,8 +447,8 @@ public class JSFClientProjectFilesGenerator extends AbstractClientProjectFilesGe
 		b.append("action_export=Export\n");
 		b.append("action_import=Import\n");
 		b.append("action_edit=Edit\n");
-		b.append("action_export_xls=As xls-file\n");
-		b.append("action_export_pdf=As pdf-file\n");
+		b.append("action_export_xlsx=as XLSX\n");
+		b.append("action_export_pdf=as PDF\n");
 		b.append("action_fetch_data=Fetching data...\n");
 		b.append("result_total_number_records=Total number of records: \n");
 		b.append("command_add=Add\n");
