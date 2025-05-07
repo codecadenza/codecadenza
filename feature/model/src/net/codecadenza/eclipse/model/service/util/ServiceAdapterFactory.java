@@ -108,8 +108,8 @@ public class ServiceAdapterFactory extends AdapterFactoryImpl {
 
 		/*
 		 * (non-Javadoc)
-		 * @see net.codecadenza.eclipse.model.service.util.ServiceSwitch#caseScheduledInvocation(net.codecadenza.eclipse.model.service.
-		 * ScheduledInvocation)
+		 * @see net.codecadenza.eclipse.model.service.util.ServiceSwitch#
+		 * caseScheduledInvocation(net.codecadenza.eclipse.model.service.ScheduledInvocation)
 		 */
 		@Override
 		public Adapter caseScheduledInvocation(ScheduledInvocation object) {
@@ -165,9 +165,9 @@ public class ServiceAdapterFactory extends AdapterFactoryImpl {
 	}
 
 	/**
-	 * Create a new adapter for an object of class '{@link net.codecadenza.eclipse.model.service.ServiceBean <em>Service Bean</em>}'.
-	 * This default implementation returns null so that we can easily ignore cases; it's useful to ignore a case when inheritance
-	 * will catch all the cases anyway.
+	 * Create a new adapter for an object of class '{@link net.codecadenza.eclipse.model.service.ServiceBean <em>Service
+	 * Bean</em>}'. This default implementation returns null so that we can easily ignore cases; it's useful to ignore a case when
+	 * inheritance will catch all the cases anyway.
 	 * @return the new adapter
 	 * @see net.codecadenza.eclipse.model.service.ServiceBean
 	 * @generated
@@ -237,9 +237,9 @@ public class ServiceAdapterFactory extends AdapterFactoryImpl {
 	}
 
 	/**
-	 * Create a new adapter for an object of class '{@link net.codecadenza.eclipse.model.java.JavaMethod <em>Java Method</em>}'. This
-	 * default implementation returns null so that we can easily ignore cases; it's useful to ignore a case when inheritance will
-	 * catch all the cases anyway.
+	 * Create a new adapter for an object of class '{@link net.codecadenza.eclipse.model.java.JavaMethod <em>Java Method</em>}'.
+	 * This default implementation returns null so that we can easily ignore cases; it's useful to ignore a case when inheritance
+	 * will catch all the cases anyway.
 	 * @return the new adapter
 	 * @see net.codecadenza.eclipse.model.java.JavaMethod
 	 * @generated

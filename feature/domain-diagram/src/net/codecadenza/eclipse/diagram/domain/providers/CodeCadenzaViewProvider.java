@@ -83,7 +83,8 @@ public class CodeCadenzaViewProvider extends AbstractViewProvider {
 	protected Class<?> getDiagramViewClass(IAdaptable semanticAdapter, String diagramKind) {
 		final EObject semanticElement = getSemanticElement(semanticAdapter);
 
-		if (DomainNamespaceEditPart.MODEL_ID.equals(diagramKind) && CodeCadenzaVisualIDRegistry.getDiagramVisualID(semanticElement) != -1)
+		if (DomainNamespaceEditPart.MODEL_ID.equals(diagramKind)
+				&& CodeCadenzaVisualIDRegistry.getDiagramVisualID(semanticElement) != -1)
 			return DomainNamespaceViewFactory.class;
 
 		return null;

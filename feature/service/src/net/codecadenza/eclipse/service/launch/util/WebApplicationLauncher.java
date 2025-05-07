@@ -70,7 +70,8 @@ public class WebApplicationLauncher extends Thread {
 				Runtime.getRuntime().exec(new String[] { OPEN_COMMAND, url.toString() });
 		}
 		catch (final Exception e) {
-			CodeCadenzaServicePlugin.getDefault().getLog().error("Error while opening the URL '" + url.toString() + "' in the browser!", e);
+			CodeCadenzaServicePlugin.getDefault().getLog().error("Error while opening the URL '" + url.toString() + "' in the browser!",
+					e);
 		}
 	}
 

@@ -122,7 +122,8 @@ public class CodeCadenzaOCLFactory {
 
 		/*
 		 * (non-Javadoc)
-		 * @see net.codecadenza.eclipse.diagram.domain.expressions.CodeCadenzaAbstractExpression#doEvaluate(java.lang.Object, java.util.Map)
+		 * @see net.codecadenza.eclipse.diagram.domain.expressions.CodeCadenzaAbstractExpression#doEvaluate(java.lang.Object,
+		 * java.util.Map)
 		 */
 		@Override
 		protected Object doEvaluate(Object context, Map env) {

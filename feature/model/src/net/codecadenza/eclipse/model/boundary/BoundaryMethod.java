@@ -137,8 +137,8 @@ public interface BoundaryMethod extends ServiceMethod {
 	BoundaryMethodDataFetchType getDataFetchType();
 
 	/**
-	 * Set the value of the '{@link net.codecadenza.eclipse.model.boundary.BoundaryMethod#getDataFetchType <em>Data Fetch Type</em>}'
-	 * attribute
+	 * Set the value of the '{@link net.codecadenza.eclipse.model.boundary.BoundaryMethod#getDataFetchType <em>Data Fetch
+	 * Type</em>}' attribute
 	 * @param value the new value of the '<em>Data Fetch Type</em>' attribute
 	 * @see net.codecadenza.eclipse.model.boundary.BoundaryMethodDataFetchType
 	 * @see #getDataFetchType()

@@ -36,7 +36,8 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
  * <p>
  * The following features are implemented:
  * <ul>
- * <li>{@link net.codecadenza.eclipse.model.repository.impl.RepositoryMethodParameterImpl#getAssociation <em>Association</em>}</li>
+ * <li>{@link net.codecadenza.eclipse.model.repository.impl.RepositoryMethodParameterImpl#getAssociation
+ * <em>Association</em>}</li>
  * <li>{@link net.codecadenza.eclipse.model.repository.impl.RepositoryMethodParameterImpl#getAttribute <em>Domain
  * Attribute</em>}</li>
  * </ul>

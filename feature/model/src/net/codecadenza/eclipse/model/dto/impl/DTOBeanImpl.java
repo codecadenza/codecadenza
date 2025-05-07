@@ -724,7 +724,8 @@ public class DTOBeanImpl extends MappingObjectImpl implements DTOBean {
 
 	/*
 	 * (non-Javadoc)
-	 * @see net.codecadenza.eclipse.model.dto.DTOBean#addAttribute(net.codecadenza.eclipse.model.dto.DTOBean, java.util.List, boolean)
+	 * @see net.codecadenza.eclipse.model.dto.DTOBean#addAttribute(net.codecadenza.eclipse.model.dto.DTOBean, java.util.List,
+	 * boolean)
 	 * @generated not
 	 */
 	@Override

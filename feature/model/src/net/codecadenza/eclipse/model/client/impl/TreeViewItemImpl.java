@@ -56,7 +56,8 @@ import org.eclipse.emf.ecore.util.InternalEList;
  * <li>{@link net.codecadenza.eclipse.model.client.impl.TreeViewItemImpl#getNodes <em>Nodes</em>}</li>
  * <li>{@link net.codecadenza.eclipse.model.client.impl.TreeViewItemImpl#getLabel <em>Label</em>}</li>
  * <li>{@link net.codecadenza.eclipse.model.client.impl.TreeViewItemImpl#getItemDTO <em>Item DTO</em>}</li>
- * <li>{@link net.codecadenza.eclipse.model.client.impl.TreeViewItemImpl#getInvisibleAttributes <em>Invisible Attributes</em>}</li>
+ * <li>{@link net.codecadenza.eclipse.model.client.impl.TreeViewItemImpl#getInvisibleAttributes <em>Invisible
+ * Attributes</em>}</li>
  * </ul>
  * </p>
  * @generated

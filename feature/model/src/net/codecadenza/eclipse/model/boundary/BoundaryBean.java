@@ -65,7 +65,8 @@ public interface BoundaryBean extends ServiceBean {
 	Repository getRepository();
 
 	/**
-	 * Set the value of the '{@link net.codecadenza.eclipse.model.boundary.BoundaryBean#getRepository <em>Repository</em>}' reference
+	 * Set the value of the '{@link net.codecadenza.eclipse.model.boundary.BoundaryBean#getRepository <em>Repository</em>}'
+	 * reference
 	 * @param value the new value of the '<em>Repository</em>' reference
 	 * @see #getRepository()
 	 * @generated

@@ -709,7 +709,8 @@ public interface DbPackage extends EPackage {
 	EReference getDBTable_Indexes();
 
 	/**
-	 * Return the meta object for the attribute '{@link net.codecadenza.eclipse.model.db.DBTable#getSchemaName <em>Schema Name</em>}'
+	 * Return the meta object for the attribute '{@link net.codecadenza.eclipse.model.db.DBTable#getSchemaName <em>Schema
+	 * Name</em>}'
 	 * @return the meta object for the attribute '<em>Schema Name</em>'
 	 * @see net.codecadenza.eclipse.model.db.DBTable#getSchemaName()
 	 * @see #getDBTable()
@@ -736,8 +737,8 @@ public interface DbPackage extends EPackage {
 	EClass getDatabase();
 
 	/**
-	 * Return the meta object for the reference list '{@link net.codecadenza.eclipse.model.db.Database#getDatabaseTables <em>Database
-	 * Tables</em>}'
+	 * Return the meta object for the reference list '{@link net.codecadenza.eclipse.model.db.Database#getDatabaseTables
+	 * <em>Database Tables</em>}'
 	 * @return the meta object for the reference list '<em>Database Tables</em>'
 	 * @see net.codecadenza.eclipse.model.db.Database#getDatabaseTables()
 	 * @see #getDatabase()

@@ -104,7 +104,7 @@ public class ServiceLocator {
 	 * @param serviceInterface
 	 * @return the service
 	 * @throws IllegalStateException if either the service locator hasn't been initialized or if the service locator wasn't able to
-	 * initialize the service
+	 *           initialize the service
 	 * @throws IllegalArgumentException if no service interface has been provided
 	 */
 	@SuppressWarnings("unchecked")

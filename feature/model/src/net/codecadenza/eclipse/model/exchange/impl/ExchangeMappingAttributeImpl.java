@@ -44,8 +44,8 @@ import org.eclipse.emf.ecore.util.EcoreUtil;
  * Mapping Object</em>}</li>
  * <li>{@link net.codecadenza.eclipse.model.exchange.impl.ExchangeMappingAttributeImpl#isInsertable <em>Insertable</em>}</li>
  * <li>{@link net.codecadenza.eclipse.model.exchange.impl.ExchangeMappingAttributeImpl#isUpdatable <em>Updatable</em>}</li>
- * <li>{@link net.codecadenza.eclipse.model.exchange.impl.ExchangeMappingAttributeImpl#getSelectionListStatement <em>Selection List
- * Statement</em>}</li>
+ * <li>{@link net.codecadenza.eclipse.model.exchange.impl.ExchangeMappingAttributeImpl#getSelectionListStatement <em>Selection
+ * List Statement</em>}</li>
  * <li>{@link net.codecadenza.eclipse.model.exchange.impl.ExchangeMappingAttributeImpl#isDeleteAllItems <em>Delete All
  * Items</em>}</li>
  * <li>{@link net.codecadenza.eclipse.model.exchange.impl.ExchangeMappingAttributeImpl#isAddNewItems <em>Add New Items</em>}</li>

@@ -66,7 +66,8 @@ public interface BoundaryPackage extends EPackage {
 	BoundaryPackage eINSTANCE = net.codecadenza.eclipse.model.boundary.impl.BoundaryPackageImpl.init();
 
 	/**
-	 * The meta object ID for the '{@link net.codecadenza.eclipse.model.boundary.impl.BoundaryBeanImpl <em>Boundary Bean</em>}' class
+	 * The meta object ID for the '{@link net.codecadenza.eclipse.model.boundary.impl.BoundaryBeanImpl <em>Boundary Bean</em>}'
+	 * class
 	 * @see net.codecadenza.eclipse.model.boundary.impl.BoundaryBeanImpl
 	 * @see net.codecadenza.eclipse.model.boundary.impl.BoundaryPackageImpl#getBoundaryBean()
 	 * @generated
@@ -501,8 +502,8 @@ public interface BoundaryPackage extends EPackage {
 		EReference BOUNDARY_METHOD__SERVICE_METHOD = eINSTANCE.getBoundaryMethod_ServiceMethod();
 
 		/**
-		 * The meta object literal for the '{@link net.codecadenza.eclipse.model.boundary.BoundaryMethodTypeEnumeration <em>Method Type
-		 * Enumeration</em>}' enum
+		 * The meta object literal for the '{@link net.codecadenza.eclipse.model.boundary.BoundaryMethodTypeEnumeration <em>Method
+		 * Type Enumeration</em>}' enum
 		 * @see net.codecadenza.eclipse.model.boundary.BoundaryMethodTypeEnumeration
 		 * @see net.codecadenza.eclipse.model.boundary.impl.BoundaryPackageImpl#getBoundaryMethodTypeEnumeration()
 		 * @generated

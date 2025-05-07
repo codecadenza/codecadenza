@@ -210,8 +210,8 @@ public interface TableColumnField extends EObject {
 	boolean isAssociationRef();
 
 	/**
-	 * Set the value of the '{@link net.codecadenza.eclipse.model.client.TableColumnField#isAssociationRef <em>Association Ref</em>}'
-	 * attribute
+	 * Set the value of the '{@link net.codecadenza.eclipse.model.client.TableColumnField#isAssociationRef <em>Association
+	 * Ref</em>}' attribute
 	 * @param value the new value of the '<em>Association Ref</em>' attribute
 	 * @see #isAssociationRef()
 	 * @generated

@@ -66,8 +66,8 @@ public class SearchInputDialog extends __SearchInputDialog {
 
 	/*
 	 * (non-Javadoc)
-	 * @see net.codecadenza.runtime.richclient.eclipse.search.__SearchInputDialog#addProposalAdapter(org.eclipse.swt.
-	 * widgets.Text, java.lang.String)
+	 * @see net.codecadenza.runtime.richclient.eclipse.search.__SearchInputDialog#addProposalAdapter(org.eclipse.swt.widgets.Text,
+	 * java.lang.String)
 	 */
 	@Override
 	protected void addProposalAdapter(Text textField, String lovCommand) {

@@ -76,7 +76,8 @@ public interface AbstractDomainAssociation extends EObject {
 	boolean isOwner();
 
 	/**
-	 * Set the value of the '{@link net.codecadenza.eclipse.model.domain.AbstractDomainAssociation#isOwner <em>Owner</em>}' attribute
+	 * Set the value of the '{@link net.codecadenza.eclipse.model.domain.AbstractDomainAssociation#isOwner <em>Owner</em>}'
+	 * attribute
 	 * @param value the new value of the '<em>Owner</em>' attribute
 	 * @see #isOwner()
 	 * @generated

@@ -152,8 +152,8 @@ public interface IntegrationPackage extends EPackage {
 	int ABSTRACT_INTEGRATION_BEAN_FEATURE_COUNT = ServicePackage.SERVICE_BEAN_FEATURE_COUNT + 3;
 
 	/**
-	 * The meta object ID for the '{@link net.codecadenza.eclipse.model.integration.impl.SOAPIntegrationBeanImpl <em>SOAP Integration
-	 * Bean</em>}' class
+	 * The meta object ID for the '{@link net.codecadenza.eclipse.model.integration.impl.SOAPIntegrationBeanImpl <em>SOAP
+	 * Integration Bean</em>}' class
 	 * @see net.codecadenza.eclipse.model.integration.impl.SOAPIntegrationBeanImpl
 	 * @see net.codecadenza.eclipse.model.integration.impl.IntegrationPackageImpl#getSOAPIntegrationBean()
 	 * @generated
@@ -273,8 +273,8 @@ public interface IntegrationPackage extends EPackage {
 	int SOAP_INTEGRATION_BEAN_FEATURE_COUNT = ABSTRACT_INTEGRATION_BEAN_FEATURE_COUNT + 5;
 
 	/**
-	 * The meta object ID for the '{@link net.codecadenza.eclipse.model.integration.impl.RESTIntegrationBeanImpl <em>REST Integration
-	 * Bean</em>}' class
+	 * The meta object ID for the '{@link net.codecadenza.eclipse.model.integration.impl.RESTIntegrationBeanImpl <em>REST
+	 * Integration Bean</em>}' class
 	 * @see net.codecadenza.eclipse.model.integration.impl.RESTIntegrationBeanImpl
 	 * @see net.codecadenza.eclipse.model.integration.impl.IntegrationPackageImpl#getRESTIntegrationBean()
 	 * @generated
@@ -785,8 +785,8 @@ public interface IntegrationPackage extends EPackage {
 	int REST_INTEGRATION_METHOD_FEATURE_COUNT = ABSTRACT_INTEGRATION_METHOD_FEATURE_COUNT + 4;
 
 	/**
-	 * The meta object ID for the '{@link net.codecadenza.eclipse.model.integration.impl.RMIIntegrationMethodImpl <em>RMI Integration
-	 * Method</em>}' class
+	 * The meta object ID for the '{@link net.codecadenza.eclipse.model.integration.impl.RMIIntegrationMethodImpl <em>RMI
+	 * Integration Method</em>}' class
 	 * @see net.codecadenza.eclipse.model.integration.impl.RMIIntegrationMethodImpl
 	 * @see net.codecadenza.eclipse.model.integration.impl.IntegrationPackageImpl#getRMIIntegrationMethod()
 	 * @generated
@@ -1248,8 +1248,8 @@ public interface IntegrationPackage extends EPackage {
 	int KAFKA_INTEGRATION_METHOD_FEATURE_COUNT = ABSTRACT_INTEGRATION_METHOD_FEATURE_COUNT + 4;
 
 	/**
-	 * The meta object id for the '{@link net.codecadenza.eclipse.model.integration.impl.JMSIntegrationMethodImpl <em>JMS Integration
-	 * Method</em>}' class
+	 * The meta object id for the '{@link net.codecadenza.eclipse.model.integration.impl.JMSIntegrationMethodImpl <em>JMS
+	 * Integration Method</em>}' class
 	 * @see net.codecadenza.eclipse.model.integration.impl.JMSIntegrationMethodImpl
 	 * @see net.codecadenza.eclipse.model.integration.impl.IntegrationPackageImpl#getJMSIntegrationMethod()
 	 * @generated
@@ -1559,8 +1559,8 @@ public interface IntegrationPackage extends EPackage {
 	EAttribute getSOAPIntegrationBean_BareParameterStyle();
 
 	/**
-	 * Return the meta object for the attribute '{@link net.codecadenza.eclipse.model.integration.SOAPIntegrationBean#getPortTypeName
-	 * <em>Port Type Name</em>}'
+	 * Return the meta object for the attribute
+	 * '{@link net.codecadenza.eclipse.model.integration.SOAPIntegrationBean#getPortTypeName <em>Port Type Name</em>}'
 	 * @return the meta object for the attribute '<em>Port Type Name</em>'
 	 * @see net.codecadenza.eclipse.model.integration.SOAPIntegrationBean#getPortTypeName()
 	 * @see #getSOAPIntegrationBean()
@@ -1697,8 +1697,8 @@ public interface IntegrationPackage extends EPackage {
 	EAttribute getRESTIntegrationMethod_Path();
 
 	/**
-	 * Return the meta object for the attribute '{@link net.codecadenza.eclipse.model.integration.RESTIntegrationMethod#getHttpMethod
-	 * <em>Http Method</em>}'
+	 * Return the meta object for the attribute
+	 * '{@link net.codecadenza.eclipse.model.integration.RESTIntegrationMethod#getHttpMethod <em>Http Method</em>}'
 	 * @return the meta object for the attribute '<em>Http Method</em>'
 	 * @see net.codecadenza.eclipse.model.integration.RESTIntegrationMethod#getHttpMethod()
 	 * @see #getRESTIntegrationMethod()
@@ -1717,8 +1717,8 @@ public interface IntegrationPackage extends EPackage {
 	EAttribute getRESTIntegrationMethod_InputType();
 
 	/**
-	 * Return the meta object for the attribute '{@link net.codecadenza.eclipse.model.integration.RESTIntegrationMethod#getOutputType
-	 * <em>Output Type</em>}'
+	 * Return the meta object for the attribute
+	 * '{@link net.codecadenza.eclipse.model.integration.RESTIntegrationMethod#getOutputType <em>Output Type</em>}'
 	 * @return the meta object for the attribute '<em>Output Type</em>'
 	 * @see net.codecadenza.eclipse.model.integration.RESTIntegrationMethod#getOutputType()
 	 * @see #getRESTIntegrationMethod()
@@ -1843,7 +1843,8 @@ public interface IntegrationPackage extends EPackage {
 
 	/**
 	 * Return the meta object for the attribute
-	 * '{@link net.codecadenza.eclipse.model.integration.KafkaIntegrationMethod#getResponseSchemaName <em>Response Schema Name</em>}'
+	 * '{@link net.codecadenza.eclipse.model.integration.KafkaIntegrationMethod#getResponseSchemaName <em>Response Schema
+	 * Name</em>}'
 	 * @return the meta object for the attribute '<em>Response Schema Name</em>'
 	 * @see net.codecadenza.eclipse.model.integration.KafkaIntegrationMethod#getResponseSchemaName()
 	 * @see #getKafkaIntegrationMethod()
@@ -1882,8 +1883,8 @@ public interface IntegrationPackage extends EPackage {
 	EClass getJMSIntegrationMethod();
 
 	/**
-	 * Return the meta object for the attribute '{@link net.codecadenza.eclipse.model.integration.JMSIntegrationMethod#getOperationID
-	 * <em>Operation ID</em>}'
+	 * Return the meta object for the attribute
+	 * '{@link net.codecadenza.eclipse.model.integration.JMSIntegrationMethod#getOperationID <em>Operation ID</em>}'
 	 * @return the meta object for the attribute '<em>Operation ID</em>'
 	 * @see net.codecadenza.eclipse.model.integration.JMSIntegrationMethod#getOperationID()
 	 * @see #getJMSIntegrationMethod()
@@ -1892,8 +1893,8 @@ public interface IntegrationPackage extends EPackage {
 	EAttribute getJMSIntegrationMethod_OperationID();
 
 	/**
-	 * Return the meta object for the attribute '{@link net.codecadenza.eclipse.model.integration.JMSIntegrationMethod#isSendResponse
-	 * <em>Send Response</em>}'
+	 * Return the meta object for the attribute
+	 * '{@link net.codecadenza.eclipse.model.integration.JMSIntegrationMethod#isSendResponse <em>Send Response</em>}'
 	 * @return the meta object for the attribute '<em>Send Response</em>'
 	 * @see net.codecadenza.eclipse.model.integration.JMSIntegrationMethod#isSendResponse()
 	 * @see #getJMSIntegrationMethod()
@@ -1939,7 +1940,8 @@ public interface IntegrationPackage extends EPackage {
 	EClass getJMSResource();
 
 	/**
-	 * Return the meta object for the attribute '{@link net.codecadenza.eclipse.model.integration.JMSResource#getName <em>Name</em>}'
+	 * Return the meta object for the attribute '{@link net.codecadenza.eclipse.model.integration.JMSResource#getName
+	 * <em>Name</em>}'
 	 * @return the meta object for the attribute '<em>Name</em>'.
 	 * @see net.codecadenza.eclipse.model.integration.JMSResource#getName()
 	 * @see #getJMSResource()

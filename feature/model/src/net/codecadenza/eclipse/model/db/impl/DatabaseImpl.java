@@ -431,7 +431,8 @@ public class DatabaseImpl extends EObjectImpl implements Database {
 
 	/*
 	 * (non-Javadoc)
-	 * @see net.codecadenza.eclipse.model.db.Database#setIdentifierStyle(net.codecadenza.eclipse.model.db.IdentifierStyleEnumeration)
+	 * @see net.codecadenza.eclipse.model.db.Database#
+	 * setIdentifierStyle(net.codecadenza.eclipse.model.db.IdentifierStyleEnumeration)
 	 * @generated
 	 */
 	@Override

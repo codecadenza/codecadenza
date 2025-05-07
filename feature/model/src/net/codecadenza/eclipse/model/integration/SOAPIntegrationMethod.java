@@ -69,8 +69,8 @@ public interface SOAPIntegrationMethod extends AbstractIntegrationMethod {
 	boolean isAddParameterAnnotations();
 
 	/**
-	 * Set the value of the '{@link net.codecadenza.eclipse.model.integration.SOAPIntegrationMethod#isAddParameterAnnotations <em>Add
-	 * Parameter Annotations</em>}' attribute
+	 * Set the value of the '{@link net.codecadenza.eclipse.model.integration.SOAPIntegrationMethod#isAddParameterAnnotations
+	 * <em>Add Parameter Annotations</em>}' attribute
 	 * @param value the new value of the '<em>Add Parameter Annotations</em>' attribute
 	 * @see #isAddParameterAnnotations()
 	 * @generated
@@ -107,8 +107,8 @@ public interface SOAPIntegrationMethod extends AbstractIntegrationMethod {
 	String getReturnValuePartName();
 
 	/**
-	 * Set the value of the '{@link net.codecadenza.eclipse.model.integration.SOAPIntegrationMethod#getReturnValuePartName <em>Return
-	 * Value Part Name</em>}' attribute
+	 * Set the value of the '{@link net.codecadenza.eclipse.model.integration.SOAPIntegrationMethod#getReturnValuePartName
+	 * <em>Return Value Part Name</em>}' attribute
 	 * @param value the new value of the '<em>Return Value Part Name</em>' attribute
 	 * @see #getReturnValuePartName()
 	 * @generated

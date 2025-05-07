@@ -48,7 +48,8 @@ import org.eclipse.emf.common.util.EList;
  * <li>{@link net.codecadenza.eclipse.model.exchange.DataExchangeMethod#getDefaultDateFormat <em>Default Date Format</em>}</li>
  * <li>{@link net.codecadenza.eclipse.model.exchange.DataExchangeMethod#getDefaultDateTimeFormat <em>Default Date Time
  * Format</em>}</li>
- * <li>{@link net.codecadenza.eclipse.model.exchange.DataExchangeMethod#getDefaultNumberFormat <em>Default Number Format</em>}</li>
+ * <li>{@link net.codecadenza.eclipse.model.exchange.DataExchangeMethod#getDefaultNumberFormat <em>Default Number
+ * Format</em>}</li>
  * <li>{@link net.codecadenza.eclipse.model.exchange.DataExchangeMethod#getAssociationControllers <em>Association
  * Controllers</em>}</li>
  * <li>{@link net.codecadenza.eclipse.model.exchange.DataExchangeMethod#getSchemaFileName <em>Schema File Name</em>}</li>
@@ -111,8 +112,8 @@ public interface DataExchangeMethod extends ServiceMethod {
 	DataExchangeMethod getJoinedImportMethod();
 
 	/**
-	 * Set the value of the '{@link net.codecadenza.eclipse.model.exchange.DataExchangeMethod#getJoinedImportMethod <em>Joined Import
-	 * Method</em>}' reference
+	 * Set the value of the '{@link net.codecadenza.eclipse.model.exchange.DataExchangeMethod#getJoinedImportMethod <em>Joined
+	 * Import Method</em>}' reference
 	 * @param value the new value of the '<em>Joined Import Method</em>' reference
 	 * @see #getJoinedImportMethod()
 	 * @generated
@@ -416,7 +417,8 @@ public interface DataExchangeMethod extends ServiceMethod {
 	String getCharset();
 
 	/**
-	 * Set the value of the '{@link net.codecadenza.eclipse.model.exchange.DataExchangeMethod#getCharset <em>Charset</em>}' attribute
+	 * Set the value of the '{@link net.codecadenza.eclipse.model.exchange.DataExchangeMethod#getCharset <em>Charset</em>}'
+	 * attribute
 	 * @param value the new value of the '<em>Charset</em>' attribute
 	 * @see #getCharset()
 	 * @generated
@@ -434,8 +436,8 @@ public interface DataExchangeMethod extends ServiceMethod {
 	boolean isFormatOutput();
 
 	/**
-	 * Set the value of the '{@link net.codecadenza.eclipse.model.exchange.DataExchangeMethod#isFormatOutput <em>Format Output</em>}'
-	 * attribute
+	 * Set the value of the '{@link net.codecadenza.eclipse.model.exchange.DataExchangeMethod#isFormatOutput <em>Format
+	 * Output</em>}' attribute
 	 * @param value the new value of the '<em>Format Output</em>' attribute
 	 * @see #isFormatOutput()
 	 * @generated

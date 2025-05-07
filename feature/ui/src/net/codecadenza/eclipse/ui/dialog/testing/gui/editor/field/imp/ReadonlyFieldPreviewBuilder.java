@@ -67,8 +67,8 @@ public class ReadonlyFieldPreviewBuilder extends AbstractGUITestFieldPreviewBuil
 
 	/*
 	 * (non-Javadoc)
-	 * @see net.codecadenza.eclipse.ui.dialog.testing.gui.editor.field.imp.AbstractGUITestFieldPreviewBuilder#setFieldValue(java.
-	 * lang.String)
+	 * @see net.codecadenza.eclipse.ui.dialog.testing.gui.editor.field.imp.AbstractGUITestFieldPreviewBuilder#
+	 * setFieldValue(java.lang.String)
 	 */
 	@Override
 	public void setFieldValue(String value) {
@@ -77,7 +77,8 @@ public class ReadonlyFieldPreviewBuilder extends AbstractGUITestFieldPreviewBuil
 
 	/*
 	 * (non-Javadoc)
-	 * @see net.codecadenza.eclipse.ui.preview.field.imp.AbstractFieldPreviewBuilder#getFieldPreview(org.eclipse.swt.widgets.Control)
+	 * @see net.codecadenza.eclipse.ui.preview.field.imp.AbstractFieldPreviewBuilder#
+	 * getFieldPreview(org.eclipse.swt.widgets.Control)
 	 */
 	@Override
 	public Control getFieldPreview(Control lblField) {

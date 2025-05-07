@@ -244,8 +244,8 @@ public interface DataExchangeAttribute extends EObject {
 	boolean isDisableExternalMapping();
 
 	/**
-	 * Set the value of the '{@link net.codecadenza.eclipse.model.exchange.DataExchangeAttribute#isDisableExternalMapping <em>Disable
-	 * External Mapping</em>}' attribute
+	 * Set the value of the '{@link net.codecadenza.eclipse.model.exchange.DataExchangeAttribute#isDisableExternalMapping
+	 * <em>Disable External Mapping</em>}' attribute
 	 * @param value the new value of the '<em>Disable External Mapping</em>' attribute
 	 * @see #isDisableExternalMapping()
 	 * @generated

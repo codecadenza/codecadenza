@@ -50,7 +50,8 @@ public interface RESTIntegrationMethod extends AbstractIntegrationMethod {
 	String getPath();
 
 	/**
-	 * Set the value of the '{@link net.codecadenza.eclipse.model.integration.RESTIntegrationMethod#getPath <em>Path</em>}' attribute
+	 * Set the value of the '{@link net.codecadenza.eclipse.model.integration.RESTIntegrationMethod#getPath <em>Path</em>}'
+	 * attribute
 	 * @param value the new value of the '<em>Path</em>' attribute
 	 * @see #getPath()
 	 * @generated

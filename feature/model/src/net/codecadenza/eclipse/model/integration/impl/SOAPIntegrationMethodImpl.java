@@ -39,8 +39,8 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
  * Annotations</em>}</li>
  * <li>{@link net.codecadenza.eclipse.model.integration.impl.SOAPIntegrationMethodImpl#getReturnValueName <em>Return Value
  * Name</em>}</li>
- * <li>{@link net.codecadenza.eclipse.model.integration.impl.SOAPIntegrationMethodImpl#getReturnValuePartName <em>Return Value Part
- * Name</em>}</li>
+ * <li>{@link net.codecadenza.eclipse.model.integration.impl.SOAPIntegrationMethodImpl#getReturnValuePartName <em>Return Value
+ * Part Name</em>}</li>
  * </ul>
  * @generated
  */

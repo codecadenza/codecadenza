@@ -122,8 +122,8 @@ public interface ProjectPackage extends EPackage {
 	int DATASOURCE_FEATURE_COUNT = 6;
 
 	/**
-	 * The meta object ID for the '{@link net.codecadenza.eclipse.model.project.impl.PersistenceUnitPropertyImpl <em>Persistence Unit
-	 * Property</em>}' class
+	 * The meta object ID for the '{@link net.codecadenza.eclipse.model.project.impl.PersistenceUnitPropertyImpl <em>Persistence
+	 * Unit Property</em>}' class
 	 * @see net.codecadenza.eclipse.model.project.impl.PersistenceUnitPropertyImpl
 	 * @see net.codecadenza.eclipse.model.project.impl.ProjectPackageImpl#getPersistenceUnitProperty()
 	 * @generated
@@ -558,8 +558,8 @@ public interface ProjectPackage extends EPackage {
 	int JPA_VERSION_ENUMERATION = 9;
 
 	/**
-	 * The meta object ID for the '{@link net.codecadenza.eclipse.model.project.TechnologyPlatformEnumeration <em>Technology Platform
-	 * Enumeration</em>}' enum
+	 * The meta object ID for the '{@link net.codecadenza.eclipse.model.project.TechnologyPlatformEnumeration <em>Technology
+	 * Platform Enumeration</em>}' enum
 	 * @see net.codecadenza.eclipse.model.project.TechnologyPlatformEnumeration
 	 * @see net.codecadenza.eclipse.model.project.impl.ProjectPackageImpl#getTechnologyPlatformEnumeration()
 	 * @generated
@@ -585,7 +585,8 @@ public interface ProjectPackage extends EPackage {
 	int BUILD_TOOL_ENUMERATION = 12;
 
 	/**
-	 * The meta object ID for the '{@link net.codecadenza.eclipse.model.project.BuildArtifactType <em>Build Artifact Type</em>}' enum
+	 * The meta object ID for the '{@link net.codecadenza.eclipse.model.project.BuildArtifactType <em>Build Artifact Type</em>}'
+	 * enum
 	 * @see net.codecadenza.eclipse.model.project.BuildArtifactType
 	 * @see net.codecadenza.eclipse.model.project.impl.ProjectPackageImpl#getBuildArtifactType()
 	 * @generated
@@ -981,8 +982,8 @@ public interface ProjectPackage extends EPackage {
 	EAttribute getProject_XmlNamespace();
 
 	/**
-	 * Return the meta object for the containment reference list '{@link net.codecadenza.eclipse.model.project.Project#getTestModules
-	 * <em>Test Modules</em>}'
+	 * Return the meta object for the containment reference list
+	 * '{@link net.codecadenza.eclipse.model.project.Project#getTestModules <em>Test Modules</em>}'
 	 * @return the meta object for the containment reference list '<em>Test Modules</em>'
 	 * @see net.codecadenza.eclipse.model.project.Project#getTestModules()
 	 * @see #getProject()
@@ -1123,7 +1124,8 @@ public interface ProjectPackage extends EPackage {
 	EReference getBuildArtifact_Project();
 
 	/**
-	 * Return the meta object for class '{@link net.codecadenza.eclipse.model.project.IntegrationModule <em>Integration Module</em>}'
+	 * Return the meta object for class '{@link net.codecadenza.eclipse.model.project.IntegrationModule <em>Integration
+	 * Module</em>}'
 	 * @return the meta object for class '<em>Integration Module</em>'
 	 * @see net.codecadenza.eclipse.model.project.IntegrationModule
 	 * @generated
@@ -1244,7 +1246,8 @@ public interface ProjectPackage extends EPackage {
 	EEnum getBuildToolEnumeration();
 
 	/**
-	 * Return the meta object for enum '{@link net.codecadenza.eclipse.model.project.BuildArtifactType <em>Build Artifact Type</em>}'
+	 * Return the meta object for enum '{@link net.codecadenza.eclipse.model.project.BuildArtifactType <em>Build Artifact
+	 * Type</em>}'
 	 * @return the meta object for enum '<em>Build Artifact Type</em>'
 	 * @see net.codecadenza.eclipse.model.project.BuildArtifactType
 	 * @generated
@@ -1252,8 +1255,8 @@ public interface ProjectPackage extends EPackage {
 	EEnum getBuildArtifactType();
 
 	/**
-	 * Return the meta object for enum '{@link net.codecadenza.eclipse.model.project.MappingAnnotationStrategy <em>Mapping Annotation
-	 * Strategy</em>}'
+	 * Return the meta object for enum '{@link net.codecadenza.eclipse.model.project.MappingAnnotationStrategy <em>Mapping
+	 * Annotation Strategy</em>}'
 	 * @return the meta object for enum '<em>Mapping Annotation Strategy</em>'
 	 * @see net.codecadenza.eclipse.model.project.MappingAnnotationStrategy
 	 * @generated
@@ -1677,8 +1680,8 @@ public interface ProjectPackage extends EPackage {
 		EEnum SERVER_PLATFORM_ENUMERATION = eINSTANCE.getServerPlatformEnumeration();
 
 		/**
-		 * The meta object literal for the '{@link net.codecadenza.eclipse.model.project.PersistenceProviderEnumeration <em>Persistence
-		 * Provider Enumeration</em>}' enum
+		 * The meta object literal for the '{@link net.codecadenza.eclipse.model.project.PersistenceProviderEnumeration
+		 * <em>Persistence Provider Enumeration</em>}' enum
 		 * @see net.codecadenza.eclipse.model.project.PersistenceProviderEnumeration
 		 * @see net.codecadenza.eclipse.model.project.impl.ProjectPackageImpl#getPersistenceProviderEnumeration()
 		 * @generated

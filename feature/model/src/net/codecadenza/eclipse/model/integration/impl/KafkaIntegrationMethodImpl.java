@@ -37,9 +37,10 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
  * Name</em>}</li>
  * <li>{@link net.codecadenza.eclipse.model.integration.impl.KafkaIntegrationMethodImpl#getResponseSchemaName <em>Response Schema
  * Name</em>}</li>
- * <li>{@link net.codecadenza.eclipse.model.integration.impl.KafkaIntegrationMethodImpl#isUseDedicatedPartition() <em>Use Dedicated
- * Partition</em>}</li>
- * <li>{@link net.codecadenza.eclipse.model.integration.impl.KafkaIntegrationMethodImpl#isSendResponse <em>Send Response</em>}</li>
+ * <li>{@link net.codecadenza.eclipse.model.integration.impl.KafkaIntegrationMethodImpl#isUseDedicatedPartition() <em>Use
+ * Dedicated Partition</em>}</li>
+ * <li>{@link net.codecadenza.eclipse.model.integration.impl.KafkaIntegrationMethodImpl#isSendResponse <em>Send
+ * Response</em>}</li>
  * </ul>
  * @generated
  */

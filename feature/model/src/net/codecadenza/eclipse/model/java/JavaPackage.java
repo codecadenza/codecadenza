@@ -425,8 +425,8 @@ public interface JavaPackage extends EPackage {
 	EAttribute getEnumLiteral_Tag();
 
 	/**
-	 * Return the meta object for the container reference '{@link net.codecadenza.eclipse.model.java.EnumLiteral#getJavaEnum <em>Java
-	 * Enum</em>}'
+	 * Return the meta object for the container reference '{@link net.codecadenza.eclipse.model.java.EnumLiteral#getJavaEnum
+	 * <em>Java Enum</em>}'
 	 * @return the meta object for the container reference '<em>Java Enum</em>'
 	 * @see net.codecadenza.eclipse.model.java.EnumLiteral#getJavaEnum()
 	 * @see #getEnumLiteral()
@@ -572,7 +572,8 @@ public interface JavaPackage extends EPackage {
 	EAttribute getJavaType_Primitive();
 
 	/**
-	 * Return the meta object for the reference '{@link net.codecadenza.eclipse.model.java.JavaType#getNamespace <em>Namespace</em>}'
+	 * Return the meta object for the reference '{@link net.codecadenza.eclipse.model.java.JavaType#getNamespace
+	 * <em>Namespace</em>}'
 	 * @return the meta object for the reference '<em>Namespace</em>'
 	 * @see net.codecadenza.eclipse.model.java.JavaType#getNamespace()
 	 * @see #getJavaType()

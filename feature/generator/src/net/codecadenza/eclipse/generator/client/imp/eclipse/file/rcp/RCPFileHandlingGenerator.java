@@ -335,7 +335,8 @@ public class RCPFileHandlingGenerator implements IEclipseFileHandlingGenerator {
 
 	/*
 	 * (non-Javadoc)
-	 * @see net.codecadenza.eclipse.generator.client.imp.eclipse.file.IEclipseFileHandlingGenerator#createDownloadFragmentForExport()
+	 * @see net.codecadenza.eclipse.generator.client.imp.eclipse.file.IEclipseFileHandlingGenerator#
+	 * createDownloadFragmentForExport()
 	 */
 	@Override
 	public String createDownloadFragmentForExport() {

@@ -538,7 +538,8 @@ public class TableColumnFieldImpl extends EObjectImpl implements TableColumnFiel
 
 	/*
 	 * (non-Javadoc)
-	 * @see net.codecadenza.eclipse.model.client.TableColumnField#setDTOAttribute(net.codecadenza.eclipse.model.dto.DTOBeanAttribute)
+	 * @see net.codecadenza.eclipse.model.client.TableColumnField#
+	 * setDTOAttribute(net.codecadenza.eclipse.model.dto.DTOBeanAttribute)
 	 * @generated
 	 */
 	@Override

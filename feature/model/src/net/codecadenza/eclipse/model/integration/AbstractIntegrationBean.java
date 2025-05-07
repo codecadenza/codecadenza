@@ -34,7 +34,8 @@ import org.eclipse.emf.common.util.EList;
  * </p>
  * <ul>
  * <li>{@link net.codecadenza.eclipse.model.integration.AbstractIntegrationBean#getMethods <em>Methods</em>}</li>
- * <li>{@link net.codecadenza.eclipse.model.integration.AbstractIntegrationBean#getClientClassName <em>Client Class Name</em>}</li>
+ * <li>{@link net.codecadenza.eclipse.model.integration.AbstractIntegrationBean#getClientClassName <em>Client Class
+ * Name</em>}</li>
  * </ul>
  * @see net.codecadenza.eclipse.model.integration.IntegrationPackage#getAbstractIntegrationBean()
  * @model

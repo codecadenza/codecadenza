@@ -375,8 +375,7 @@ public class EditDatabasePropertiesDialog extends CodeCadenzaDialog {
 		gridColumnTypes = new DataGridComposite<>(panColumnTypes, SWT.BORDER, REMOVE_DEFAULT_MENU_ITEMS) {
 			/*
 			 * (non-Javadoc)
-			 * @see net.codecadenza.runtime.richclient.eclipse.widget.__AbstractDataGridComposite#getCellText(java.lang.Object,
-			 * int)
+			 * @see net.codecadenza.runtime.richclient.eclipse.widget.__AbstractDataGridComposite#getCellText(java.lang.Object, int)
 			 */
 			@Override
 			public String getCellText(DBColumnType element, int columnIndex) {

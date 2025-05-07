@@ -300,7 +300,8 @@ public interface MappingPackage extends EPackage {
 	 */
 	interface Literals {
 		/**
-		 * The meta object literal for the '{@link net.codecadenza.eclipse.model.mapping.impl.MappingObjectImpl <em>Object</em>}' class
+		 * The meta object literal for the '{@link net.codecadenza.eclipse.model.mapping.impl.MappingObjectImpl <em>Object</em>}'
+		 * class
 		 * @see net.codecadenza.eclipse.model.mapping.impl.MappingObjectImpl
 		 * @see net.codecadenza.eclipse.model.mapping.impl.MappingPackageImpl#getMappingObject()
 		 * @generated

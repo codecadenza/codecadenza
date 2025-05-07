@@ -83,7 +83,8 @@ public class CodeCadenzaNavigatorLinkHelper implements ILinkHelper {
 	 */
 	@Override
 	public IStructuredSelection findSelection(IEditorInput anInput) {
-		final IDiagramDocument document = CodeCadenzaDiagramEditorPlugin.getInstance().getDocumentProvider().getDiagramDocument(anInput);
+		final IDiagramDocument document = CodeCadenzaDiagramEditorPlugin.getInstance().getDocumentProvider()
+				.getDiagramDocument(anInput);
 
 		if (document == null)
 			return StructuredSelection.EMPTY;

@@ -43,7 +43,8 @@ import org.eclipse.emf.common.util.EList;
  * <li>{@link net.codecadenza.eclipse.model.domain.DomainObject#getNamePlural <em>Name Plural</em>}</li>
  * <li>{@link net.codecadenza.eclipse.model.domain.DomainObject#getLabelPlural <em>Label Plural</em>}</li>
  * <li>{@link net.codecadenza.eclipse.model.domain.DomainObject#getDiscriminatorValue <em>Discriminator Value</em>}</li>
- * <li>{@link net.codecadenza.eclipse.model.domain.DomainObject#getDiscriminatorColumnType <em>Discriminator Column Type</em>}</li>
+ * <li>{@link net.codecadenza.eclipse.model.domain.DomainObject#getDiscriminatorColumnType <em>Discriminator Column
+ * Type</em>}</li>
  * <li>{@link net.codecadenza.eclipse.model.domain.DomainObject#getInheritanceType <em>Inheritance Type</em>}</li>
  * <li>{@link net.codecadenza.eclipse.model.domain.DomainObject#isPropertyAccess <em>Property Access</em>}</li>
  * <li>{@link net.codecadenza.eclipse.model.domain.DomainObject#isAbstract <em>Abstract</em>}</li>

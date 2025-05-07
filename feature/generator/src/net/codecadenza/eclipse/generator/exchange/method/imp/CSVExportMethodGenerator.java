@@ -241,7 +241,8 @@ public class CSVExportMethodGenerator extends AbstractExportMethodGenerator {
 
 	/*
 	 * (non-Javadoc)
-	 * @see net.codecadenza.eclipse.generator.exchange.method.AbstractExportMethodGenerator#addMarshallerInvocation(java.lang.String)
+	 * @see net.codecadenza.eclipse.generator.exchange.method.AbstractExportMethodGenerator#
+	 * addMarshallerInvocation(java.lang.String)
 	 */
 	@Override
 	protected String addMarshallerInvocation(String marshalledObject) {

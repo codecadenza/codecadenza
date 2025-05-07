@@ -184,9 +184,9 @@ public class DbAdapterFactory extends AdapterFactoryImpl {
 	}
 
 	/**
-	 * Create a new adapter for an object of class '{@link net.codecadenza.eclipse.model.db.DBIndex <em>DB Index</em>}'. This default
-	 * implementation returns null so that we can easily ignore cases; it's useful to ignore a case when inheritance will catch all
-	 * the cases anyway.
+	 * Create a new adapter for an object of class '{@link net.codecadenza.eclipse.model.db.DBIndex <em>DB Index</em>}'. This
+	 * default implementation returns null so that we can easily ignore cases; it's useful to ignore a case when inheritance will
+	 * catch all the cases anyway.
 	 * @return the new adapter
 	 * @see net.codecadenza.eclipse.model.db.DBIndex
 	 * @generated
@@ -196,9 +196,9 @@ public class DbAdapterFactory extends AdapterFactoryImpl {
 	}
 
 	/**
-	 * Create a new adapter for an object of class '{@link net.codecadenza.eclipse.model.db.DBTable <em>DB Table</em>}'. This default
-	 * implementation returns null so that we can easily ignore cases; it's useful to ignore a case when inheritance will catch all
-	 * the cases anyway.
+	 * Create a new adapter for an object of class '{@link net.codecadenza.eclipse.model.db.DBTable <em>DB Table</em>}'. This
+	 * default implementation returns null so that we can easily ignore cases; it's useful to ignore a case when inheritance will
+	 * catch all the cases anyway.
 	 * @return the new adapter
 	 * @see net.codecadenza.eclipse.model.db.DBTable
 	 * @generated

@@ -89,7 +89,8 @@ import org.eclipse.emf.ecore.util.InternalEList;
  * <li>{@link net.codecadenza.eclipse.model.domain.impl.DomainObjectImpl#getAssociations <em>Associations</em>}</li>
  * <li>{@link net.codecadenza.eclipse.model.domain.impl.DomainObjectImpl#getEnumAssociations <em>Enum Associations</em>}</li>
  * <li>{@link net.codecadenza.eclipse.model.domain.impl.DomainObjectImpl#getTargetInheritances <em>Target Inheritances</em>}</li>
- * <li>{@link net.codecadenza.eclipse.model.domain.impl.DomainObjectImpl#getDiscriminatorColumn <em>Discriminator Column</em>}</li>
+ * <li>{@link net.codecadenza.eclipse.model.domain.impl.DomainObjectImpl#getDiscriminatorColumn <em>Discriminator
+ * Column</em>}</li>
  * <li>{@link net.codecadenza.eclipse.model.domain.impl.DomainObjectImpl#getDatabaseTable <em>Database Table</em>}</li>
  * <li>{@link net.codecadenza.eclipse.model.domain.impl.DomainObjectImpl#getTag <em>Tag</em>}</li>
  * </ul>

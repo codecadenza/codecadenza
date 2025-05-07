@@ -40,8 +40,8 @@ import org.eclipse.gmf.runtime.emf.type.core.requests.CreateElementRequest;
 public class DomainAttributeCompartmentItemSemanticEditPolicy extends CodeCadenzaBaseItemSemanticEditPolicy {
 	/*
 	 * (non-Javadoc)
-	 * @see net.codecadenza.eclipse.diagram.domain.edit.policies.CodeCadenzaBaseItemSemanticEditPolicy#getCreateCommand(org.eclipse.gmf.
-	 * runtime.emf.type.core.requests.CreateElementRequest)
+	 * @see net.codecadenza.eclipse.diagram.domain.edit.policies.CodeCadenzaBaseItemSemanticEditPolicy#
+	 * getCreateCommand(org.eclipse.gmf.runtime.emf.type.core.requests.CreateElementRequest)
 	 */
 	@Override
 	protected Command getCreateCommand(CreateElementRequest req) {

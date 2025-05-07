@@ -446,8 +446,8 @@ public interface RepositoryPackage extends EPackage {
 	EEnum getRepositoryMethodTypeEnumeration();
 
 	/**
-	 * Return the meta object for enum '{@link net.codecadenza.eclipse.model.repository.PermissionModeEnumeration <em>Permission Mode
-	 * Enumeration</em>}'
+	 * Return the meta object for enum '{@link net.codecadenza.eclipse.model.repository.PermissionModeEnumeration <em>Permission
+	 * Mode Enumeration</em>}'
 	 * @return the meta object for enum '<em>Permission Mode Enumeration</em>'
 	 * @see net.codecadenza.eclipse.model.repository.PermissionModeEnumeration
 	 * @generated

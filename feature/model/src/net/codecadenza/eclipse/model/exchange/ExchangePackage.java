@@ -1132,7 +1132,8 @@ public interface ExchangePackage extends EPackage {
 
 	/**
 	 * Return the meta object for the containment reference list
-	 * '{@link net.codecadenza.eclipse.model.exchange.DataExchangeServiceBean#getDataExchangeMethods <em>Data Exchange Methods</em>}'
+	 * '{@link net.codecadenza.eclipse.model.exchange.DataExchangeServiceBean#getDataExchangeMethods <em>Data Exchange
+	 * Methods</em>}'
 	 * @return the meta object for the containment reference list '<em>Data Exchange Methods</em>'
 	 * @see net.codecadenza.eclipse.model.exchange.DataExchangeServiceBean#getDataExchangeMethods()
 	 * @see #getDataExchangeServiceBean()
@@ -1201,8 +1202,8 @@ public interface ExchangePackage extends EPackage {
 	EAttribute getDataExchangeMethod_RecordSeparator();
 
 	/**
-	 * Return the meta object for the attribute '{@link net.codecadenza.eclipse.model.exchange.DataExchangeMethod#getCommentCharacter
-	 * <em>Comment Character</em>}'
+	 * Return the meta object for the attribute
+	 * '{@link net.codecadenza.eclipse.model.exchange.DataExchangeMethod#getCommentCharacter <em>Comment Character</em>}'
 	 * @return the meta object for the attribute '<em>Comment Character</em>'
 	 * @see net.codecadenza.eclipse.model.exchange.DataExchangeMethod#getCommentCharacter()
 	 * @see #getDataExchangeMethod()
@@ -1232,7 +1233,8 @@ public interface ExchangePackage extends EPackage {
 
 	/**
 	 * Return the meta object for the attribute
-	 * '{@link net.codecadenza.eclipse.model.exchange.DataExchangeMethod#getDefaultDateTimeFormat <em>Default Date Time Format</em>}'
+	 * '{@link net.codecadenza.eclipse.model.exchange.DataExchangeMethod#getDefaultDateTimeFormat <em>Default Date Time
+	 * Format</em>}'
 	 * @return the meta object for the attribute '<em>Default Date Time Format</em>'
 	 * @see net.codecadenza.eclipse.model.exchange.DataExchangeMethod#getDefaultDateTimeFormat()
 	 * @see #getDataExchangeMethod()
@@ -1252,7 +1254,8 @@ public interface ExchangePackage extends EPackage {
 
 	/**
 	 * Return the meta object for the containment reference list
-	 * '{@link net.codecadenza.eclipse.model.exchange.DataExchangeMethod#getAssociationControllers <em>Association Controllers</em>}'
+	 * '{@link net.codecadenza.eclipse.model.exchange.DataExchangeMethod#getAssociationControllers <em>Association
+	 * Controllers</em>}'
 	 * @return the meta object for the containment reference list '<em>Association Controllers</em>'
 	 * @see net.codecadenza.eclipse.model.exchange.DataExchangeMethod#getAssociationControllers()
 	 * @see #getDataExchangeMethod()
@@ -1321,8 +1324,8 @@ public interface ExchangePackage extends EPackage {
 	EAttribute getDataExchangeMethod_Parser();
 
 	/**
-	 * Return the meta object for the attribute '{@link net.codecadenza.eclipse.model.exchange.DataExchangeMethod#isPerformValidation
-	 * <em>Perform Validation</em>}'
+	 * Return the meta object for the attribute
+	 * '{@link net.codecadenza.eclipse.model.exchange.DataExchangeMethod#isPerformValidation <em>Perform Validation</em>}'
 	 * @return the meta object for the attribute '<em>Perform Validation</em>'
 	 * @see net.codecadenza.eclipse.model.exchange.DataExchangeMethod#isPerformValidation()
 	 * @see #getDataExchangeMethod()
@@ -1351,7 +1354,8 @@ public interface ExchangePackage extends EPackage {
 	EAttribute getDataExchangeMethod_FormatOutput();
 
 	/**
-	 * Return the meta object for class '{@link net.codecadenza.eclipse.model.exchange.DataExchangeMode <em>Data Exchange Mode</em>}'
+	 * Return the meta object for class '{@link net.codecadenza.eclipse.model.exchange.DataExchangeMode <em>Data Exchange
+	 * Mode</em>}'
 	 * @return the meta object for class '<em>Data Exchange Mode</em>'
 	 * @see net.codecadenza.eclipse.model.exchange.DataExchangeMode
 	 * @generated
@@ -1379,7 +1383,8 @@ public interface ExchangePackage extends EPackage {
 	EClass getStringExchangeMode();
 
 	/**
-	 * Return the meta object for class '{@link net.codecadenza.eclipse.model.exchange.FileExchangeMode <em>File Exchange Mode</em>}'
+	 * Return the meta object for class '{@link net.codecadenza.eclipse.model.exchange.FileExchangeMode <em>File Exchange
+	 * Mode</em>}'
 	 * @return the meta object for class '<em>File Exchange Mode</em>'
 	 * @see net.codecadenza.eclipse.model.exchange.FileExchangeMode
 	 * @generated
@@ -1794,8 +1799,8 @@ public interface ExchangePackage extends EPackage {
 	EReference getExchangeMappingObject_Attributes();
 
 	/**
-	 * Return the meta object for the attribute '{@link net.codecadenza.eclipse.model.exchange.ExchangeMappingObject#isDeleteAllItems
-	 * <em>Delete All Items</em>}'
+	 * Return the meta object for the attribute
+	 * '{@link net.codecadenza.eclipse.model.exchange.ExchangeMappingObject#isDeleteAllItems <em>Delete All Items</em>}'
 	 * @return the meta object for the attribute '<em>Delete All Items</em>'
 	 * @see net.codecadenza.eclipse.model.exchange.ExchangeMappingObject#isDeleteAllItems()
 	 * @see #getExchangeMappingObject()
@@ -1885,8 +1890,8 @@ public interface ExchangePackage extends EPackage {
 	EAttribute getExchangeMappingAttribute_DeleteAllItems();
 
 	/**
-	 * Return the meta object for the attribute '{@link net.codecadenza.eclipse.model.exchange.ExchangeMappingAttribute#isAddNewItems
-	 * <em>Add New Items</em>}'
+	 * Return the meta object for the attribute
+	 * '{@link net.codecadenza.eclipse.model.exchange.ExchangeMappingAttribute#isAddNewItems <em>Add New Items</em>}'
 	 * @return the meta object for the attribute '<em>Add New Items</em>'
 	 * @see net.codecadenza.eclipse.model.exchange.ExchangeMappingAttribute#isAddNewItems()
 	 * @see #getExchangeMappingAttribute()
@@ -1906,7 +1911,8 @@ public interface ExchangePackage extends EPackage {
 
 	/**
 	 * Return the meta object for the attribute
-	 * '{@link net.codecadenza.eclipse.model.exchange.ExchangeMappingAttribute#isUpdateExistingItems <em>Update Existing Items</em>}'
+	 * '{@link net.codecadenza.eclipse.model.exchange.ExchangeMappingAttribute#isUpdateExistingItems <em>Update Existing
+	 * Items</em>}'
 	 * @return the meta object for the attribute '<em>Update Existing Items</em>'
 	 * @see net.codecadenza.eclipse.model.exchange.ExchangeMappingAttribute#isUpdateExistingItems()
 	 * @see #getExchangeMappingAttribute()
@@ -2071,8 +2077,8 @@ public interface ExchangePackage extends EPackage {
 		EReference DATA_EXCHANGE_SERVICE_BEAN__DATA_EXCHANGE_METHODS = eINSTANCE.getDataExchangeServiceBean_DataExchangeMethods();
 
 		/**
-		 * The meta object literal for the '{@link net.codecadenza.eclipse.model.exchange.impl.DataExchangeMethodImpl <em>Data Exchange
-		 * Method</em>}' class
+		 * The meta object literal for the '{@link net.codecadenza.eclipse.model.exchange.impl.DataExchangeMethodImpl <em>Data
+		 * Exchange Method</em>}' class
 		 * @see net.codecadenza.eclipse.model.exchange.impl.DataExchangeMethodImpl
 		 * @see net.codecadenza.eclipse.model.exchange.impl.ExchangePackageImpl#getDataExchangeMethod()
 		 * @generated
@@ -2509,8 +2515,8 @@ public interface ExchangePackage extends EPackage {
 		EAttribute EXCHANGE_MAPPING_OBJECT__UPDATE_EXISTING_ITEMS = eINSTANCE.getExchangeMappingObject_UpdateExistingItems();
 
 		/**
-		 * The meta object literal for the '{@link net.codecadenza.eclipse.model.exchange.impl.ExchangeMappingAttributeImpl <em>Mapping
-		 * Attribute</em>}' class
+		 * The meta object literal for the '{@link net.codecadenza.eclipse.model.exchange.impl.ExchangeMappingAttributeImpl
+		 * <em>Mapping Attribute</em>}' class
 		 * @see net.codecadenza.eclipse.model.exchange.impl.ExchangeMappingAttributeImpl
 		 * @see net.codecadenza.eclipse.model.exchange.impl.ExchangePackageImpl#getExchangeMappingAttribute()
 		 * @generated

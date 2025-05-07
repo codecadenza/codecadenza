@@ -184,7 +184,8 @@ public class BoundaryMethodImpl extends ServiceMethodImpl implements BoundaryMet
 
 	/*
 	 * (non-Javadoc)
-	 * @see net.codecadenza.eclipse.model.boundary.BoundaryMethod#setBoundaryBean(net.codecadenza.eclipse.model.boundary.BoundaryBean)
+	 * @see net.codecadenza.eclipse.model.boundary.BoundaryMethod#
+	 * setBoundaryBean(net.codecadenza.eclipse.model.boundary.BoundaryBean)
 	 * @generated
 	 */
 	@Override

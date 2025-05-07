@@ -88,7 +88,8 @@ public class CodeCadenzaLinkDescriptor extends CodeCadenzaNodeDescriptor {
 	 * @param elementType
 	 * @param linkVID
 	 */
-	public CodeCadenzaLinkDescriptor(EObject source, EObject destination, EObject linkElement, IElementType elementType, int linkVID) {
+	public CodeCadenzaLinkDescriptor(EObject source, EObject destination, EObject linkElement, IElementType elementType,
+			int linkVID) {
 		this(source, destination, linkElement, linkVID);
 
 		final IElementType elementTypeCopy = elementType;

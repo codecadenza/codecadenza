@@ -108,8 +108,8 @@ public class CodeCadenzaCreateShortcutAction implements IObjectActionDelegate {
 			selectedElement = mySelectedElement.getEditingDomain().getResourceSet().getEObject(selectedModelElementURI, true);
 		}
 		catch (final WrappedException e) {
-			CodeCadenzaDiagramEditorPlugin.getInstance().logError("Exception while loading object: " + selectedModelElementURI.toString(),
-					e);
+			CodeCadenzaDiagramEditorPlugin.getInstance()
+					.logError("Exception while loading object: " + selectedModelElementURI.toString(), e);
 			return;
 		}
 

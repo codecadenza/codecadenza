@@ -59,7 +59,8 @@ public class RichClientI18NGenerator extends AbstractI18NGenerator {
 
 	/*
 	 * (non-Javadoc)
-	 * @see net.codecadenza.eclipse.generator.client.common.i18n.AbstractI18NGenerator#getCodeFragmentForFieldLabel(java.lang.String)
+	 * @see net.codecadenza.eclipse.generator.client.common.i18n.AbstractI18NGenerator#
+	 * getCodeFragmentForFieldLabel(java.lang.String)
 	 */
 	@Override
 	public String getCodeFragmentForFieldLabel(String key) {

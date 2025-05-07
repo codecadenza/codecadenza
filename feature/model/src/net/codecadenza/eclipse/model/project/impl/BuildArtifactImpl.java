@@ -43,7 +43,8 @@ import org.eclipse.emf.ecore.util.EcoreUtil;
  * <ul>
  * <li>{@link net.codecadenza.eclipse.model.project.impl.BuildArtifactImpl#getName <em>Name</em>}</li>
  * <li>{@link net.codecadenza.eclipse.model.project.impl.BuildArtifactImpl#getType <em>Type</em>}</li>
- * <li>{@link net.codecadenza.eclipse.model.project.impl.BuildArtifactImpl#getContainedArtifacts <em>Contained Artifacts</em>}</li>
+ * <li>{@link net.codecadenza.eclipse.model.project.impl.BuildArtifactImpl#getContainedArtifacts <em>Contained
+ * Artifacts</em>}</li>
  * <li>{@link net.codecadenza.eclipse.model.project.impl.BuildArtifactImpl#getProject <em>Project</em>}</li>
  * </ul>
  * </p>

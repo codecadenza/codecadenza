@@ -88,8 +88,7 @@ public abstract class AbstractSearchResultView<T> extends AbstractResultView<T> 
 
 			/*
 			 * (non-Javadoc)
-			 * @see net.codecadenza.runtime.richclient.swing.search.Countable#countData(net.codecadenza.runtime.search.
-			 * dto.SearchDTO)
+			 * @see net.codecadenza.runtime.richclient.swing.search.Countable#countData(net.codecadenza.runtime.search.dto.SearchDTO)
 			 */
 			@Override
 			public long countData(SearchDTO searchDTO) {
@@ -127,8 +126,7 @@ public abstract class AbstractSearchResultView<T> extends AbstractResultView<T> 
 
 			/*
 			 * (non-Javadoc)
-			 * @see net.codecadenza.runtime.richclient.swing.widget.AbstractDataTablePanel#getCellBackground(java.lang.Object,
-			 * int)
+			 * @see net.codecadenza.runtime.richclient.swing.widget.AbstractDataTablePanel#getCellBackground(java.lang.Object, int)
 			 */
 			@Override
 			public Color getCellBackground(T element, int columnIndex) {
@@ -146,8 +144,7 @@ public abstract class AbstractSearchResultView<T> extends AbstractResultView<T> 
 
 			/*
 			 * (non-Javadoc)
-			 * @see net.codecadenza.runtime.richclient.swing.widget.AbstractDataTablePanel#getCellForeground(java.lang.Object,
-			 * int)
+			 * @see net.codecadenza.runtime.richclient.swing.widget.AbstractDataTablePanel#getCellForeground(java.lang.Object, int)
 			 */
 			@Override
 			public Color getCellForeground(T element, int columnIndex) {
@@ -183,8 +180,7 @@ public abstract class AbstractSearchResultView<T> extends AbstractResultView<T> 
 
 			/*
 			 * (non-Javadoc)
-			 * @see net.codecadenza.runtime.richclient.swing.widget.AbstractDataTablePanel#getCellExportText(java.lang.Object,
-			 * int)
+			 * @see net.codecadenza.runtime.richclient.swing.widget.AbstractDataTablePanel#getCellExportText(java.lang.Object, int)
 			 */
 			@Override
 			public String getCellExportText(T element, int columnIndex) {

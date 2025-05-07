@@ -200,8 +200,8 @@ public interface Form extends EObject {
 	boolean isOpenEditAfterCreate();
 
 	/**
-	 * Set the value of the '{@link net.codecadenza.eclipse.model.client.Form#isOpenEditAfterCreate <em>Open Edit After Create</em>}'
-	 * attribute
+	 * Set the value of the '{@link net.codecadenza.eclipse.model.client.Form#isOpenEditAfterCreate <em>Open Edit After
+	 * Create</em>}' attribute
 	 * @param value the new value of the '<em>Open Edit After Create</em>' attribute
 	 * @see #isOpenEditAfterCreate()
 	 * @generated

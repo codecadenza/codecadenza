@@ -51,8 +51,8 @@ public interface KafkaIntegrationMethod extends AbstractIntegrationMethod {
 	String getRequestSchemaName();
 
 	/**
-	 * Set the value of the '{@link net.codecadenza.eclipse.model.integration.KafkaIntegrationMethod#getRequestSchemaName <em>Request
-	 * Schema Name</em>}' attribute
+	 * Set the value of the '{@link net.codecadenza.eclipse.model.integration.KafkaIntegrationMethod#getRequestSchemaName
+	 * <em>Request Schema Name</em>}' attribute
 	 * @param value the new value of the '<em>Request Schema Name</em>' attribute
 	 * @see #getRequestSchemaName()
 	 * @generated

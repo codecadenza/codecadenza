@@ -48,7 +48,8 @@ public interface OneToOneAssociation extends AbstractDomainAssociation {
 	boolean isOptional();
 
 	/**
-	 * Set the value of the '{@link net.codecadenza.eclipse.model.domain.OneToOneAssociation#isOptional <em>Optional</em>}' attribute
+	 * Set the value of the '{@link net.codecadenza.eclipse.model.domain.OneToOneAssociation#isOptional <em>Optional</em>}'
+	 * attribute
 	 * @param value the new value of the '<em>Optional</em>' attribute
 	 * @see #isOptional()
 	 * @generated

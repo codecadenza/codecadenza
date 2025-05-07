@@ -27,7 +27,8 @@ package net.codecadenza.eclipse.model.integration;
  * The following features are supported:
  * </p>
  * <ul>
- * <li>{@link net.codecadenza.eclipse.model.integration.JMSIntegrationBean#getRequestDestination <em>Request Destination</em>}</li>
+ * <li>{@link net.codecadenza.eclipse.model.integration.JMSIntegrationBean#getRequestDestination <em>Request
+ * Destination</em>}</li>
  * <li>{@link net.codecadenza.eclipse.model.integration.JMSIntegrationBean#getResponseDestination <em>Response
  * Destination</em>}</li>
  * </ul>

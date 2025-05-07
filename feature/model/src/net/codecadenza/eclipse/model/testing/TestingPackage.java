@@ -541,8 +541,8 @@ public interface TestingPackage extends EPackage {
 	int GUI_TEST_DATA_FEATURE_COUNT = 7;
 
 	/**
-	 * The meta object ID for the '{@link net.codecadenza.eclipse.model.testing.GUITestActionStatus <em>GUI Test Action Status</em>}'
-	 * enum
+	 * The meta object ID for the '{@link net.codecadenza.eclipse.model.testing.GUITestActionStatus <em>GUI Test Action
+	 * Status</em>}' enum
 	 * @see net.codecadenza.eclipse.model.testing.GUITestActionStatus
 	 * @see net.codecadenza.eclipse.model.testing.impl.TestingPackageImpl#getGUITestActionStatus()
 	 * @generated
@@ -613,8 +613,8 @@ public interface TestingPackage extends EPackage {
 	EAttribute getAbstractTestModule_TestCaseSuffix();
 
 	/**
-	 * Return the meta object for the container reference '{@link net.codecadenza.eclipse.model.testing.AbstractTestModule#getProject
-	 * <em>Project</em>}'
+	 * Return the meta object for the container reference
+	 * '{@link net.codecadenza.eclipse.model.testing.AbstractTestModule#getProject <em>Project</em>}'
 	 * @return the meta object for the container reference '<em>Project</em>'
 	 * @see net.codecadenza.eclipse.model.testing.AbstractTestModule#getProject()
 	 * @see #getAbstractTestModule()
@@ -1095,7 +1095,8 @@ public interface TestingPackage extends EPackage {
 		EAttribute SELENIUM_TEST_MODULE__PAGE_LOAD_TIME = eINSTANCE.getSeleniumTestModule_PageLoadTime();
 
 		/**
-		 * The meta object literal for the '{@link net.codecadenza.eclipse.model.testing.impl.TestSuiteImpl <em>Test Suite</em>}' class
+		 * The meta object literal for the '{@link net.codecadenza.eclipse.model.testing.impl.TestSuiteImpl <em>Test Suite</em>}'
+		 * class
 		 * @see net.codecadenza.eclipse.model.testing.impl.TestSuiteImpl
 		 * @see net.codecadenza.eclipse.model.testing.impl.TestingPackageImpl#getTestSuite()
 		 * @generated
@@ -1319,7 +1320,8 @@ public interface TestingPackage extends EPackage {
 		EEnum GUI_TEST_DATA_TYPE = eINSTANCE.getGUITestDataType();
 
 		/**
-		 * The meta object literal for the '{@link net.codecadenza.eclipse.model.testing.SeleniumDriver <em>Selenium Driver</em>}' enum
+		 * The meta object literal for the '{@link net.codecadenza.eclipse.model.testing.SeleniumDriver <em>Selenium Driver</em>}'
+		 * enum
 		 * @see net.codecadenza.eclipse.model.testing.SeleniumDriver
 		 * @see net.codecadenza.eclipse.model.testing.impl.TestingPackageImpl#getSeleniumDriver()
 		 * @generated

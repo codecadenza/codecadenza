@@ -119,8 +119,8 @@ public class DomainInheritanceCreateCommand extends CreateElementCommand {
 		if (getContainer() == null)
 			return false;
 
-		return CodeCadenzaBaseItemSemanticEditPolicy.LinkConstraints.canCreateDomainObjectInheritance_4005(getContainer(), getSource(),
-				getTarget());
+		return CodeCadenzaBaseItemSemanticEditPolicy.LinkConstraints.canCreateDomainObjectInheritance_4005(getContainer(),
+				getSource(), getTarget());
 	}
 
 	/**

@@ -104,7 +104,8 @@ public interface DTOBean extends MappingObject {
 	boolean isCreatedManually();
 
 	/**
-	 * Set the value of the '{@link net.codecadenza.eclipse.model.dto.DTOBean#isCreatedManually <em>Created Manually</em>}' attribute
+	 * Set the value of the '{@link net.codecadenza.eclipse.model.dto.DTOBean#isCreatedManually <em>Created Manually</em>}'
+	 * attribute
 	 * @param value the new value of the '<em>Created Manually</em>' attribute
 	 * @see #isCreatedManually()
 	 * @generated

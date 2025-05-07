@@ -172,8 +172,8 @@ public interface Database extends EObject {
 	int getMaxIdentifierLength();
 
 	/**
-	 * Set the value of the '{@link net.codecadenza.eclipse.model.db.Database#getMaxIdentifierLength <em>Max Identifier Length</em>}'
-	 * attribute
+	 * Set the value of the '{@link net.codecadenza.eclipse.model.db.Database#getMaxIdentifierLength <em>Max Identifier
+	 * Length</em>}' attribute
 	 * @param value the new value of the '<em>Max Identifier Length</em>' attribute
 	 * @see #getMaxIdentifierLength()
 	 * @generated

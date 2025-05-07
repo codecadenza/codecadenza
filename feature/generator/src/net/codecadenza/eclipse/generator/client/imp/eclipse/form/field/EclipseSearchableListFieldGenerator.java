@@ -134,8 +134,8 @@ public class EclipseSearchableListFieldGenerator extends AbstractEclipseFieldGen
 
 	/*
 	 * (non-Javadoc)
-	 * @see net.codecadenza.eclipse.generator.client.imp.eclipse.form.field.AbstractEclipseFieldGenerator#getFieldDefinitionFragment(
-	 * boolean)
+	 * @see net.codecadenza.eclipse.generator.client.imp.eclipse.form.field.AbstractEclipseFieldGenerator#
+	 * getFieldDefinitionFragment(boolean)
 	 */
 	@Override
 	public String getFieldDefinitionFragment(boolean hasOneColumn) {

@@ -104,7 +104,8 @@ public class DtoAdapterFactory extends AdapterFactoryImpl {
 
 		/*
 		 * (non-Javadoc)
-		 * @see net.codecadenza.eclipse.model.dto.util.DtoSwitch#caseMappingObject(net.codecadenza.eclipse.model.mapping.MappingObject)
+		 * @see net.codecadenza.eclipse.model.dto.util.DtoSwitch#
+		 * caseMappingObject(net.codecadenza.eclipse.model.mapping.MappingObject)
 		 */
 		@Override
 		public Adapter caseMappingObject(MappingObject object) {

@@ -86,7 +86,8 @@ public class DomainNamespaceCanonicalEditPolicy extends CanonicalConnectionEditP
 		final var viewObject = (View) getHost().getModel();
 		final var result = new LinkedList<EObject>();
 
-		for (final CodeCadenzaNodeDescriptor nodeDescriptor : CodeCadenzaDiagramUpdater.getDomainNamespace_1000SemanticChildren(viewObject))
+		for (final CodeCadenzaNodeDescriptor nodeDescriptor : CodeCadenzaDiagramUpdater
+				.getDomainNamespace_1000SemanticChildren(viewObject))
 			result.add(nodeDescriptor.getModelElement());
 
 		return result;

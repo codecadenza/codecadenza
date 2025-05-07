@@ -52,7 +52,8 @@ import org.eclipse.emf.ecore.EObject;
  * <li>{@link net.codecadenza.eclipse.model.project.Project#getServerPlatform <em>Server Platform</em>}</li>
  * <li>{@link net.codecadenza.eclipse.model.project.Project#getClientPlatform <em>Client Platform</em>}</li>
  * <li>{@link net.codecadenza.eclipse.model.project.Project#getRoles <em>Roles</em>}</li>
- * <li>{@link net.codecadenza.eclipse.model.project.Project#getPersistenceUnitProperties <em>Persistence Unit Properties</em>}</li>
+ * <li>{@link net.codecadenza.eclipse.model.project.Project#getPersistenceUnitProperties <em>Persistence Unit
+ * Properties</em>}</li>
  * <li>{@link net.codecadenza.eclipse.model.project.Project#getDataSource <em>Data Source</em>}</li>
  * <li>{@link net.codecadenza.eclipse.model.project.Project#getRootNamespace <em>Root Namespace</em>}</li>
  * <li>{@link net.codecadenza.eclipse.model.project.Project#getRepositoryNamespace <em>Repository Namespace</em>}</li>

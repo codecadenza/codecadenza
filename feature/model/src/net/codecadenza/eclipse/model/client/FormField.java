@@ -265,7 +265,8 @@ public interface FormField extends EObject {
 	String getDefaultValue();
 
 	/**
-	 * Set the value of the '{@link net.codecadenza.eclipse.model.client.FormField#getDefaultValue <em>Default Value</em>}' attribute
+	 * Set the value of the '{@link net.codecadenza.eclipse.model.client.FormField#getDefaultValue <em>Default Value</em>}'
+	 * attribute
 	 * @param value the new value of the '<em>Default Value</em>' attribute
 	 * @see #getDefaultValue()
 	 * @generated
@@ -302,7 +303,8 @@ public interface FormField extends EObject {
 	DTOBeanAttribute getDTOAttribute();
 
 	/**
-	 * Set the value of the '{@link net.codecadenza.eclipse.model.client.FormField#getDTOAttribute <em>DTO Attribute</em>}' reference
+	 * Set the value of the '{@link net.codecadenza.eclipse.model.client.FormField#getDTOAttribute <em>DTO Attribute</em>}'
+	 * reference
 	 * @param value the new value of the '<em>DTO Attribute</em>' reference
 	 * @see #getDTOAttribute()
 	 * @generated

@@ -106,8 +106,8 @@ public class BoundaryAdapterFactory extends AdapterFactoryImpl {
 
 		/*
 		 * (non-Javadoc)
-		 * @see net.codecadenza.eclipse.model.boundary.util.BoundarySwitch#caseServiceBean(net.codecadenza.eclipse.model.service.
-		 * ServiceBean)
+		 * @see net.codecadenza.eclipse.model.boundary.util.BoundarySwitch#
+		 * caseServiceBean(net.codecadenza.eclipse.model.service.ServiceBean)
 		 */
 		@Override
 		public Adapter caseServiceBean(ServiceBean object) {
@@ -116,7 +116,8 @@ public class BoundaryAdapterFactory extends AdapterFactoryImpl {
 
 		/*
 		 * (non-Javadoc)
-		 * @see net.codecadenza.eclipse.model.boundary.util.BoundarySwitch#caseJavaMethod(net.codecadenza.eclipse.model.java.JavaMethod)
+		 * @see net.codecadenza.eclipse.model.boundary.util.BoundarySwitch#
+		 * caseJavaMethod(net.codecadenza.eclipse.model.java.JavaMethod)
 		 */
 		@Override
 		public Adapter caseJavaMethod(JavaMethod object) {
@@ -125,8 +126,8 @@ public class BoundaryAdapterFactory extends AdapterFactoryImpl {
 
 		/*
 		 * (non-Javadoc)
-		 * @see net.codecadenza.eclipse.model.boundary.util.BoundarySwitch#caseServiceMethod(net.codecadenza.eclipse.model.service.
-		 * ServiceMethod)
+		 * @see net.codecadenza.eclipse.model.boundary.util.BoundarySwitch
+		 * #caseServiceMethod(net.codecadenza.eclipse.model.service.ServiceMethod)
 		 */
 		@Override
 		public Adapter caseServiceMethod(ServiceMethod object) {
@@ -190,9 +191,9 @@ public class BoundaryAdapterFactory extends AdapterFactoryImpl {
 	}
 
 	/**
-	 * Create a new adapter for an object of class '{@link net.codecadenza.eclipse.model.service.ServiceBean <em>Service Bean</em>}'.
-	 * This default implementation returns null so that we can easily ignore cases; it's useful to ignore a case when inheritance
-	 * will catch all the cases anyway.
+	 * Create a new adapter for an object of class '{@link net.codecadenza.eclipse.model.service.ServiceBean <em>Service
+	 * Bean</em>}'. This default implementation returns null so that we can easily ignore cases; it's useful to ignore a case when
+	 * inheritance will catch all the cases anyway.
 	 * @return the new adapter
 	 * @see net.codecadenza.eclipse.model.service.ServiceBean
 	 * @generated
@@ -202,9 +203,9 @@ public class BoundaryAdapterFactory extends AdapterFactoryImpl {
 	}
 
 	/**
-	 * Create a new adapter for an object of class '{@link net.codecadenza.eclipse.model.java.JavaMethod <em>Java Method</em>}'. This
-	 * default implementation returns null so that we can easily ignore cases; it's useful to ignore a case when inheritance will
-	 * catch all the cases anyway.
+	 * Create a new adapter for an object of class '{@link net.codecadenza.eclipse.model.java.JavaMethod <em>Java Method</em>}'.
+	 * This default implementation returns null so that we can easily ignore cases; it's useful to ignore a case when inheritance
+	 * will catch all the cases anyway.
 	 * @return the new adapter
 	 * @see net.codecadenza.eclipse.model.java.JavaMethod
 	 * @generated

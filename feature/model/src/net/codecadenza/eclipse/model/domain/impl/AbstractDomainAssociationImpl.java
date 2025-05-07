@@ -44,7 +44,8 @@ import org.eclipse.emf.ecore.util.EcoreUtil;
  * <li>{@link net.codecadenza.eclipse.model.domain.impl.AbstractDomainAssociationImpl#isCascadePersist <em>Cascade
  * Persist</em>}</li>
  * <li>{@link net.codecadenza.eclipse.model.domain.impl.AbstractDomainAssociationImpl#isCascadeMerge <em>Cascade Merge</em>}</li>
- * <li>{@link net.codecadenza.eclipse.model.domain.impl.AbstractDomainAssociationImpl#isCascadeRemove <em>Cascade Remove</em>}</li>
+ * <li>{@link net.codecadenza.eclipse.model.domain.impl.AbstractDomainAssociationImpl#isCascadeRemove <em>Cascade
+ * Remove</em>}</li>
  * <li>{@link net.codecadenza.eclipse.model.domain.impl.AbstractDomainAssociationImpl#isCascadeRefresh <em>Cascade
  * Refresh</em>}</li>
  * <li>{@link net.codecadenza.eclipse.model.domain.impl.AbstractDomainAssociationImpl#isFetchTypeEager <em>Fetch Type
@@ -629,8 +630,8 @@ public abstract class AbstractDomainAssociationImpl extends EObjectImpl implemen
 
 	/*
 	 * (non-Javadoc)
-	 * @see net.codecadenza.eclipse.model.domain.AbstractDomainAssociation#setReverseAssociation(net.codecadenza.eclipse.model.domain.
-	 * AbstractDomainAssociation)
+	 * @see net.codecadenza.eclipse.model.domain.AbstractDomainAssociation#
+	 * setReverseAssociation(net.codecadenza.eclipse.model.domain.AbstractDomainAssociation)
 	 * @generated
 	 */
 	@Override

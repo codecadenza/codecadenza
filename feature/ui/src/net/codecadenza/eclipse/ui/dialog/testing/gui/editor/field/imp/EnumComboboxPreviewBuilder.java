@@ -55,7 +55,8 @@ public class EnumComboboxPreviewBuilder extends AbstractGUITestFieldPreviewBuild
 
 	/*
 	 * (non-Javadoc)
-	 * @see net.codecadenza.eclipse.ui.preview.field.imp.AbstractFieldPreviewBuilder#getFieldPreview(org.eclipse.swt.widgets.Control)
+	 * @see net.codecadenza.eclipse.ui.preview.field.imp.AbstractFieldPreviewBuilder#
+	 * getFieldPreview(org.eclipse.swt.widgets.Control)
 	 */
 	@Override
 	public Control getFieldPreview(Control lblField) {

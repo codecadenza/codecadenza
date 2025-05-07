@@ -48,7 +48,8 @@ public interface PersistenceUnitProperty extends EObject {
 	String getValue();
 
 	/**
-	 * Set the value of the '{@link net.codecadenza.eclipse.model.project.PersistenceUnitProperty#getValue <em>Value</em>}' attribute
+	 * Set the value of the '{@link net.codecadenza.eclipse.model.project.PersistenceUnitProperty#getValue <em>Value</em>}'
+	 * attribute
 	 * @param value the new value of the '<em>Value</em>' attribute
 	 * @see #getValue()
 	 * @generated

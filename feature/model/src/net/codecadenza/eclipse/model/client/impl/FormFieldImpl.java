@@ -493,7 +493,8 @@ public class FormFieldImpl extends EObjectImpl implements FormField {
 
 	/*
 	 * (non-Javadoc)
-	 * @see net.codecadenza.eclipse.model.client.FormField#setFieldType(net.codecadenza.eclipse.model.client.FormFieldTypeEnumeration)
+	 * @see net.codecadenza.eclipse.model.client.FormField#
+	 * setFieldType(net.codecadenza.eclipse.model.client.FormFieldTypeEnumeration)
 	 * @generated
 	 */
 	@Override

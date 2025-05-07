@@ -103,8 +103,8 @@ public class NewFormFieldDialog extends CodeCadenzaDialog {
 		domainObjectTreePanel = new DomainObjectTreePanel(panDialogArea) {
 			/*
 			 * (non-Javadoc)
-			 * @see net.codecadenza.eclipse.ui.dialog.util.DomainObjectTreePanel#addDomainAttribute(net.codecadenza.eclipse.model.domain.
-			 * DomainAttribute)
+			 * @see net.codecadenza.eclipse.ui.dialog.util.DomainObjectTreePanel#
+			 * addDomainAttribute(net.codecadenza.eclipse.model.domain.DomainAttribute)
 			 */
 			@Override
 			protected boolean addDomainAttribute(DomainAttribute attr) {

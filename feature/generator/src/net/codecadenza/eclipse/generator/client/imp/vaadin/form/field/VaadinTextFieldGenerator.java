@@ -88,8 +88,8 @@ public class VaadinTextFieldGenerator extends AbstractVaadinFieldGenerator {
 
 	/*
 	 * (non-Javadoc)
-	 * @see net.codecadenza.eclipse.generator.client.imp.vaadin.form.field.AbstractVaadinFieldGenerator#addToolTipFragment(java.lang.
-	 * String)
+	 * @see net.codecadenza.eclipse.generator.client.imp.vaadin.form.field.AbstractVaadinFieldGenerator#
+	 * addToolTipFragment(java.lang.String)
 	 */
 	@Override
 	public String addToolTipFragment(String fieldName) {

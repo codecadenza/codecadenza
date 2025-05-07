@@ -54,8 +54,8 @@ public interface DomainAttributeValidator extends EObject {
 	boolean isFutureDate();
 
 	/**
-	 * Set the value of the '{@link net.codecadenza.eclipse.model.domain.DomainAttributeValidator#isFutureDate <em>Future Date</em>}'
-	 * attribute
+	 * Set the value of the '{@link net.codecadenza.eclipse.model.domain.DomainAttributeValidator#isFutureDate <em>Future
+	 * Date</em>}' attribute
 	 * @param value the new value of the '<em>Future Date</em>' attribute
 	 * @see #isFutureDate()
 	 * @generated

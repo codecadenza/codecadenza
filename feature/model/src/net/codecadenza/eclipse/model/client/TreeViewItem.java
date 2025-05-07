@@ -94,8 +94,8 @@ public interface TreeViewItem extends EObject {
 	BoundaryMethod getDataFetchMethod();
 
 	/**
-	 * Set the value of the '{@link net.codecadenza.eclipse.model.client.TreeViewItem#getDataFetchMethod <em>Data Fetch Method</em>}'
-	 * reference
+	 * Set the value of the '{@link net.codecadenza.eclipse.model.client.TreeViewItem#getDataFetchMethod <em>Data Fetch
+	 * Method</em>}' reference
 	 * @param value the new value of the '<em>Data Fetch Method</em>' reference
 	 * @see #getDataFetchMethod()
 	 * @generated
@@ -141,7 +141,8 @@ public interface TreeViewItem extends EObject {
 	AbstractDomainAssociation getAssociation();
 
 	/**
-	 * Set the value of the '{@link net.codecadenza.eclipse.model.client.TreeViewItem#getAssociation <em>Association</em>}' reference
+	 * Set the value of the '{@link net.codecadenza.eclipse.model.client.TreeViewItem#getAssociation <em>Association</em>}'
+	 * reference
 	 * @param value the new value of the '<em>Association</em>' reference
 	 * @see #getAssociation()
 	 * @generated

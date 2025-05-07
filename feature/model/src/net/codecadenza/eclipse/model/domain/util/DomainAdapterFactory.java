@@ -155,7 +155,8 @@ public class DomainAdapterFactory extends AdapterFactoryImpl {
 
 		/*
 		 * (non-Javadoc)
-		 * @see net.codecadenza.eclipse.model.domain.util.DomainSwitch#caseIDGenerator(net.codecadenza.eclipse.model.domain.IDGenerator)
+		 * @see net.codecadenza.eclipse.model.domain.util.DomainSwitch#caseIDGenerator(net.codecadenza.eclipse.model.domain.
+		 * IDGenerator)
 		 */
 		@Override
 		public Adapter caseIDGenerator(IDGenerator object) {
@@ -301,9 +302,9 @@ public class DomainAdapterFactory extends AdapterFactoryImpl {
 	}
 
 	/**
-	 * Create a new adapter for an object of class '{@link net.codecadenza.eclipse.model.domain.DomainNamespace <em>Namespace</em>}'.
-	 * This default implementation returns null so that we can easily ignore cases; it's useful to ignore a case when inheritance
-	 * will catch all the cases anyway.
+	 * Create a new adapter for an object of class '{@link net.codecadenza.eclipse.model.domain.DomainNamespace
+	 * <em>Namespace</em>}'. This default implementation returns null so that we can easily ignore cases; it's useful to ignore a
+	 * case when inheritance will catch all the cases anyway.
 	 * @return the new adapter
 	 * @see net.codecadenza.eclipse.model.domain.DomainNamespace
 	 * @generated

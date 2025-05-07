@@ -62,8 +62,7 @@ public class InputDialog extends AbstractTitleDialog {
 
 	/*
 	 * (non-Javadoc)
-	 * @see net.codecadenza.runtime.webclient.vaadin.dialog.AbstractTitleDialog#onAttach(com.vaadin.flow.component.
-	 * AttachEvent)
+	 * @see net.codecadenza.runtime.webclient.vaadin.dialog.AbstractTitleDialog#onAttach(com.vaadin.flow.component.AttachEvent)
 	 */
 	@Override
 	protected void onAttach(AttachEvent attachEvent) {

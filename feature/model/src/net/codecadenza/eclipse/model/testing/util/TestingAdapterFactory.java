@@ -99,7 +99,8 @@ public class TestingAdapterFactory extends AdapterFactoryImpl {
 
 		/*
 		 * (non-Javadoc)
-		 * @see net.codecadenza.eclipse.model.testing.util.TestingSwitch#caseTestSuite(net.codecadenza.eclipse.model.testing.TestSuite)
+		 * @see net.codecadenza.eclipse.model.testing.util.TestingSwitch#caseTestSuite(net.codecadenza.eclipse.model.testing.
+		 * TestSuite)
 		 */
 		@Override
 		public Adapter caseTestSuite(TestSuite object) {
@@ -138,8 +139,8 @@ public class TestingAdapterFactory extends AdapterFactoryImpl {
 
 		/*
 		 * (non-Javadoc)
-		 * @see net.codecadenza.eclipse.model.testing.util.TestingSwitch#caseGUITestActionResult(net.codecadenza.eclipse.model.testing.
-		 * GUITestActionResult)
+		 * @see net.codecadenza.eclipse.model.testing.util.TestingSwitch#caseGUITestActionResult(net.codecadenza.eclipse.model.
+		 * testing.GUITestActionResult)
 		 */
 		@Override
 		public Adapter caseGUITestActionResult(GUITestActionResult object) {
@@ -186,9 +187,9 @@ public class TestingAdapterFactory extends AdapterFactoryImpl {
 	}
 
 	/**
-	 * Create a new adapter for an object of class '{@link net.codecadenza.eclipse.model.testing.AbstractTestModule <em>Abstract Test
-	 * Module</em>}'. This default implementation returns null so that we can easily ignore cases; it's useful to ignore a case when
-	 * inheritance will catch all the cases anyway.
+	 * Create a new adapter for an object of class '{@link net.codecadenza.eclipse.model.testing.AbstractTestModule <em>Abstract
+	 * Test Module</em>}'. This default implementation returns null so that we can easily ignore cases; it's useful to ignore a case
+	 * when inheritance will catch all the cases anyway.
 	 * @return the new adapter
 	 * @see net.codecadenza.eclipse.model.testing.AbstractTestModule
 	 * @generated
@@ -198,9 +199,9 @@ public class TestingAdapterFactory extends AdapterFactoryImpl {
 	}
 
 	/**
-	 * Create a new adapter for an object of class '{@link net.codecadenza.eclipse.model.testing.SeleniumTestModule <em>Selenium Test
-	 * Module</em>}'. This default implementation returns null so that we can easily ignore cases; it's useful to ignore a case when
-	 * inheritance will catch all the cases anyway.
+	 * Create a new adapter for an object of class '{@link net.codecadenza.eclipse.model.testing.SeleniumTestModule <em>Selenium
+	 * Test Module</em>}'. This default implementation returns null so that we can easily ignore cases; it's useful to ignore a case
+	 * when inheritance will catch all the cases anyway.
 	 * @return the new adapter
 	 * @see net.codecadenza.eclipse.model.testing.SeleniumTestModule
 	 * @generated

@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 ### Fixed
+2025-05-07: Fix formatting in plug-ins and runtime libraries to adhere to the maximum line width
+### Fixed
 2025-05-06: Replace invalid characters in the translation files of different runtime libraries
 ### Changed
 2025-05-06: Use the XLSX export format instead of XLS in JSF data tables

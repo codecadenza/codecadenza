@@ -87,8 +87,8 @@ public abstract class AbstractSearchResultView<T> extends __AbstractSearchResult
 
 	/*
 	 * (non-Javadoc)
-	 * @see net.codecadenza.runtime.richclient.eclipse.search.__AbstractSearchResultView#init(org.eclipse.swt.widgets.
-	 * Composite, java.lang.Integer, org.eclipse.swt.widgets.Shell)
+	 * @see net.codecadenza.runtime.richclient.eclipse.search.__AbstractSearchResultView#init(org.eclipse.swt.widgets.Composite,
+	 * java.lang.Integer, org.eclipse.swt.widgets.Shell)
 	 */
 	@Override
 	public void init(Composite parent, Integer savedSearchId, Shell parentShell) {

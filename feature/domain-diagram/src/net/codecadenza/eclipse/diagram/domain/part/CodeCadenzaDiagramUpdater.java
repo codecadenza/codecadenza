@@ -717,8 +717,8 @@ public class CodeCadenzaDiagramUpdater {
 			if (isShortCut)
 				continue;
 
-			result.add(
-					new CodeCadenzaLinkDescriptor(src, dst, link, CodeCadenzaElementTypes.EnumAssociation_4001, EnumAssociationEditPart.VISUAL_ID));
+			result.add(new CodeCadenzaLinkDescriptor(src, dst, link, CodeCadenzaElementTypes.EnumAssociation_4001,
+					EnumAssociationEditPart.VISUAL_ID));
 		}
 
 		return result;
@@ -755,8 +755,8 @@ public class CodeCadenzaDiagramUpdater {
 	 * @param crossReferences
 	 * @return a list containing links
 	 */
-	private static Collection<CodeCadenzaLinkDescriptor> getIncomingTypeModelFacetLinks_OneToOneAssociation_4003(DomainObject target,
-			Map<EObject, Collection<EStructuralFeature.Setting>> crossReferences) {
+	private static Collection<CodeCadenzaLinkDescriptor> getIncomingTypeModelFacetLinks_OneToOneAssociation_4003(
+			DomainObject target, Map<EObject, Collection<EStructuralFeature.Setting>> crossReferences) {
 		final var result = new LinkedList<CodeCadenzaLinkDescriptor>();
 		final Collection<EStructuralFeature.Setting> settings = crossReferences.get(target);
 
@@ -782,8 +782,8 @@ public class CodeCadenzaDiagramUpdater {
 	 * @param crossReferences
 	 * @return a list containing links
 	 */
-	private static Collection<CodeCadenzaLinkDescriptor> getIncomingTypeModelFacetLinks_ManyToManyAssociation_4002(DomainObject target,
-			Map<EObject, Collection<EStructuralFeature.Setting>> crossReferences) {
+	private static Collection<CodeCadenzaLinkDescriptor> getIncomingTypeModelFacetLinks_ManyToManyAssociation_4002(
+			DomainObject target, Map<EObject, Collection<EStructuralFeature.Setting>> crossReferences) {
 		final var result = new LinkedList<CodeCadenzaLinkDescriptor>();
 		final Collection<EStructuralFeature.Setting> settings = crossReferences.get(target);
 
@@ -809,8 +809,8 @@ public class CodeCadenzaDiagramUpdater {
 	 * @param crossReferences
 	 * @return a list containing links
 	 */
-	private static Collection<CodeCadenzaLinkDescriptor> getIncomingTypeModelFacetLinks_ManyToOneAssociation_4004(DomainObject target,
-			Map<EObject, Collection<EStructuralFeature.Setting>> crossReferences) {
+	private static Collection<CodeCadenzaLinkDescriptor> getIncomingTypeModelFacetLinks_ManyToOneAssociation_4004(
+			DomainObject target, Map<EObject, Collection<EStructuralFeature.Setting>> crossReferences) {
 		final var result = new LinkedList<CodeCadenzaLinkDescriptor>();
 		final Collection<EStructuralFeature.Setting> settings = crossReferences.get(target);
 
@@ -836,8 +836,8 @@ public class CodeCadenzaDiagramUpdater {
 	 * @param crossReferences
 	 * @return a list containing links
 	 */
-	private static Collection<CodeCadenzaLinkDescriptor> getIncomingTypeModelFacetLinks_OneToManyAssociation_4006(DomainObject target,
-			Map<EObject, Collection<EStructuralFeature.Setting>> crossReferences) {
+	private static Collection<CodeCadenzaLinkDescriptor> getIncomingTypeModelFacetLinks_OneToManyAssociation_4006(
+			DomainObject target, Map<EObject, Collection<EStructuralFeature.Setting>> crossReferences) {
 		final var result = new LinkedList<CodeCadenzaLinkDescriptor>();
 		final Collection<EStructuralFeature.Setting> settings = crossReferences.get(target);
 
@@ -916,7 +916,8 @@ public class CodeCadenzaDiagramUpdater {
 	 * @param source
 	 * @return a list containing outgoing links
 	 */
-	private static Collection<CodeCadenzaLinkDescriptor> getOutgoingTypeModelFacetLinks_OneToOneAssociation_4003(DomainObject source) {
+	private static Collection<CodeCadenzaLinkDescriptor> getOutgoingTypeModelFacetLinks_OneToOneAssociation_4003(
+			DomainObject source) {
 		DomainObject container = null;
 
 		// Find a container element for the new link. Climb up the containment hierarchy starting from the source and return the first
@@ -954,7 +955,8 @@ public class CodeCadenzaDiagramUpdater {
 	 * @param source
 	 * @return a list containing outgoing links
 	 */
-	private static Collection<CodeCadenzaLinkDescriptor> getOutgoingTypeModelFacetLinks_ManyToManyAssociation_4002(DomainObject source) {
+	private static Collection<CodeCadenzaLinkDescriptor> getOutgoingTypeModelFacetLinks_ManyToManyAssociation_4002(
+			DomainObject source) {
 		DomainObject container = null;
 
 		// Find a container element for the new link. Climb up the containment hierarchy starting from the source and return the first
@@ -992,7 +994,8 @@ public class CodeCadenzaDiagramUpdater {
 	 * @param source
 	 * @return a list containing outgoing links
 	 */
-	private static Collection<CodeCadenzaLinkDescriptor> getOutgoingTypeModelFacetLinks_ManyToOneAssociation_4004(DomainObject source) {
+	private static Collection<CodeCadenzaLinkDescriptor> getOutgoingTypeModelFacetLinks_ManyToOneAssociation_4004(
+			DomainObject source) {
 		DomainObject container = null;
 
 		// Find a container element for the new link. Climb up the containment hierarchy starting from the source and return the first
@@ -1030,7 +1033,8 @@ public class CodeCadenzaDiagramUpdater {
 	 * @param source
 	 * @return a list containing outgoing links
 	 */
-	private static Collection<CodeCadenzaLinkDescriptor> getOutgoingTypeModelFacetLinks_OneToManyAssociation_4006(DomainObject source) {
+	private static Collection<CodeCadenzaLinkDescriptor> getOutgoingTypeModelFacetLinks_OneToManyAssociation_4006(
+			DomainObject source) {
 		DomainObject container = null;
 
 		// Find a container element for the new link. Climb up the containment hierarchy starting from the source and return the first
@@ -1092,8 +1096,8 @@ public class CodeCadenzaDiagramUpdater {
 			if (src != source)
 				continue;
 
-			result.add(
-					new CodeCadenzaLinkDescriptor(src, dst, link, CodeCadenzaElementTypes.EnumAssociation_4001, EnumAssociationEditPart.VISUAL_ID));
+			result.add(new CodeCadenzaLinkDescriptor(src, dst, link, CodeCadenzaElementTypes.EnumAssociation_4001,
+					EnumAssociationEditPart.VISUAL_ID));
 		}
 
 		return result;
@@ -1103,7 +1107,8 @@ public class CodeCadenzaDiagramUpdater {
 	 * @param source
 	 * @return a list containing outgoing links
 	 */
-	private static Collection<CodeCadenzaLinkDescriptor> getOutgoingTypeModelFacetLinks_DomainInheritance_4005(DomainObject source) {
+	private static Collection<CodeCadenzaLinkDescriptor> getOutgoingTypeModelFacetLinks_DomainInheritance_4005(
+			DomainObject source) {
 		DomainObject container = null;
 
 		// Find a container element for the new link. Climb up the containment hierarchy starting from the source and return the first

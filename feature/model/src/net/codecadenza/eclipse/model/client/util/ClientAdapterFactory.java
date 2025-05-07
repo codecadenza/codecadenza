@@ -228,9 +228,9 @@ public class ClientAdapterFactory extends AdapterFactoryImpl {
 	}
 
 	/**
-	 * Create a new adapter for an object of class '{@link net.codecadenza.eclipse.model.client.FormField <em>Form Field</em>}'. This
-	 * default implementation returns null so that we can easily ignore cases; it's useful to ignore a case when inheritance will
-	 * catch all the cases anyway.
+	 * Create a new adapter for an object of class '{@link net.codecadenza.eclipse.model.client.FormField <em>Form Field</em>}'.
+	 * This default implementation returns null so that we can easily ignore cases; it's useful to ignore a case when inheritance
+	 * will catch all the cases anyway.
 	 * @return the new adapter
 	 * @see net.codecadenza.eclipse.model.client.FormField
 	 * @generated
@@ -240,9 +240,9 @@ public class ClientAdapterFactory extends AdapterFactoryImpl {
 	}
 
 	/**
-	 * Create a new adapter for an object of class '{@link net.codecadenza.eclipse.model.client.FormGroup <em>Form Group</em>}'. This
-	 * default implementation returns null so that we can easily ignore cases; it's useful to ignore a case when inheritance will
-	 * catch all the cases anyway.
+	 * Create a new adapter for an object of class '{@link net.codecadenza.eclipse.model.client.FormGroup <em>Form Group</em>}'.
+	 * This default implementation returns null so that we can easily ignore cases; it's useful to ignore a case when inheritance
+	 * will catch all the cases anyway.
 	 * @return the new adapter
 	 * @see net.codecadenza.eclipse.model.client.FormGroup
 	 * @generated
@@ -252,9 +252,9 @@ public class ClientAdapterFactory extends AdapterFactoryImpl {
 	}
 
 	/**
-	 * Create a new adapter for an object of class '{@link net.codecadenza.eclipse.model.client.FormPanel <em>Form Panel</em>}'. This
-	 * default implementation returns null so that we can easily ignore cases; it's useful to ignore a case when inheritance will
-	 * catch all the cases anyway.
+	 * Create a new adapter for an object of class '{@link net.codecadenza.eclipse.model.client.FormPanel <em>Form Panel</em>}'.
+	 * This default implementation returns null so that we can easily ignore cases; it's useful to ignore a case when inheritance
+	 * will catch all the cases anyway.
 	 * @return the new adapter
 	 * @see net.codecadenza.eclipse.model.client.FormPanel
 	 * @generated
@@ -264,9 +264,9 @@ public class ClientAdapterFactory extends AdapterFactoryImpl {
 	}
 
 	/**
-	 * Create a new adapter for an object of class '{@link net.codecadenza.eclipse.model.client.FormTable <em>Form Table</em>}'. This
-	 * default implementation returns null so that we can easily ignore cases; it's useful to ignore a case when inheritance will
-	 * catch all the cases anyway.
+	 * Create a new adapter for an object of class '{@link net.codecadenza.eclipse.model.client.FormTable <em>Form Table</em>}'.
+	 * This default implementation returns null so that we can easily ignore cases; it's useful to ignore a case when inheritance
+	 * will catch all the cases anyway.
 	 * @return the new adapter
 	 * @see net.codecadenza.eclipse.model.client.FormTable
 	 * @generated

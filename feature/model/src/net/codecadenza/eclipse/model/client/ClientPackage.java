@@ -1097,8 +1097,8 @@ public interface ClientPackage extends EPackage {
 	int FORM_TYPE_ENUMERATION = 12;
 
 	/**
-	 * The meta object ID for the '{@link net.codecadenza.eclipse.model.client.TableColumnFieldTypeEnumeration <em>Table Column Field
-	 * Type Enumeration</em>}' enum
+	 * The meta object ID for the '{@link net.codecadenza.eclipse.model.client.TableColumnFieldTypeEnumeration <em>Table Column
+	 * Field Type Enumeration</em>}' enum
 	 * @see net.codecadenza.eclipse.model.client.TableColumnFieldTypeEnumeration
 	 * @see net.codecadenza.eclipse.model.client.impl.ClientPackageImpl#getTableColumnFieldTypeEnumeration()
 	 * @generated
@@ -1185,8 +1185,8 @@ public interface ClientPackage extends EPackage {
 	EAttribute getForm_TitleArea();
 
 	/**
-	 * Return the meta object for the attribute '{@link net.codecadenza.eclipse.model.client.Form#isOpenEditAfterCreate <em>Open Edit
-	 * After Create</em>}'
+	 * Return the meta object for the attribute '{@link net.codecadenza.eclipse.model.client.Form#isOpenEditAfterCreate <em>Open
+	 * Edit After Create</em>}'
 	 * @return the meta object for the attribute '<em>Open Edit After Create</em>'
 	 * @see net.codecadenza.eclipse.model.client.Form#isOpenEditAfterCreate()
 	 * @see #getForm()
@@ -1432,7 +1432,8 @@ public interface ClientPackage extends EPackage {
 	EAttribute getFormField_SpanCols();
 
 	/**
-	 * Return the meta object for the attribute '{@link net.codecadenza.eclipse.model.client.FormField#isReadonly <em>Readonly</em>}'
+	 * Return the meta object for the attribute '{@link net.codecadenza.eclipse.model.client.FormField#isReadonly
+	 * <em>Readonly</em>}'
 	 * @return the meta object for the attribute '<em>Readonly</em>'
 	 * @see net.codecadenza.eclipse.model.client.FormField#isReadonly()
 	 * @see #getFormField()
@@ -1567,7 +1568,8 @@ public interface ClientPackage extends EPackage {
 	EReference getFormGroup_ChildGroups();
 
 	/**
-	 * Return the meta object for the reference list '{@link net.codecadenza.eclipse.model.client.FormGroup#getForms <em>Forms</em>}'
+	 * Return the meta object for the reference list '{@link net.codecadenza.eclipse.model.client.FormGroup#getForms
+	 * <em>Forms</em>}'
 	 * @return the meta object for the reference list '<em>Forms</em>'
 	 * @see net.codecadenza.eclipse.model.client.FormGroup#getForms()
 	 * @see #getFormGroup()
@@ -1586,7 +1588,8 @@ public interface ClientPackage extends EPackage {
 	EReference getFormGroup_Panels();
 
 	/**
-	 * Return the meta object for the reference list '{@link net.codecadenza.eclipse.model.client.FormGroup#getRoles <em>Roles</em>}'
+	 * Return the meta object for the reference list '{@link net.codecadenza.eclipse.model.client.FormGroup#getRoles
+	 * <em>Roles</em>}'
 	 * @return the meta object for the reference list '<em>Roles</em>'
 	 * @see net.codecadenza.eclipse.model.client.FormGroup#getRoles()
 	 * @see #getFormGroup()
@@ -1758,8 +1761,8 @@ public interface ClientPackage extends EPackage {
 	EReference getFormPanel_DTO();
 
 	/**
-	 * Return the meta object for the reference '{@link net.codecadenza.eclipse.model.client.FormPanel#getBoundaryMethod <em>Boundary
-	 * Method</em>}'
+	 * Return the meta object for the reference '{@link net.codecadenza.eclipse.model.client.FormPanel#getBoundaryMethod
+	 * <em>Boundary Method</em>}'
 	 * @return the meta object for the reference '<em>Boundary Method</em>'
 	 * @see net.codecadenza.eclipse.model.client.FormPanel#getBoundaryMethod()
 	 * @see #getFormPanel()
@@ -1993,8 +1996,8 @@ public interface ClientPackage extends EPackage {
 	EAttribute getTableColumnField_Searchable();
 
 	/**
-	 * Return the meta object for the reference '{@link net.codecadenza.eclipse.model.client.TableColumnField#getDTOAttribute <em>DTO
-	 * Attribute</em>}'
+	 * Return the meta object for the reference '{@link net.codecadenza.eclipse.model.client.TableColumnField#getDTOAttribute
+	 * <em>DTO Attribute</em>}'
 	 * @return the meta object for the reference '<em>DTO Attribute</em>'
 	 * @see net.codecadenza.eclipse.model.client.TableColumnField#getDTOAttribute()
 	 * @see #getTableColumnField()
@@ -2089,8 +2092,8 @@ public interface ClientPackage extends EPackage {
 	EReference getTreeViewItem_Children();
 
 	/**
-	 * Return the meta object for the reference '{@link net.codecadenza.eclipse.model.client.TreeViewItem#getDataFetchMethod <em>Data
-	 * Fetch Method</em>}'
+	 * Return the meta object for the reference '{@link net.codecadenza.eclipse.model.client.TreeViewItem#getDataFetchMethod
+	 * <em>Data Fetch Method</em>}'
 	 * @return the meta object for the reference '<em>Data Fetch Method</em>'
 	 * @see net.codecadenza.eclipse.model.client.TreeViewItem#getDataFetchMethod()
 	 * @see #getTreeViewItem()
@@ -2158,8 +2161,8 @@ public interface ClientPackage extends EPackage {
 	EReference getTreeViewItem_ItemDTO();
 
 	/**
-	 * Return the meta object for the reference list '{@link net.codecadenza.eclipse.model.client.TreeViewItem#getInvisibleAttributes
-	 * <em>Invisible Attributes</em>}'
+	 * Return the meta object for the reference list
+	 * '{@link net.codecadenza.eclipse.model.client.TreeViewItem#getInvisibleAttributes <em>Invisible Attributes</em>}'
 	 * @return the meta object for the reference list '<em>Invisible Attributes</em>'
 	 * @see net.codecadenza.eclipse.model.client.TreeViewItem#getInvisibleAttributes()
 	 * @see #getTreeViewItem()
@@ -2176,7 +2179,8 @@ public interface ClientPackage extends EPackage {
 	EClass getTreeSearchItem();
 
 	/**
-	 * Return the meta object for the attribute '{@link net.codecadenza.eclipse.model.client.TreeSearchItem#getLabel <em>Label</em>}'
+	 * Return the meta object for the attribute '{@link net.codecadenza.eclipse.model.client.TreeSearchItem#getLabel
+	 * <em>Label</em>}'
 	 * @return the meta object for the attribute '<em>Label</em>'
 	 * @see net.codecadenza.eclipse.model.client.TreeSearchItem#getLabel()
 	 * @see #getTreeSearchItem()
@@ -2886,8 +2890,8 @@ public interface ClientPackage extends EPackage {
 		EReference TREE_VIEW__RECURSIVE_METHOD = eINSTANCE.getTreeView_RecursiveMethod();
 
 		/**
-		 * The meta object literal for the '{@link net.codecadenza.eclipse.model.client.impl.TreeViewItemImpl <em>Tree View Item</em>}'
-		 * class
+		 * The meta object literal for the '{@link net.codecadenza.eclipse.model.client.impl.TreeViewItemImpl <em>Tree View
+		 * Item</em>}' class
 		 * @see net.codecadenza.eclipse.model.client.impl.TreeViewItemImpl
 		 * @see net.codecadenza.eclipse.model.client.impl.ClientPackageImpl#getTreeViewItem()
 		 * @generated
