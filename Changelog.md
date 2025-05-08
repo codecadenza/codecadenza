@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 ### Fixed
+2025-05-08: Move the ValueConverterTest to the correct package
+### Fixed
 2025-05-08: Use a fixed grouping separator and a fixed decimal separator for saving decimal values of an element collection that
             use the 'CONVERTER' strategy in a locale-independent format
 ### Fixed

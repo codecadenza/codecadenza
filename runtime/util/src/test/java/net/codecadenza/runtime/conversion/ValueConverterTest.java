@@ -19,7 +19,7 @@
  * along with this software; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
  */
-package net.codecadenza.runtime.random.conversion;
+package net.codecadenza.runtime.conversion;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -39,7 +39,6 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicLong;
-import net.codecadenza.runtime.conversion.ValueConverter;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
