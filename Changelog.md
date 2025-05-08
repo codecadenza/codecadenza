@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## Unreleased
+### Changed
+2025-05-08: Initialize new domain attributes as non-nullable when using the 'CONVERTER' strategy
 ### Fixed
 2025-05-08: Move the ValueConverterTest to the correct package
 ### Fixed

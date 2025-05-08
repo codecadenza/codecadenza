@@ -1216,7 +1216,11 @@ public class NewDomainAttributeDialog extends CodeCadenzaDialog {
 				return false;
 			}
 
-			column.setNullable(domainAttribute.getDomainAttributeValidator().isNullable());
+			if (selectedStrategy == CollectionMappingStrategyEnumeration.CONVERTER)
+				column.setNullable(true);
+			else
+				column.setNullable(domainAttribute.getDomainAttributeValidator().isNullable());
+
 			column.setColumnType(columnTypeMap.get(cboDBColumnType.getItem(cboDBColumnType.getSelectionIndex())));
 
 			Integer minLength = null;
@@ -1354,7 +1358,7 @@ public class NewDomainAttributeDialog extends CodeCadenzaDialog {
 			txtValidatorMinLength.setEnabled(true);
 			txtValidatorMaxLength.setEnabled(true);
 			chkValidatorNullable.setEnabled(false);
-			chkValidatorNullable.setSelection(true);
+			chkValidatorNullable.setSelection(false);
 
 			setDefaultLengthConstraints(stringType);
 		}

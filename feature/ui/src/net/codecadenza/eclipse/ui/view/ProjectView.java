@@ -576,7 +576,7 @@ public class ProjectView extends ViewPart implements GraphicalEditorEventListene
 			item.setData(attr);
 			item.setImage(CodeCadenzaResourcePlugin.getImage(IMG_ATTRIBUTE));
 
-			if (attr.isPersistent() && attr.getColumn().isNullable())
+			if (attr.getDomainAttributeValidator().isNullable())
 				item.setForeground(Display.getCurrent().getSystemColor(SWT.COLOR_DARK_GRAY));
 		});
 
