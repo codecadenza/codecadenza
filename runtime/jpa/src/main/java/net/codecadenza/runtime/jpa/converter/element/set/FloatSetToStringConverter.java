@@ -22,6 +22,7 @@
 package net.codecadenza.runtime.jpa.converter.element.set;
 
 import jakarta.persistence.Converter;
+import net.codecadenza.runtime.conversion.ValueConverter;
 
 /**
  * <p>
@@ -35,13 +36,16 @@ import jakarta.persistence.Converter;
  */
 @Converter
 public class FloatSetToStringConverter extends AbstractSetToStringConverter<Float> {
+	private static final String DECIMAL_FORMAT = "0.00000";
+	private static final ValueConverter<Float> valueConverter = ValueConverter.getFloatConverter(DECIMAL_FORMAT);
+
 	/*
 	 * (non-Javadoc)
 	 * @see net.codecadenza.runtime.jpa.converter.element.set.AbstractSetToStringConverter#convertToString(java.lang.String)
 	 */
 	@Override
 	protected String convertToString(Float value) {
-		return String.format("%.5f", value);
+		return valueConverter.convertToString(value);
 	}
 
 	/*
@@ -50,6 +54,6 @@ public class FloatSetToStringConverter extends AbstractSetToStringConverter<Floa
 	 */
 	@Override
 	protected Float convertToValue(String string) {
-		return Float.parseFloat(string);
+		return valueConverter.convertToValue(string);
 	}
 }

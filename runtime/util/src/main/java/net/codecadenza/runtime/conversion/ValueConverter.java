@@ -23,7 +23,7 @@ package net.codecadenza.runtime.conversion;
 
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
-import java.text.ParseException;
+import java.text.DecimalFormatSymbols;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -47,23 +47,90 @@ import java.util.UUID;
  * @param <T> the type of the value that should be converted
  */
 public class ValueConverter<T> {
+	private static final char DEFAULT_DECIMAL_SEPARATOR = '.';
+	private static final char DEFAULT_GROUPING_SEPARATOR = ',';
+
 	private final Class<T> type;
 	private DecimalFormat decimalFormat;
+	private DecimalFormat bigDecimalFormat;
 	private DateTimeFormatter dateTimeFormat;
 	private DateTimeFormatter dateFormat;
 
 	/**
-	 * Constructor
+	 * Create a new {@link Double} value converter that uses a decimal format with a fixed decimal separator and a fixed grouping
+	 * separator
+	 * @param decimalFormat
+	 * @return a {@link ValueConverter} for double values
+	 */
+	public static ValueConverter<Double> getDoubleConverter(String decimalFormat) {
+		return getNumberConverter(decimalFormat, Double.class);
+	}
+
+	/**
+	 * Create a new {@link Float} value converter that uses a decimal format with a fixed decimal separator and a fixed grouping
+	 * separator
+	 * @param decimalFormat
+	 * @return a {@link ValueConverter} for float values
+	 */
+	public static ValueConverter<Float> getFloatConverter(String decimalFormat) {
+		return getNumberConverter(decimalFormat, Float.class);
+	}
+
+	/**
+	 * Create a new {@link BigDecimal} value converter that uses a decimal format with a fixed decimal separator and a fixed
+	 * grouping separator
+	 * @param decimalFormat
+	 * @return a {@link ValueConverter} for {@link BigDecimal} values
+	 */
+	public static ValueConverter<BigDecimal> getBigDecimalConverter(String decimalFormat) {
+		return getNumberConverter(decimalFormat, BigDecimal.class);
+	}
+
+	/**
+	 * Create a new value converter that uses a decimal format with a fixed decimal separator and a fixed grouping separator
+	 * @param decimalFormat
+	 * @return a {@link ValueConverter} for decimal values
+	 */
+	public static <N extends Number> ValueConverter<N> getNumberConverter(String decimalFormat, Class<N> numericType) {
+		return new ValueConverter<>(decimalFormat, DEFAULT_DECIMAL_SEPARATOR, DEFAULT_GROUPING_SEPARATOR, null, null, numericType);
+	}
+
+	/**
+	 * Constructor that uses a decimal format with a fixed decimal separator and a fixed grouping separator
 	 * @param decimalFormat
 	 * @param dateTimeFormat
 	 * @param dateFormat
 	 * @param type
 	 */
 	public ValueConverter(String decimalFormat, String dateTimeFormat, String dateFormat, Class<T> type) {
+		this(decimalFormat, DEFAULT_DECIMAL_SEPARATOR, DEFAULT_GROUPING_SEPARATOR, dateTimeFormat, dateFormat, type);
+	}
+
+	/**
+	 * Constructor
+	 * @param decimalFormat
+	 * @param decimalSeparator
+	 * @param groupingSeparator
+	 * @param dateTimeFormat
+	 * @param dateFormat
+	 * @param type
+	 */
+	public ValueConverter(String decimalFormat, char decimalSeparator, char groupingSeparator, String dateTimeFormat,
+			String dateFormat, Class<T> type) {
 		this.type = type;
 
-		if (decimalFormat != null && !decimalFormat.isEmpty())
+		if (decimalFormat != null && !decimalFormat.isEmpty()) {
+			final var decimalSymbols = new DecimalFormatSymbols();
+			decimalSymbols.setDecimalSeparator(decimalSeparator);
+			decimalSymbols.setGroupingSeparator(groupingSeparator);
+
 			this.decimalFormat = new DecimalFormat(decimalFormat);
+			this.decimalFormat.setDecimalFormatSymbols(decimalSymbols);
+
+			this.bigDecimalFormat = new DecimalFormat(decimalFormat);
+			this.bigDecimalFormat.setDecimalFormatSymbols(decimalSymbols);
+			this.bigDecimalFormat.setParseBigDecimal(true);
+		}
 
 		if (dateTimeFormat != null && !dateTimeFormat.isEmpty())
 			this.dateTimeFormat = DateTimeFormatter.ofPattern(dateTimeFormat).withZone(ZoneId.systemDefault());
@@ -95,7 +162,7 @@ public class ValueConverter<T> {
 				value = string.charAt(0);
 			}
 			else if (type.equals(BigDecimal.class))
-				value = parseBigDecimal(string);
+				value = bigDecimalFormat.parse(string);
 			else if (type.equals(Integer.class))
 				value = Integer.parseInt(string);
 			else if (type.equals(Long.class))
@@ -191,22 +258,6 @@ public class ValueConverter<T> {
 			return UUID.randomUUID().toString();
 
 		return "";
-	}
-
-	/**
-	 * Convert the given string to a {@link BigDecimal}
-	 * @param string the string to convert
-	 * @return the {@link BigDecimal} value
-	 * @throws ParseException if the parsing has failed
-	 */
-	private synchronized Object parseBigDecimal(String string) throws ParseException {
-		decimalFormat.setParseBigDecimal(true);
-
-		final BigDecimal value = (BigDecimal) decimalFormat.parse(string);
-
-		decimalFormat.setParseBigDecimal(false);
-
-		return value;
 	}
 
 }

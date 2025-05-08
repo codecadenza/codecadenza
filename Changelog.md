@@ -7,6 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 ### Fixed
+2025-05-08: Use a fixed grouping separator and a fixed decimal separator for saving decimal values of an element collection that
+            use the 'CONVERTER' strategy in a locale-independent format
+### Fixed
 2025-05-07: Fix formatting in plug-ins and runtime libraries to adhere to the maximum line width
 ### Fixed
 2025-05-06: Replace invalid characters in the translation files of different runtime libraries

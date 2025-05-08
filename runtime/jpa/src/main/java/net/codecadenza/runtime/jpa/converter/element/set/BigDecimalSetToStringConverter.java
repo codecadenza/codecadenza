@@ -38,8 +38,7 @@ import net.codecadenza.runtime.conversion.ValueConverter;
 @Converter
 public class BigDecimalSetToStringConverter extends AbstractSetToStringConverter<BigDecimal> {
 	private static final String DECIMAL_FORMAT = "0.0000000000";
-	private static final ValueConverter<BigDecimal> valueConverter = new ValueConverter<>(DECIMAL_FORMAT, null, null,
-			BigDecimal.class);
+	private static final ValueConverter<BigDecimal> valueConverter = ValueConverter.getBigDecimalConverter(DECIMAL_FORMAT);
 
 	/*
 	 * (non-Javadoc)

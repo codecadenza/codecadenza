@@ -137,7 +137,7 @@ class ValueConverterTest {
 
 	@Test
 	void testDoubleConversion() {
-		final var converter = new ValueConverter<>(DECIMAL_FORMAT, null, null, Double.class);
+		final var converter = ValueConverter.getDoubleConverter(DECIMAL_FORMAT);
 		final Double convertedValue = converter.convertToValue(TEST_DOUBLE_STRING);
 
 		assertEquals(TEST_DOUBLE, convertedValue, 0.01);
@@ -149,7 +149,7 @@ class ValueConverterTest {
 
 	@Test
 	void testFloatConversion() {
-		final var converter = new ValueConverter<>(DECIMAL_FORMAT, null, null, Float.class);
+		final var converter = ValueConverter.getFloatConverter(DECIMAL_FORMAT);
 		final Float convertedValue = converter.convertToValue(TEST_FLOAT_STRING);
 
 		assertEquals(TEST_FLOAT, convertedValue, 0.01);
@@ -161,7 +161,7 @@ class ValueConverterTest {
 
 	@Test
 	void testBigDecimalConversion() {
-		final var converter = new ValueConverter<>(DECIMAL_FORMAT, null, null, BigDecimal.class);
+		final var converter = ValueConverter.getBigDecimalConverter(DECIMAL_FORMAT);
 		final BigDecimal convertedValue = converter.convertToValue(TEST_BIG_DECIMAL_STRING);
 
 		assertEquals(TEST_BIG_DECIMAL, convertedValue);
