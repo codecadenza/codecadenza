@@ -59,7 +59,7 @@ public class ValueConverter<T> {
 	/**
 	 * Create a new {@link Double} value converter that uses a decimal format with a fixed decimal separator and a fixed grouping
 	 * separator
-	 * @param decimalFormat
+	 * @param decimalFormat the decimal format string
 	 * @return a {@link ValueConverter} for double values
 	 */
 	public static ValueConverter<Double> getDoubleConverter(String decimalFormat) {
@@ -69,7 +69,7 @@ public class ValueConverter<T> {
 	/**
 	 * Create a new {@link Float} value converter that uses a decimal format with a fixed decimal separator and a fixed grouping
 	 * separator
-	 * @param decimalFormat
+	 * @param decimalFormat the decimal format string
 	 * @return a {@link ValueConverter} for float values
 	 */
 	public static ValueConverter<Float> getFloatConverter(String decimalFormat) {
@@ -79,7 +79,7 @@ public class ValueConverter<T> {
 	/**
 	 * Create a new {@link BigDecimal} value converter that uses a decimal format with a fixed decimal separator and a fixed
 	 * grouping separator
-	 * @param decimalFormat
+	 * @param decimalFormat the decimal format string
 	 * @return a {@link ValueConverter} for {@link BigDecimal} values
 	 */
 	public static ValueConverter<BigDecimal> getBigDecimalConverter(String decimalFormat) {
@@ -88,7 +88,8 @@ public class ValueConverter<T> {
 
 	/**
 	 * Create a new value converter that uses a decimal format with a fixed decimal separator and a fixed grouping separator
-	 * @param decimalFormat
+	 * @param decimalFormat the decimal format string
+	 * @param numericType the numeric type of the value that should be converted
 	 * @return a {@link ValueConverter} for decimal values
 	 */
 	public static <N extends Number> ValueConverter<N> getNumberConverter(String decimalFormat, Class<N> numericType) {
@@ -258,6 +259,20 @@ public class ValueConverter<T> {
 			return UUID.randomUUID().toString();
 
 		return "";
+	}
+
+	/**
+	 * @return the decimal format used for {@link Double} and {@link Float} values
+	 */
+	public DecimalFormat getDecimalFormat() {
+		return decimalFormat;
+	}
+
+	/**
+	 * @return the decimal format used for {@link BigDecimal} values
+	 */
+	public DecimalFormat getBigDecimalFormat() {
+		return bigDecimalFormat;
 	}
 
 }

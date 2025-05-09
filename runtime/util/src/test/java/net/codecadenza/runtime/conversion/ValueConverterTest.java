@@ -28,7 +28,6 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.math.BigDecimal;
-import java.text.DecimalFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -306,9 +305,10 @@ class ValueConverterTest {
 
 	@ParameterizedTest
 	@ValueSource(strings = { "java.lang.Double", "java.lang.Float", "java.math.BigDecimal" })
+	@SuppressWarnings("unchecked")
 	void testGetInitialDefaulDecimalValue(String className) throws ClassNotFoundException {
-		final var converter = new ValueConverter<>(DECIMAL_FORMAT, null, null, Class.forName(className));
-		final var decimalFormat = new DecimalFormat(DECIMAL_FORMAT);
+		final var converter = ValueConverter.getNumberConverter(DECIMAL_FORMAT, (Class<Number>) Class.forName(className));
+		final var decimalFormat = converter.getDecimalFormat();
 		final String convertedValue = converter.getInitialDefaultValue();
 
 		assertEquals(decimalFormat.format(0.0), convertedValue);
