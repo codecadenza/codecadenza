@@ -157,7 +157,7 @@ public class CodeCadenzaEditPartFactory implements EditPartFactory {
 			final Rectangle rect = getWrapLabel().getTextBounds().getCopy();
 			getWrapLabel().translateToAbsolute(rect);
 
-			if (getWrapLabel().isTextWrapOn() && getWrapLabel().getText().length() > 0)
+			if (getWrapLabel().isTextWrapOn() && !getWrapLabel().getText().isEmpty())
 				rect.setSize(new Dimension(text.computeSize(rect.width, SWT.DEFAULT)));
 			else {
 				final int avr = (int) FigureUtilities.getFontMetrics(text.getFont()).getAverageCharacterWidth();

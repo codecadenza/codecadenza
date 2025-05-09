@@ -301,7 +301,7 @@ public abstract class AbstractProposalTextField<T> extends TextField {
 		 */
 		@Override
 		public void changed(ObservableValue<? extends String> observable, String newValue, String oldValue) {
-			if (getText().length() > 0) {
+			if (!getText().isEmpty()) {
 				if (dataFetchTask != null && dataFetchTask.isRunning())
 					dataFetchTask.cancel();
 

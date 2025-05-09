@@ -881,7 +881,7 @@ public class IntegrationWizardPage extends WizardPage {
 		String warningMessage = null;
 		final String statusMessage = status.getMessage();
 
-		if (statusMessage.length() > 0) {
+		if (!statusMessage.isEmpty()) {
 			if (status.matches(IStatus.ERROR))
 				errorMessage = statusMessage;
 			else if (!status.isOK())

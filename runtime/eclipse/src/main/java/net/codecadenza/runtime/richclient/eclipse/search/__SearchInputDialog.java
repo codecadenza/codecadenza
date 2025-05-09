@@ -717,7 +717,7 @@ public abstract class __SearchInputDialog extends TitleAreaDialog {
 				if (s.getDataType() == SearchFieldDataTypeEnum.BOOLEAN) {
 					((Combo) criterion1Map.get(key)).setItems("", Boolean.TRUE.toString(), Boolean.FALSE.toString());
 
-					if (criteria != null && criteria.length() > 0) {
+					if (criteria != null && !criteria.isEmpty()) {
 						if (Boolean.TRUE.toString().equals(criteria))
 							((Combo) criterion1Map.get(key)).select(1);
 						else
@@ -763,7 +763,7 @@ public abstract class __SearchInputDialog extends TitleAreaDialog {
 						});
 					}
 
-					if (criteria != null && criteria.length() > 0) {
+					if (criteria != null && !criteria.isEmpty()) {
 						if (criteria.contains(TOKEN_DELIMITER_BETWEEN))
 							((Text) criterion1Map.get(key)).setText(criteria.substring(0, criteria.indexOf(TOKEN_DELIMITER_BETWEEN)));
 						else

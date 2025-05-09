@@ -295,7 +295,7 @@ public class CodeCadenzaElementChooserDialog extends Dialog {
 		@Override
 		public String getText(Object element) {
 			final String result = myWorkbenchLabelProvider.getText(element);
-			return result != null && result.length() > 0 ? result : myAdapterFactoryLabelProvider.getText(element);
+			return result != null && !result.isEmpty() ? result : myAdapterFactoryLabelProvider.getText(element);
 		}
 
 		/*
