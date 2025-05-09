@@ -7,9 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 ### Changed
+2025-05-09: Improve the initialization of domain model enumerations by performing a cleanup
+### Changed
 2025-05-09: Use isEmpty() to check whether a string is empty or not
 ### Fixed
-2025-05-09: Changed formatting of Javadoc comments after performing a cleanup
+2025-05-09: Change formatting of Javadoc comments by performing a cleanup
 ### Fixed
 2025-05-09: Fix the broken ValueConverter test, which fails if a locale other than 'EN' is used
 ### Fixed

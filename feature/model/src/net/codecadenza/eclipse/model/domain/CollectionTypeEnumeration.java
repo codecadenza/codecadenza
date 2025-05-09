@@ -89,7 +89,7 @@ public enum CollectionTypeEnumeration implements Enumerator {
 	 * An array of all the '<em><b>Collection Type</b></em>' enumerators
 	 * @generated
 	 */
-	private static final CollectionTypeEnumeration[] VALUES_ARRAY = new CollectionTypeEnumeration[] { NONE, LIST, SET, };
+	private static final CollectionTypeEnumeration[] VALUES_ARRAY = { NONE, LIST, SET, };
 
 	/**
 	 * A public read-only list of all the '<em><b>Collection Type</b></em>' enumerators

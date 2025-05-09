@@ -89,8 +89,7 @@ public enum CollectionMappingStrategyEnumeration implements Enumerator {
 	 * An array of all the '<em><b>Collection Mapping Strategy</b></em>' enumerators
 	 * @generated
 	 */
-	private static final CollectionMappingStrategyEnumeration[] VALUES_ARRAY = new CollectionMappingStrategyEnumeration[] { NONE,
-			CONVERTER, TABLE, };
+	private static final CollectionMappingStrategyEnumeration[] VALUES_ARRAY = { NONE, CONVERTER, TABLE, };
 
 	/**
 	 * A public read-only list of all the '<em><b>Collection Mapping Strategy</b></em>' enumerators
