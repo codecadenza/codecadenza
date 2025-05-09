@@ -21,8 +21,8 @@
  */
 package net.codecadenza.eclipse.diagram.domain.edit.parts;
 
-import net.codecadenza.eclipse.diagram.domain.edit.policies.EnumLiteralItemSemanticEditPolicy;
 import net.codecadenza.eclipse.diagram.domain.edit.policies.CodeCadenzaTextSelectionEditPolicy;
+import net.codecadenza.eclipse.diagram.domain.edit.policies.EnumLiteralItemSemanticEditPolicy;
 import net.codecadenza.eclipse.diagram.domain.part.CodeCadenzaVisualIDRegistry;
 import org.eclipse.draw2d.ColorConstants;
 import org.eclipse.draw2d.IFigure;

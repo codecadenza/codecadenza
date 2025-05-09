@@ -21,9 +21,9 @@
  */
 package net.codecadenza.eclipse.diagram.domain.edit.parts;
 
+import net.codecadenza.eclipse.diagram.domain.edit.policies.CodeCadenzaTextSelectionEditPolicy;
 import net.codecadenza.eclipse.diagram.domain.edit.policies.DomainObjectItemSemanticEditPolicy;
 import net.codecadenza.eclipse.diagram.domain.edit.policies.DoubleClickEditPolicy;
-import net.codecadenza.eclipse.diagram.domain.edit.policies.CodeCadenzaTextSelectionEditPolicy;
 import net.codecadenza.eclipse.diagram.domain.part.CodeCadenzaVisualIDRegistry;
 import net.codecadenza.eclipse.diagram.domain.providers.CodeCadenzaElementTypes;
 import org.eclipse.draw2d.ColorConstants;

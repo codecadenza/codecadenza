@@ -22,10 +22,10 @@
 package net.codecadenza.eclipse.testing.bots;
 
 import java.util.Collections;
+import net.codecadenza.eclipse.testing.dialog.AbstractDialog.OperationMode;
 import net.codecadenza.eclipse.testing.dialog.DeleteDialog;
 import net.codecadenza.eclipse.testing.dialog.RenameCompilationUnitDialog;
 import net.codecadenza.eclipse.testing.dialog.RenameDialog;
-import net.codecadenza.eclipse.testing.dialog.AbstractDialog.OperationMode;
 import net.codecadenza.eclipse.testing.dialog.client.CreateDefaultFormsDialog;
 import net.codecadenza.eclipse.testing.dialog.client.CreateGridPanelDialog;
 import net.codecadenza.eclipse.testing.dialog.client.CreateSingleRecordFormDialog;

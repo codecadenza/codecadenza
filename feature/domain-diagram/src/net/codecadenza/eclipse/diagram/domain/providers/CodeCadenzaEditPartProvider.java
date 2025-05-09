@@ -22,8 +22,8 @@
 package net.codecadenza.eclipse.diagram.domain.providers;
 
 import java.lang.ref.WeakReference;
-import net.codecadenza.eclipse.diagram.domain.edit.parts.DomainNamespaceEditPart;
 import net.codecadenza.eclipse.diagram.domain.edit.parts.CodeCadenzaEditPartFactory;
+import net.codecadenza.eclipse.diagram.domain.edit.parts.DomainNamespaceEditPart;
 import net.codecadenza.eclipse.diagram.domain.part.CodeCadenzaVisualIDRegistry;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPartFactory;

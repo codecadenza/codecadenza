@@ -23,12 +23,12 @@ package net.codecadenza.eclipse.service.form.init;
 
 import static net.codecadenza.eclipse.shared.Constants.ADMIN_PANEL_TITLE;
 import static net.codecadenza.eclipse.shared.Constants.BASIC_PANEL_TITLE;
-import static net.codecadenza.eclipse.shared.Constants.EDITOR_PREFIX;
 import static net.codecadenza.eclipse.shared.Constants.CHECKBOX_PREFIX;
 import static net.codecadenza.eclipse.shared.Constants.COMBO_PREFIX;
 import static net.codecadenza.eclipse.shared.Constants.CREATE_DTO_SUFFIX;
 import static net.codecadenza.eclipse.shared.Constants.DEFAULT_VALUE_FLAG;
 import static net.codecadenza.eclipse.shared.Constants.DTO_SUFFIX;
+import static net.codecadenza.eclipse.shared.Constants.EDITOR_PREFIX;
 import static net.codecadenza.eclipse.shared.Constants.INITIAL_ONE_TO_MANY_DTO_SUFFIX;
 import static net.codecadenza.eclipse.shared.Constants.LIST_PREFIX;
 import static net.codecadenza.eclipse.shared.Constants.TEXT_PREFIX;
