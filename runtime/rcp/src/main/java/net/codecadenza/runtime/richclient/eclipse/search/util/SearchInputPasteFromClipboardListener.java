@@ -32,8 +32,7 @@ import org.eclipse.swt.widgets.Text;
 /**
  * <p>
  * If a user performs a 'CTRL+V' on a text field the respective content in the clipboard will be converted by replacing all new
- * line characters (depending on the operating system) by
- * {@link net.codecadenza.runtime.search.SearchService#TOKEN_DELIMITER_IN}.
+ * line characters (depending on the operating system) by {@link net.codecadenza.runtime.search.SearchService#TOKEN_DELIMITER_IN}.
  * </p>
  * <p>
  * Copyright 2025 (C) by Martin Ganserer

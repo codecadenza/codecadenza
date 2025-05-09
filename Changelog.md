@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 ### Fixed
+2025-05-09: Changed formatting of Javadoc comments after performing a cleanup
+### Fixed
 2025-05-09: Fix the broken ValueConverter test, which fails if a locale other than 'EN' is used
 ### Fixed
 2025-05-09: Fix wrong ordering of import statements
