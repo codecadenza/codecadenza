@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## Unreleased
+### Fixed
+2025-05-11: A warning message dialog won't be opened if a value cannot be added to an element collection in a JSF application
 ### Changed
 2025-05-09: Improve the initialization of domain model enumerations by performing a cleanup
 ### Changed

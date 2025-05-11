@@ -149,7 +149,7 @@ public class JSFElementCollectionEditorFieldGenerator extends AbstractJSFFieldGe
 			b.append("}");
 			b.append("catch(Exception e)\n");
 			b.append("{\n");
-			b.append("MessageUtil.sendFacesMessage(bundle, FacesMessage.SEVERITY_INFO, e.getMessage());\n");
+			b.append("MessageUtil.sendFacesMessage(bundle, FacesMessage.SEVERITY_WARN, MSG_ADD_ELEMENT_FAILED, e);\n");
 			b.append("}\n");
 			b.append("}\n\n");
 

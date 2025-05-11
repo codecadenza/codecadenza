@@ -557,6 +557,7 @@ public class JSFClientProjectFilesGenerator extends AbstractClientProjectFilesGe
 		b.append("element_collection_editor_col_header_element=Element\n");
 		b.append("element_collection_editor_action_delete=Delete\n");
 		b.append("element_collection_editor_action_delete_all=Delete all\n");
+		b.append("msg_add_element_failed=The new value could not be added to the collection!\n");
 
 		return b.toString();
 	}
