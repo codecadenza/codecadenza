@@ -395,6 +395,13 @@ public class EditDomainAttributeDialog extends CodeCadenzaDialog {
 				final CollectionTypeEnumeration selectedCollectionType = CollectionTypeEnumeration
 						.valueOf(cboCollectionType.getItem(cboCollectionType.getSelectionIndex()));
 
+				chkNullable.setEnabled(selectedCollectionType == CollectionTypeEnumeration.NONE);
+
+				if (selectedCollectionType == CollectionTypeEnumeration.NONE)
+					chkNullable.setSelection(domainAttribute.getDomainAttributeValidator().isNullable());
+				else
+					chkNullable.setSelection(false);
+
 				if (domainAttribute.getCollectionMappingStrategy() == CollectionMappingStrategyEnumeration.TABLE)
 					return;
 
@@ -411,6 +418,7 @@ public class EditDomainAttributeDialog extends CodeCadenzaDialog {
 		txtCollectionStrategy = new Text(groupBasicData, SWT.BORDER);
 		txtCollectionStrategy.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
 		txtCollectionStrategy.setEditable(false);
+		txtCollectionStrategy.setBackground(READ_ONLY_COLOR);
 
 		final var groupValidation = new Group(panDialogArea, SWT.NONE);
 		groupValidation.setLayout(new GridLayout(4, false));
@@ -524,6 +532,11 @@ public class EditDomainAttributeDialog extends CodeCadenzaDialog {
 		txtCollectionStrategy.setText(domainAttribute.getCollectionMappingStrategy().toString());
 		txtDBColumnName.setText(domainAttribute.getColumn().getName());
 		txtDBColumnType.setText(domainAttribute.getColumn().getColumnType().getName());
+
+		if (domainAttribute.getCollectionType() != CollectionTypeEnumeration.NONE) {
+			chkNullable.setEnabled(false);
+			chkNullable.setSelection(false);
+		}
 
 		final Optional<Integer> maxLength = domainAttribute.getMaxFieldLenght();
 		final Optional<Integer> minLength = domainAttribute.getMinFieldLength();
