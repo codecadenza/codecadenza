@@ -1127,6 +1127,11 @@ public class ReverseEngineeringService {
 		DomainObject domainObject = null;
 		DBColumn valueColumn = null;
 
+		// Check if the collection table has already been imported
+		for (final DBTable existingTable : project.getDatabase().getDatabaseTables())
+			if (existingTable.getConvertedName().equals(elementCollectionTable.getConvertedName()))
+				return;
+
 		if (!initColumnTypes(elementCollectionTable))
 			return;
 

@@ -7,6 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 ### Changed
+2025-05-12: Add a check to prevent the duplicate initialization of an element collection attribute during a subsequent reverse
+            engineering process
+### Changed
 2025-05-11: Disable the field that controls if a domain attribute is nullable for element collections in the respective reverse
             engineering dialog
 ### Fixed
