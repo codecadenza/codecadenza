@@ -23,6 +23,7 @@ package net.codecadenza.eclipse.diagram.domain.sheet.custom;
 
 import net.codecadenza.eclipse.diagram.domain.edit.parts.DomainAttributeEditPart;
 import net.codecadenza.eclipse.diagram.domain.part.CodeCadenzaDiagramEditorPlugin;
+import net.codecadenza.eclipse.model.domain.CollectionTypeEnumeration;
 import net.codecadenza.eclipse.model.domain.DomainAttribute;
 import net.codecadenza.eclipse.model.domain.DomainAttributeValidator;
 import net.codecadenza.eclipse.model.domain.DomainObject;
@@ -442,62 +443,66 @@ public class DomainAttributePropertySection extends AbstractPropertySection {
 		txtLabel.setText(attribute.getLabel());
 		txtLabelPlural.setText(attribute.getLabelPlural());
 
-		if (attribute.isPersistent()) {
-			chkFetchTypeEager.setEnabled(true);
-			chkFetchTypeEager.setSelection(attribute.isFetchTypeEager());
-			chkInsertable.setEnabled(true);
-			chkInsertable.setSelection(attribute.isInsertable());
-			chkUpdatable.setEnabled(true);
-			chkUpdatable.setSelection(attribute.isUpdatable());
-
-			if (!attribute.getJavaType().isPrimitive() && !attribute.isPk()) {
-				chkNullable.setEnabled(true);
-				chkNullable.setSelection(attribute.getDomainAttributeValidator().isNullable());
-			}
-
-			if (!attribute.isPk() && type.isIntegerOrLong()) {
-				chkVersion.setSelection(attribute.isTrackVersion());
-				chkVersion.setEnabled(true);
-			}
-
-			if (type.isString() || type.isByteArray()) {
-				if (type.isString()) {
-					chkDisplayAttribute.setEnabled(true);
-					chkDisplayAttribute.setSelection(attribute.isDisplayAttribute());
-					chkRemoveWhitespaceCharacters.setEnabled(true);
-					chkRemoveWhitespaceCharacters.setSelection(attribute.isRemoveWhitespaceCharacters());
-					chkConvertToUpperCase.setEnabled(true);
-					chkConvertToUpperCase.setSelection(attribute.isConvertToUpperCase());
-					chkConvertToLowerCase.setEnabled(true);
-					chkConvertToLowerCase.setSelection(attribute.isConvertToLowerCase());
-				}
-
-				txtMinLength.setEnabled(true);
-
-				if (attribute.getDomainAttributeValidator().getMinLength() != null)
-					txtMinLength.setText(String.valueOf(attribute.getDomainAttributeValidator().getMinLength()));
-
-				txtMinLength.addModifyListener(textChangeListener);
-
-				txtMaxLength.setEnabled(true);
-
-				if (attribute.getDomainAttributeValidator().getMaxLength() != null)
-					txtMaxLength.setText(String.valueOf(attribute.getDomainAttributeValidator().getMaxLength()));
-
-				txtMaxLength.addModifyListener(textChangeListener);
-			}
-			else if (type.isNumber()) {
-				txtMinValue.setEnabled(true);
-				txtMinValue.setText(attribute.getDomainAttributeValidator().getMinValue());
-				txtMinValue.addModifyListener(textChangeListener);
-				txtMaxValue.setEnabled(true);
-				txtMaxValue.setText(attribute.getDomainAttributeValidator().getMaxValue());
-				txtMaxValue.addModifyListener(textChangeListener);
-			}
-		}
-
 		txtLabel.addModifyListener(textChangeListener);
 		txtLabelPlural.addModifyListener(textChangeListener);
+
+		if (!attribute.isPersistent())
+			return;
+
+		chkFetchTypeEager.setEnabled(true);
+		chkFetchTypeEager.setSelection(attribute.isFetchTypeEager());
+		chkInsertable.setEnabled(true);
+		chkInsertable.setSelection(attribute.isInsertable());
+		chkUpdatable.setEnabled(true);
+		chkUpdatable.setSelection(attribute.isUpdatable());
+
+		if (attribute.getCollectionType() != CollectionTypeEnumeration.NONE)
+			return;
+
+		if (!attribute.getJavaType().isPrimitive() && !attribute.isPk()) {
+			chkNullable.setEnabled(true);
+			chkNullable.setSelection(attribute.getDomainAttributeValidator().isNullable());
+		}
+
+		if (!attribute.isPk() && type.isIntegerOrLong()) {
+			chkVersion.setSelection(attribute.isTrackVersion());
+			chkVersion.setEnabled(true);
+		}
+
+		if (type.isString() || type.isByteArray()) {
+			if (type.isString()) {
+				chkDisplayAttribute.setEnabled(true);
+				chkDisplayAttribute.setSelection(attribute.isDisplayAttribute());
+				chkRemoveWhitespaceCharacters.setEnabled(true);
+				chkRemoveWhitespaceCharacters.setSelection(attribute.isRemoveWhitespaceCharacters());
+				chkConvertToUpperCase.setEnabled(true);
+				chkConvertToUpperCase.setSelection(attribute.isConvertToUpperCase());
+				chkConvertToLowerCase.setEnabled(true);
+				chkConvertToLowerCase.setSelection(attribute.isConvertToLowerCase());
+			}
+
+			txtMinLength.setEnabled(true);
+
+			if (attribute.getDomainAttributeValidator().getMinLength() != null)
+				txtMinLength.setText(String.valueOf(attribute.getDomainAttributeValidator().getMinLength()));
+
+			txtMinLength.addModifyListener(textChangeListener);
+
+			txtMaxLength.setEnabled(true);
+
+			if (attribute.getDomainAttributeValidator().getMaxLength() != null)
+				txtMaxLength.setText(String.valueOf(attribute.getDomainAttributeValidator().getMaxLength()));
+
+			txtMaxLength.addModifyListener(textChangeListener);
+		}
+		else if (type.isNumber()) {
+			txtMinValue.setEnabled(true);
+			txtMinValue.setText(attribute.getDomainAttributeValidator().getMinValue());
+			txtMinValue.addModifyListener(textChangeListener);
+			txtMaxValue.setEnabled(true);
+			txtMaxValue.setText(attribute.getDomainAttributeValidator().getMaxValue());
+			txtMaxValue.addModifyListener(textChangeListener);
+		}
 	}
 
 	/**

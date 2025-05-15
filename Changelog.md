@@ -6,8 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## Unreleased
+### Fixed
+2025-05-15: Disable fields in the property sheet that must not be changed for attributes that are mapped to an element collection
 ### Changed
-2025-05-12: Add a check to prevent the duplicate initialization of an element collection attribute during a subsequent reverse
+2025-05-15: Add a check to prevent the duplicate initialization of an element collection attribute during a subsequent reverse
             engineering process
 ### Changed
 2025-05-11: Disable the field that controls if a domain attribute is nullable for element collections in the respective reverse
