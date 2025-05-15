@@ -15,7 +15,7 @@
 
 <div class="form-spacer" *ngIf="!readOnly"></div>
 
-<p-table [value]="elements" selectionMode="single" (onRowSelect)="onRowSelect($event)" [contextMenu]="cm"
+<p-table [value]="filteredElements" selectionMode="single" (onRowSelect)="onRowSelect($event)" [contextMenu]="cm"
   [(contextMenuSelection)]="selectedItem">
   <ng-template pTemplate="header" let-rowData>
     <tr>

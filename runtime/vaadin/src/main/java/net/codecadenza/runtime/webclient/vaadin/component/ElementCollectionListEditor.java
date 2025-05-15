@@ -24,7 +24,9 @@ package net.codecadenza.runtime.webclient.vaadin.component;
 import com.vaadin.flow.component.HasValue;
 import com.vaadin.flow.component.HasValue.ValueChangeEvent;
 import com.vaadin.flow.shared.Registration;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 import net.codecadenza.runtime.webclient.vaadin.i18n.I18NService;
 import net.codecadenza.runtime.webclient.vaadin.util.PreferencesStore;
 
@@ -60,7 +62,7 @@ public class ElementCollectionListEditor<T> extends AbstractElementCollectionEdi
 	 */
 	@Override
 	public List<T> getValue() {
-		return elements.stream().toList();
+		return elements.stream().collect(Collectors.toCollection(ArrayList::new));
 	}
 
 	/*
@@ -71,7 +73,7 @@ public class ElementCollectionListEditor<T> extends AbstractElementCollectionEdi
 	public void setValue(List<T> value) {
 		elements = value;
 
-		grid.setItems(value);
+		refreshGrid(null);
 	}
 
 	/*

@@ -36,11 +36,12 @@ import net.codecadenza.runtime.conversion.ValueConverter;
 import net.codecadenza.runtime.richclient.format.FormatDTO;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
-import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.viewers.ListViewer;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.KeyAdapter;
+import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
@@ -98,7 +99,7 @@ public abstract class __AbstractElementCollectionEditor<T> extends Composite {
 	public void setElements(Collection<T> elements) {
 		this.elements = elements;
 
-		listViewer.setInput(elements);
+		refreshListView(null);
 	}
 
 	/**
@@ -129,7 +130,7 @@ public abstract class __AbstractElementCollectionEditor<T> extends Composite {
 			final var txtNewElementName = new Text(panAdd, SWT.BORDER);
 			txtNewElementName.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
 			txtNewElementName.setText(valueConverter.getInitialDefaultValue());
-			txtNewElementName.selectAll();
+			txtNewElementName.addModifyListener(event -> refreshListView(txtNewElementName.getText()));
 
 			final var cmdAdd = new Button(panAdd, SWT.NONE);
 			cmdAdd.setText(getTranslation(CMD_ADD));
@@ -146,6 +147,7 @@ public abstract class __AbstractElementCollectionEditor<T> extends Composite {
 
 					try {
 						elements.add(valueConverter.convertToValue(txtNewElementName.getText()));
+						refreshListView(null);
 					}
 					catch (final Exception ex) {
 						MessageDialog.openError(getShell(), getTranslation(ABSTRACT_ELEMENT_COLLECTION_EDITOR_MSG_TITLE_CONVERSION),
@@ -160,13 +162,24 @@ public abstract class __AbstractElementCollectionEditor<T> extends Composite {
 		}
 
 		listViewer = new ListViewer(this, SWT.V_SCROLL | SWT.MULTI | SWT.H_SCROLL | SWT.BORDER);
-		listViewer.setLabelProvider(new ListLabelProvider());
 		listViewer.setContentProvider(new ListContentProvider());
 
 		final List list = listViewer.getList();
 		list.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 
 		if (!readonly) {
+			listViewer.getList().addKeyListener(new KeyAdapter() {
+				/*
+				 * (non-Javadoc)
+				 * @see org.eclipse.swt.events.KeyAdapter#keyReleased(org.eclipse.swt.events.KeyEvent)
+				 */
+				@Override
+				public void keyReleased(KeyEvent e) {
+					if (e.character == SWT.DEL)
+						deleteSelectedElement();
+				}
+			});
+
 			final var menu = new Menu(list);
 			list.setMenu(menu);
 
@@ -179,20 +192,8 @@ public abstract class __AbstractElementCollectionEditor<T> extends Composite {
 				 * @see org.eclipse.swt.events.SelectionAdapter#widgetDefaultSelected(org.eclipse.swt.events.SelectionEvent)
 				 */
 				@Override
-				@SuppressWarnings("unchecked")
 				public void widgetSelected(SelectionEvent e) {
-					final var selection = (StructuredSelection) listViewer.getSelection();
-
-					if (selection == null)
-						return;
-
-					final T selectedElement = (T) selection.getFirstElement();
-
-					if (selectedElement == null)
-						return;
-
-					elements.remove(selectedElement);
-					listViewer.setInput(elements);
+					deleteSelectedElement();
 				}
 			});
 
@@ -207,16 +208,51 @@ public abstract class __AbstractElementCollectionEditor<T> extends Composite {
 				@Override
 				public void widgetSelected(SelectionEvent e) {
 					elements.clear();
-					listViewer.setInput(elements);
+					refreshListView(null);
 				}
 			});
 		}
 	}
 
 	/**
+	 * Refresh the {@link ListViewer}
+	 * @param filter the filter for elements to be displayed
+	 */
+	protected void refreshListView(String filter) {
+		final Collection<String> viewModel;
+
+		if (filter == null || filter.isEmpty())
+			viewModel = elements.stream().sorted().map(valueConverter::convertToString).toList();
+		else
+			viewModel = elements.stream().sorted().map(valueConverter::convertToString).filter(item -> item.startsWith(filter))
+					.toList();
+
+		listViewer.setInput(viewModel);
+	}
+
+	/**
+	 * Delete the selected element from the {@link ListViewer}
+	 */
+	protected void deleteSelectedElement() {
+		final var selection = (StructuredSelection) listViewer.getSelection();
+
+		if (selection == null)
+			return;
+
+		final String selectedElement = (String) selection.getFirstElement();
+
+		if (selectedElement == null)
+			return;
+
+		elements.remove(valueConverter.convertToValue(selectedElement));
+
+		refreshListView(null);
+	}
+
+	/**
 	 * Content provider
 	 */
-	private class ListContentProvider implements IStructuredContentProvider {
+	private static class ListContentProvider implements IStructuredContentProvider {
 		/*
 		 * (non-Javadoc)
 		 * @see org.eclipse.jface.viewers.IStructuredContentProvider#getElements(java.lang.Object)
@@ -224,7 +260,7 @@ public abstract class __AbstractElementCollectionEditor<T> extends Composite {
 		@Override
 		@SuppressWarnings("unchecked")
 		public Object[] getElements(Object inputElement) {
-			return ((Collection<T>) inputElement).toArray();
+			return ((Collection<String>) inputElement).toArray();
 		}
 
 		/*
@@ -244,22 +280,6 @@ public abstract class __AbstractElementCollectionEditor<T> extends Composite {
 		@Override
 		public void inputChanged(Viewer viewer, Object oldInput, Object newInput) {
 			// No implementation required!
-		}
-	}
-
-	/**
-	 * Label provider
-	 */
-	private class ListLabelProvider extends LabelProvider {
-		/*
-		 * (non-Javadoc)
-		 * @see org.eclipse.jface.viewers.LabelProvider#getText(java.lang.Object)
-		 */
-		@Override
-		@SuppressWarnings("unchecked")
-		public String getText(Object element) {
-			final T item = (T) element;
-			return valueConverter.convertToString(item);
 		}
 	}
 

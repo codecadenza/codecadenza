@@ -17,7 +17,7 @@ import { ValueType } from '../../converter/value-type.enum';
      multi: true
    }]
 })
-export class ElementCollectionEditor<T> implements OnInit, ControlValueAccessor {
+export class ElementCollectionEditor<T extends string | Date | number > implements OnInit, ControlValueAccessor {
   @Input() uniqueElements = false;
   @Input() readOnly = false;
   @Input() fieldType = '';
@@ -76,6 +76,25 @@ export class ElementCollectionEditor<T> implements OnInit, ControlValueAccessor 
    */
   registerOnTouched() {
     // No implementation required!
+  }
+
+  /**
+   * Get the items to be displayed in the data table. The text in the field for adding new values is used as filter!
+   */
+  get filteredElements(): T[] {
+    if (!this.newValue || this.newValue === this.valueConverter.getInitialDefaultValue(this.valueType)) {
+      return this.elements.sort();
+    }
+
+    return this.elements.filter(element => {
+      const elementString = this.convertElementToString(element);
+
+      if (!elementString) {
+        return false;
+      }
+
+      return elementString.startsWith(this.newValue);
+    }).sort();
   }
 
   /**
@@ -150,4 +169,3 @@ export class ElementCollectionEditor<T> implements OnInit, ControlValueAccessor 
     this.contextMenuItems.push(menuItem);
   }
 }
-

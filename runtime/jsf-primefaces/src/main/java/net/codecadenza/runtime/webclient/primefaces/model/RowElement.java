@@ -33,17 +33,16 @@ import java.util.UUID;
  * </p>
  * @author Martin Ganserer
  * @version 1.0.0
- * @param <T> the type of the row value
  */
-public class RowElement<T> implements Comparable<RowElement<T>> {
+public class RowElement implements Comparable<RowElement> {
 	private final UUID rowKey;
-	private final T value;
+	private final String value;
 
 	/**
 	 * Constructor
 	 * @param value
 	 */
-	public RowElement(T value) {
+	public RowElement(String value) {
 		this.rowKey = UUID.randomUUID();
 		this.value = value;
 	}
@@ -58,7 +57,7 @@ public class RowElement<T> implements Comparable<RowElement<T>> {
 	/**
 	 * @return the value
 	 */
-	public T getValue() {
+	public String getValue() {
 		return value;
 	}
 
@@ -67,7 +66,7 @@ public class RowElement<T> implements Comparable<RowElement<T>> {
 	 * @see java.lang.Comparable#compareTo(java.lang.Object)
 	 */
 	@Override
-	public int compareTo(RowElement<T> other) {
+	public int compareTo(RowElement other) {
 		return rowKey.compareTo(other.rowKey);
 	}
 
@@ -92,7 +91,7 @@ public class RowElement<T> implements Comparable<RowElement<T>> {
 		if (obj == null || getClass() != obj.getClass())
 			return false;
 
-		final RowElement<?> other = (RowElement<?>) obj;
+		final RowElement other = (RowElement) obj;
 		return Objects.equals(rowKey, other.rowKey);
 	}
 

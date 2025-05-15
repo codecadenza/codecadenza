@@ -31,15 +31,14 @@ import static net.codecadenza.runtime.richclient.swing.i18n.I18NSwing.getTransla
 import static net.codecadenza.runtime.richclient.swing.i18n.I18NSwing.getTranslationForFieldLabel;
 
 import java.awt.BorderLayout;
-import java.awt.Component;
 import java.awt.FlowLayout;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Collection;
+import java.util.List;
 import java.util.Locale;
-import javax.swing.DefaultListCellRenderer;
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -75,10 +74,10 @@ public class ElementCollectionEditor<T> extends JPanel {
 	protected final DecimalFormat decimalFormat = new DecimalFormat(userFormat.getDecimalFormat());
 	protected final boolean readonly;
 	protected final Class<T> elementType;
-	protected final DefaultListModel<T> listModel = new DefaultListModel<>();
+	protected final DefaultListModel<String> listModel = new DefaultListModel<>();
 	protected final transient ValueConverter<T> valueConverter;
 	protected transient Collection<T> elements = java.util.Collections.emptyList();
-	protected JList<T> elementList;
+	protected JList<String> elementList;
 
 	/**
 	 * Constructor
@@ -101,13 +100,13 @@ public class ElementCollectionEditor<T> extends JPanel {
 	public void setElements(Collection<T> elements) {
 		this.elements = elements;
 
-		updateListModel();
+		refreshList(null);
 	}
 
 	/**
 	 * @return the list component
 	 */
-	public JList<T> getElementList() {
+	public JList<String> getElementList() {
 		return elementList;
 	}
 
@@ -123,6 +122,17 @@ public class ElementCollectionEditor<T> extends JPanel {
 			final var txtAdd = new JTextField(30);
 			txtAdd.setText(valueConverter.getInitialDefaultValue());
 
+			txtAdd.addKeyListener(new KeyAdapter() {
+				/*
+				 * (non-Javadoc)
+				 * @see java.awt.event.KeyAdapter#keyReleased(java.awt.event.KeyEvent)
+				 */
+				@Override
+				public void keyReleased(KeyEvent e) {
+					refreshList(txtAdd.getText());
+				}
+			});
+
 			final var cmdAdd = new JButton(getTranslation(ELEMENT_COLLECTION_EDITOR_CMD_ADD));
 
 			cmdAdd.addActionListener(e -> {
@@ -133,7 +143,7 @@ public class ElementCollectionEditor<T> extends JPanel {
 					final T newElement = valueConverter.convertToValue(txtAdd.getText());
 
 					elements.add(newElement);
-					updateListModel();
+					refreshList(null);
 				}
 				catch (final Exception ex) {
 					JOptionPane.showMessageDialog(this, getTranslation(ELEMENT_COLLECTION_EDITOR_MSG_CONVERSION_FAILED, ex.getMessage()),
@@ -150,27 +160,8 @@ public class ElementCollectionEditor<T> extends JPanel {
 			add(panAdd, BorderLayout.NORTH);
 		}
 
-		// Create a cell renderer so that the elements are formatted correctly
-		final var cellRenderer = new DefaultListCellRenderer() {
-			private static final long serialVersionUID = 130760999823468359L;
-
-			/*
-			 * (non-Javadoc)
-			 * @see javax.swing.DefaultListCellRenderer#getListCellRendererComponent(javax.swing.JList, java.lang.Object, int, boolean,
-			 * boolean)
-			 */
-			@SuppressWarnings("unchecked")
-			@Override
-			public Component getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected,
-					boolean cellHasFocus) {
-				final String formattedValue = valueConverter.convertToString((T) value);
-				return super.getListCellRendererComponent(list, formattedValue, index, isSelected, cellHasFocus);
-			}
-		};
-
 		elementList = new JList<>(listModel);
 		elementList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		elementList.setCellRenderer(cellRenderer);
 
 		if (!readonly) {
 			elementList.addKeyListener(new KeyAdapter() {
@@ -192,7 +183,7 @@ public class ElementCollectionEditor<T> extends JPanel {
 
 			mniDeleteAll.addActionListener(e -> {
 				elements.clear();
-				updateListModel();
+				refreshList(null);
 			});
 
 			final var contextMenu = new JPopupMenu();
@@ -206,23 +197,31 @@ public class ElementCollectionEditor<T> extends JPanel {
 	}
 
 	/**
-	 * Delete the selected item
+	 * Refresh the {@link List}
+	 * @param filter the filter for elements to be displayed
 	 */
-	private void deleteSelectedItem() {
-		final var selectedValue = elementList.getSelectedValue();
+	protected void refreshList(String filter) {
+		final List<String> filteredElements;
 
-		if (selectedValue != null) {
-			elements.remove(selectedValue);
-			updateListModel();
-		}
+		if (filter != null && !filter.isEmpty())
+			filteredElements = elements.stream().sorted().map(valueConverter::convertToString).filter(item -> item.startsWith(filter))
+					.toList();
+		else
+			filteredElements = elements.stream().sorted().map(valueConverter::convertToString).toList();
+
+		listModel.clear();
+		listModel.addAll(filteredElements);
 	}
 
 	/**
-	 * Update the list model
+	 * Delete the selected item
 	 */
-	private void updateListModel() {
-		listModel.clear();
-		listModel.addAll(elements);
-	}
+	protected void deleteSelectedItem() {
+		final var selectedValue = elementList.getSelectedValue();
 
+		if (selectedValue != null) {
+			elements.remove(valueConverter.convertToValue(selectedValue));
+			refreshList(null);
+		}
+	}
 }

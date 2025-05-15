@@ -41,10 +41,10 @@ import org.primefaces.event.SelectEvent;
  */
 public class ElementCollectionEditorModel<T> {
 	private final ValueConverter<T> valueConverter;
-	private List<RowElement<T>> rowElements;
+	private List<RowElement> rowElements;
 	private Collection<T> elements;
 	private String newElement;
-	private RowElement<T> selectedElement;
+	private RowElement selectedElement;
 
 	/**
 	 * Constructor
@@ -76,7 +76,7 @@ public class ElementCollectionEditorModel<T> {
 	/**
 	 * @return the selected row element
 	 */
-	public RowElement<T> getSelectedRowElement() {
+	public RowElement getSelectedRowElement() {
 		return selectedElement;
 	}
 
@@ -84,7 +84,7 @@ public class ElementCollectionEditorModel<T> {
 	 * Set the selected row element
 	 * @param selectedElement
 	 */
-	public void setSelectedRowElement(RowElement<T> selectedElement) {
+	public void setSelectedRowElement(RowElement selectedElement) {
 		this.selectedElement = selectedElement;
 	}
 
@@ -92,7 +92,7 @@ public class ElementCollectionEditorModel<T> {
 	 * Callback method that keeps track of the selected row element
 	 * @param event
 	 */
-	public void onRowSelect(SelectEvent<RowElement<T>> event) {
+	public void onRowSelect(SelectEvent<RowElement> event) {
 		setSelectedRowElement(event.getObject());
 	}
 
@@ -103,21 +103,33 @@ public class ElementCollectionEditorModel<T> {
 	public void setElements(Collection<T> elements) {
 		this.elements = elements;
 
-		this.rowElements = elements.stream().map(RowElement::new).collect(Collectors.toCollection(ArrayList::new));
+		refreshElementsToBeDisplayed();
 	}
 
 	/**
 	 * @return the elements
 	 */
 	public Collection<T> getElements() {
-		return this.elements;
+		return elements;
 	}
 
 	/**
 	 * @return all elements
 	 */
-	public Collection<RowElement<T>> getRowElements() {
+	public Collection<RowElement> getRowElements() {
 		return rowElements;
+	}
+
+	/**
+	 * Determine the elements to be displayed by using the value in the 'newElement' field as filter
+	 */
+	public void refreshElementsToBeDisplayed() {
+		if (newElement == null || newElement.isEmpty() || newElement.equals(valueConverter.getInitialDefaultValue()))
+			rowElements = elements.stream().sorted().map(valueConverter::convertToString).map(RowElement::new)
+					.collect(Collectors.toCollection(ArrayList::new));
+		else
+			rowElements = elements.stream().sorted().map(valueConverter::convertToString).filter(item -> item.startsWith(newElement))
+					.map(RowElement::new).collect(Collectors.toCollection(ArrayList::new));
 	}
 
 	/**
@@ -132,17 +144,12 @@ public class ElementCollectionEditorModel<T> {
 
 		final T elementValue = valueConverter.convertToValue(newElement);
 
-		rowElements.add(new RowElement<>(elementValue));
 		elements.add(elementValue);
-	}
 
-	/**
-	 * Convert the given row to its string representation
-	 * @param element
-	 * @return the string representation of the given row
-	 */
-	public String convertToString(RowElement<T> element) {
-		return valueConverter.convertToString(element.getValue());
+		// Reset the value to display all elements after adding a new one
+		newElement = null;
+
+		refreshElementsToBeDisplayed();
 	}
 
 	/**
@@ -150,8 +157,8 @@ public class ElementCollectionEditorModel<T> {
 	 */
 	public void deleteElement() {
 		if (selectedElement != null) {
-			rowElements.remove(selectedElement);
-			elements.remove(selectedElement.getValue());
+			elements.remove(valueConverter.convertToValue(selectedElement.getValue()));
+			refreshElementsToBeDisplayed();
 		}
 	}
 
@@ -159,8 +166,8 @@ public class ElementCollectionEditorModel<T> {
 	 * Delete all elements
 	 */
 	public void deleteAll() {
-		rowElements.clear();
 		elements.clear();
+		refreshElementsToBeDisplayed();
 	}
 
 }

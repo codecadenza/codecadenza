@@ -36,8 +36,10 @@ import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.renderer.TextRenderer;
+import com.vaadin.flow.data.value.ValueChangeMode;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import net.codecadenza.runtime.conversion.ValueConverter;
 import net.codecadenza.runtime.webclient.vaadin.dialog.InfoMessageDialog;
 import net.codecadenza.runtime.webclient.vaadin.i18n.I18NService;
@@ -61,7 +63,7 @@ public abstract class AbstractElementCollectionEditor<T> extends VerticalLayout 
 	protected final PreferencesStore preferences;
 	protected final transient ValueConverter<T> valueConverter;
 	protected final Class<T> elementType;
-	protected final Grid<T> grid = new Grid<>();
+	protected final Grid<String> grid = new Grid<>();
 	protected final InternalI18NService internalI18n;
 	protected transient Collection<T> elements = new ArrayList<>();
 	protected boolean readOnly;
@@ -94,6 +96,8 @@ public abstract class AbstractElementCollectionEditor<T> extends VerticalLayout 
 		if (!readOnly) {
 			final var txtInput = new TextField();
 			txtInput.setValue(valueConverter.getInitialDefaultValue());
+			txtInput.setValueChangeMode(ValueChangeMode.LAZY);
+			txtInput.addValueChangeListener(event -> refreshGrid(event.getValue()));
 
 			final var cmdAdd = new Button(internalI18n.getTranslation(CMD_ADD));
 
@@ -102,7 +106,7 @@ public abstract class AbstractElementCollectionEditor<T> extends VerticalLayout 
 					final T newElement = valueConverter.convertToValue(txtInput.getValue());
 
 					elements.add(newElement);
-					grid.setItems(elements);
+					refreshGrid(null);
 				}
 				catch (final Exception ex) {
 					new InfoMessageDialog(internalI18n.getTranslation(ABSTRACT_ELEMENT_COLLECTION_EDITOR_MSG_TITLE_CONVERSION),
@@ -120,7 +124,7 @@ public abstract class AbstractElementCollectionEditor<T> extends VerticalLayout 
 			hlAdd.setDefaultVerticalComponentAlignment(Alignment.CENTER);
 		}
 
-		grid.addColumn(new TextRenderer<>(valueConverter::convertToString));
+		grid.addColumn(new TextRenderer<>());
 		grid.setSelectionMode(Grid.SelectionMode.SINGLE);
 
 		if (!readOnly) {
@@ -130,11 +134,11 @@ public abstract class AbstractElementCollectionEditor<T> extends VerticalLayout 
 			mniDelete.setId("mniDelete");
 
 			mniDelete.addClickListener(e -> {
-				final T selectedItem = grid.getSelectedItems().stream().findFirst().orElse(null);
+				final String selectedItem = grid.getSelectedItems().stream().findFirst().orElse(null);
 
 				if (selectedItem != null) {
-					elements.remove(selectedItem);
-					grid.setItems(elements);
+					elements.remove(valueConverter.convertToValue(selectedItem));
+					refreshGrid(null);
 				}
 			});
 
@@ -143,13 +147,29 @@ public abstract class AbstractElementCollectionEditor<T> extends VerticalLayout 
 
 			mniDeleteAllItems.addClickListener(e -> {
 				elements.clear();
-				grid.setItems(elements);
+				refreshGrid(null);
 			});
 
 			add(hlAdd);
 		}
 
 		add(grid);
+	}
+
+	/**
+	 * Refresh the {@link Grid} with the elements to be displayed
+	 * @param filter the filter for elements to be displayed
+	 */
+	protected void refreshGrid(String filter) {
+		final List<String> filteredElements;
+
+		if (filter != null && !filter.isEmpty())
+			filteredElements = elements.stream().sorted().map(valueConverter::convertToString).filter(item -> item.startsWith(filter))
+					.toList();
+		else
+			filteredElements = elements.stream().sorted().map(valueConverter::convertToString).toList();
+
+		grid.setItems(filteredElements);
 	}
 
 }

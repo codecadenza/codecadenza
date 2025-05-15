@@ -24,6 +24,7 @@ package net.codecadenza.runtime.webclient.vaadin.component;
 import com.vaadin.flow.component.HasValue;
 import com.vaadin.flow.component.HasValue.ValueChangeEvent;
 import com.vaadin.flow.shared.Registration;
+import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
 import net.codecadenza.runtime.webclient.vaadin.i18n.I18NService;
@@ -61,7 +62,7 @@ public class ElementCollectionSetEditor<T> extends AbstractElementCollectionEdit
 	 */
 	@Override
 	public Set<T> getValue() {
-		return elements.stream().collect(Collectors.toSet());
+		return elements.stream().collect(Collectors.toCollection(HashSet::new));
 	}
 
 	/*
@@ -72,7 +73,7 @@ public class ElementCollectionSetEditor<T> extends AbstractElementCollectionEdit
 	public void setValue(Set<T> value) {
 		elements = value;
 
-		grid.setItems(value);
+		refreshGrid(null);
 	}
 
 	/*

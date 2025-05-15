@@ -180,6 +180,8 @@ public class JSFElementCollectionEditorFieldGenerator extends AbstractJSFFieldGe
 			b.append("value=\"#{" + EL_I18N_VAR + ".element_collection_editor_lbl_add}&#160;\"/>\n");
 			b.append("\t\t\t<p:inputText autocomplete=\"off\" id=\"" + inputId + "\" ");
 			b.append("size=\"40\" value=\"#{" + modelBinding + ".newElement}\">\n");
+			b.append("\t\t\t\t<p:ajax event=\"keyup\" update=\"" + tableId + "\" ");
+			b.append("listener=\"#{" + modelBinding + ".refreshElementsToBeDisplayed}\"/>\n");
 			b.append("\t\t\t</p:inputText>\n");
 			b.append("\t\t\t<p:commandButton value=\"#{" + EL_I18N_VAR + ".command_add}\" id=\"" + buttonId + "\" ");
 			b.append("action=\"#{" + managedBeanName + "." + addMethodName + "}\"\n");
@@ -201,7 +203,7 @@ public class JSFElementCollectionEditorFieldGenerator extends AbstractJSFFieldGe
 		b.append("\t\t\t\t<f:facet name=\"header\">\n");
 		b.append("\t\t\t\t\t<h:outputText value=\"#{" + EL_I18N_VAR + ".element_collection_editor_col_header_element}\"/>\n");
 		b.append("\t\t\t\t</f:facet>\n");
-		b.append("\t\t\t\t<h:outputText value=\"#{" + modelBinding + ".convertToString(item)}\"/>\n");
+		b.append("\t\t\t\t<h:outputText value=\"#{item.value}\"/>\n");
 		b.append("\t\t\t</p:column>\n\n");
 		b.append("\t\t</p:dataTable>\n");
 

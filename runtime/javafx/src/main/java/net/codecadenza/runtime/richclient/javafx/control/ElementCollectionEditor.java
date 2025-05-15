@@ -35,6 +35,7 @@ import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.List;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.HPos;
@@ -42,7 +43,6 @@ import javafx.geometry.Insets;
 import javafx.scene.control.Button;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.Label;
-import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.SelectionMode;
@@ -53,7 +53,6 @@ import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
-import javafx.util.Callback;
 import net.codecadenza.runtime.conversion.ValueConverter;
 import net.codecadenza.runtime.richclient.format.FormatDTO;
 import net.codecadenza.runtime.richclient.format.FormatPreferencesManager;
@@ -80,9 +79,9 @@ public class ElementCollectionEditor<T> extends VBox {
 	protected final boolean readonly;
 	protected final Class<T> elementType;
 	protected final ValueConverter<T> valueConverter;
-	protected final ObservableList<T> observableList = FXCollections.observableArrayList();
+	protected final ObservableList<String> observableList = FXCollections.observableArrayList();
 	protected Collection<T> elements = Collections.emptyList();
-	protected ListView<T> elementList;
+	protected ListView<String> elementList;
 
 	/**
 	 * Constructor
@@ -114,7 +113,8 @@ public class ElementCollectionEditor<T> extends VBox {
 	 */
 	public void setElements(Collection<T> elements) {
 		this.elements = elements;
-		observableList.addAll(elements);
+
+		refreshListView(null);
 	}
 
 	/**
@@ -135,6 +135,7 @@ public class ElementCollectionEditor<T> extends VBox {
 
 			final var txtAdd = new TextField();
 			txtAdd.setText(valueConverter.getInitialDefaultValue());
+			txtAdd.textProperty().addListener((observable, oldValue, newValue) -> refreshListView(newValue));
 
 			final var cmdAdd = new Button(getTranslation(CMD_ADD));
 
@@ -146,7 +147,7 @@ public class ElementCollectionEditor<T> extends VBox {
 					final T newElement = valueConverter.convertToValue(txtAdd.getText());
 
 					elements.add(newElement);
-					observableList.add(newElement);
+					refreshListView(null);
 				}
 				catch (final Exception ex) {
 					DialogUtil.openInformationDialog(null, getTranslation(ELEMENT_COLLECTION_EDITOR_MSG_TITLE_CONVERSION),
@@ -161,7 +162,6 @@ public class ElementCollectionEditor<T> extends VBox {
 		}
 
 		elementList = new ListView<>();
-		elementList.setCellFactory(new InternalCallback());
 		elementList.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
 		elementList.setPrefHeight(200);
 		elementList.setMaxHeight(Double.MAX_VALUE);
@@ -179,8 +179,8 @@ public class ElementCollectionEditor<T> extends VBox {
 
 			final var mniDeleteAll = new MenuItem(getTranslation(ACTION_DELETE_ALL_TITLE));
 			mniDeleteAll.setOnAction(action -> {
-				observableList.clear();
 				elements.clear();
+				refreshListView(null);
 			});
 
 			final var contextMenu = new ContextMenu();
@@ -220,42 +220,31 @@ public class ElementCollectionEditor<T> extends VBox {
 	}
 
 	/**
-	 * Delete the selected item
+	 * Refresh the {@link ListView} that contains the visual representation of the elements
+	 * @param filter the filter for elements to be displayed
 	 */
-	private void deleteSelectedItem() {
-		final T selectedItem = elementList.getSelectionModel().getSelectedItem();
+	protected void refreshListView(String filter) {
+		final List<String> filteredElements;
 
-		if (selectedItem != null) {
-			elements.remove(selectedItem);
-			observableList.remove(selectedItem);
-		}
+		if (filter != null && !filter.isEmpty())
+			filteredElements = elements.stream().sorted().map(valueConverter::convertToString).filter(item -> item.startsWith(filter))
+					.toList();
+		else
+			filteredElements = elements.stream().sorted().map(valueConverter::convertToString).toList();
+
+		observableList.clear();
+		observableList.addAll(filteredElements);
 	}
 
 	/**
-	 * Overwrite the textual representation of a {@link ListCell}
+	 * Delete the selected item
 	 */
-	private class InternalCallback implements Callback<ListView<T>, ListCell<T>> {
-		/*
-		 * (non-Javadoc)
-		 * @see javafx.util.Callback#call(java.lang.Object)
-		 */
-		@Override
-		public ListCell<T> call(ListView<T> arg0) {
-			return new ListCell<>() {
-				/*
-				 * (non-Javadoc)
-				 * @see javafx.scene.control.Cell#updateItem(java.lang.Object, boolean)
-				 */
-				@Override
-				protected void updateItem(T t, boolean bln) {
-					super.updateItem(t, bln);
+	protected void deleteSelectedItem() {
+		final String selectedItem = elementList.getSelectionModel().getSelectedItem();
 
-					if (t != null)
-						setText(valueConverter.convertToString(t));
-					else
-						setText("");
-				}
-			};
+		if (selectedItem != null) {
+			elements.remove(valueConverter.convertToValue(selectedItem));
+			refreshListView(null);
 		}
 	}
 }
