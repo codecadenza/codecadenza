@@ -25,6 +25,7 @@ import static net.codecadenza.runtime.richclient.javafx.i18n.I18NJavaFX.ACTION_D
 import static net.codecadenza.runtime.richclient.javafx.i18n.I18NJavaFX.ACTION_DELETE_TITLE;
 import static net.codecadenza.runtime.richclient.javafx.i18n.I18NJavaFX.CMD_ADD;
 import static net.codecadenza.runtime.richclient.javafx.i18n.I18NJavaFX.ELEMENT_COLLECTION_EDITOR_LBL_ADD;
+import static net.codecadenza.runtime.richclient.javafx.i18n.I18NJavaFX.ELEMENT_COLLECTION_EDITOR_LBL_NUMBER_OF_ELEMENTS;
 import static net.codecadenza.runtime.richclient.javafx.i18n.I18NJavaFX.ELEMENT_COLLECTION_EDITOR_MSG_CONVERSION_FAILED;
 import static net.codecadenza.runtime.richclient.javafx.i18n.I18NJavaFX.ELEMENT_COLLECTION_EDITOR_MSG_TITLE_CONVERSION;
 import static net.codecadenza.runtime.richclient.javafx.i18n.I18NJavaFX.getTranslation;
@@ -80,6 +81,7 @@ public class ElementCollectionEditor<T> extends VBox {
 	protected final Class<T> elementType;
 	protected final ValueConverter<T> valueConverter;
 	protected final ObservableList<String> observableList = FXCollections.observableArrayList();
+	protected final Label lblNumberOfElements = new Label();
 	protected Collection<T> elements = Collections.emptyList();
 	protected ListView<String> elementList;
 
@@ -197,6 +199,7 @@ public class ElementCollectionEditor<T> extends VBox {
 				panTitleContent.getChildren().add(panAdd);
 
 			panTitleContent.getChildren().add(elementList);
+			panTitleContent.getChildren().add(lblNumberOfElements);
 
 			final var panTitle = new TitledPane(title, panTitleContent);
 			panTitle.setCollapsible(false);
@@ -214,6 +217,7 @@ public class ElementCollectionEditor<T> extends VBox {
 				getChildren().add(panAdd);
 
 			getChildren().add(elementList);
+			getChildren().add(lblNumberOfElements);
 
 			VBox.setVgrow(elementList, Priority.ALWAYS);
 		}
@@ -231,6 +235,8 @@ public class ElementCollectionEditor<T> extends VBox {
 					.toList();
 		else
 			filteredElements = elements.stream().sorted().map(valueConverter::convertToString).toList();
+
+		lblNumberOfElements.setText(getTranslation(ELEMENT_COLLECTION_EDITOR_LBL_NUMBER_OF_ELEMENTS, elements.size()));
 
 		observableList.clear();
 		observableList.addAll(filteredElements);

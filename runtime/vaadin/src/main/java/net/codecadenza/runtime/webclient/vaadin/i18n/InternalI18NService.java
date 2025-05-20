@@ -38,6 +38,7 @@ public class InternalI18NService extends AbstractI18NService {
 	private static final long serialVersionUID = 6018555612223358244L;
 	public static final String ABSTRACT_DATA_GRID_ACTION_REFRESH = "abstract_data_grid.action_refresh";
 	public static final String ABSTRACT_ELEMENT_COLLECTION_EDITOR_LBL_ADD = "abstract_element_collection_editor.lbl_add";
+	public static final String ABSTRACT_ELEMENT_COLLECTION_EDITOR_LBL_NUMBER_OF_ELEMENTS = "abstract_element_collection_editor.lbl_number_of_elements";
 	public static final String ABSTRACT_ELEMENT_COLLECTION_EDITOR_MSG_TITLE_CONVERSION = "abstract_element_collection_editor.msg_title_conversion";
 	public static final String ABSTRACT_ELEMENT_COLLECTION_EDITOR_MSG_CONVERSION_FAILED = "abstract_element_collection_editor.msg_conversion_failed";
 	public static final String DUAL_LIST_FIELD_LEFT_COL = "dual_list_field.list_left_col";

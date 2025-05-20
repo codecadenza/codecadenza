@@ -42,6 +42,7 @@ public class I18NEclipse {
 	public static final String ABSTRACT_CHANGE_PASSWORD_DIALOG_TITLE = "abstract_change_password_dialog.title";
 	public static final String ABSTRACT_CHANGE_PASSWORD_DIALOG_TITLE_MESSAGE = "abstract_change_password_dialog.title_message";
 	public static final String ABSTRACT_ELEMENT_COLLECTION_EDITOR_LBL_ADD = "abstract_element_collection_editor.lbl_add";
+	public static final String ABSTRACT_ELEMENT_COLLECTION_EDITOR_LBL_NUMBER_OF_ELEMENTS = "abstract_element_collection_editor.lbl_number_of_elements";
 	public static final String ABSTRACT_ELEMENT_COLLECTION_EDITOR_MSG_TITLE_CONVERSION = "abstract_element_collection_editor.msg_title_conversion";
 	public static final String ABSTRACT_ELEMENT_COLLECTION_EDITOR_MSG_CONVERSION_FAILED = "abstract_element_collection_editor.msg_conversion_failed";
 	public static final String ABSTRACT_COLUMN_SORT_LISTENER_MSG_ERR_COL_NOT_FOUND = "abstract_column_sort_listener.msg_err_col_not_found";

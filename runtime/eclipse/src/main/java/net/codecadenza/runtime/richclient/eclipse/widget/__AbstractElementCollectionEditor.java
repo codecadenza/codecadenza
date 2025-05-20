@@ -22,6 +22,7 @@
 package net.codecadenza.runtime.richclient.eclipse.widget;
 
 import static net.codecadenza.runtime.richclient.eclipse.i18n.I18NEclipse.ABSTRACT_ELEMENT_COLLECTION_EDITOR_LBL_ADD;
+import static net.codecadenza.runtime.richclient.eclipse.i18n.I18NEclipse.ABSTRACT_ELEMENT_COLLECTION_EDITOR_LBL_NUMBER_OF_ELEMENTS;
 import static net.codecadenza.runtime.richclient.eclipse.i18n.I18NEclipse.ABSTRACT_ELEMENT_COLLECTION_EDITOR_MSG_CONVERSION_FAILED;
 import static net.codecadenza.runtime.richclient.eclipse.i18n.I18NEclipse.ABSTRACT_ELEMENT_COLLECTION_EDITOR_MSG_TITLE_CONVERSION;
 import static net.codecadenza.runtime.richclient.eclipse.i18n.I18NEclipse.CMD_ADD;
@@ -72,6 +73,7 @@ public abstract class __AbstractElementCollectionEditor<T> extends Composite {
 	protected final FormatDTO formatPreferences;
 	protected Collection<T> elements = Collections.emptyList();
 	protected ListViewer listViewer;
+	protected Label lblNumberOfElements;
 
 	/**
 	 * Create the editor
@@ -164,6 +166,8 @@ public abstract class __AbstractElementCollectionEditor<T> extends Composite {
 		listViewer = new ListViewer(this, SWT.V_SCROLL | SWT.MULTI | SWT.H_SCROLL | SWT.BORDER);
 		listViewer.setContentProvider(new ListContentProvider());
 
+		lblNumberOfElements = new Label(this, SWT.NONE);
+
 		final List list = listViewer.getList();
 		list.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 
@@ -226,6 +230,8 @@ public abstract class __AbstractElementCollectionEditor<T> extends Composite {
 		else
 			viewModel = elements.stream().sorted().map(valueConverter::convertToString).filter(item -> item.startsWith(filter))
 					.toList();
+
+		lblNumberOfElements.setText(getTranslation(ABSTRACT_ELEMENT_COLLECTION_EDITOR_LBL_NUMBER_OF_ELEMENTS, elements.size()));
 
 		listViewer.setInput(viewModel);
 	}

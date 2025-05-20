@@ -7,11 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 ### Added
-2025-05-15: Add the filtering of elements displayed in the element collection editors for all supported client technologies
+2025-05-20: Add a label for the total number of elements to the element collection editors of all supported client technologies
+### Added
+2025-05-15: Add the filtering of elements displayed in the element collection editors of all supported client technologies
 ### Fixed
 2025-05-15: Disable fields in the property sheet that must not be changed for attributes that are mapped to an element collection
 ### Changed
-2025-05-15: Add a check to prevent the duplicate initialization of an element collection attribute during a subsequent reverse
+2025-05-14: Add a check to prevent the duplicate initialization of an element collection attribute during a subsequent reverse
             engineering process
 ### Changed
 2025-05-11: Disable the field that controls if a domain attribute is nullable for element collections in the respective reverse

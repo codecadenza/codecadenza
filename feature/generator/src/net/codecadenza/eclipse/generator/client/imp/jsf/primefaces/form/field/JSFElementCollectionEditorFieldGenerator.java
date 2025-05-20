@@ -205,6 +205,11 @@ public class JSFElementCollectionEditorFieldGenerator extends AbstractJSFFieldGe
 		b.append("\t\t\t\t</f:facet>\n");
 		b.append("\t\t\t\t<h:outputText value=\"#{item.value}\"/>\n");
 		b.append("\t\t\t</p:column>\n\n");
+		b.append("\t\t\t<f:facet name=\"footer\">\n");
+		b.append("\t\t\t\t<div style=\"white-space: nowrap; font-weight: bold;\">\n");
+		b.append("\t\t\t\t\t#{i18n.element_collection_editor_lbl_no_of_elements} #{" + modelBinding + ".elements.size()}\n");
+		b.append("\t\t\t\t</div>\n");
+		b.append("\t\t\t</f:facet>\n");
 		b.append("\t\t</p:dataTable>\n");
 
 		if (!field.isReadonly()) {

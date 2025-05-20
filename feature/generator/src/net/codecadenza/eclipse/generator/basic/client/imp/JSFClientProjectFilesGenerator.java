@@ -554,6 +554,7 @@ public class JSFClientProjectFilesGenerator extends AbstractClientProjectFilesGe
 		b.append("msg_session_exp_title=The application has been left inactive for a while!\n");
 		b.append("msg_session_exp_desc=Due to security reasons it is necessary that you login again!\n");
 		b.append("element_collection_editor_lbl_add=Value for a new element\n");
+		b.append("element_collection_editor_lbl_no_of_elements=Number of elements:\n");
 		b.append("element_collection_editor_col_header_element=Element\n");
 		b.append("element_collection_editor_action_delete=Delete\n");
 		b.append("element_collection_editor_action_delete_all=Delete all\n");

@@ -25,6 +25,7 @@ import static net.codecadenza.runtime.richclient.swing.i18n.I18NSwing.ELEMENT_CO
 import static net.codecadenza.runtime.richclient.swing.i18n.I18NSwing.ELEMENT_COLLECTION_EDITOR_ACTION_DELETE_ALL;
 import static net.codecadenza.runtime.richclient.swing.i18n.I18NSwing.ELEMENT_COLLECTION_EDITOR_CMD_ADD;
 import static net.codecadenza.runtime.richclient.swing.i18n.I18NSwing.ELEMENT_COLLECTION_EDITOR_LBL_ADD;
+import static net.codecadenza.runtime.richclient.swing.i18n.I18NSwing.ELEMENT_COLLECTION_EDITOR_LBL_NUMBER_OF_ELEMENTS;
 import static net.codecadenza.runtime.richclient.swing.i18n.I18NSwing.ELEMENT_COLLECTION_EDITOR_MSG_CONVERSION_FAILED;
 import static net.codecadenza.runtime.richclient.swing.i18n.I18NSwing.ELEMENT_COLLECTION_EDITOR_MSG_TITLE_CONVERSION;
 import static net.codecadenza.runtime.richclient.swing.i18n.I18NSwing.getTranslation;
@@ -76,6 +77,7 @@ public class ElementCollectionEditor<T> extends JPanel {
 	protected final Class<T> elementType;
 	protected final DefaultListModel<String> listModel = new DefaultListModel<>();
 	protected final transient ValueConverter<T> valueConverter;
+	protected final JLabel lblNumberOfElements = new JLabel();
 	protected transient Collection<T> elements = java.util.Collections.emptyList();
 	protected JList<String> elementList;
 
@@ -163,6 +165,8 @@ public class ElementCollectionEditor<T> extends JPanel {
 		elementList = new JList<>(listModel);
 		elementList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
+		add(lblNumberOfElements, BorderLayout.SOUTH);
+
 		if (!readonly) {
 			elementList.addKeyListener(new KeyAdapter() {
 				/*
@@ -208,6 +212,8 @@ public class ElementCollectionEditor<T> extends JPanel {
 					.toList();
 		else
 			filteredElements = elements.stream().sorted().map(valueConverter::convertToString).toList();
+
+		lblNumberOfElements.setText(getTranslation(ELEMENT_COLLECTION_EDITOR_LBL_NUMBER_OF_ELEMENTS, elements.size()));
 
 		listModel.clear();
 		listModel.addAll(filteredElements);

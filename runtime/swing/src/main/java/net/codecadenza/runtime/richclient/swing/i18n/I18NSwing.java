@@ -50,6 +50,7 @@ public class I18NSwing {
 	public static final String ELEMENT_COLLECTION_EDITOR_ACTION_DELETE_ALL = "element_collection_editor.action_delete_all";
 	public static final String ELEMENT_COLLECTION_EDITOR_CMD_ADD = "element_collection_editor.cmd_add";
 	public static final String ELEMENT_COLLECTION_EDITOR_LBL_ADD = "element_collection_editor.lbl_add";
+	public static final String ELEMENT_COLLECTION_EDITOR_LBL_NUMBER_OF_ELEMENTS = "element_collection_editor.lbl_number_of_elements";
 	public static final String ELEMENT_COLLECTION_EDITOR_MSG_TITLE_CONVERSION = "element_collection_editor.msg_title_conversion";
 	public static final String ELEMENT_COLLECTION_EDITOR_MSG_CONVERSION_FAILED = "element_collection_editor.msg_conversion_failed";
 	public static final String ABSTRACT_COLUMN_SORT_LISTENER_MSG_ERR_COL_NOT_FOUND = "abstract_column_sort_listener.msg_err_col_not_found";

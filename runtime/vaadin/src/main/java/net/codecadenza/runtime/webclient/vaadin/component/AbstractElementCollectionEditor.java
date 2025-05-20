@@ -22,6 +22,7 @@
 package net.codecadenza.runtime.webclient.vaadin.component;
 
 import static net.codecadenza.runtime.webclient.vaadin.i18n.InternalI18NService.ABSTRACT_ELEMENT_COLLECTION_EDITOR_LBL_ADD;
+import static net.codecadenza.runtime.webclient.vaadin.i18n.InternalI18NService.ABSTRACT_ELEMENT_COLLECTION_EDITOR_LBL_NUMBER_OF_ELEMENTS;
 import static net.codecadenza.runtime.webclient.vaadin.i18n.InternalI18NService.ABSTRACT_ELEMENT_COLLECTION_EDITOR_MSG_CONVERSION_FAILED;
 import static net.codecadenza.runtime.webclient.vaadin.i18n.InternalI18NService.ABSTRACT_ELEMENT_COLLECTION_EDITOR_MSG_TITLE_CONVERSION;
 import static net.codecadenza.runtime.webclient.vaadin.i18n.InternalI18NService.CMD_ADD;
@@ -67,6 +68,7 @@ public abstract class AbstractElementCollectionEditor<T> extends VerticalLayout 
 	protected final InternalI18NService internalI18n;
 	protected transient Collection<T> elements = new ArrayList<>();
 	protected boolean readOnly;
+	protected final NativeLabel lblNumberOfElements = new NativeLabel();
 
 	/**
 	 * Constructor
@@ -154,6 +156,7 @@ public abstract class AbstractElementCollectionEditor<T> extends VerticalLayout 
 		}
 
 		add(grid);
+		add(lblNumberOfElements);
 	}
 
 	/**
@@ -161,6 +164,8 @@ public abstract class AbstractElementCollectionEditor<T> extends VerticalLayout 
 	 * @param filter the filter for elements to be displayed
 	 */
 	protected void refreshGrid(String filter) {
+		final String msgNumberOfElements = internalI18n.getTranslation(ABSTRACT_ELEMENT_COLLECTION_EDITOR_LBL_NUMBER_OF_ELEMENTS,
+				elements.size());
 		final List<String> filteredElements;
 
 		if (filter != null && !filter.isEmpty())
@@ -169,6 +174,7 @@ public abstract class AbstractElementCollectionEditor<T> extends VerticalLayout 
 		else
 			filteredElements = elements.stream().sorted().map(valueConverter::convertToString).toList();
 
+		lblNumberOfElements.setText(msgNumberOfElements);
 		grid.setItems(filteredElements);
 	}
 
