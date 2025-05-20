@@ -461,9 +461,9 @@ public class NewDomainAttributeDialog extends CodeCadenzaDialog {
 				txtAttributeLabel.setText(EclipseIDEService.buildDefaultLabel(txtAttributeName.getText()));
 
 				if (selectedType == CollectionTypeEnumeration.NONE)
-					txtAttributeLabelPlural.setText(txtAttributeLabel.getText());
-				else
 					txtAttributeLabelPlural.setText(EclipseIDEService.buildDefaultPluralLabel(txtAttributeName.getText()));
+				else
+					txtAttributeLabelPlural.setText(txtAttributeLabel.getText());
 
 				txtDBColumnName.setText(EclipseIDEService.buildDefaultColumnName(txtAttributeName.getText()));
 			}
@@ -531,9 +531,9 @@ public class NewDomainAttributeDialog extends CodeCadenzaDialog {
 						.valueOf(cboCollectionType.getItem(cboCollectionType.getSelectionIndex()));
 
 				if (selectedType == CollectionTypeEnumeration.NONE)
-					txtAttributeLabelPlural.setText(txtAttributeLabel.getText());
-				else
 					txtAttributeLabelPlural.setText(EclipseIDEService.buildDefaultPluralForm(txtAttributeLabel.getText()));
+				else
+					txtAttributeLabelPlural.setText(txtAttributeLabel.getText());
 
 				txtDBColumnName.setText(txtAttributeLabel.getText().toLowerCase().replace(" ", "_").replace(".", ""));
 			}

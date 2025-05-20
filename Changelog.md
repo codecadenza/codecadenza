@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## Unreleased
+### Fixed
+2025-05-20: Fix generation of wrong plural label when creating a new domain attribute
 ### Added
 2025-05-20: Add a label for the total number of elements to the element collection editors of all supported client technologies
 ### Added
