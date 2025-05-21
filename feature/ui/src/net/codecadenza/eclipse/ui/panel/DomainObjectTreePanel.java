@@ -226,8 +226,7 @@ public class DomainObjectTreePanel extends Composite {
 	}
 
 	/**
-	 * Set the internal flag that controls the tree view structure and the behaviour when dragging items. This flag is only used in
-	 * mode DTO!
+	 * Set the internal flag that controls the tree view structure and the behaviour when dragging items
 	 * @param standardConversion
 	 */
 	public void setStandardConversion(boolean standardConversion) {
@@ -491,8 +490,14 @@ public class DomainObjectTreePanel extends Composite {
 
 				itemText += " (" + attr.getTypeName() + ")";
 			}
-			else
+			else {
+				// Transient fields, byte arrays or element collections are not supported for search operations!
+				if (mode == Mode.STANDARD && !standardConversion
+						&& (!attr.isPersistent() || attr.isLob() || attr.getCollectionType() != CollectionTypeEnumeration.NONE))
+					continue;
+
 				itemText = attr.getTypeName() + " " + attr.getName();
+			}
 
 			final var item = new TreeItem(parentItem, SWT.NONE);
 			item.setText(itemText);

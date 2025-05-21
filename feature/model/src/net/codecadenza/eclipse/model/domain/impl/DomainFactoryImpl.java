@@ -448,7 +448,6 @@ public class DomainFactoryImpl extends EFactoryImpl implements DomainFactory {
 	 * @return the String value
 	 * @generated
 	 */
-	@SuppressWarnings("unused")
 	public CollectionTypeEnumeration createCollectionTypeEnumerationFromString(EDataType eDataType, String instanceValue) {
 		final CollectionTypeEnumeration result = CollectionTypeEnumeration.get(instanceValue);
 

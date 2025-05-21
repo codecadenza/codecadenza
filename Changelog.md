@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 ### Fixed
+2025-05-21: Avoid adding DTO attributes that are mapped to transient fields, byte arrays, or element collections if the DTO is
+            intended for search operations
+### Fixed
+2025-05-20: Avoid adding attributes to a DTO that are mapped to transient fields, byte arrays, or element collections if the DTO
+            is intended for search operations
+### Fixed
 2025-05-20: Fix generation of wrong plural label when creating a new domain attribute
 ### Added
 2025-05-20: Add a label for the total number of elements to the element collection editors of all supported client technologies
