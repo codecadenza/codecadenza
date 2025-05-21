@@ -31,6 +31,7 @@ import java.util.Optional;
 import java.util.stream.Stream;
 import net.codecadenza.eclipse.model.boundary.BoundaryBean;
 import net.codecadenza.eclipse.model.domain.AbstractDomainAssociation;
+import net.codecadenza.eclipse.model.domain.CollectionTypeEnumeration;
 import net.codecadenza.eclipse.model.domain.DomainAttribute;
 import net.codecadenza.eclipse.model.domain.DomainObject;
 import net.codecadenza.eclipse.model.domain.ManyToManyAssociation;
@@ -220,6 +221,12 @@ public class EditDTODialog extends CodeCadenzaDialog {
 		int tokenHierarchyCounter = 1;
 
 		if (domainAttribute != null) {
+			// Avoid adding DTO attributes that are mapped to transient fields, byte arrays, or element collections if the DTO is
+			// intended for search operations
+			if (!dtoBean.isStandardConversion() && (!domainAttribute.isPersistent() || domainAttribute.isLob()
+					|| domainAttribute.getCollectionType() != CollectionTypeEnumeration.NONE))
+				return;
+
 			dtoAttrName = domainAttribute.getName();
 
 			if (domainAssoc != null) {
