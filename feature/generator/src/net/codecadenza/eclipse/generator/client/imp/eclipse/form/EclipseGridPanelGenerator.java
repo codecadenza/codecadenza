@@ -47,6 +47,7 @@ import net.codecadenza.eclipse.model.domain.DomainAttribute;
 import net.codecadenza.eclipse.model.domain.OneToManyAssociation;
 import net.codecadenza.eclipse.model.dto.DTOBeanAttribute;
 import net.codecadenza.eclipse.model.exchange.DataExchangeMethod;
+import net.codecadenza.eclipse.model.java.JavaEnum;
 import net.codecadenza.eclipse.model.project.Project;
 import org.eclipse.emf.common.util.ECollections;
 import org.eclipse.emf.common.util.EList;
@@ -893,6 +894,12 @@ public class EclipseGridPanelGenerator extends AbstractJavaSourceGenerator {
 				// We should always return an empty string for boolean cells!
 				colIndex++;
 				continue;
+			}
+			else if (col.getFieldType() == TableColumnFieldTypeEnumeration.ENUM) {
+				final var javaEnum = (JavaEnum) col.getDTOAttribute().getDomainAttribute().getJavaType();
+
+				// Generate translations for all literals
+				javaEnum.getEnumerationValues().forEach(i18n::getI18N);
 			}
 
 			b.append("case " + colIndex++ + ":\n");

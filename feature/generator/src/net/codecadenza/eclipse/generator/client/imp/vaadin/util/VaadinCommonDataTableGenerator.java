@@ -134,6 +134,9 @@ public class VaadinCommonDataTableGenerator {
 			if (col.getFieldType() == TableColumnFieldTypeEnumeration.ENUM) {
 				final var javaEnum = (JavaEnum) col.getDTOAttribute().getDomainAttribute().getJavaType();
 
+				// Generate translations for all literals
+				javaEnum.getEnumerationValues().forEach(i18n::getI18N);
+
 				if (!firstColumn)
 					b.append("\n");
 				else
@@ -183,7 +186,6 @@ public class VaadinCommonDataTableGenerator {
 				b.append(", translationMap" + col.getColIndex());
 
 			b.append(");\n");
-
 			b.append(columnName + ".setWidth(\"" + col.getWidth() + "px\");\n");
 			b.append(columnName + ".setHeader(" + i18n.getI18N(col) + ");\n");
 		}

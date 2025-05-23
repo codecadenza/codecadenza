@@ -1065,6 +1065,9 @@ public class JSFTreeViewGenerator extends AbstractTreeViewGenerator {
 				b.append(node.getDTOAttribute().getDomainAttribute().convertToString("element") + "), " + parentNodeName + ");\n");
 			}
 			else {
+				if (attr.getDomainAttribute().getJavaType() instanceof final JavaEnum javaEnum)
+					javaEnum.getEnumerationValues().forEach(i18n::getI18N);
+
 				b.append("itemText = new StringBuilder();\n");
 				b.append(createItemText(attr, false, node.getLabel()));
 				b.append("new DefaultTreeNode<>(" + NODE_TYPE_DATA + ", new TreeNavigatorItem(itemText.toString()), node);\n");
@@ -1087,6 +1090,9 @@ public class JSFTreeViewGenerator extends AbstractTreeViewGenerator {
 		b.append("itemText = new StringBuilder();\n\n");
 
 		for (final DTOBeanAttribute attr : treeItem.getDisplayAttributes()) {
+			if (attr.getDomainAttribute().getJavaType() instanceof final JavaEnum javaEnum)
+				javaEnum.getEnumerationValues().forEach(i18n::getI18N);
+
 			b.append(createItemText(attr, isFirstAttribute, null));
 
 			if (numberOfDisplayAttributes > 1) {

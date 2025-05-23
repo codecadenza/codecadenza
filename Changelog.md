@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 ### Fixed
+2025-05-23: Save the translations for enum literals when creating either a grid panel, a tree view or a view form
+### Fixed
 2025-05-21: Avoid adding DTO attributes that are mapped to transient fields, byte arrays, or element collections if the DTO is
             intended for search operations
 ### Fixed

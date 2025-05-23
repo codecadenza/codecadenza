@@ -837,6 +837,9 @@ public class VaadinTreeViewGenerator extends AbstractTreeViewGenerator {
 		b.append("itemText = new StringBuilder();\n\n");
 
 		for (final DTOBeanAttribute attr : treeItem.getDisplayAttributes()) {
+			if (attr.getDomainAttribute().getJavaType() instanceof final JavaEnum javaEnum)
+				javaEnum.getEnumerationValues().forEach(i18n::getI18N);
+
 			b.append(createItemText(attr, isFirstAttribute, null));
 
 			if (numberOfDisplayAttributes > 1) {
@@ -977,6 +980,9 @@ public class VaadinTreeViewGenerator extends AbstractTreeViewGenerator {
 				b.append("}\n");
 			}
 			else {
+				if (attr.getDomainAttribute().getJavaType() instanceof final JavaEnum javaEnum)
+					javaEnum.getEnumerationValues().forEach(i18n::getI18N);
+
 				b.append("itemText = new StringBuilder();\n");
 				b.append(createItemText(attr, false, node.getLabel()) + "\n");
 				b.append("final var " + itemName + " = new TreeItem(");

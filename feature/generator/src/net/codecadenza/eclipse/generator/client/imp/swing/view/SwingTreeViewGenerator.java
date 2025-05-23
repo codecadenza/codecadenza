@@ -1073,6 +1073,9 @@ public class SwingTreeViewGenerator extends AbstractTreeViewGenerator {
 			final String getter = "i." + attr.getGetterName();
 			final boolean addNullCheck = !attr.getSearchType().isPrimitive();
 
+			if (attr.getDomainAttribute().getJavaType() instanceof final JavaEnum javaEnum)
+				javaEnum.getEnumerationValues().forEach(i18n::getI18N);
+
 			if (isFirstAttribute) {
 				isFirstAttribute = false;
 				isSecondAttribute = true;
@@ -1170,6 +1173,9 @@ public class SwingTreeViewGenerator extends AbstractTreeViewGenerator {
 				b.append("\n");
 			}
 			else {
+				if (type instanceof final JavaEnum javaEnum)
+					javaEnum.getEnumerationValues().forEach(i18n::getI18N);
+
 				b.append("\n");
 				b.append("final var " + nodeName + " = new DataTreeNode(" + i18n.getI18N(node.getDTOAttribute(), node.getLabel()));
 				b.append(" + ITEM_LABEL_SEPARATOR + ");

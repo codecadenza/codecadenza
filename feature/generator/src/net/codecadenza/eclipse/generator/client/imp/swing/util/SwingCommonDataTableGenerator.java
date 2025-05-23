@@ -259,6 +259,9 @@ public class SwingCommonDataTableGenerator {
 			if (col.getFieldType() == TableColumnFieldTypeEnumeration.ENUM) {
 				final var javaEnum = (JavaEnum) col.getDTOAttribute().getDomainAttribute().getJavaType();
 
+				// Generate translations for all literals
+				javaEnum.getEnumerationValues().forEach(i18n::getI18N);
+
 				b.append("return getTranslation(\"" + javaEnum.getName().toLowerCase());
 				b.append("_\" + element." + getter + ".name().toLowerCase());\n");
 			}

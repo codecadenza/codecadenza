@@ -807,6 +807,9 @@ public class JavaFXTreeViewGenerator extends AbstractTreeViewGenerator {
 		b.append("itemText.setLength(0);\n");
 
 		for (final DTOBeanAttribute attr : item.getDisplayAttributes()) {
+			if (attr.getDomainAttribute().getJavaType() instanceof final JavaEnum javaEnum)
+				javaEnum.getEnumerationValues().forEach(i18n::getI18N);
+
 			if (isFirstAttribute) {
 				isFirstAttribute = false;
 				isSecondAttribute = true;
@@ -911,6 +914,9 @@ public class JavaFXTreeViewGenerator extends AbstractTreeViewGenerator {
 				b.append("ImageLoader.getImage(ImageLoader.IMG_UNCHECKED));\n");
 			}
 			else {
+				if (type instanceof final JavaEnum javaEnum)
+					javaEnum.getEnumerationValues().forEach(i18n::getI18N);
+
 				b.append("\nfinal var " + nodeName + " = new TreeDataItem(");
 				b.append(i18n.getI18N(node.getDTOAttribute(), node.getLabel()) + " + ITEM_LABEL_SEPARATOR + ");
 				b.append(node.getDTOAttribute().getDomainAttribute().convertToString(getter));

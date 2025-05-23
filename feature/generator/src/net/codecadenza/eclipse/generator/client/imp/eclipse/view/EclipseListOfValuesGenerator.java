@@ -34,6 +34,7 @@ import net.codecadenza.eclipse.model.client.TableColumnField;
 import net.codecadenza.eclipse.model.client.TableColumnFieldTypeEnumeration;
 import net.codecadenza.eclipse.model.domain.DomainAttribute;
 import net.codecadenza.eclipse.model.dto.DTOBean;
+import net.codecadenza.eclipse.model.java.JavaEnum;
 import net.codecadenza.eclipse.model.project.Project;
 import org.eclipse.emf.common.util.ECollections;
 import org.eclipse.emf.common.util.EList;
@@ -294,6 +295,13 @@ public class EclipseListOfValuesGenerator extends AbstractJavaSourceGenerator {
 		for (final TableColumnField col : cols) {
 			if (!col.isVisible())
 				continue;
+
+			if (col.getFieldType() == TableColumnFieldTypeEnumeration.ENUM) {
+				final var javaEnum = (JavaEnum) col.getDTOAttribute().getDomainAttribute().getJavaType();
+
+				// Generate translations for all literals
+				javaEnum.getEnumerationValues().forEach(i18n::getI18N);
+			}
 
 			b.append("grid.addColumn(" + i18n.getI18N(col) + ", ColumnSortType.");
 

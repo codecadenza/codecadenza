@@ -937,6 +937,9 @@ public class EclipseTreeViewGenerator extends AbstractTreeViewGenerator {
 		boolean isSecondAttribute = false;
 
 		for (final DTOBeanAttribute attr : item.getDisplayAttributes()) {
+			if (attr.getDomainAttribute().getJavaType() instanceof final JavaEnum javaEnum)
+				javaEnum.getEnumerationValues().forEach(i18n::getI18N);
+
 			if (isFirstAttribute) {
 				isFirstAttribute = false;
 				isSecondAttribute = true;
@@ -1035,6 +1038,9 @@ public class EclipseTreeViewGenerator extends AbstractTreeViewGenerator {
 					b.append(nodeName + ".setImage(ImageCache.getImage(ImageCache.IMG_UNCHECKED));\n\n");
 				}
 				else {
+					if (type instanceof final JavaEnum javaEnum)
+						javaEnum.getEnumerationValues().forEach(i18n::getI18N);
+
 					b.append(nodeName + ".setText(" + i18n.getI18N(node.getDTOAttribute(), node.getLabel()));
 					b.append(" + ITEM_LABEL_SEPARATOR + ");
 					b.append(node.getDTOAttribute().getDomainAttribute().convertToString(getter) + ");\n");

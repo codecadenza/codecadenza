@@ -25,7 +25,9 @@ import net.codecadenza.eclipse.generator.client.common.i18n.RichClientI18NGenera
 import net.codecadenza.eclipse.generator.common.AbstractJavaSourceGenerator;
 import net.codecadenza.eclipse.model.client.FormTable;
 import net.codecadenza.eclipse.model.client.TableColumnField;
+import net.codecadenza.eclipse.model.client.TableColumnFieldTypeEnumeration;
 import net.codecadenza.eclipse.model.dto.DTOBean;
+import net.codecadenza.eclipse.model.java.JavaEnum;
 
 /**
  * <p>
@@ -126,6 +128,13 @@ public class JavaFXCommonDataTableGenerator {
 		for (final TableColumnField col : table.getFields()) {
 			if (!col.isVisible())
 				continue;
+
+			if (col.getFieldType() == TableColumnFieldTypeEnumeration.ENUM) {
+				final var javaEnum = (JavaEnum) col.getDTOAttribute().getDomainAttribute().getJavaType();
+
+				// Generate translations for all literals
+				javaEnum.getEnumerationValues().forEach(i18n::getI18N);
+			}
 
 			final String getter = "element." + col.getDTOAttribute().getGetterName();
 

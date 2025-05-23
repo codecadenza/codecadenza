@@ -247,9 +247,6 @@ public class JavaFXViewGenerator extends AbstractJavaSourceGenerator {
 			if (col.getFieldType() == TableColumnFieldTypeEnumeration.ENUM) {
 				final var javaEnum = (JavaEnum) col.getDTOAttribute().getDomainAttribute().getJavaType();
 
-				// Generate translations for all literals
-				javaEnum.getEnumerationValues().forEach(i18n::getI18N);
-
 				b.append("\nfinal var enumListValues" + col.getColIndex() + " = new HashMap<String, String>();\n");
 
 				for (final EnumLiteral value : javaEnum.getEnumerationValues()) {
