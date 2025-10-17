@@ -71,7 +71,7 @@ public interface TreeView extends Form {
 	EList<TreeSearchItem> getQuickSearchItems();
 
 	/**
-	 * Return the value of the '<em><b>Advanced Search Items</b></em>' containment reference. list The list contents are of type
+	 * Return the value of the '<em><b>Advanced Search Items</b></em>' containment reference list. The list contents are of type
 	 * {@link net.codecadenza.eclipse.model.client.TreeSearchItem}.
 	 * @return the value of the '<em>Advanced Search Items</em>' containment reference list
 	 * @see net.codecadenza.eclipse.model.client.ClientPackage#getTreeView_AdvancedSearchItems()

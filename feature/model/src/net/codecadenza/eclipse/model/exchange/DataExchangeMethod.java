@@ -254,7 +254,7 @@ public interface DataExchangeMethod extends ServiceMethod {
 	void setDefaultNumberFormat(String value);
 
 	/**
-	 * Return the value of the '<em><b>Association Controllers</b></em>' containment reference. list The list contents are of type
+	 * Return the value of the '<em><b>Association Controllers</b></em>' containment reference list. The list contents are of type
 	 * {@link net.codecadenza.eclipse.model.exchange.AssociationController}.
 	 * @return the value of the '<em>Association Controllers</em>' containment reference list
 	 * @see net.codecadenza.eclipse.model.exchange.ExchangePackage#getDataExchangeMethod_AssociationControllers()
