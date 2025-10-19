@@ -58,6 +58,10 @@ class ValueConverterTest {
 	private static final String TEST_CHAR_STRING = "X";
 	private static final int TEST_INTEGER = 123;
 	private static final String TEST_INTEGER_STRING = "123";
+	private static final short TEST_SHORT = 12;
+	private static final String TEST_SHORT_STRING = "12";
+	private static final byte TEST_BYTE = 0x61;
+	private static final String TEST_BYTE_STRING = "97";
 	private static final long TEST_LONG = 12345678L;
 	private static final String TEST_LONG_STRING = "12345678";
 	private static final double TEST_DOUBLE = 123.45678;
@@ -90,6 +94,18 @@ class ValueConverterTest {
 
 	@Test
 	void testCharacterConversion() {
+		final var converter = new ValueConverter<>(null, null, null, char.class);
+		final char convertedValue = converter.convertToValue(TEST_CHAR_STRING);
+
+		assertEquals(TEST_CHAR, convertedValue);
+
+		final String convertedString = converter.convertToString(TEST_CHAR);
+
+		assertEquals(TEST_CHAR_STRING, convertedString);
+	}
+
+	@Test
+	void testCharacterWrapperConversion() {
 		final var converter = new ValueConverter<>(null, null, null, Character.class);
 		final Character convertedValue = converter.convertToValue(TEST_CHAR_STRING);
 
@@ -110,7 +126,7 @@ class ValueConverterTest {
 	}
 
 	@Test
-	void testIntegerConversion() {
+	void testIntegerWrapperConversion() {
 		final var converter = new ValueConverter<>(null, null, null, Integer.class);
 		final Integer convertedValue = converter.convertToValue(TEST_INTEGER_STRING);
 
@@ -122,7 +138,67 @@ class ValueConverterTest {
 	}
 
 	@Test
-	void testLongConversion() {
+	void testIntegerConversion() {
+		final var converter = new ValueConverter<>(null, null, null, int.class);
+		final int convertedValue = converter.convertToValue(TEST_INTEGER_STRING);
+
+		assertEquals(TEST_INTEGER, convertedValue);
+
+		final String convertedString = converter.convertToString(TEST_INTEGER);
+
+		assertEquals(TEST_INTEGER_STRING, convertedString);
+	}
+
+	@Test
+	void testShortWrapperConversion() {
+		final var converter = new ValueConverter<>(null, null, null, Short.class);
+		final Short convertedValue = converter.convertToValue(TEST_SHORT_STRING);
+
+		assertEquals(TEST_SHORT, convertedValue);
+
+		final String convertedString = converter.convertToString(TEST_SHORT);
+
+		assertEquals(TEST_SHORT_STRING, convertedString);
+	}
+
+	@Test
+	void testShortConversion() {
+		final var converter = new ValueConverter<>(null, null, null, short.class);
+		final short convertedValue = converter.convertToValue(TEST_SHORT_STRING);
+
+		assertEquals(TEST_SHORT, convertedValue);
+
+		final String convertedString = converter.convertToString(TEST_SHORT);
+
+		assertEquals(TEST_SHORT_STRING, convertedString);
+	}
+
+	@Test
+	void testByteWrapperConversion() {
+		final var converter = new ValueConverter<>(null, null, null, Byte.class);
+		final Byte convertedValue = converter.convertToValue(TEST_BYTE_STRING);
+
+		assertEquals(TEST_BYTE, convertedValue);
+
+		final String convertedString = converter.convertToString(TEST_BYTE);
+
+		assertEquals(TEST_BYTE_STRING, convertedString);
+	}
+
+	@Test
+	void testByteConversion() {
+		final var converter = new ValueConverter<>(null, null, null, byte.class);
+		final byte convertedValue = converter.convertToValue(TEST_BYTE_STRING);
+
+		assertEquals(TEST_BYTE, convertedValue);
+
+		final String convertedString = converter.convertToString(TEST_BYTE);
+
+		assertEquals(TEST_BYTE_STRING, convertedString);
+	}
+
+	@Test
+	void testLongWrapperConversion() {
 		final var converter = new ValueConverter<>(null, null, null, Long.class);
 		final Long convertedValue = converter.convertToValue(TEST_LONG_STRING);
 
@@ -134,7 +210,31 @@ class ValueConverterTest {
 	}
 
 	@Test
+	void testLongConversion() {
+		final var converter = new ValueConverter<>(null, null, null, long.class);
+		final long convertedValue = converter.convertToValue(TEST_LONG_STRING);
+
+		assertEquals(TEST_LONG, convertedValue);
+
+		final String convertedString = converter.convertToString(TEST_LONG);
+
+		assertEquals(TEST_LONG_STRING, convertedString);
+	}
+
+	@Test
 	void testDoubleConversion() {
+		final var converter = new ValueConverter<>(DECIMAL_FORMAT, null, null, double.class);
+		final double convertedValue = converter.convertToValue(TEST_DOUBLE_STRING);
+
+		assertEquals(TEST_DOUBLE, convertedValue, 0.01);
+
+		final String convertedString = converter.convertToString(TEST_DOUBLE);
+
+		assertEquals(TEST_DOUBLE_STRING, convertedString);
+	}
+
+	@Test
+	void testDoubleWrapperConversion() {
 		final var converter = ValueConverter.getDoubleConverter(DECIMAL_FORMAT);
 		final Double convertedValue = converter.convertToValue(TEST_DOUBLE_STRING);
 
@@ -147,6 +247,18 @@ class ValueConverterTest {
 
 	@Test
 	void testFloatConversion() {
+		final var converter = new ValueConverter<>(DECIMAL_FORMAT, null, null, float.class);
+		final float convertedValue = converter.convertToValue(TEST_FLOAT_STRING);
+
+		assertEquals(TEST_FLOAT, convertedValue, 0.01);
+
+		final String convertedString = converter.convertToString(TEST_FLOAT);
+
+		assertEquals(TEST_FLOAT_STRING, convertedString);
+	}
+
+	@Test
+	void testFloatWrapperConversion() {
 		final var converter = ValueConverter.getFloatConverter(DECIMAL_FORMAT);
 		final Float convertedValue = converter.convertToValue(TEST_FLOAT_STRING);
 
@@ -171,6 +283,18 @@ class ValueConverterTest {
 
 	@Test
 	void testBooleanConversion() {
+		final var converter = new ValueConverter<>(null, null, null, boolean.class);
+		final boolean convertedValue = converter.convertToValue(TEST_BOOLEAN_STRING);
+
+		assertTrue(convertedValue);
+
+		final String convertedString = converter.convertToString(true);
+
+		assertEquals(TEST_BOOLEAN_STRING, convertedString);
+	}
+
+	@Test
+	void testBooleanWrapperConversion() {
 		final var converter = new ValueConverter<>(null, null, null, Boolean.class);
 		final Boolean convertedValue = converter.convertToValue(TEST_BOOLEAN_STRING);
 

@@ -156,7 +156,7 @@ public class ValueConverter<T> {
 		try {
 			if (type.equals(String.class))
 				value = string;
-			else if (type.equals(Character.class)) {
+			else if (type.equals(Character.class) || type.equals(char.class)) {
 				if (string.isEmpty() || string.length() > 1)
 					throw new IllegalArgumentException("The string '" + string + "' cannot be converted to a character!");
 
@@ -164,15 +164,19 @@ public class ValueConverter<T> {
 			}
 			else if (type.equals(BigDecimal.class))
 				value = bigDecimalFormat.parse(string);
-			else if (type.equals(Integer.class))
+			else if (type.equals(Integer.class) || type.equals(int.class))
 				value = Integer.parseInt(string);
-			else if (type.equals(Long.class))
+			else if (type.equals(Short.class) || type.equals(short.class))
+				value = Short.parseShort(string);
+			else if (type.equals(Byte.class) || type.equals(byte.class))
+				value = Byte.parseByte(string);
+			else if (type.equals(Long.class) || type.equals(long.class))
 				value = Long.parseLong(string);
-			else if (type.equals(Double.class))
+			else if (type.equals(Double.class) || type.equals(double.class))
 				value = decimalFormat.parse(string).doubleValue();
-			else if (type.equals(Float.class))
+			else if (type.equals(Float.class) || type.equals(float.class))
 				value = decimalFormat.parse(string).floatValue();
-			else if (type.equals(Boolean.class))
+			else if (type.equals(Boolean.class) || type.equals(boolean.class))
 				value = Boolean.parseBoolean(string);
 			else if (type.equals(UUID.class))
 				value = UUID.fromString(string);
@@ -222,13 +226,21 @@ public class ValueConverter<T> {
 
 		if (type.equals(String.class))
 			return (String) value;
-		else if (type.equals(Long.class))
+		else if (type.equals(char.class) || type.equals(Character.class))
+			return Character.toString((char) value);
+		else if (type.equals(boolean.class) || type.equals(Boolean.class))
+			return Boolean.toString((boolean) value);
+		else if (type.equals(Long.class) || type.equals(long.class))
 			return Long.toString((long) value);
-		else if (type.equals(Integer.class))
+		else if (type.equals(Integer.class) || type.equals(int.class))
 			return Integer.toString((int) value);
-		else if (type.equals(Double.class))
+		else if (type.equals(short.class) || type.equals(Short.class))
+			return Short.toString((short) value);
+		else if (type.equals(byte.class) || type.equals(Byte.class))
+			return Byte.toString((byte) value);
+		else if (type.equals(Double.class) || type.equals(double.class))
 			return decimalFormat.format((double) value);
-		else if (type.equals(Float.class))
+		else if (type.equals(Float.class) || type.equals(float.class))
 			return decimalFormat.format((float) value);
 		else if (type.equals(BigDecimal.class))
 			return decimalFormat.format(value);
