@@ -1106,6 +1106,7 @@ public class JMSIntegrationProjectFilesGenerator extends AbstractIntegrationProj
 		b.append("super.init();\n\n");
 		b.append("requestQueue = (Queue) initialContext.lookup(REQUEST_QUEUE_NAME);\n");
 		b.append("responseQueue = (Queue) initialContext.lookup(RESPONSE_QUEUE_NAME);\n");
+		b.append("initialized = true;\n");
 		b.append("}\n");
 		b.append("catch (Exception ex)\n");
 		b.append("{\n");
