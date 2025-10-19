@@ -709,7 +709,12 @@ public class BasicKafkaMethodGenerator extends AbstractIntegrationMethodGenerato
 			}
 			else {
 				b.append("if(response.getCode() == ResponseCode.SUCCESS)\n");
-				b.append("return;\n\n");
+
+				if (!kafkaMethod.getReturnType().isVoid())
+					b.append("return null;\n\n");
+				else
+					b.append("return;\n\n");
+
 				b.append("throw new RemoteOperationException(response.getMessage());\n");
 			}
 
