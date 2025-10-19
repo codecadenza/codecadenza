@@ -278,8 +278,6 @@ public class NewDomainAttributeDialog extends CodeCadenzaDialog {
 	private void enableFieldsForNumericTypes(JavaType type, CollectionTypeEnumeration collectionType) {
 		enableFields(type);
 
-		txtDBColumnPrecision.setEnabled(true);
-		txtDBColumnScale.setEnabled(true);
 		cboCollectionType.setEnabled(enableElementCollection);
 		cboCollectionStrategy.setEnabled(collectionType != CollectionTypeEnumeration.NONE);
 		txtValidatorMaxValue.setEnabled(collectionType == CollectionTypeEnumeration.NONE);
@@ -287,11 +285,11 @@ public class NewDomainAttributeDialog extends CodeCadenzaDialog {
 
 		if (type.isIntegerOrLong()) {
 			chkAttributePrimaryKey.setEnabled(collectionType == CollectionTypeEnumeration.NONE);
-
-			// A whole number has no decimal places. Thus, we should omit the scale!
-			txtDBColumnScale.setEnabled(false);
-			txtDBColumnScale.setText("");
 			chkAttributeVersion.setEnabled(collectionType == CollectionTypeEnumeration.NONE);
+		}
+		else if (type.isBigDecimal()) {
+			txtDBColumnPrecision.setEnabled(true);
+			txtDBColumnScale.setEnabled(true);
 		}
 	}
 
