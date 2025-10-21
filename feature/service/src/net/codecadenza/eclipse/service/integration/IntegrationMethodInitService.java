@@ -25,6 +25,8 @@ import net.codecadenza.eclipse.model.boundary.BoundaryMethod;
 import net.codecadenza.eclipse.model.boundary.BoundaryMethodTypeEnumeration;
 import net.codecadenza.eclipse.model.domain.AbstractDomainAssociation;
 import net.codecadenza.eclipse.model.dto.DTOBean;
+import net.codecadenza.eclipse.model.exchange.ContentTypeEnumeration;
+import net.codecadenza.eclipse.model.exchange.DataExchangeMethod;
 import net.codecadenza.eclipse.model.integration.AbstractIntegrationBean;
 import net.codecadenza.eclipse.model.integration.AbstractIntegrationMethod;
 import net.codecadenza.eclipse.model.integration.HttpMethodEnumeration;
@@ -225,7 +227,21 @@ public class IntegrationMethodInitService {
 			case DOWNLOAD_EXPORT:
 				restMethod.setPath(EXPORT);
 				restMethod.setInputType(MediaTypeEnumeration.NONE);
-				restMethod.setOutputType(MediaTypeEnumeration.TEXT);
+
+				if (boundaryMethod.getReturnType().isVoid())
+					restMethod.setInputType(MediaTypeEnumeration.NONE);
+				else if (boundaryMethod.getReturnType().isString()) {
+					restMethod.setOutputType(MediaTypeEnumeration.TEXT);
+
+					if (boundaryMethod.getServiceMethod() instanceof final DataExchangeMethod exchangeMethod
+							&& exchangeMethod.returnsContent()) {
+						if (exchangeMethod.getContentType() == ContentTypeEnumeration.JSON)
+							restMethod.setOutputType(MediaTypeEnumeration.JSON);
+						else if (exchangeMethod.getContentType() == ContentTypeEnumeration.XML)
+							restMethod.setOutputType(MediaTypeEnumeration.XML);
+					}
+				}
+
 				restMethod.setHttpMethod(HttpMethodEnumeration.GET);
 				break;
 			case FIND_BY_ID:
