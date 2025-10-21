@@ -242,8 +242,8 @@ public enum AssertionOperator implements Enumerator {
 	 * An array of all the '<em><b>Assertion Operator</b></em>' enumerators
 	 * @generated
 	 */
-	private static final AssertionOperator[] VALUES_ARRAY = new AssertionOperator[] { NONE, EQUAL, IS_NULL, IS_NOT_NULL,
-			GREATER_OR_EQUAL, GREATER, SMALLER_OR_EQUAL, SMALLER, STARTS_WITH, ENDS_WITH, CONTAINS, IS_EMPTY };
+	private static final AssertionOperator[] VALUES_ARRAY = { NONE, EQUAL, IS_NULL, IS_NOT_NULL, GREATER_OR_EQUAL, GREATER,
+			SMALLER_OR_EQUAL, SMALLER, STARTS_WITH, ENDS_WITH, CONTAINS, IS_EMPTY };
 
 	/**
 	 * A public read-only list of all the '<em><b>Assertion Operator</b></em>' enumerators
