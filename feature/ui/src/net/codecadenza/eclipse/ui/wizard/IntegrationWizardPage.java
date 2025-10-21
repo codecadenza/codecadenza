@@ -305,7 +305,7 @@ public class IntegrationWizardPage extends WizardPage {
 		});
 
 		final var tabFolder = new TabFolder(groupModules, SWT.NONE);
-		tabFolder.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 4, 1));
+		tabFolder.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 5, 1));
 
 		final var tabItemSOAP = new TabItem(tabFolder, SWT.NONE);
 		tabItemSOAP.setText("SOAP");
@@ -944,7 +944,7 @@ public class IntegrationWizardPage extends WizardPage {
 	}
 
 	/**
-	 * @return true if a RMI client should be generated
+	 * @return true if an RMI client should be generated
 	 */
 	public boolean isAddRMIClient() {
 		return addRMIClient;
@@ -979,7 +979,7 @@ public class IntegrationWizardPage extends WizardPage {
 	}
 
 	/**
-	 * @return true if a RMI module should be created
+	 * @return true if an RMI module should be created
 	 */
 	public boolean isAddRMIModule() {
 		return addRMIModule;
@@ -1004,6 +1004,14 @@ public class IntegrationWizardPage extends WizardPage {
 	 */
 	public List<IntegrationModule> getIntegrationModules() {
 		return integrationModules;
+	}
+
+	/**
+	 * @param technology
+	 * @return an integration module for the given technology
+	 */
+	public IntegrationModule getIntegrationModule(IntegrationTechnology technology) {
+		return integrationModules.stream().filter(i -> i.getTechnology() == technology).findFirst().orElse(null);
 	}
 
 }
