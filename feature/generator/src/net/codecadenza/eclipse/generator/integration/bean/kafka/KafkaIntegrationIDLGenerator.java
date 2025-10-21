@@ -209,7 +209,8 @@ public class KafkaIntegrationIDLGenerator extends AbstractContentFormatter {
 				isArray = attr.getDomainAttribute().getCollectionType() != CollectionTypeEnumeration.NONE;
 
 				if (attr.getDomainAttribute().isPersistent())
-					optional = attr.getDomainAttribute().getDomainAttributeValidator().isNullable();
+					optional = attr.getDomainAttribute().isSetDateOnPersist()
+							|| attr.getDomainAttribute().getDomainAttributeValidator().isNullable();
 				else
 					optional = !attr.getDomainAttribute().getJavaType().isPrimitive();
 			}
@@ -260,7 +261,8 @@ public class KafkaIntegrationIDLGenerator extends AbstractContentFormatter {
 
 			if (attr.getDomainAttribute() != null) {
 				if (attr.getDomainAttribute().isPersistent())
-					optional = attr.getDomainAttribute().getDomainAttributeValidator().isNullable();
+					optional = attr.getDomainAttribute().isSetDateOnPersist()
+							|| attr.getDomainAttribute().getDomainAttributeValidator().isNullable();
 				else
 					optional = !attr.getJavaType().isPrimitive();
 
