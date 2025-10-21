@@ -401,7 +401,7 @@ public class SeleniumTestModuleImpl extends AbstractTestModuleImpl implements Se
 	 */
 	@Override
 	public List<GUITestCase> getGUITestCases() {
-		return getTestCases().stream().map(GUITestCase.class::cast).toList();
+		return getProject().getAllGUITestCases();
 	}
 
 }

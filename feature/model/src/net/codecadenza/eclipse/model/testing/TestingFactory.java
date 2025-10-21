@@ -78,6 +78,48 @@ public interface TestingFactory extends EFactory {
 	GUITestData createGUITestData();
 
 	/**
+	 * Return a new object of class '<em>Integration Test Module</em>'
+	 * @return a new object of class '<em>Integration Test Module</em>'
+	 * @generated
+	 */
+	IntegrationTestModule createIntegrationTestModule();
+
+	/**
+	 * Return a new object of class '<em>Integration Test Case</em>'
+	 * @return a new object of class '<em>Integration Test Case</em>'
+	 * @generated
+	 */
+	IntegrationTestCase createIntegrationTestCase();
+
+	/**
+	 * Return a new object of class '<em>Integration Method Test Invocation</em>'
+	 * @return a new object of class '<em>Integration Method Test Invocation</em>'
+	 * @generated
+	 */
+	IntegrationMethodTestInvocation createIntegrationMethodTestInvocation();
+
+	/**
+	 * Return a new object of class '<em>Method Invocation Parameter</em>'
+	 * @return a new object of class '<em>Method Invocation Parameter</em>'
+	 * @generated
+	 */
+	MethodInvocationParameter createMethodInvocationParameter();
+
+	/**
+	 * Return a new object of class '<em>Test Data Object</em>'
+	 * @return a new object of class '<em>Test Data Object</em>'
+	 * @generated
+	 */
+	TestDataObject createTestDataObject();
+
+	/**
+	 * Return a new object of class '<em>Test Data Attribute</em>'
+	 * @return a new object of class '<em>Test Data Attribute</em>'
+	 * @generated
+	 */
+	TestDataAttribute createTestDataAttribute();
+
+	/**
 	 * Return the package supported by this factory
 	 * @return the package supported by this factory
 	 * @generated

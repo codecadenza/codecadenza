@@ -42,5 +42,6 @@ Export-Package: net.codecadenza.eclipse.service,
  net.codecadenza.eclipse.service.repository,
  net.codecadenza.eclipse.service.security,
  net.codecadenza.eclipse.service.testing,
- net.codecadenza.eclipse.service.testing.gui
+ net.codecadenza.eclipse.service.testing.gui,
+ net.codecadenza.eclipse.service.testing.integration
 Bundle-ClassPath: .

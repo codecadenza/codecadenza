@@ -29,12 +29,15 @@ import java.util.List;
 import net.codecadenza.eclipse.model.java.JavaFactory;
 import net.codecadenza.eclipse.model.java.Namespace;
 import net.codecadenza.eclipse.model.project.ClientPlatformEnumeration;
+import net.codecadenza.eclipse.model.project.IntegrationModule;
+import net.codecadenza.eclipse.model.project.IntegrationTechnology;
 import net.codecadenza.eclipse.model.testing.AbstractTestModule;
 import net.codecadenza.eclipse.model.testing.SeleniumDriver;
 import net.codecadenza.eclipse.model.testing.SeleniumTestModule;
 import net.codecadenza.eclipse.model.testing.TestingFactory;
 import net.codecadenza.eclipse.tools.ide.EclipseIDEService;
 import net.codecadenza.eclipse.ui.CodeCadenzaUserInterfacePlugin;
+import net.codecadenza.eclipse.ui.panel.IntegrationTestModulePanel;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.dialogs.DialogPage;
@@ -50,6 +53,7 @@ import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.FileDialog;
+import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.TabFolder;
 import org.eclipse.swt.widgets.TabItem;
@@ -70,6 +74,7 @@ public class TestingWizardPage extends WizardPage {
 	private static final int DEFAULT_PAGE_LOAD_TIMEOUT = 5;
 
 	private final ApplicationWizardPage pageApp;
+	private final IntegrationWizardPage pageIntegration;
 	private Button chkSelenium;
 	private Text txtSeleniumNamespace;
 	private Combo cboDriver;
@@ -79,7 +84,6 @@ public class TestingWizardPage extends WizardPage {
 	private Button chkMaximizeWindow;
 	private Text txtPageLoadTimeout;
 	private Text txtTestCaseSuffix;
-	private boolean addSeleniumTestModule;
 	private String seleniumNamespaceName;
 	private SeleniumDriver driver;
 	private String driverPath;
@@ -89,17 +93,29 @@ public class TestingWizardPage extends WizardPage {
 	private String testCaseSuffix;
 	private IStatus currentStatus;
 	private boolean pageVisible;
+	private IntegrationTestModulePanel panSOAP;
+	private IntegrationTestModulePanel panREST;
+	private IntegrationTestModulePanel panRMI;
+	private IntegrationTestModulePanel panKafka;
+	private IntegrationTestModulePanel panJMS;
+	private Button chkSOAP;
+	private Button chkREST;
+	private Button chkRMI;
+	private Button chkKafka;
+	private Button chkJMS;
 
 	/**
 	 * Constructor
 	 * @param pageNumber
 	 * @param pageApp
+	 * @param pageIntegration
 	 */
-	public TestingWizardPage(int pageNumber, ApplicationWizardPage pageApp) {
+	public TestingWizardPage(int pageNumber, ApplicationWizardPage pageApp, IntegrationWizardPage pageIntegration) {
 		super("page" + pageNumber);
 
 		this.currentStatus = createStatus(IStatus.OK, "");
 		this.pageApp = pageApp;
+		this.pageIntegration = pageIntegration;
 
 		setTitle("Test modules");
 		setDescription("Definition of test modules");
@@ -247,6 +263,151 @@ public class TestingWizardPage extends WizardPage {
 		txtTestCaseSuffix.addModifyListener(e -> applyTestCaseSuffix(txtTestCaseSuffix.getText()));
 
 		tabItemSelenium.setControl(panSelenium);
+
+		initIntegrationTestModuleGroup(panPageArea);
+	}
+
+	/**
+	 * Initialize the panel for the integration test modules
+	 * @param panParent
+	 */
+	private void initIntegrationTestModuleGroup(Composite panParent) {
+		final var groupIntegrationTests = new Group(panParent, SWT.NONE);
+		groupIntegrationTests.setText("Integration test modules");
+		groupIntegrationTests.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
+		groupIntegrationTests.setLayout(new GridLayout(1, false));
+
+		final var panSelection = new Composite(groupIntegrationTests, SWT.NONE);
+		panSelection.setLayout(new GridLayout(5, false));
+		panSelection.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, false));
+
+		chkSOAP = new Button(panSelection, SWT.CHECK);
+		chkSOAP.setText("Add SOAP module");
+
+		chkSOAP.addSelectionListener(new SelectionAdapter() {
+			/*
+			 * (non-Javadoc)
+			 * @see org.eclipse.swt.events.SelectionAdapter#widgetSelected(org.eclipse.swt.events.SelectionEvent)
+			 */
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				if (chkSOAP.getSelection())
+					panSOAP.setIntegrationModule(pageIntegration.getIntegrationModule(IntegrationTechnology.SOAP));
+				else
+					panSOAP.setIntegrationModule(null);
+			}
+		});
+
+		chkREST = new Button(panSelection, SWT.CHECK);
+		chkREST.setText("Add REST module");
+
+		chkREST.addSelectionListener(new SelectionAdapter() {
+			/*
+			 * (non-Javadoc)
+			 * @see org.eclipse.swt.events.SelectionAdapter#widgetSelected(org.eclipse.swt.events.SelectionEvent)
+			 */
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				if (chkREST.getSelection())
+					panREST.setIntegrationModule(pageIntegration.getIntegrationModule(IntegrationTechnology.REST));
+				else
+					panREST.setIntegrationModule(null);
+			}
+		});
+
+		chkRMI = new Button(panSelection, SWT.CHECK);
+		chkRMI.setText("Add RMI module");
+
+		chkRMI.addSelectionListener(new SelectionAdapter() {
+			/*
+			 * (non-Javadoc)
+			 * @see org.eclipse.swt.events.SelectionAdapter#widgetSelected(org.eclipse.swt.events.SelectionEvent)
+			 */
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				if (chkRMI.getSelection())
+					panRMI.setIntegrationModule(pageIntegration.getIntegrationModule(IntegrationTechnology.RMI));
+				else
+					panRMI.setIntegrationModule(null);
+			}
+		});
+
+		chkKafka = new Button(panSelection, SWT.CHECK);
+		chkKafka.setText("Add Kafka module");
+
+		chkKafka.addSelectionListener(new SelectionAdapter() {
+			/*
+			 * (non-Javadoc)
+			 * @see org.eclipse.swt.events.SelectionAdapter#widgetSelected(org.eclipse.swt.events.SelectionEvent)
+			 */
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				if (chkKafka.getSelection())
+					panKafka.setIntegrationModule(pageIntegration.getIntegrationModule(IntegrationTechnology.KAFKA));
+				else
+					panKafka.setIntegrationModule(null);
+			}
+		});
+
+		chkJMS = new Button(panSelection, SWT.CHECK);
+		chkJMS.setText("Add JMS module");
+
+		chkJMS.addSelectionListener(new SelectionAdapter() {
+			/*
+			 * (non-Javadoc)
+			 * @see org.eclipse.swt.events.SelectionAdapter#widgetSelected(org.eclipse.swt.events.SelectionEvent)
+			 */
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				if (chkJMS.getSelection())
+					panJMS.setIntegrationModule(pageIntegration.getIntegrationModule(IntegrationTechnology.JMS));
+				else
+					panJMS.setIntegrationModule(null);
+			}
+		});
+
+		final var tabFolder = new TabFolder(groupIntegrationTests, SWT.NONE);
+		tabFolder.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
+
+		final var tabItemSOAP = new TabItem(tabFolder, SWT.NONE);
+		tabItemSOAP.setText("SOAP");
+
+		panSOAP = new IntegrationTestModulePanel(tabFolder, SWT.NONE, this);
+		panSOAP.setLayout(new GridLayout(2, false));
+
+		tabItemSOAP.setControl(panSOAP);
+
+		final var tabItemREST = new TabItem(tabFolder, SWT.NONE);
+		tabItemREST.setText("REST");
+
+		panREST = new IntegrationTestModulePanel(tabFolder, SWT.NONE, this);
+		panREST.setLayout(new GridLayout(2, false));
+
+		tabItemREST.setControl(panREST);
+
+		final var tabItemRMI = new TabItem(tabFolder, SWT.NONE);
+		tabItemRMI.setText("RMI");
+
+		panRMI = new IntegrationTestModulePanel(tabFolder, SWT.NONE, this);
+		panRMI.setLayout(new GridLayout(2, false));
+
+		tabItemRMI.setControl(panRMI);
+
+		final var tabItemKafka = new TabItem(tabFolder, SWT.NONE);
+		tabItemKafka.setText("Kafka");
+
+		panKafka = new IntegrationTestModulePanel(tabFolder, SWT.NONE, this);
+		panKafka.setLayout(new GridLayout(2, false));
+
+		tabItemKafka.setControl(panKafka);
+
+		final var tabItemJMS = new TabItem(tabFolder, SWT.NONE);
+		tabItemJMS.setText("JMS");
+
+		panJMS = new IntegrationTestModulePanel(tabFolder, SWT.NONE, this);
+		panJMS.setLayout(new GridLayout(2, false));
+
+		tabItemJMS.setControl(panJMS);
 	}
 
 	/**
@@ -254,8 +415,6 @@ public class TestingWizardPage extends WizardPage {
 	 * @param addSeleniumTestModule controls if the respective fields should be either enabled or disabled
 	 */
 	private void initSeleniumFields(boolean addSeleniumTestModule) {
-		this.addSeleniumTestModule = addSeleniumTestModule;
-
 		// Reset all text fields
 		txtSeleniumNamespace.setText("");
 		txtDriverPath.setText("");
@@ -311,6 +470,21 @@ public class TestingWizardPage extends WizardPage {
 
 			testModules.add(testModule);
 		}
+
+		if (panSOAP.getIntegrationTestModule() != null)
+			testModules.add(panSOAP.getIntegrationTestModule());
+
+		if (panREST.getIntegrationTestModule() != null)
+			testModules.add(panREST.getIntegrationTestModule());
+
+		if (panRMI.getIntegrationTestModule() != null)
+			testModules.add(panRMI.getIntegrationTestModule());
+
+		if (panKafka.getIntegrationTestModule() != null)
+			testModules.add(panKafka.getIntegrationTestModule());
+
+		if (panJMS.getIntegrationTestModule() != null)
+			testModules.add(panJMS.getIntegrationTestModule());
 
 		return testModules;
 	}
@@ -415,6 +589,71 @@ public class TestingWizardPage extends WizardPage {
 
 			initSeleniumFields(enableSelenium);
 
+			if (pageIntegration.isAddSOAPModule() && pageIntegration.isAddSOAPClient()) {
+				final IntegrationModule integrationModule = pageIntegration.getIntegrationModule(IntegrationTechnology.SOAP);
+
+				chkSOAP.setEnabled(true);
+				chkSOAP.setSelection(true);
+				panSOAP.setIntegrationModule(integrationModule);
+			}
+			else {
+				chkSOAP.setEnabled(false);
+				chkSOAP.setSelection(false);
+				panSOAP.setIntegrationModule(null);
+			}
+
+			if (pageIntegration.isAddRESTModule() && pageIntegration.isAddRESTClient()) {
+				final IntegrationModule integrationModule = pageIntegration.getIntegrationModule(IntegrationTechnology.REST);
+
+				chkREST.setEnabled(true);
+				chkREST.setSelection(true);
+				panREST.setIntegrationModule(integrationModule);
+			}
+			else {
+				chkREST.setEnabled(false);
+				chkREST.setSelection(false);
+				panREST.setIntegrationModule(null);
+			}
+
+			if (pageIntegration.isAddRMIModule() && pageIntegration.isAddRMIClient()) {
+				final IntegrationModule integrationModule = pageIntegration.getIntegrationModule(IntegrationTechnology.RMI);
+
+				chkRMI.setEnabled(true);
+				chkRMI.setSelection(true);
+				panRMI.setIntegrationModule(integrationModule);
+			}
+			else {
+				chkRMI.setEnabled(false);
+				chkRMI.setSelection(false);
+				panRMI.setIntegrationModule(null);
+			}
+
+			if (pageIntegration.isAddKafkaModule() && pageIntegration.isAddKafkaClient()) {
+				final IntegrationModule integrationModule = pageIntegration.getIntegrationModule(IntegrationTechnology.KAFKA);
+
+				chkKafka.setEnabled(true);
+				chkKafka.setSelection(true);
+				panKafka.setIntegrationModule(integrationModule);
+			}
+			else {
+				chkKafka.setEnabled(false);
+				chkKafka.setSelection(false);
+				panKafka.setIntegrationModule(null);
+			}
+
+			if (pageIntegration.isAddJMSModule() && pageIntegration.isAddJMSClient()) {
+				final IntegrationModule integrationModule = pageIntegration.getIntegrationModule(IntegrationTechnology.JMS);
+
+				chkJMS.setEnabled(true);
+				chkJMS.setSelection(true);
+				panJMS.setIntegrationModule(integrationModule);
+			}
+			else {
+				chkJMS.setEnabled(false);
+				chkJMS.setSelection(false);
+				panJMS.setIntegrationModule(null);
+			}
+
 			// Reset the status as we don't want to see the last status after initializing the fields
 			updateStatus(createStatus(IStatus.OK, ""));
 		}
@@ -426,7 +665,7 @@ public class TestingWizardPage extends WizardPage {
 	 * Update the status line and the 'Finish' button depending on the status
 	 * @param status
 	 */
-	private void updateStatus(IStatus status) {
+	public void updateStatus(IStatus status) {
 		currentStatus = status;
 		setPageComplete(!status.matches(IStatus.ERROR));
 
@@ -438,7 +677,7 @@ public class TestingWizardPage extends WizardPage {
 	 * @param page
 	 * @param status
 	 */
-	private static void applyToStatusLine(DialogPage page, IStatus status) {
+	public static void applyToStatusLine(DialogPage page, IStatus status) {
 		String errorMessage = null;
 		String warningMessage = null;
 		final String statusMessage = status.getMessage();
@@ -474,7 +713,42 @@ public class TestingWizardPage extends WizardPage {
 	 * @return true if a Selenium test module should be added
 	 */
 	public boolean isAddSeleniumTestModule() {
-		return addSeleniumTestModule;
+		return chkSelenium.getSelection();
+	}
+
+	/**
+	 * @return true if a REST integration test module should be added
+	 */
+	public boolean isAddRESTTestModule() {
+		return chkREST.getSelection();
+	}
+
+	/**
+	 * @return true if a SOAP integration test module should be added
+	 */
+	public boolean isAddSOAPTestModule() {
+		return chkSOAP.getSelection();
+	}
+
+	/**
+	 * @return true if an RMI integration test module should be added
+	 */
+	public boolean isAddRMITestModule() {
+		return chkRMI.getSelection();
+	}
+
+	/**
+	 * @return true if a Kafka integration test module should be added
+	 */
+	public boolean isAddKafkaTestModule() {
+		return chkKafka.getSelection();
+	}
+
+	/**
+	 * @return true if a JMS integration test module should be added
+	 */
+	public boolean isAddJMSTestModule() {
+		return chkJMS.getSelection();
 	}
 
 }

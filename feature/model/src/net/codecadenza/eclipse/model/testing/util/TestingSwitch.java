@@ -28,7 +28,13 @@ import net.codecadenza.eclipse.model.testing.GUITestAction;
 import net.codecadenza.eclipse.model.testing.GUITestActionResult;
 import net.codecadenza.eclipse.model.testing.GUITestCase;
 import net.codecadenza.eclipse.model.testing.GUITestData;
+import net.codecadenza.eclipse.model.testing.IntegrationMethodTestInvocation;
+import net.codecadenza.eclipse.model.testing.IntegrationTestCase;
+import net.codecadenza.eclipse.model.testing.IntegrationTestModule;
+import net.codecadenza.eclipse.model.testing.MethodInvocationParameter;
 import net.codecadenza.eclipse.model.testing.SeleniumTestModule;
+import net.codecadenza.eclipse.model.testing.TestDataAttribute;
+import net.codecadenza.eclipse.model.testing.TestDataObject;
 import net.codecadenza.eclipse.model.testing.TestSuite;
 import net.codecadenza.eclipse.model.testing.TestingPackage;
 import org.eclipse.emf.ecore.EObject;
@@ -88,7 +94,6 @@ public class TestingSwitch<T> extends Switch<T> {
 			}
 			case TestingPackage.SELENIUM_TEST_MODULE: {
 				final var seleniumTestModule = (SeleniumTestModule) theEObject;
-
 				T result = caseSeleniumTestModule(seleniumTestModule);
 
 				if (result == null)
@@ -101,7 +106,6 @@ public class TestingSwitch<T> extends Switch<T> {
 			}
 			case TestingPackage.TEST_SUITE: {
 				final var testSuite = (TestSuite) theEObject;
-
 				T result = caseTestSuite(testSuite);
 
 				if (result == null)
@@ -114,7 +118,6 @@ public class TestingSwitch<T> extends Switch<T> {
 			}
 			case TestingPackage.ABSTRACT_TEST_CASE: {
 				final var abstractTestCase = (AbstractTestCase) theEObject;
-
 				T result = caseAbstractTestCase(abstractTestCase);
 
 				if (result == null)
@@ -127,7 +130,6 @@ public class TestingSwitch<T> extends Switch<T> {
 			}
 			case TestingPackage.GUI_TEST_CASE: {
 				final var guiTestCase = (GUITestCase) theEObject;
-
 				T result = caseGUITestCase(guiTestCase);
 
 				if (result == null)
@@ -143,7 +145,6 @@ public class TestingSwitch<T> extends Switch<T> {
 			}
 			case TestingPackage.GUI_TEST_ACTION: {
 				final var guiTestAction = (GUITestAction) theEObject;
-
 				T result = caseGUITestAction(guiTestAction);
 
 				if (result == null)
@@ -153,7 +154,6 @@ public class TestingSwitch<T> extends Switch<T> {
 			}
 			case TestingPackage.GUI_TEST_ACTION_RESULT: {
 				final var guiTestActionResult = (GUITestActionResult) theEObject;
-
 				T result = caseGUITestActionResult(guiTestActionResult);
 
 				if (result == null)
@@ -163,8 +163,70 @@ public class TestingSwitch<T> extends Switch<T> {
 			}
 			case TestingPackage.GUI_TEST_DATA: {
 				final var guiTestData = (GUITestData) theEObject;
-
 				T result = caseGUITestData(guiTestData);
+
+				if (result == null)
+					result = defaultCase(theEObject);
+
+				return result;
+			}
+			case TestingPackage.INTEGRATION_TEST_MODULE: {
+				final var integrationTestModule = (IntegrationTestModule) theEObject;
+				T result = caseIntegrationTestModule(integrationTestModule);
+
+				if (result == null)
+					result = caseAbstractTestModule(integrationTestModule);
+
+				if (result == null)
+					result = defaultCase(theEObject);
+
+				return result;
+			}
+			case TestingPackage.INTEGRATION_TEST_CASE: {
+				final var integrationTestCase = (IntegrationTestCase) theEObject;
+				T result = caseIntegrationTestCase(integrationTestCase);
+
+				if (result == null)
+					result = caseAbstractTestCase(integrationTestCase);
+
+				if (result == null)
+					result = caseJavaType(integrationTestCase);
+
+				if (result == null)
+					result = defaultCase(theEObject);
+
+				return result;
+			}
+			case TestingPackage.INTEGRATION_METHOD_TEST_INVOCATION: {
+				final var integrationMethodTestInvocation = (IntegrationMethodTestInvocation) theEObject;
+				T result = caseIntegrationMethodTestInvocation(integrationMethodTestInvocation);
+
+				if (result == null)
+					result = defaultCase(theEObject);
+
+				return result;
+			}
+			case TestingPackage.METHOD_INVOCATION_PARAMETER: {
+				final var methodInvocationParameter = (MethodInvocationParameter) theEObject;
+				T result = caseMethodInvocationParameter(methodInvocationParameter);
+
+				if (result == null)
+					result = defaultCase(theEObject);
+
+				return result;
+			}
+			case TestingPackage.TEST_DATA_OBJECT: {
+				final var testDataObject = (TestDataObject) theEObject;
+				T result = caseTestDataObject(testDataObject);
+
+				if (result == null)
+					result = defaultCase(theEObject);
+
+				return result;
+			}
+			case TestingPackage.TEST_DATA_ATTRIBUTE: {
+				final var testDataAttribute = (TestDataAttribute) theEObject;
+				T result = caseTestDataAttribute(testDataAttribute);
 
 				if (result == null)
 					result = defaultCase(theEObject);
@@ -277,6 +339,84 @@ public class TestingSwitch<T> extends Switch<T> {
 	 */
 	@SuppressWarnings("unused")
 	public T caseGUITestData(GUITestData object) {
+		return null;
+	}
+
+	/**
+	 * Return the result of interpreting the object as an instance of '<em>Integration Test Module</em>'. This implementation
+	 * returns null; returning a non-null result will terminate the switch.
+	 * @param object the target of the switch
+	 * @return the result of interpreting the object as an instance of '<em>Integration Test Module</em>'
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	@SuppressWarnings("unused")
+	public T caseIntegrationTestModule(IntegrationTestModule object) {
+		return null;
+	}
+
+	/**
+	 * Return the result of interpreting the object as an instance of '<em>Integration Test Case</em>'. This implementation returns
+	 * null; returning a non-null result will terminate the switch.
+	 * @param object the target of the switch
+	 * @return the result of interpreting the object as an instance of '<em>Integration Test Case</em>'
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	@SuppressWarnings("unused")
+	public T caseIntegrationTestCase(IntegrationTestCase object) {
+		return null;
+	}
+
+	/**
+	 * Return the result of interpreting the object as an instance of '<em>Integration Method Test Invocation</em>'. This
+	 * implementation returns null; returning a non-null result will terminate the switch.
+	 * @param object the target of the switch
+	 * @return the result of interpreting the object as an instance of '<em>Integration Method Test Invocation</em>'
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	@SuppressWarnings("unused")
+	public T caseIntegrationMethodTestInvocation(IntegrationMethodTestInvocation object) {
+		return null;
+	}
+
+	/**
+	 * Return the result of interpreting the object as an instance of '<em>Method Invocation Parameter</em>'. This implementation
+	 * returns null; returning a non-null result will terminate the switch.
+	 * @param object the target of the switch
+	 * @return the result of interpreting the object as an instance of '<em>Method Invocation Parameter</em>'
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	@SuppressWarnings("unused")
+	public T caseMethodInvocationParameter(MethodInvocationParameter object) {
+		return null;
+	}
+
+	/**
+	 * Return the result of interpreting the object as an instance of '<em>Test Data Object</em>'. This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * @param object the target of the switch
+	 * @return the result of interpreting the object as an instance of '<em>Test Data Object</em>'
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	@SuppressWarnings("unused")
+	public T caseTestDataObject(TestDataObject object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Test Data Attribute</em>'. This implementation returns
+	 * null; returning a non-null result will terminate the switch.
+	 * @param object the target of the switch
+	 * @return the result of interpreting the object as an instance of '<em>Test Data Attribute</em>'
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	@SuppressWarnings("unused")
+	public T caseTestDataAttribute(TestDataAttribute object) {
 		return null;
 	}
 

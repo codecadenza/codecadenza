@@ -33,6 +33,7 @@ import net.codecadenza.eclipse.service.build.imp.module.imp.GUIBuildModule;
 import net.codecadenza.eclipse.service.build.imp.module.imp.IntegrationClientBuildModule;
 import net.codecadenza.eclipse.service.build.imp.module.imp.IntegrationImpBuildModule;
 import net.codecadenza.eclipse.service.build.imp.module.imp.IntegrationSEIBuildModule;
+import net.codecadenza.eclipse.service.build.imp.module.imp.IntegrationTestBuildModule;
 import net.codecadenza.eclipse.service.build.imp.module.imp.MasterBuildModule;
 import net.codecadenza.eclipse.service.build.imp.module.imp.RepositoryBuildModule;
 import net.codecadenza.eclipse.service.build.imp.module.imp.SeleniumTestBuildModule;
@@ -99,6 +100,10 @@ public class BuildModuleFactory {
 				|| artifactType == BuildArtifactType.INTEGRATION_CLIENT_REST || artifactType == BuildArtifactType.INTEGRATION_CLIENT_RMI
 				|| artifactType == BuildArtifactType.INTEGRATION_CLIENT_KAFKA || artifactType == BuildArtifactType.INTEGRATION_CLIENT_JMS)
 			return new IntegrationClientBuildModule(buildArtifact, artifactType);
+		else if (artifactType == BuildArtifactType.INTEGRATION_TEST_SOAP || artifactType == BuildArtifactType.INTEGRATION_TEST_REST
+				|| artifactType == BuildArtifactType.INTEGRATION_TEST_RMI || artifactType == BuildArtifactType.INTEGRATION_TEST_KAFKA
+				|| artifactType == BuildArtifactType.INTEGRATION_TEST_JMS)
+			return new IntegrationTestBuildModule(buildArtifact, artifactType);
 		else if (artifactType == BuildArtifactType.SELENIUM_TEST)
 			return new SeleniumTestBuildModule(buildArtifact, artifactType);
 		else if (artifactType == BuildArtifactType.SHARED)

@@ -24,11 +24,12 @@ package net.codecadenza.eclipse.model.testing.impl;
 import net.codecadenza.eclipse.model.java.JavaType;
 import net.codecadenza.eclipse.model.java.Namespace;
 import net.codecadenza.eclipse.model.project.BuildArtifactType;
+import net.codecadenza.eclipse.model.project.IntegrationTechnology;
 import net.codecadenza.eclipse.model.project.Project;
 import net.codecadenza.eclipse.model.project.ProjectPackage;
 import net.codecadenza.eclipse.model.testing.AbstractTestCase;
 import net.codecadenza.eclipse.model.testing.AbstractTestModule;
-import net.codecadenza.eclipse.model.testing.GUITestCase;
+import net.codecadenza.eclipse.model.testing.IntegrationTestModule;
 import net.codecadenza.eclipse.model.testing.SeleniumTestModule;
 import net.codecadenza.eclipse.model.testing.TestSuite;
 import net.codecadenza.eclipse.model.testing.TestingPackage;
@@ -396,8 +397,8 @@ public abstract class AbstractTestModuleImpl extends EObjectImpl implements Abst
 		final var testCases = new BasicEList<AbstractTestCase>();
 
 		for (final JavaType type : getNamespace().getJavaTypes())
-			if (type instanceof final GUITestCase guiTestCase)
-				testCases.add(guiTestCase);
+			if (type instanceof final AbstractTestCase testCase)
+				testCases.add(testCase);
 
 		return testCases;
 	}
@@ -411,6 +412,20 @@ public abstract class AbstractTestModuleImpl extends EObjectImpl implements Abst
 	public BuildArtifactType getArtifactType() {
 		if (this instanceof SeleniumTestModule)
 			return BuildArtifactType.SELENIUM_TEST;
+		else if (this instanceof final IntegrationTestModule integrationTestModule) {
+			final IntegrationTechnology technology = integrationTestModule.getIntegrationModule().getTechnology();
+
+			if (technology == IntegrationTechnology.REST)
+				return BuildArtifactType.INTEGRATION_TEST_REST;
+			else if (technology == IntegrationTechnology.SOAP)
+				return BuildArtifactType.INTEGRATION_TEST_SOAP;
+			else if (technology == IntegrationTechnology.RMI)
+				return BuildArtifactType.INTEGRATION_TEST_RMI;
+			else if (technology == IntegrationTechnology.KAFKA)
+				return BuildArtifactType.INTEGRATION_TEST_KAFKA;
+			else if (technology == IntegrationTechnology.JMS)
+				return BuildArtifactType.INTEGRATION_TEST_JMS;
+		}
 
 		return null;
 	}

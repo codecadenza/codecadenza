@@ -238,16 +238,21 @@ public class RunBuildAction implements IViewActionDelegate {
 					for (final BuildArtifact buildArtifact : buildArtifacts) {
 						final var type = buildArtifact.getType();
 
-						if ((module.getTechnology() == IntegrationTechnology.REST && (type == BuildArtifactType.INTEGRATION_CLIENT_REST
-								|| type == BuildArtifactType.INTEGRATION_IMP_REST || type == BuildArtifactType.INTEGRATION_SEI_REST))
-								|| (module.getTechnology() == IntegrationTechnology.SOAP && (type == BuildArtifactType.INTEGRATION_CLIENT_SOAP
-										|| type == BuildArtifactType.INTEGRATION_IMP_SOAP || type == BuildArtifactType.INTEGRATION_SEI_SOAP))
-								|| (module.getTechnology() == IntegrationTechnology.RMI && (type == BuildArtifactType.INTEGRATION_CLIENT_RMI
-										|| type == BuildArtifactType.INTEGRATION_IMP_RMI || type == BuildArtifactType.INTEGRATION_SEI_RMI))
-								|| (module.getTechnology() == IntegrationTechnology.KAFKA && (type == BuildArtifactType.INTEGRATION_CLIENT_KAFKA
-										|| type == BuildArtifactType.INTEGRATION_IMP_KAFKA || type == BuildArtifactType.INTEGRATION_SEI_KAFKA))
-								|| (module.getTechnology() == IntegrationTechnology.JMS && (type == BuildArtifactType.INTEGRATION_CLIENT_JMS
-										|| type == BuildArtifactType.INTEGRATION_IMP_JMS || type == BuildArtifactType.INTEGRATION_SEI_JMS)))
+						if ((module.getTechnology() == IntegrationTechnology.REST
+								&& (type == BuildArtifactType.INTEGRATION_CLIENT_REST || type == BuildArtifactType.INTEGRATION_IMP_REST
+										|| type == BuildArtifactType.INTEGRATION_SEI_REST || type == BuildArtifactType.INTEGRATION_TEST_REST))
+								|| (module.getTechnology() == IntegrationTechnology.SOAP
+										&& (type == BuildArtifactType.INTEGRATION_CLIENT_SOAP || type == BuildArtifactType.INTEGRATION_IMP_SOAP
+												|| type == BuildArtifactType.INTEGRATION_SEI_SOAP || type == BuildArtifactType.INTEGRATION_TEST_SOAP))
+								|| (module.getTechnology() == IntegrationTechnology.RMI
+										&& (type == BuildArtifactType.INTEGRATION_CLIENT_RMI || type == BuildArtifactType.INTEGRATION_IMP_RMI
+												|| type == BuildArtifactType.INTEGRATION_SEI_RMI || type == BuildArtifactType.INTEGRATION_TEST_RMI))
+								|| (module.getTechnology() == IntegrationTechnology.KAFKA
+										&& (type == BuildArtifactType.INTEGRATION_CLIENT_KAFKA || type == BuildArtifactType.INTEGRATION_IMP_KAFKA
+												|| type == BuildArtifactType.INTEGRATION_SEI_KAFKA || type == BuildArtifactType.INTEGRATION_TEST_KAFKA))
+								|| (module.getTechnology() == IntegrationTechnology.JMS
+										&& (type == BuildArtifactType.INTEGRATION_CLIENT_JMS || type == BuildArtifactType.INTEGRATION_IMP_JMS
+												|| type == BuildArtifactType.INTEGRATION_SEI_JMS || type == BuildArtifactType.INTEGRATION_TEST_JMS)))
 							project.getBuildConfiguration().remove(buildArtifact);
 					}
 
@@ -273,21 +278,25 @@ public class RunBuildAction implements IViewActionDelegate {
 					if (driverFile.exists() && driverFile.isFile())
 						((SeleniumTestModule) seleniumTestModule).setDriverPath(driverFile.getAbsolutePath());
 
-					if (!projectConf.isAddSelenium()) {
-						// Remove the Selenium test module
-						final Namespace guiTestPackage = seleniumTestModule.getNamespace();
-
-						seleniumTestModule.setNamespace(null);
-
-						project.getTestModules().remove(seleniumTestModule);
-						project.eResource().getContents().remove(guiTestPackage);
-
-						// Remove the respective build artifact
-						for (final BuildArtifact buildArtifact : buildArtifacts)
-							if (buildArtifact.getType() == BuildArtifactType.SELENIUM_TEST)
-								project.getBuildConfiguration().remove(buildArtifact);
-					}
+					if (!projectConf.isAddSelenium())
+						removeTestModule(seleniumTestModule);
 				}
+
+				// Remove unused integration test modules
+				if (!projectConf.isAddREST() || !projectConf.isAddIntegrationTests())
+					removeTestModule(project.getTestModuleByArtifact(BuildArtifactType.INTEGRATION_TEST_REST));
+
+				if (!projectConf.isAddSOAP() || !projectConf.isAddIntegrationTests())
+					removeTestModule(project.getTestModuleByArtifact(BuildArtifactType.INTEGRATION_TEST_SOAP));
+
+				if (!projectConf.isAddRMI() || !projectConf.isAddIntegrationTests())
+					removeTestModule(project.getTestModuleByArtifact(BuildArtifactType.INTEGRATION_TEST_RMI));
+
+				if (!projectConf.isAddKafka() || !projectConf.isAddIntegrationTests())
+					removeTestModule(project.getTestModuleByArtifact(BuildArtifactType.INTEGRATION_TEST_KAFKA));
+
+				if (!projectConf.isAddJMS() || !projectConf.isAddIntegrationTests())
+					removeTestModule(project.getTestModuleByArtifact(BuildArtifactType.INTEGRATION_TEST_JMS));
 
 				// Run the integration bean synchronization as it might be the case that some methods are missing!
 				if (!project.getIntegrationModules().isEmpty())
@@ -448,6 +457,25 @@ public class RunBuildAction implements IViewActionDelegate {
 				}
 			}
 		}
+	}
+
+	/**
+	 * Remove the provided test module from the project meta-data
+	 * @param testModule
+	 */
+	private void removeTestModule(AbstractTestModule testModule) {
+		final Project project = testModule.getProject();
+		final List<BuildArtifact> buildArtifacts = new ArrayList<>(project.getBuildConfiguration());
+		final Namespace testPackage = testModule.getNamespace();
+
+		for (final BuildArtifact buildArtifact : buildArtifacts)
+			if (buildArtifact.getType() == testModule.getArtifactType())
+				project.getBuildConfiguration().remove(buildArtifact);
+
+		testModule.setNamespace(null);
+
+		project.getTestModules().remove(testModule);
+		project.eResource().getContents().remove(testPackage);
 	}
 
 }

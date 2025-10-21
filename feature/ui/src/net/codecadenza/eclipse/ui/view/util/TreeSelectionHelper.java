@@ -49,7 +49,7 @@ import net.codecadenza.eclipse.model.java.Namespace;
 import net.codecadenza.eclipse.model.project.Project;
 import net.codecadenza.eclipse.model.repository.Repository;
 import net.codecadenza.eclipse.model.repository.RepositoryMethod;
-import net.codecadenza.eclipse.model.testing.GUITestCase;
+import net.codecadenza.eclipse.model.testing.AbstractTestCase;
 import net.codecadenza.eclipse.model.testing.TestSuite;
 import net.codecadenza.eclipse.service.repository.RepositoryService;
 import net.codecadenza.eclipse.ui.view.ProjectView;
@@ -666,7 +666,7 @@ public class TreeSelectionHelper {
 					}
 				}
 			}
-			else if (type instanceof GUITestCase || type instanceof TestSuite) {
+			else if (type instanceof AbstractTestCase || type instanceof TestSuite) {
 				TreeItem currentItem = null;
 
 				for (final TreeItem k : projectItem.getItems())

@@ -376,6 +376,16 @@ public class DependencyService {
 			}
 			else if (type == BuildArtifactType.INTEGRATION_IMP_KAFKA)
 				moduleDependencyMap.put(type, List.of(BuildArtifactType.INTEGRATION_SEI_KAFKA, BuildArtifactType.BOUNDARY));
+			else if (type == BuildArtifactType.INTEGRATION_TEST_SOAP)
+				moduleDependencyMap.put(type, List.of(BuildArtifactType.INTEGRATION_CLIENT_SOAP));
+			else if (type == BuildArtifactType.INTEGRATION_TEST_REST)
+				moduleDependencyMap.put(type, List.of(BuildArtifactType.INTEGRATION_CLIENT_REST));
+			else if (type == BuildArtifactType.INTEGRATION_TEST_RMI)
+				moduleDependencyMap.put(type, List.of(BuildArtifactType.INTEGRATION_CLIENT_RMI));
+			else if (type == BuildArtifactType.INTEGRATION_TEST_KAFKA)
+				moduleDependencyMap.put(type, List.of(BuildArtifactType.INTEGRATION_CLIENT_KAFKA));
+			else if (type == BuildArtifactType.INTEGRATION_TEST_JMS)
+				moduleDependencyMap.put(type, List.of(BuildArtifactType.INTEGRATION_CLIENT_JMS));
 		}
 
 		return moduleDependencyMap;

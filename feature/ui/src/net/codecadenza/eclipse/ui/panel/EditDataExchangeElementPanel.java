@@ -25,6 +25,8 @@ import static net.codecadenza.eclipse.shared.Constants.IMG_ATTRIBUTE;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 import net.codecadenza.eclipse.model.domain.AbstractDomainAssociation;
 import net.codecadenza.eclipse.model.domain.CollectionTypeEnumeration;
 import net.codecadenza.eclipse.model.domain.DomainAttribute;
@@ -46,6 +48,7 @@ import net.codecadenza.eclipse.model.exchange.ExchangeMappingObject;
 import net.codecadenza.eclipse.model.java.JavaType;
 import net.codecadenza.eclipse.model.java.JavaTypeModifierEnumeration;
 import net.codecadenza.eclipse.model.project.Project;
+import net.codecadenza.eclipse.model.testing.IntegrationTestCase;
 import net.codecadenza.eclipse.resource.CodeCadenzaResourcePlugin;
 import net.codecadenza.eclipse.ui.CodeCadenzaUserInterfacePlugin;
 import net.codecadenza.eclipse.ui.dialog.exchange.CreateNewDataExchangeElementDialog;
@@ -903,6 +906,18 @@ public class EditDataExchangeElementPanel extends Composite {
 				ExchangeMappingObject mappingObject = null;
 
 				if (attribute.getMappingAttribute() != null) {
+					final ExchangeMappingAttribute mappingAttribute = attribute.getMappingAttribute();
+					final Set<IntegrationTestCase> testCases = project.searchIntegrationTestCasesByMappingAttribute(mappingAttribute);
+
+					if (!testCases.isEmpty()) {
+						final var message = "The attribute cannot be deleted, because it is referenced by following integration test cases:\n";
+						final String testCaseNames = testCases.stream().map(IntegrationTestCase::getName)
+								.collect(Collectors.joining(System.lineSeparator()));
+
+						MessageDialog.openInformation(getShell(), title, message + testCaseNames);
+						return;
+					}
+
 					// Remove the mapping attribute from the association controller tree view
 					removeAttributeFromAssocTree(attribute.getMappingAttribute());
 
@@ -1030,6 +1045,18 @@ public class EditDataExchangeElementPanel extends Composite {
 
 				if (editMode) {
 					if (element.getMappingAttribute() != null) {
+						final ExchangeMappingAttribute mappingAttribute = element.getMappingAttribute();
+						final Set<IntegrationTestCase> testCases = project.searchIntegrationTestCasesByMappingAttribute(mappingAttribute);
+
+						if (!testCases.isEmpty()) {
+							final var message = "The element cannot be deleted, because it is referenced by following integration test cases:\n";
+							final String testCaseNames = testCases.stream().map(IntegrationTestCase::getName)
+									.collect(Collectors.joining(System.lineSeparator()));
+
+							MessageDialog.openInformation(getShell(), title, message + testCaseNames);
+							return;
+						}
+
 						// Remove the mapping attribute from the association controller tree view
 						removeAttributeFromAssocTree(element.getMappingAttribute());
 

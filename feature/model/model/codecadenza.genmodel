@@ -5,7 +5,7 @@
     editPluginClass="net.codecadenza.eclipse.model.boundary.provider.CodeCadenzaEditPlugin"
     editorPluginClass="net.codecadenza.eclipse.model.boundary.presentation.CodeCadenzaEditorPlugin"
     rootImplementsInterface="" testSuiteClass="net.codecadenza.eclipse.model.boundary.tests.CodeCadenzaAllTests"
-    importerID="org.eclipse.emf.importer.ecore" complianceLevel="7.0" copyrightFields="false"
+    importerID="org.eclipse.emf.importer.ecore" complianceLevel="23.0" copyrightFields="false"
     editPluginID="net.codecadenza.eclipse.model.edit" editorPluginID="net.codecadenza.eclipse.model.editor"
     language="" interfaceNamePattern="">
   <foreignModel>boundary.ecore</foreignModel>
@@ -932,6 +932,11 @@
       <genEnumLiterals ecoreEnumLiteral="project.ecore#//BuildArtifactType/INTEGRATION_IMP_JMS"/>
       <genEnumLiterals ecoreEnumLiteral="project.ecore#//BuildArtifactType/INTEGRATION_SEI_JMS"/>
       <genEnumLiterals ecoreEnumLiteral="project.ecore#//BuildArtifactType/INTEGRATION_CLIENT_JMS"/>
+      <genEnumLiterals ecoreEnumLiteral="project.ecore#//BuildArtifactType/INTEGRATION_TEST_SOAP"/>
+      <genEnumLiterals ecoreEnumLiteral="project.ecore#//BuildArtifactType/INTEGRATION_TEST_REST"/>
+      <genEnumLiterals ecoreEnumLiteral="project.ecore#//BuildArtifactType/INTEGRATION_TEST_RMI"/>
+      <genEnumLiterals ecoreEnumLiteral="project.ecore#//BuildArtifactType/INTEGRATION_TEST_KAFKA"/>
+      <genEnumLiterals ecoreEnumLiteral="project.ecore#//BuildArtifactType/INTEGRATION_TEST_JMS"/>
     </genEnums>
     <genEnums typeSafeEnumCompatible="false" ecoreEnum="project.ecore#//MappingAnnotationStrategy">
       <genEnumLiterals ecoreEnumLiteral="project.ecore#//MappingAnnotationStrategy/NEVER"/>
@@ -1096,6 +1101,20 @@
       <genEnumLiterals ecoreEnumLiteral="testing.ecore#//GUITestActionResultComponentType/DIALOG"/>
       <genEnumLiterals ecoreEnumLiteral="testing.ecore#//GUITestActionResultComponentType/NOTIFICATION"/>
     </genEnums>
+    <genEnums typeSafeEnumCompatible="false" ecoreEnum="testing.ecore#//AssertionOperator">
+      <genEnumLiterals ecoreEnumLiteral="testing.ecore#//AssertionOperator/NONE"/>
+      <genEnumLiterals ecoreEnumLiteral="testing.ecore#//AssertionOperator/EQUAL"/>
+      <genEnumLiterals ecoreEnumLiteral="testing.ecore#//AssertionOperator/IS_NULL"/>
+      <genEnumLiterals ecoreEnumLiteral="testing.ecore#//AssertionOperator/IS_NOT_NULL"/>
+      <genEnumLiterals ecoreEnumLiteral="testing.ecore#//AssertionOperator/GREATER_OR_EQUAL"/>
+      <genEnumLiterals ecoreEnumLiteral="testing.ecore#//AssertionOperator/GREATER"/>
+      <genEnumLiterals ecoreEnumLiteral="testing.ecore#//AssertionOperator/SMALLER_OR_EQUAL"/>
+      <genEnumLiterals ecoreEnumLiteral="testing.ecore#//AssertionOperator/SMALLER"/>
+      <genEnumLiterals ecoreEnumLiteral="testing.ecore#//AssertionOperator/STARTS_WITH"/>
+      <genEnumLiterals ecoreEnumLiteral="testing.ecore#//AssertionOperator/ENDS_WITH"/>
+      <genEnumLiterals ecoreEnumLiteral="testing.ecore#//AssertionOperator/CONTAINS"/>
+      <genEnumLiterals ecoreEnumLiteral="testing.ecore#//AssertionOperator/IS_EMPTY"/>
+    </genEnums>
     <genClasses image="false" ecoreClass="testing.ecore#//AbstractTestModule">
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference testing.ecore#//AbstractTestModule/namespace"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute testing.ecore#//AbstractTestModule/testCaseSuffix"/>
@@ -1144,6 +1163,59 @@
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute testing.ecore#//GUITestData/type"/>
       <genFeatures property="None" notify="false" createChild="false" ecoreFeature="ecore:EReference testing.ecore#//GUITestData/testAction"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute testing.ecore#//GUITestData/filterValue"/>
+    </genClasses>
+    <genClasses ecoreClass="testing.ecore#//IntegrationTestModule">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute testing.ecore#//IntegrationTestModule/defaultTimeout"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute testing.ecore#//IntegrationTestModule/decimalFormat"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute testing.ecore#//IntegrationTestModule/dateTimeFormat"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference testing.ecore#//IntegrationTestModule/integrationModule"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute testing.ecore#//IntegrationTestModule/dateFormat"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute testing.ecore#//IntegrationTestModule/decimalSeparator"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute testing.ecore#//IntegrationTestModule/groupingSeparator"/>
+    </genClasses>
+    <genClasses ecoreClass="testing.ecore#//IntegrationTestCase">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute testing.ecore#//IntegrationTestCase/userName"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute testing.ecore#//IntegrationTestCase/password"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference testing.ecore#//IntegrationTestCase/methodInvocations"/>
+    </genClasses>
+    <genClasses ecoreClass="testing.ecore#//IntegrationMethodTestInvocation">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute testing.ecore#//IntegrationMethodTestInvocation/expectToFail"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute testing.ecore#//IntegrationMethodTestInvocation/postProcessingStatement"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute testing.ecore#//IntegrationMethodTestInvocation/timeout"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference testing.ecore#//IntegrationMethodTestInvocation/integrationMethod"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference testing.ecore#//IntegrationMethodTestInvocation/parameters"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference testing.ecore#//IntegrationMethodTestInvocation/returnValues"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference testing.ecore#//IntegrationMethodTestInvocation/postProcessingAttributes"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference testing.ecore#//IntegrationMethodTestInvocation/nestedInvocations"/>
+      <genFeatures property="None" notify="false" createChild="false" ecoreFeature="ecore:EReference testing.ecore#//IntegrationMethodTestInvocation/parentInvocation"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute testing.ecore#//IntegrationMethodTestInvocation/testMethodName"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute testing.ecore#//IntegrationMethodTestInvocation/expectedSize"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute testing.ecore#//IntegrationMethodTestInvocation/expectedSizeOperator"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute testing.ecore#//IntegrationMethodTestInvocation/expectedReturnNull"/>
+    </genClasses>
+    <genClasses ecoreClass="testing.ecore#//MethodInvocationParameter">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference testing.ecore#//MethodInvocationParameter/parameterValues"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute testing.ecore#//MethodInvocationParameter/name"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference testing.ecore#//MethodInvocationParameter/type"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute testing.ecore#//MethodInvocationParameter/representsList"/>
+    </genClasses>
+    <genClasses ecoreClass="testing.ecore#//TestDataObject">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference testing.ecore#//TestDataObject/mappingObject"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference testing.ecore#//TestDataObject/attributes"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference testing.ecore#//TestDataObject/referencedObject"/>
+    </genClasses>
+    <genClasses ecoreClass="testing.ecore#//TestDataAttribute">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference testing.ecore#//TestDataAttribute/mappingAttribute"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute testing.ecore#//TestDataAttribute/value"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute testing.ecore#//TestDataAttribute/trackValue"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute testing.ecore#//TestDataAttribute/operator"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference testing.ecore#//TestDataAttribute/referencedAttribute"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference testing.ecore#//TestDataAttribute/referencedObjects"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference testing.ecore#//TestDataAttribute/mappingType"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute testing.ecore#//TestDataAttribute/name"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute testing.ecore#//TestDataAttribute/expectedSize"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute testing.ecore#//TestDataAttribute/expectedSizeOperator"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute testing.ecore#//TestDataAttribute/id"/>
     </genClasses>
   </genPackages>
 </genmodel:GenModel>

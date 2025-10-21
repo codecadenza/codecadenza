@@ -15,7 +15,8 @@ Require-Bundle: org.eclipse.ui;bundle-version="3.111.0",
  net.codecadenza.eclipse.model;bundle-version="1.1.0",
  net.codecadenza.eclipse.resource;bundle-version="1.1.0",
  net.codecadenza.eclipse.shared;bundle-version="1.1.0",
- net.codecadenza.eclipse.tools;bundle-version="1.1.0"
+ net.codecadenza.eclipse.tools;bundle-version="1.1.0",
+ org.apache.commons.text;bundle-version="1.12.0"
 Bundle-ActivationPolicy: lazy
 Bundle-RequiredExecutionEnvironment: JavaSE-21
 Export-Package: net.codecadenza.eclipse.generator,
@@ -62,5 +63,6 @@ Export-Package: net.codecadenza.eclipse.generator,
  net.codecadenza.eclipse.generator.security,
  net.codecadenza.eclipse.generator.service,
  net.codecadenza.eclipse.generator.testing.gui,
- net.codecadenza.eclipse.generator.testing.gui.imp
+ net.codecadenza.eclipse.generator.testing.gui.imp,
+ net.codecadenza.eclipse.generator.testing.integration
 Bundle-Vendor: Martin Ganserer

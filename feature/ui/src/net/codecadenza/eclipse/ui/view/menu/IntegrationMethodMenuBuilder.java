@@ -21,10 +21,13 @@
  */
 package net.codecadenza.eclipse.ui.view.menu;
 
+import java.util.Set;
+import java.util.stream.Collectors;
 import net.codecadenza.eclipse.model.integration.AbstractIntegrationBean;
 import net.codecadenza.eclipse.model.integration.AbstractIntegrationMethod;
 import net.codecadenza.eclipse.model.project.IntegrationTechnology;
 import net.codecadenza.eclipse.model.project.Project;
+import net.codecadenza.eclipse.model.testing.IntegrationTestCase;
 import net.codecadenza.eclipse.service.integration.IntegrationBeanService;
 import net.codecadenza.eclipse.tools.ide.EclipseIDEService;
 import net.codecadenza.eclipse.ui.CodeCadenzaUserInterfacePlugin;
@@ -129,14 +132,25 @@ public class IntegrationMethodMenuBuilder extends AbstractMenuBuilder<AbstractIn
 				if (EclipseIDEService.openDiagramExists(view))
 					return;
 
+				final AbstractIntegrationMethod method = getSelectedObject();
+				final Project project = method.getIntegrationBean().getNamespace().getProject();
+				final Set<IntegrationTestCase> testCases = project.searchIntegrationTestCasesByIntegrationMethod(method);
+
+				if (!testCases.isEmpty()) {
+					final var message = "The method cannot be deleted, because it is referenced by following integration test cases:\n";
+
+					final String testCaseNames = testCases.stream().map(IntegrationTestCase::getName)
+							.collect(Collectors.joining(System.lineSeparator()));
+
+					MessageDialog.openInformation(shell, TITLE_DELETE, message + testCaseNames);
+					return;
+				}
+
 				if (!MessageDialog.openConfirm(shell, TITLE_DELETE, "Do you really want to delete the selected method?"))
 					return;
 
 				try {
-					final AbstractIntegrationMethod method = getSelectedObject();
-					final var integrationBeanService = new IntegrationBeanService(method.getIntegrationBean().getNamespace().getProject());
-
-					integrationBeanService.removeIntegrationMethod(method);
+					new IntegrationBeanService(project).removeIntegrationMethod(method);
 
 					view.refreshTree();
 				}

@@ -142,47 +142,56 @@ public class BuildConfigWizardPage extends WizardPage {
 
 			if (!pageIntegration.isAddSOAPModule()) {
 				if (artifactType == BuildArtifactType.INTEGRATION_CLIENT_SOAP || artifactType == BuildArtifactType.INTEGRATION_IMP_SOAP
-						|| artifactType == BuildArtifactType.INTEGRATION_SEI_SOAP)
+						|| artifactType == BuildArtifactType.INTEGRATION_SEI_SOAP || artifactType == BuildArtifactType.INTEGRATION_TEST_SOAP)
 					remove = true;
 			}
-			else if (!pageIntegration.isAddSOAPClient() && artifactType == BuildArtifactType.INTEGRATION_CLIENT_SOAP)
+			else if (!pageIntegration.isAddSOAPClient() && (artifactType == BuildArtifactType.INTEGRATION_CLIENT_SOAP
+					|| artifactType == BuildArtifactType.INTEGRATION_TEST_SOAP))
 				remove = true;
 
 			if (!pageIntegration.isAddRESTModule()) {
 				if (artifactType == BuildArtifactType.INTEGRATION_CLIENT_REST || artifactType == BuildArtifactType.INTEGRATION_IMP_REST
-						|| artifactType == BuildArtifactType.INTEGRATION_SEI_REST)
+						|| artifactType == BuildArtifactType.INTEGRATION_SEI_REST || artifactType == BuildArtifactType.INTEGRATION_TEST_REST)
 					remove = true;
 			}
 			else if (!pageIntegration.isAddRESTClient() && (artifactType == BuildArtifactType.INTEGRATION_CLIENT_REST
-					|| artifactType == BuildArtifactType.INTEGRATION_SEI_REST))
+					|| artifactType == BuildArtifactType.INTEGRATION_SEI_REST || artifactType == BuildArtifactType.INTEGRATION_TEST_REST))
 				remove = true;
 
 			if (!pageIntegration.isAddRMIModule()) {
 				if (artifactType == BuildArtifactType.INTEGRATION_CLIENT_RMI || artifactType == BuildArtifactType.INTEGRATION_IMP_RMI
-						|| artifactType == BuildArtifactType.INTEGRATION_SEI_RMI)
+						|| artifactType == BuildArtifactType.INTEGRATION_SEI_RMI || artifactType == BuildArtifactType.INTEGRATION_TEST_RMI)
 					remove = true;
 			}
-			else if (!pageIntegration.isAddRMIClient() && artifactType == BuildArtifactType.INTEGRATION_CLIENT_RMI)
+			else if (!pageIntegration.isAddRMIClient()
+					&& (artifactType == BuildArtifactType.INTEGRATION_CLIENT_RMI || artifactType == BuildArtifactType.INTEGRATION_TEST_RMI))
 				remove = true;
 
 			if (!pageIntegration.isAddKafkaModule()) {
 				if (artifactType == BuildArtifactType.INTEGRATION_CLIENT_KAFKA || artifactType == BuildArtifactType.INTEGRATION_IMP_KAFKA
-						|| artifactType == BuildArtifactType.INTEGRATION_SEI_KAFKA)
+						|| artifactType == BuildArtifactType.INTEGRATION_SEI_KAFKA
+						|| artifactType == BuildArtifactType.INTEGRATION_TEST_KAFKA)
 					remove = true;
 			}
-			else if (!pageIntegration.isAddKafkaClient() && artifactType == BuildArtifactType.INTEGRATION_CLIENT_KAFKA)
+			else if (!pageIntegration.isAddKafkaClient() && (artifactType == BuildArtifactType.INTEGRATION_CLIENT_KAFKA
+					|| artifactType == BuildArtifactType.INTEGRATION_TEST_KAFKA))
 				remove = true;
 
 			if (!pageIntegration.isAddJMSModule()) {
 				if (artifactType == BuildArtifactType.INTEGRATION_CLIENT_JMS || artifactType == BuildArtifactType.INTEGRATION_IMP_JMS
-						|| artifactType == BuildArtifactType.INTEGRATION_SEI_JMS)
+						|| artifactType == BuildArtifactType.INTEGRATION_SEI_JMS || artifactType == BuildArtifactType.INTEGRATION_TEST_JMS)
 					remove = true;
 			}
-			else if (!pageIntegration.isAddJMSClient()
-					&& (artifactType == BuildArtifactType.INTEGRATION_CLIENT_JMS || artifactType == BuildArtifactType.INTEGRATION_SEI_JMS))
+			else if (!pageIntegration.isAddJMSClient() && (artifactType == BuildArtifactType.INTEGRATION_CLIENT_JMS
+					|| artifactType == BuildArtifactType.INTEGRATION_SEI_JMS || artifactType == BuildArtifactType.INTEGRATION_TEST_JMS))
 				remove = true;
 
-			if (!pageTesting.isAddSeleniumTestModule() && artifactType == BuildArtifactType.SELENIUM_TEST)
+			if ((!pageTesting.isAddSeleniumTestModule() && artifactType == BuildArtifactType.SELENIUM_TEST)
+					|| (!pageTesting.isAddRESTTestModule() && artifactType == BuildArtifactType.INTEGRATION_TEST_REST)
+					|| (!pageTesting.isAddSOAPTestModule() && artifactType == BuildArtifactType.INTEGRATION_TEST_SOAP)
+					|| (!pageTesting.isAddRMITestModule() && artifactType == BuildArtifactType.INTEGRATION_TEST_RMI)
+					|| (!pageTesting.isAddKafkaTestModule() && artifactType == BuildArtifactType.INTEGRATION_TEST_KAFKA)
+					|| (!pageTesting.isAddJMSTestModule() && artifactType == BuildArtifactType.INTEGRATION_TEST_JMS))
 				remove = true;
 
 			if (remove)

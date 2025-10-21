@@ -75,6 +75,7 @@ public class ProjectSelectionDialog extends CodeCadenzaDialog {
 	private Button chkAddKafka;
 	private Button chkAddJMS;
 	private Button chkAddSelenium;
+	private Button chkAddIntegrationTests;
 	private boolean protectManualChanges;
 	private boolean addREST = true;
 	private boolean addSOAP = true;
@@ -82,6 +83,7 @@ public class ProjectSelectionDialog extends CodeCadenzaDialog {
 	private boolean addKafka = true;
 	private boolean addJMS = true;
 	private boolean addSelenium = true;
+	private boolean addIntegrationTests = true;
 	private boolean selectAll = true;
 
 	/**
@@ -109,12 +111,14 @@ public class ProjectSelectionDialog extends CodeCadenzaDialog {
 			config.setAddKafka(false);
 			config.setAddJMS(false);
 			config.setAddSelenium(false);
+			config.setAddIntegrationTests(false);
 
 			// Accept the user selection only if the selected configuration basically supports a given technology!
 			if (technology == TechnologyPlatformEnumeration.SPRING_BOOT || technology == TechnologyPlatformEnumeration.JAKARTA_EE) {
 				config.setAddREST(addREST);
 				config.setAddSOAP(addSOAP);
 				config.setAddJMS(addJMS);
+				config.setAddIntegrationTests(addIntegrationTests);
 
 				if (technology == TechnologyPlatformEnumeration.JAKARTA_EE)
 					config.setAddRMI(addRMI);
@@ -202,7 +206,7 @@ public class ProjectSelectionDialog extends CodeCadenzaDialog {
 			}
 		});
 
-		final GridLayout glOptionalArtifacts = new GridLayout(8, false);
+		final GridLayout glOptionalArtifacts = new GridLayout(9, false);
 		glOptionalArtifacts.marginWidth = 0;
 
 		final var panOptionalArtifacts = new Composite(panDialogArea, SWT.NONE);
@@ -302,6 +306,21 @@ public class ProjectSelectionDialog extends CodeCadenzaDialog {
 			}
 		});
 
+		chkAddIntegrationTests = new Button(panOptionalArtifacts, SWT.CHECK);
+		chkAddIntegrationTests.setSelection(true);
+		chkAddIntegrationTests.setText("Integration tests");
+
+		chkAddIntegrationTests.addSelectionListener(new SelectionAdapter() {
+			/*
+			 * (non-Javadoc)
+			 * @see org.eclipse.swt.events.SelectionAdapter#widgetSelected(org.eclipse.swt.events.SelectionEvent)
+			 */
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				addIntegrationTests = chkAddIntegrationTests.getSelection();
+			}
+		});
+
 		final var cmdToggleSelection = new Button(panOptionalArtifacts, SWT.NONE);
 		cmdToggleSelection.setText("Toggle");
 
@@ -319,6 +338,7 @@ public class ProjectSelectionDialog extends CodeCadenzaDialog {
 				addKafka = selectAll;
 				addJMS = selectAll;
 				addSelenium = selectAll;
+				addIntegrationTests = selectAll;
 
 				chkAddREST.setSelection(selectAll);
 				chkAddSOAP.setSelection(selectAll);
@@ -326,6 +346,7 @@ public class ProjectSelectionDialog extends CodeCadenzaDialog {
 				chkAddKafka.setSelection(selectAll);
 				chkAddJMS.setSelection(selectAll);
 				chkAddSelenium.setSelection(selectAll);
+				chkAddIntegrationTests.setSelection(selectAll);
 			}
 		});
 

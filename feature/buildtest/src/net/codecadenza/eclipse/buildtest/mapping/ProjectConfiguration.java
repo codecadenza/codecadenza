@@ -73,6 +73,7 @@ public class ProjectConfiguration implements Serializable {
 	private boolean addKafka;
 	private boolean addJMS;
 	private boolean addSelenium;
+	private boolean addIntegrationTests;
 
 	/**
 	 * @return the client platform
@@ -222,7 +223,7 @@ public class ProjectConfiguration implements Serializable {
 	}
 
 	/**
-	 * @return true if a RMI integration module should be added
+	 * @return true if an RMI integration module should be added
 	 */
 	public boolean isAddRMI() {
 		return addRMI;
@@ -275,6 +276,20 @@ public class ProjectConfiguration implements Serializable {
 	 */
 	public void setAddSelenium(boolean addSelenium) {
 		this.addSelenium = addSelenium;
+	}
+
+	/**
+	 * @return the true if the integration tests should be added
+	 */
+	public boolean isAddIntegrationTests() {
+		return addIntegrationTests;
+	}
+
+	/**
+	 * @param addIntegrationTests
+	 */
+	public void setAddIntegrationTests(boolean addIntegrationTests) {
+		this.addIntegrationTests = addIntegrationTests;
 	}
 
 	/**

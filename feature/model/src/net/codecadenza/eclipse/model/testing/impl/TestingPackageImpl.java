@@ -47,6 +47,7 @@ import net.codecadenza.eclipse.model.service.ServicePackage;
 import net.codecadenza.eclipse.model.service.impl.ServicePackageImpl;
 import net.codecadenza.eclipse.model.testing.AbstractTestCase;
 import net.codecadenza.eclipse.model.testing.AbstractTestModule;
+import net.codecadenza.eclipse.model.testing.AssertionOperator;
 import net.codecadenza.eclipse.model.testing.GUITestAction;
 import net.codecadenza.eclipse.model.testing.GUITestActionResult;
 import net.codecadenza.eclipse.model.testing.GUITestActionResultComponentType;
@@ -55,8 +56,14 @@ import net.codecadenza.eclipse.model.testing.GUITestActionType;
 import net.codecadenza.eclipse.model.testing.GUITestCase;
 import net.codecadenza.eclipse.model.testing.GUITestData;
 import net.codecadenza.eclipse.model.testing.GUITestDataType;
+import net.codecadenza.eclipse.model.testing.IntegrationMethodTestInvocation;
+import net.codecadenza.eclipse.model.testing.IntegrationTestCase;
+import net.codecadenza.eclipse.model.testing.IntegrationTestModule;
+import net.codecadenza.eclipse.model.testing.MethodInvocationParameter;
 import net.codecadenza.eclipse.model.testing.SeleniumDriver;
 import net.codecadenza.eclipse.model.testing.SeleniumTestModule;
+import net.codecadenza.eclipse.model.testing.TestDataAttribute;
+import net.codecadenza.eclipse.model.testing.TestDataObject;
 import net.codecadenza.eclipse.model.testing.TestSuite;
 import net.codecadenza.eclipse.model.testing.TestingFactory;
 import net.codecadenza.eclipse.model.testing.TestingPackage;
@@ -115,6 +122,36 @@ public class TestingPackageImpl extends EPackageImpl implements TestingPackage {
 	/**
 	 * @generated
 	 */
+	private EClass integrationTestModuleEClass;
+
+	/**
+	 * @generated
+	 */
+	private EClass integrationTestCaseEClass;
+
+	/**
+	 * @generated
+	 */
+	private EClass integrationMethodTestInvocationEClass;
+
+	/**
+	 * @generated
+	 */
+	private EClass methodInvocationParameterEClass;
+
+	/**
+	 * @generated
+	 */
+	private EClass testDataObjectEClass;
+
+	/**
+	 * @generated
+	 */
+	private EClass testDataAttributeEClass;
+
+	/**
+	 * @generated
+	 */
 	private EEnum guiTestActionStatusEEnum;
 
 	/**
@@ -136,6 +173,11 @@ public class TestingPackageImpl extends EPackageImpl implements TestingPackage {
 	 * @generated
 	 */
 	private EEnum guiTestActionResultComponentTypeEEnum;
+
+	/**
+	 * @generated
+	 */
+	private EEnum assertionOperatorEEnum;
 
 	/**
 	 * Create an instance of the model <b>Package</b>, registered with {@link org.eclipse.emf.ecore.EPackage.Registry
@@ -179,41 +221,42 @@ public class TestingPackageImpl extends EPackageImpl implements TestingPackage {
 		isInited = true;
 
 		// Obtain or create and register interdependencies
-		final var theBoundaryPackage = (BoundaryPackageImpl) (EPackage.Registry.INSTANCE
-				.getEPackage(BoundaryPackage.eNS_URI) instanceof BoundaryPackageImpl
-						? EPackage.Registry.INSTANCE.getEPackage(BoundaryPackage.eNS_URI) : BoundaryPackage.eINSTANCE);
-		final var theClientPackage = (ClientPackageImpl) (EPackage.Registry.INSTANCE
-				.getEPackage(ClientPackage.eNS_URI) instanceof ClientPackageImpl
-						? EPackage.Registry.INSTANCE.getEPackage(ClientPackage.eNS_URI) : ClientPackage.eINSTANCE);
-		final var theRepositoryPackage = (RepositoryPackageImpl) (EPackage.Registry.INSTANCE
-				.getEPackage(RepositoryPackage.eNS_URI) instanceof RepositoryPackageImpl
-						? EPackage.Registry.INSTANCE.getEPackage(RepositoryPackage.eNS_URI) : RepositoryPackage.eINSTANCE);
-		final var theDbPackage = (DbPackageImpl) (EPackage.Registry.INSTANCE.getEPackage(DbPackage.eNS_URI) instanceof DbPackageImpl
-				? EPackage.Registry.INSTANCE.getEPackage(DbPackage.eNS_URI) : DbPackage.eINSTANCE);
-		final var theDomainPackage = (DomainPackageImpl) (EPackage.Registry.INSTANCE
-				.getEPackage(DomainPackage.eNS_URI) instanceof DomainPackageImpl
-						? EPackage.Registry.INSTANCE.getEPackage(DomainPackage.eNS_URI) : DomainPackage.eINSTANCE);
-		final var theDtoPackage = (DtoPackageImpl) (EPackage.Registry.INSTANCE
-				.getEPackage(DtoPackage.eNS_URI) instanceof DtoPackageImpl ? EPackage.Registry.INSTANCE.getEPackage(DtoPackage.eNS_URI)
-						: DtoPackage.eINSTANCE);
-		final var theExchangePackage = (ExchangePackageImpl) (EPackage.Registry.INSTANCE
-				.getEPackage(ExchangePackage.eNS_URI) instanceof ExchangePackageImpl
-						? EPackage.Registry.INSTANCE.getEPackage(ExchangePackage.eNS_URI) : ExchangePackage.eINSTANCE);
-		final var theIntegrationPackage = (IntegrationPackageImpl) (EPackage.Registry.INSTANCE
-				.getEPackage(IntegrationPackage.eNS_URI) instanceof IntegrationPackageImpl
-						? EPackage.Registry.INSTANCE.getEPackage(IntegrationPackage.eNS_URI) : IntegrationPackage.eINSTANCE);
-		final var theJavaPackage = (JavaPackageImpl) (EPackage.Registry.INSTANCE
-				.getEPackage(JavaPackage.eNS_URI) instanceof JavaPackageImpl ? EPackage.Registry.INSTANCE.getEPackage(JavaPackage.eNS_URI)
-						: JavaPackage.eINSTANCE);
-		final var theMappingPackage = (MappingPackageImpl) (EPackage.Registry.INSTANCE
-				.getEPackage(MappingPackage.eNS_URI) instanceof MappingPackageImpl
-						? EPackage.Registry.INSTANCE.getEPackage(MappingPackage.eNS_URI) : MappingPackage.eINSTANCE);
-		final var theProjectPackage = (ProjectPackageImpl) (EPackage.Registry.INSTANCE
-				.getEPackage(ProjectPackage.eNS_URI) instanceof ProjectPackageImpl
-						? EPackage.Registry.INSTANCE.getEPackage(ProjectPackage.eNS_URI) : ProjectPackage.eINSTANCE);
-		final var theServicePackage = (ServicePackageImpl) (EPackage.Registry.INSTANCE
-				.getEPackage(ServicePackage.eNS_URI) instanceof ServicePackageImpl
-						? EPackage.Registry.INSTANCE.getEPackage(ServicePackage.eNS_URI) : ServicePackage.eINSTANCE);
+		Object registeredPackage = EPackage.Registry.INSTANCE.getEPackage(BoundaryPackage.eNS_URI);
+		final var theBoundaryPackage = (BoundaryPackageImpl) (registeredPackage instanceof BoundaryPackageImpl ? registeredPackage
+				: BoundaryPackage.eINSTANCE);
+		registeredPackage = EPackage.Registry.INSTANCE.getEPackage(ClientPackage.eNS_URI);
+		final var theClientPackage = (ClientPackageImpl) (registeredPackage instanceof ClientPackageImpl ? registeredPackage
+				: ClientPackage.eINSTANCE);
+		registeredPackage = EPackage.Registry.INSTANCE.getEPackage(RepositoryPackage.eNS_URI);
+		final var theRepositoryPackage = (RepositoryPackageImpl) (registeredPackage instanceof RepositoryPackageImpl
+				? registeredPackage : RepositoryPackage.eINSTANCE);
+		registeredPackage = EPackage.Registry.INSTANCE.getEPackage(DbPackage.eNS_URI);
+		final var theDbPackage = (DbPackageImpl) (registeredPackage instanceof DbPackageImpl ? registeredPackage
+				: DbPackage.eINSTANCE);
+		registeredPackage = EPackage.Registry.INSTANCE.getEPackage(DomainPackage.eNS_URI);
+		final var theDomainPackage = (DomainPackageImpl) (registeredPackage instanceof DomainPackageImpl ? registeredPackage
+				: DomainPackage.eINSTANCE);
+		registeredPackage = EPackage.Registry.INSTANCE.getEPackage(DtoPackage.eNS_URI);
+		final var theDtoPackage = (DtoPackageImpl) (registeredPackage instanceof DtoPackageImpl ? registeredPackage
+				: DtoPackage.eINSTANCE);
+		registeredPackage = EPackage.Registry.INSTANCE.getEPackage(ExchangePackage.eNS_URI);
+		final var theExchangePackage = (ExchangePackageImpl) (registeredPackage instanceof ExchangePackageImpl ? registeredPackage
+				: ExchangePackage.eINSTANCE);
+		registeredPackage = EPackage.Registry.INSTANCE.getEPackage(IntegrationPackage.eNS_URI);
+		final var theIntegrationPackage = (IntegrationPackageImpl) (registeredPackage instanceof IntegrationPackageImpl
+				? registeredPackage : IntegrationPackage.eINSTANCE);
+		registeredPackage = EPackage.Registry.INSTANCE.getEPackage(JavaPackage.eNS_URI);
+		final var theJavaPackage = (JavaPackageImpl) (registeredPackage instanceof JavaPackageImpl ? registeredPackage
+				: JavaPackage.eINSTANCE);
+		registeredPackage = EPackage.Registry.INSTANCE.getEPackage(MappingPackage.eNS_URI);
+		final var theMappingPackage = (MappingPackageImpl) (registeredPackage instanceof MappingPackageImpl ? registeredPackage
+				: MappingPackage.eINSTANCE);
+		registeredPackage = EPackage.Registry.INSTANCE.getEPackage(ProjectPackage.eNS_URI);
+		final var theProjectPackage = (ProjectPackageImpl) (registeredPackage instanceof ProjectPackageImpl ? registeredPackage
+				: ProjectPackage.eINSTANCE);
+		registeredPackage = EPackage.Registry.INSTANCE.getEPackage(ServicePackage.eNS_URI);
+		final var theServicePackage = (ServicePackageImpl) (registeredPackage instanceof ServicePackageImpl ? registeredPackage
+				: ServicePackage.eINSTANCE);
 
 		// Create package meta-data objects
 		theTestingPackage.createPackageContents();
@@ -646,10 +689,481 @@ public class TestingPackageImpl extends EPackageImpl implements TestingPackage {
 	/*
 	 * (non-Javadoc)
 	 * @see net.codecadenza.eclipse.model.testing.TestingPackage#getGUITestData_FilterValue()
+	 * @generated
 	 */
 	@Override
 	public EAttribute getGUITestData_FilterValue() {
 		return (EAttribute) guiTestDataEClass.getEStructuralFeatures().get(6);
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see net.codecadenza.eclipse.model.testing.TestingPackage#getIntegrationTestModule()
+	 * @generated
+	 */
+	@Override
+	public EClass getIntegrationTestModule() {
+		return integrationTestModuleEClass;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see net.codecadenza.eclipse.model.testing.TestingPackage#getIntegrationTestModule_DefaultTimeout()
+	 * @generated
+	 */
+	@Override
+	public EAttribute getIntegrationTestModule_DefaultTimeout() {
+		return (EAttribute) integrationTestModuleEClass.getEStructuralFeatures().get(0);
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see net.codecadenza.eclipse.model.testing.TestingPackage#getIntegrationTestModule_DecimalFormat()
+	 * @generated
+	 */
+	@Override
+	public EAttribute getIntegrationTestModule_DecimalFormat() {
+		return (EAttribute) integrationTestModuleEClass.getEStructuralFeatures().get(1);
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see net.codecadenza.eclipse.model.testing.TestingPackage#getIntegrationTestModule_DateTimeFormat()
+	 * @generated
+	 */
+	@Override
+	public EAttribute getIntegrationTestModule_DateTimeFormat() {
+		return (EAttribute) integrationTestModuleEClass.getEStructuralFeatures().get(2);
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see net.codecadenza.eclipse.model.testing.TestingPackage#getIntegrationTestModule_IntegrationModule()
+	 * @generated
+	 */
+	@Override
+	public EReference getIntegrationTestModule_IntegrationModule() {
+		return (EReference) integrationTestModuleEClass.getEStructuralFeatures().get(3);
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see net.codecadenza.eclipse.model.testing.TestingPackage#getIntegrationTestModule_DateFormat()
+	 * @generated
+	 */
+	@Override
+	public EAttribute getIntegrationTestModule_DateFormat() {
+		return (EAttribute) integrationTestModuleEClass.getEStructuralFeatures().get(4);
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see net.codecadenza.eclipse.model.testing.TestingPackage#getIntegrationTestModule_DecimalSeparator()
+	 * @generated
+	 */
+	@Override
+	public EAttribute getIntegrationTestModule_DecimalSeparator() {
+		return (EAttribute) integrationTestModuleEClass.getEStructuralFeatures().get(5);
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see net.codecadenza.eclipse.model.testing.TestingPackage#getIntegrationTestModule_GroupingSeparator()
+	 * @generated
+	 */
+	@Override
+	public EAttribute getIntegrationTestModule_GroupingSeparator() {
+		return (EAttribute) integrationTestModuleEClass.getEStructuralFeatures().get(6);
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see net.codecadenza.eclipse.model.testing.TestingPackage#getIntegrationTestCase()
+	 * @generated
+	 */
+	@Override
+	public EClass getIntegrationTestCase() {
+		return integrationTestCaseEClass;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see net.codecadenza.eclipse.model.testing.TestingPackage#getIntegrationTestCase_UserName()
+	 * @generated
+	 */
+	@Override
+	public EAttribute getIntegrationTestCase_UserName() {
+		return (EAttribute) integrationTestCaseEClass.getEStructuralFeatures().get(0);
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see net.codecadenza.eclipse.model.testing.TestingPackage#getIntegrationTestCase_Password()
+	 * @generated
+	 */
+	@Override
+	public EAttribute getIntegrationTestCase_Password() {
+		return (EAttribute) integrationTestCaseEClass.getEStructuralFeatures().get(1);
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see net.codecadenza.eclipse.model.testing.TestingPackage#getIntegrationTestCase_MethodInvocations()
+	 * @generated
+	 */
+	@Override
+	public EReference getIntegrationTestCase_MethodInvocations() {
+		return (EReference) integrationTestCaseEClass.getEStructuralFeatures().get(2);
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see net.codecadenza.eclipse.model.testing.TestingPackage#getIntegrationMethodTestInvocation()
+	 * @generated
+	 */
+	@Override
+	public EClass getIntegrationMethodTestInvocation() {
+		return integrationMethodTestInvocationEClass;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see net.codecadenza.eclipse.model.testing.TestingPackage#getIntegrationMethodTestInvocation_ExpectToFail()
+	 * @generated
+	 */
+	@Override
+	public EAttribute getIntegrationMethodTestInvocation_ExpectToFail() {
+		return (EAttribute) integrationMethodTestInvocationEClass.getEStructuralFeatures().get(0);
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see net.codecadenza.eclipse.model.testing.TestingPackage#getIntegrationMethodTestInvocation_PostProcessingStatement()
+	 * @generated
+	 */
+	@Override
+	public EAttribute getIntegrationMethodTestInvocation_PostProcessingStatement() {
+		return (EAttribute) integrationMethodTestInvocationEClass.getEStructuralFeatures().get(1);
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see net.codecadenza.eclipse.model.testing.TestingPackage#getIntegrationMethodTestInvocation_Timeout()
+	 * @generated
+	 */
+	@Override
+	public EAttribute getIntegrationMethodTestInvocation_Timeout() {
+		return (EAttribute) integrationMethodTestInvocationEClass.getEStructuralFeatures().get(2);
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see net.codecadenza.eclipse.model.testing.TestingPackage#getIntegrationMethodTestInvocation_IntegrationMethod()
+	 * @generated
+	 */
+	@Override
+	public EReference getIntegrationMethodTestInvocation_IntegrationMethod() {
+		return (EReference) integrationMethodTestInvocationEClass.getEStructuralFeatures().get(3);
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see net.codecadenza.eclipse.model.testing.TestingPackage#getIntegrationMethodTestInvocation_Parameters()
+	 * @generated
+	 */
+	@Override
+	public EReference getIntegrationMethodTestInvocation_Parameters() {
+		return (EReference) integrationMethodTestInvocationEClass.getEStructuralFeatures().get(4);
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see net.codecadenza.eclipse.model.testing.TestingPackage#getIntegrationMethodTestInvocation_ReturnValues()
+	 * @generated
+	 */
+	@Override
+	public EReference getIntegrationMethodTestInvocation_ReturnValues() {
+		return (EReference) integrationMethodTestInvocationEClass.getEStructuralFeatures().get(5);
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see net.codecadenza.eclipse.model.testing.TestingPackage#getIntegrationMethodTestInvocation_PostProcessingAttributes()
+	 * @generated
+	 */
+	@Override
+	public EReference getIntegrationMethodTestInvocation_PostProcessingAttributes() {
+		return (EReference) integrationMethodTestInvocationEClass.getEStructuralFeatures().get(6);
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see net.codecadenza.eclipse.model.testing.TestingPackage#getIntegrationMethodTestInvocation_NestedInvocations()
+	 * @generated
+	 */
+	@Override
+	public EReference getIntegrationMethodTestInvocation_NestedInvocations() {
+		return (EReference) integrationMethodTestInvocationEClass.getEStructuralFeatures().get(7);
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see net.codecadenza.eclipse.model.testing.TestingPackage#getIntegrationMethodTestInvocation_ParentInvocation()
+	 * @generated
+	 */
+	@Override
+	public EReference getIntegrationMethodTestInvocation_ParentInvocation() {
+		return (EReference) integrationMethodTestInvocationEClass.getEStructuralFeatures().get(8);
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see net.codecadenza.eclipse.model.testing.TestingPackage#getIntegrationMethodTestInvocation_TestMethodName()
+	 * @generated
+	 */
+	@Override
+	public EAttribute getIntegrationMethodTestInvocation_TestMethodName() {
+		return (EAttribute) integrationMethodTestInvocationEClass.getEStructuralFeatures().get(9);
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see net.codecadenza.eclipse.model.testing.TestingPackage#getIntegrationMethodTestInvocation_ExpectedSize()
+	 * @generated
+	 */
+	@Override
+	public EAttribute getIntegrationMethodTestInvocation_ExpectedSize() {
+		return (EAttribute) integrationMethodTestInvocationEClass.getEStructuralFeatures().get(10);
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see net.codecadenza.eclipse.model.testing.TestingPackage#getIntegrationMethodTestInvocation_ExpectedSizeOperator()
+	 * @generated
+	 */
+	@Override
+	public EAttribute getIntegrationMethodTestInvocation_ExpectedSizeOperator() {
+		return (EAttribute) integrationMethodTestInvocationEClass.getEStructuralFeatures().get(11);
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see net.codecadenza.eclipse.model.testing.TestingPackage#getIntegrationMethodTestInvocation_ExpectedReturnNull()
+	 * @generated
+	 */
+	@Override
+	public EAttribute getIntegrationMethodTestInvocation_ExpectedReturnNull() {
+		return (EAttribute) integrationMethodTestInvocationEClass.getEStructuralFeatures().get(12);
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see net.codecadenza.eclipse.model.testing.TestingPackage#getMethodInvocationParameter()
+	 * @generated
+	 */
+	@Override
+	public EClass getMethodInvocationParameter() {
+		return methodInvocationParameterEClass;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see net.codecadenza.eclipse.model.testing.TestingPackage#getMethodInvocationParameter_ParameterValues()
+	 * @generated
+	 */
+	@Override
+	public EReference getMethodInvocationParameter_ParameterValues() {
+		return (EReference) methodInvocationParameterEClass.getEStructuralFeatures().get(0);
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see net.codecadenza.eclipse.model.testing.TestingPackage#getMethodInvocationParameter_Name()
+	 * @generated
+	 */
+	@Override
+	public EAttribute getMethodInvocationParameter_Name() {
+		return (EAttribute) methodInvocationParameterEClass.getEStructuralFeatures().get(1);
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see net.codecadenza.eclipse.model.testing.TestingPackage#getMethodInvocationParameter_Type()
+	 * @generated
+	 */
+	@Override
+	public EReference getMethodInvocationParameter_Type() {
+		return (EReference) methodInvocationParameterEClass.getEStructuralFeatures().get(2);
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see net.codecadenza.eclipse.model.testing.TestingPackage#getMethodInvocationParameter_RepresentsList()
+	 * @generated
+	 */
+	@Override
+	public EAttribute getMethodInvocationParameter_RepresentsList() {
+		return (EAttribute) methodInvocationParameterEClass.getEStructuralFeatures().get(3);
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see net.codecadenza.eclipse.model.testing.TestingPackage#getTestDataObject()
+	 * @generated
+	 */
+	@Override
+	public EClass getTestDataObject() {
+		return testDataObjectEClass;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see net.codecadenza.eclipse.model.testing.TestingPackage#getTestDataObject_MappingObject()
+	 * @generated
+	 */
+	@Override
+	public EReference getTestDataObject_MappingObject() {
+		return (EReference) testDataObjectEClass.getEStructuralFeatures().get(0);
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see net.codecadenza.eclipse.model.testing.TestingPackage#getTestDataObject_Attributes()
+	 * @generated
+	 */
+	@Override
+	public EReference getTestDataObject_Attributes() {
+		return (EReference) testDataObjectEClass.getEStructuralFeatures().get(1);
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see net.codecadenza.eclipse.model.testing.TestingPackage#getTestDataObject_ReferencedObject()
+	 * @generated
+	 */
+	@Override
+	public EReference getTestDataObject_ReferencedObject() {
+		return (EReference) testDataObjectEClass.getEStructuralFeatures().get(2);
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see net.codecadenza.eclipse.model.testing.TestingPackage#getTestDataAttribute()
+	 * @generated
+	 */
+	@Override
+	public EClass getTestDataAttribute() {
+		return testDataAttributeEClass;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see net.codecadenza.eclipse.model.testing.TestingPackage#getTestDataAttribute_MappingAttribute()
+	 * @generated
+	 */
+	@Override
+	public EReference getTestDataAttribute_MappingAttribute() {
+		return (EReference) testDataAttributeEClass.getEStructuralFeatures().get(0);
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see net.codecadenza.eclipse.model.testing.TestingPackage#getTestDataAttribute_Value()
+	 * @generated
+	 */
+	@Override
+	public EAttribute getTestDataAttribute_Value() {
+		return (EAttribute) testDataAttributeEClass.getEStructuralFeatures().get(1);
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see net.codecadenza.eclipse.model.testing.TestingPackage#getTestDataAttribute_TrackValue()
+	 * @generated
+	 */
+	@Override
+	public EAttribute getTestDataAttribute_TrackValue() {
+		return (EAttribute) testDataAttributeEClass.getEStructuralFeatures().get(2);
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see net.codecadenza.eclipse.model.testing.TestingPackage#getTestDataAttribute_Operator()
+	 * @generated
+	 */
+	@Override
+	public EAttribute getTestDataAttribute_Operator() {
+		return (EAttribute) testDataAttributeEClass.getEStructuralFeatures().get(3);
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see net.codecadenza.eclipse.model.testing.TestingPackage#getTestDataAttribute_ReferencedAttribute()
+	 * @generated
+	 */
+	@Override
+	public EReference getTestDataAttribute_ReferencedAttribute() {
+		return (EReference) testDataAttributeEClass.getEStructuralFeatures().get(4);
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see net.codecadenza.eclipse.model.testing.TestingPackage#getTestDataAttribute_ReferencedObjects()
+	 * @generated
+	 */
+	@Override
+	public EReference getTestDataAttribute_ReferencedObjects() {
+		return (EReference) testDataAttributeEClass.getEStructuralFeatures().get(5);
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see net.codecadenza.eclipse.model.testing.TestingPackage#getTestDataAttribute_MappingType()
+	 * @generated
+	 */
+	@Override
+	public EReference getTestDataAttribute_MappingType() {
+		return (EReference) testDataAttributeEClass.getEStructuralFeatures().get(6);
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see net.codecadenza.eclipse.model.testing.TestingPackage#getTestDataAttribute_Name()
+	 * @generated
+	 */
+	@Override
+	public EAttribute getTestDataAttribute_Name() {
+		return (EAttribute) testDataAttributeEClass.getEStructuralFeatures().get(7);
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see net.codecadenza.eclipse.model.testing.TestingPackage#getTestDataAttribute_ExpectedSize()
+	 * @generated
+	 */
+	@Override
+	public EAttribute getTestDataAttribute_ExpectedSize() {
+		return (EAttribute) testDataAttributeEClass.getEStructuralFeatures().get(8);
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see net.codecadenza.eclipse.model.testing.TestingPackage#getTestDataAttribute_ExpectedSizeOperator()
+	 * @generated
+	 */
+	@Override
+	public EAttribute getTestDataAttribute_ExpectedSizeOperator() {
+		return (EAttribute) testDataAttributeEClass.getEStructuralFeatures().get(9);
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see net.codecadenza.eclipse.model.testing.TestingPackage#getTestDataAttribute_Id()
+	 * @generated
+	 */
+	@Override
+	public EAttribute getTestDataAttribute_Id() {
+		return (EAttribute) testDataAttributeEClass.getEStructuralFeatures().get(10);
 	}
 
 	/*
@@ -700,6 +1214,16 @@ public class TestingPackageImpl extends EPackageImpl implements TestingPackage {
 	@Override
 	public EEnum getGUITestActionResultComponentType() {
 		return guiTestActionResultComponentTypeEEnum;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see net.codecadenza.eclipse.model.testing.TestingPackage#getAssertionOperator()
+	 * @generated
+	 */
+	@Override
+	public EEnum getAssertionOperator() {
+		return assertionOperatorEEnum;
 	}
 
 	/*
@@ -776,12 +1300,66 @@ public class TestingPackageImpl extends EPackageImpl implements TestingPackage {
 		createEReference(guiTestDataEClass, GUI_TEST_DATA__TEST_ACTION);
 		createEAttribute(guiTestDataEClass, GUI_TEST_DATA__FILTER_VALUE);
 
+		integrationTestModuleEClass = createEClass(INTEGRATION_TEST_MODULE);
+		createEAttribute(integrationTestModuleEClass, INTEGRATION_TEST_MODULE__DEFAULT_TIMEOUT);
+		createEAttribute(integrationTestModuleEClass, INTEGRATION_TEST_MODULE__DECIMAL_FORMAT);
+		createEAttribute(integrationTestModuleEClass, INTEGRATION_TEST_MODULE__DATE_TIME_FORMAT);
+		createEReference(integrationTestModuleEClass, INTEGRATION_TEST_MODULE__INTEGRATION_MODULE);
+		createEAttribute(integrationTestModuleEClass, INTEGRATION_TEST_MODULE__DATE_FORMAT);
+		createEAttribute(integrationTestModuleEClass, INTEGRATION_TEST_MODULE__DECIMAL_SEPARATOR);
+		createEAttribute(integrationTestModuleEClass, INTEGRATION_TEST_MODULE__GROUPING_SEPARATOR);
+
+		integrationTestCaseEClass = createEClass(INTEGRATION_TEST_CASE);
+		createEAttribute(integrationTestCaseEClass, INTEGRATION_TEST_CASE__USER_NAME);
+		createEAttribute(integrationTestCaseEClass, INTEGRATION_TEST_CASE__PASSWORD);
+		createEReference(integrationTestCaseEClass, INTEGRATION_TEST_CASE__METHOD_INVOCATIONS);
+
+		integrationMethodTestInvocationEClass = createEClass(INTEGRATION_METHOD_TEST_INVOCATION);
+		createEAttribute(integrationMethodTestInvocationEClass, INTEGRATION_METHOD_TEST_INVOCATION__EXPECT_TO_FAIL);
+		createEAttribute(integrationMethodTestInvocationEClass, INTEGRATION_METHOD_TEST_INVOCATION__POST_PROCESSING_STATEMENT);
+		createEAttribute(integrationMethodTestInvocationEClass, INTEGRATION_METHOD_TEST_INVOCATION__TIMEOUT);
+		createEReference(integrationMethodTestInvocationEClass, INTEGRATION_METHOD_TEST_INVOCATION__INTEGRATION_METHOD);
+		createEReference(integrationMethodTestInvocationEClass, INTEGRATION_METHOD_TEST_INVOCATION__PARAMETERS);
+		createEReference(integrationMethodTestInvocationEClass, INTEGRATION_METHOD_TEST_INVOCATION__RETURN_VALUES);
+		createEReference(integrationMethodTestInvocationEClass, INTEGRATION_METHOD_TEST_INVOCATION__POST_PROCESSING_ATTRIBUTES);
+		createEReference(integrationMethodTestInvocationEClass, INTEGRATION_METHOD_TEST_INVOCATION__NESTED_INVOCATIONS);
+		createEReference(integrationMethodTestInvocationEClass, INTEGRATION_METHOD_TEST_INVOCATION__PARENT_INVOCATION);
+		createEAttribute(integrationMethodTestInvocationEClass, INTEGRATION_METHOD_TEST_INVOCATION__TEST_METHOD_NAME);
+		createEAttribute(integrationMethodTestInvocationEClass, INTEGRATION_METHOD_TEST_INVOCATION__EXPECTED_SIZE);
+		createEAttribute(integrationMethodTestInvocationEClass, INTEGRATION_METHOD_TEST_INVOCATION__EXPECTED_SIZE_OPERATOR);
+		createEAttribute(integrationMethodTestInvocationEClass, INTEGRATION_METHOD_TEST_INVOCATION__EXPECTED_RETURN_NULL);
+
+		methodInvocationParameterEClass = createEClass(METHOD_INVOCATION_PARAMETER);
+		createEReference(methodInvocationParameterEClass, METHOD_INVOCATION_PARAMETER__PARAMETER_VALUES);
+		createEAttribute(methodInvocationParameterEClass, METHOD_INVOCATION_PARAMETER__NAME);
+		createEReference(methodInvocationParameterEClass, METHOD_INVOCATION_PARAMETER__TYPE);
+		createEAttribute(methodInvocationParameterEClass, METHOD_INVOCATION_PARAMETER__REPRESENTS_LIST);
+
+		testDataObjectEClass = createEClass(TEST_DATA_OBJECT);
+		createEReference(testDataObjectEClass, TEST_DATA_OBJECT__MAPPING_OBJECT);
+		createEReference(testDataObjectEClass, TEST_DATA_OBJECT__ATTRIBUTES);
+		createEReference(testDataObjectEClass, TEST_DATA_OBJECT__REFERENCED_OBJECT);
+
+		testDataAttributeEClass = createEClass(TEST_DATA_ATTRIBUTE);
+		createEReference(testDataAttributeEClass, TEST_DATA_ATTRIBUTE__MAPPING_ATTRIBUTE);
+		createEAttribute(testDataAttributeEClass, TEST_DATA_ATTRIBUTE__VALUE);
+		createEAttribute(testDataAttributeEClass, TEST_DATA_ATTRIBUTE__TRACK_VALUE);
+		createEAttribute(testDataAttributeEClass, TEST_DATA_ATTRIBUTE__OPERATOR);
+		createEReference(testDataAttributeEClass, TEST_DATA_ATTRIBUTE__REFERENCED_ATTRIBUTE);
+		createEReference(testDataAttributeEClass, TEST_DATA_ATTRIBUTE__REFERENCED_OBJECTS);
+		createEReference(testDataAttributeEClass, TEST_DATA_ATTRIBUTE__MAPPING_TYPE);
+		createEAttribute(testDataAttributeEClass, TEST_DATA_ATTRIBUTE__NAME);
+		createEAttribute(testDataAttributeEClass, TEST_DATA_ATTRIBUTE__EXPECTED_SIZE);
+		createEAttribute(testDataAttributeEClass, TEST_DATA_ATTRIBUTE__EXPECTED_SIZE_OPERATOR);
+		createEAttribute(testDataAttributeEClass, TEST_DATA_ATTRIBUTE__ID);
+
 		// Create enums
 		guiTestActionStatusEEnum = createEEnum(GUI_TEST_ACTION_STATUS);
 		guiTestActionTypeEEnum = createEEnum(GUI_TEST_ACTION_TYPE);
 		guiTestDataTypeEEnum = createEEnum(GUI_TEST_DATA_TYPE);
 		seleniumDriverEEnum = createEEnum(SELENIUM_DRIVER);
 		guiTestActionResultComponentTypeEEnum = createEEnum(GUI_TEST_ACTION_RESULT_COMPONENT_TYPE);
+		assertionOperatorEEnum = createEEnum(ASSERTION_OPERATOR);
 	}
 
 	/**
@@ -809,12 +1387,16 @@ public class TestingPackageImpl extends EPackageImpl implements TestingPackage {
 		final var theJavaPackage = (JavaPackage) EPackage.Registry.INSTANCE.getEPackage(JavaPackage.eNS_URI);
 		final var theProjectPackage = (ProjectPackage) EPackage.Registry.INSTANCE.getEPackage(ProjectPackage.eNS_URI);
 		final var theClientPackage = (ClientPackage) EPackage.Registry.INSTANCE.getEPackage(ClientPackage.eNS_URI);
+		final var theIntegrationPackage = (IntegrationPackage) EPackage.Registry.INSTANCE.getEPackage(IntegrationPackage.eNS_URI);
+		final var theMappingPackage = (MappingPackage) EPackage.Registry.INSTANCE.getEPackage(MappingPackage.eNS_URI);
 
 		// Add supertypes to classes
 		seleniumTestModuleEClass.getESuperTypes().add(this.getAbstractTestModule());
 		testSuiteEClass.getESuperTypes().add(theJavaPackage.getJavaType());
 		abstractTestCaseEClass.getESuperTypes().add(theJavaPackage.getJavaType());
 		guiTestCaseEClass.getESuperTypes().add(this.getAbstractTestCase());
+		integrationTestModuleEClass.getESuperTypes().add(this.getAbstractTestModule());
+		integrationTestCaseEClass.getESuperTypes().add(this.getAbstractTestCase());
 
 		// Initialize classes and features; add operations and parameters
 		initEClass(abstractTestModuleEClass, AbstractTestModule.class, "AbstractTestModule", IS_ABSTRACT, !IS_INTERFACE,
@@ -930,6 +1512,145 @@ public class TestingPackageImpl extends EPackageImpl implements TestingPackage {
 		initEAttribute(getGUITestData_FilterValue(), ecorePackage.getEString(), "filterValue", null, 0, 1, GUITestData.class,
 				!IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
+		initEClass(integrationTestModuleEClass, IntegrationTestModule.class, "IntegrationTestModule", !IS_ABSTRACT, !IS_INTERFACE,
+				IS_GENERATED_INSTANCE_CLASS);
+		initEAttribute(getIntegrationTestModule_DefaultTimeout(), ecorePackage.getEIntegerObject(), "defaultTimeout", null, 0, 1,
+				IntegrationTestModule.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED,
+				IS_ORDERED);
+		initEAttribute(getIntegrationTestModule_DecimalFormat(), ecorePackage.getEString(), "decimalFormat", null, 0, 1,
+				IntegrationTestModule.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED,
+				IS_ORDERED);
+		initEAttribute(getIntegrationTestModule_DateTimeFormat(), ecorePackage.getEString(), "dateTimeFormat", null, 0, 1,
+				IntegrationTestModule.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED,
+				IS_ORDERED);
+		initEReference(getIntegrationTestModule_IntegrationModule(), theProjectPackage.getIntegrationModule(), null,
+				"integrationModule", null, 0, 1, IntegrationTestModule.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE,
+				IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getIntegrationTestModule_DateFormat(), ecorePackage.getEString(), "dateFormat", null, 0, 1,
+				IntegrationTestModule.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED,
+				IS_ORDERED);
+		initEAttribute(getIntegrationTestModule_DecimalSeparator(), ecorePackage.getEChar(), "decimalSeparator", null, 0, 1,
+				IntegrationTestModule.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED,
+				IS_ORDERED);
+		initEAttribute(getIntegrationTestModule_GroupingSeparator(), ecorePackage.getEChar(), "groupingSeparator", null, 0, 1,
+				IntegrationTestModule.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED,
+				IS_ORDERED);
+
+		initEClass(integrationTestCaseEClass, IntegrationTestCase.class, "IntegrationTestCase", !IS_ABSTRACT, !IS_INTERFACE,
+				IS_GENERATED_INSTANCE_CLASS);
+		initEAttribute(getIntegrationTestCase_UserName(), ecorePackage.getEString(), "userName", null, 0, 1,
+				IntegrationTestCase.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED,
+				IS_ORDERED);
+		initEAttribute(getIntegrationTestCase_Password(), ecorePackage.getEString(), "password", null, 0, 1,
+				IntegrationTestCase.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED,
+				IS_ORDERED);
+		initEReference(getIntegrationTestCase_MethodInvocations(), this.getIntegrationMethodTestInvocation(), null,
+				"methodInvocations", null, 0, -1, IntegrationTestCase.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE,
+				!IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(integrationMethodTestInvocationEClass, IntegrationMethodTestInvocation.class, "IntegrationMethodTestInvocation",
+				!IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEAttribute(getIntegrationMethodTestInvocation_ExpectToFail(), ecorePackage.getEBoolean(), "expectToFail", null, 0, 1,
+				IntegrationMethodTestInvocation.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE,
+				!IS_DERIVED, IS_ORDERED);
+		initEAttribute(getIntegrationMethodTestInvocation_PostProcessingStatement(), ecorePackage.getEString(),
+				"postProcessingStatement", null, 0, 1, IntegrationMethodTestInvocation.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE,
+				!IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getIntegrationMethodTestInvocation_Timeout(), ecorePackage.getEIntegerObject(), "timeout", null, 0, 1,
+				IntegrationMethodTestInvocation.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE,
+				!IS_DERIVED, IS_ORDERED);
+		initEReference(getIntegrationMethodTestInvocation_IntegrationMethod(), theIntegrationPackage.getAbstractIntegrationMethod(),
+				null, "integrationMethod", null, 0, 1, IntegrationMethodTestInvocation.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE,
+				!IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getIntegrationMethodTestInvocation_Parameters(), this.getMethodInvocationParameter(), null, "parameters", null,
+				0, -1, IntegrationMethodTestInvocation.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE,
+				!IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getIntegrationMethodTestInvocation_ReturnValues(), this.getTestDataObject(), null, "returnValues", null, 0, -1,
+				IntegrationMethodTestInvocation.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES,
+				!IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getIntegrationMethodTestInvocation_PostProcessingAttributes(), this.getTestDataAttribute(), null,
+				"postProcessingAttributes", null, 0, -1, IntegrationMethodTestInvocation.class, !IS_TRANSIENT, !IS_VOLATILE,
+				IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getIntegrationMethodTestInvocation_NestedInvocations(), this.getIntegrationMethodTestInvocation(),
+				this.getIntegrationMethodTestInvocation_ParentInvocation(), "nestedInvocations", null, 0, -1,
+				IntegrationMethodTestInvocation.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES,
+				!IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getIntegrationMethodTestInvocation_ParentInvocation(), this.getIntegrationMethodTestInvocation(),
+				this.getIntegrationMethodTestInvocation_NestedInvocations(), "parentInvocation", null, 0, 1,
+				IntegrationMethodTestInvocation.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, !IS_RESOLVE_PROXIES,
+				!IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getIntegrationMethodTestInvocation_TestMethodName(), ecorePackage.getEString(), "testMethodName", null, 0, 1,
+				IntegrationMethodTestInvocation.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE,
+				!IS_DERIVED, IS_ORDERED);
+		initEAttribute(getIntegrationMethodTestInvocation_ExpectedSize(), ecorePackage.getEIntegerObject(), "expectedSize", null, 0,
+				1, IntegrationMethodTestInvocation.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE,
+				!IS_DERIVED, IS_ORDERED);
+		initEAttribute(getIntegrationMethodTestInvocation_ExpectedSizeOperator(), this.getAssertionOperator(), "expectedSizeOperator",
+				null, 0, 1, IntegrationMethodTestInvocation.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID,
+				IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getIntegrationMethodTestInvocation_ExpectedReturnNull(), ecorePackage.getEBoolean(), "expectedReturnNull",
+				null, 0, 1, IntegrationMethodTestInvocation.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID,
+				IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(methodInvocationParameterEClass, MethodInvocationParameter.class, "MethodInvocationParameter", !IS_ABSTRACT,
+				!IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEReference(getMethodInvocationParameter_ParameterValues(), this.getTestDataObject(), null, "parameterValues", null, 0, -1,
+				MethodInvocationParameter.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES,
+				!IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getMethodInvocationParameter_Name(), ecorePackage.getEString(), "name", null, 0, 1,
+				MethodInvocationParameter.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE,
+				!IS_DERIVED, IS_ORDERED);
+		initEReference(getMethodInvocationParameter_Type(), theJavaPackage.getJavaType(), null, "type", null, 0, 1,
+				MethodInvocationParameter.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES,
+				!IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getMethodInvocationParameter_RepresentsList(), ecorePackage.getEBoolean(), "representsList", null, 0, 1,
+				MethodInvocationParameter.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE,
+				!IS_DERIVED, IS_ORDERED);
+
+		initEClass(testDataObjectEClass, TestDataObject.class, "TestDataObject", !IS_ABSTRACT, !IS_INTERFACE,
+				IS_GENERATED_INSTANCE_CLASS);
+		initEReference(getTestDataObject_MappingObject(), theMappingPackage.getMappingObject(), null, "mappingObject", null, 0, 1,
+				TestDataObject.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE,
+				IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getTestDataObject_Attributes(), this.getTestDataAttribute(), null, "attributes", null, 0, -1,
+				TestDataObject.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE,
+				IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getTestDataObject_ReferencedObject(), this.getTestDataObject(), null, "referencedObject", null, 0, 1,
+				TestDataObject.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE,
+				IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(testDataAttributeEClass, TestDataAttribute.class, "TestDataAttribute", !IS_ABSTRACT, !IS_INTERFACE,
+				IS_GENERATED_INSTANCE_CLASS);
+		initEReference(getTestDataAttribute_MappingAttribute(), theMappingPackage.getMappingAttribute(), null, "mappingAttribute",
+				null, 0, 1, TestDataAttribute.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES,
+				!IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getTestDataAttribute_Value(), ecorePackage.getEString(), "value", null, 0, 1, TestDataAttribute.class,
+				!IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getTestDataAttribute_TrackValue(), ecorePackage.getEBoolean(), "trackValue", null, 0, 1,
+				TestDataAttribute.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED,
+				IS_ORDERED);
+		initEAttribute(getTestDataAttribute_Operator(), this.getAssertionOperator(), "operator", null, 0, 1, TestDataAttribute.class,
+				!IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getTestDataAttribute_ReferencedAttribute(), this.getTestDataAttribute(), null, "referencedAttribute", null, 0,
+				1, TestDataAttribute.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE,
+				IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getTestDataAttribute_ReferencedObjects(), this.getTestDataObject(), null, "referencedObjects", null, 0, -1,
+				TestDataAttribute.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE,
+				IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getTestDataAttribute_MappingType(), theJavaPackage.getJavaType(), null, "mappingType", null, 0, 1,
+				TestDataAttribute.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE,
+				IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getTestDataAttribute_Name(), ecorePackage.getEString(), "name", null, 0, 1, TestDataAttribute.class,
+				!IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getTestDataAttribute_ExpectedSize(), ecorePackage.getEIntegerObject(), "expectedSize", null, 0, 1,
+				TestDataAttribute.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED,
+				IS_ORDERED);
+		initEAttribute(getTestDataAttribute_ExpectedSizeOperator(), this.getAssertionOperator(), "expectedSizeOperator", null, 0, 1,
+				TestDataAttribute.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED,
+				IS_ORDERED);
+		initEAttribute(getTestDataAttribute_Id(), ecorePackage.getEString(), "id", null, 0, 1, TestDataAttribute.class, !IS_TRANSIENT,
+				!IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
 		// Initialize enums and add enum literals
 		initEEnum(guiTestActionStatusEEnum, GUITestActionStatus.class, "GUITestActionStatus");
 		addEEnumLiteral(guiTestActionStatusEEnum, GUITestActionStatus.INFO);
@@ -981,6 +1702,20 @@ public class TestingPackageImpl extends EPackageImpl implements TestingPackage {
 		initEEnum(guiTestActionResultComponentTypeEEnum, GUITestActionResultComponentType.class, "GUITestActionResultComponentType");
 		addEEnumLiteral(guiTestActionResultComponentTypeEEnum, GUITestActionResultComponentType.DIALOG);
 		addEEnumLiteral(guiTestActionResultComponentTypeEEnum, GUITestActionResultComponentType.NOTIFICATION);
+
+		initEEnum(assertionOperatorEEnum, AssertionOperator.class, "AssertionOperator");
+		addEEnumLiteral(assertionOperatorEEnum, AssertionOperator.NONE);
+		addEEnumLiteral(assertionOperatorEEnum, AssertionOperator.EQUAL);
+		addEEnumLiteral(assertionOperatorEEnum, AssertionOperator.IS_NULL);
+		addEEnumLiteral(assertionOperatorEEnum, AssertionOperator.IS_NOT_NULL);
+		addEEnumLiteral(assertionOperatorEEnum, AssertionOperator.GREATER_OR_EQUAL);
+		addEEnumLiteral(assertionOperatorEEnum, AssertionOperator.GREATER);
+		addEEnumLiteral(assertionOperatorEEnum, AssertionOperator.SMALLER_OR_EQUAL);
+		addEEnumLiteral(assertionOperatorEEnum, AssertionOperator.SMALLER);
+		addEEnumLiteral(assertionOperatorEEnum, AssertionOperator.STARTS_WITH);
+		addEEnumLiteral(assertionOperatorEEnum, AssertionOperator.ENDS_WITH);
+		addEEnumLiteral(assertionOperatorEEnum, AssertionOperator.CONTAINS);
+		addEEnumLiteral(assertionOperatorEEnum, AssertionOperator.IS_EMPTY);
 
 		// Create resource
 		createResource(eNS_URI);

@@ -254,7 +254,47 @@ public enum BuildArtifactType implements Enumerator {
 	 * @generated
 	 * @ordered
 	 */
-	INTEGRATION_CLIENT_JMS(27, "INTEGRATION_CLIENT_JMS", "INTEGRATION_CLIENT_JMS");
+	INTEGRATION_CLIENT_JMS(27, "INTEGRATION_CLIENT_JMS", "INTEGRATION_CLIENT_JMS"),
+
+	/**
+	 * The '<em><b>INTEGRATION TEST SOAP</b></em>' literal object
+	 * @see #INTEGRATION_TEST_SOAP_VALUE
+	 * @generated
+	 * @ordered
+	 */
+	INTEGRATION_TEST_SOAP(28, "INTEGRATION_TEST_SOAP", "INTEGRATION_TEST_SOAP"),
+
+	/**
+	 * The '<em><b>INTEGRATION TEST REST</b></em>' literal object
+	 * @see #INTEGRATION_TEST_REST_VALUE
+	 * @generated
+	 * @ordered
+	 */
+	INTEGRATION_TEST_REST(29, "INTEGRATION_TEST_REST", "INTEGRATION_TEST_REST"),
+
+	/**
+	 * The '<em><b>INTEGRATION TEST RMI</b></em>' literal object
+	 * @see #INTEGRATION_TEST_RMI_VALUE
+	 * @generated
+	 * @ordered
+	 */
+	INTEGRATION_TEST_RMI(30, "INTEGRATION_TEST_RMI", "INTEGRATION_TEST_RMI"),
+
+	/**
+	 * The '<em><b>INTEGRATION TEST KAFKA</b></em>' literal object
+	 * @see #INTEGRATION_TEST_KAFKA_VALUE
+	 * @generated
+	 * @ordered
+	 */
+	INTEGRATION_TEST_KAFKA(31, "INTEGRATION_TEST_KAFKA", "INTEGRATION_TEST_KAFKA"),
+
+	/**
+	 * The '<em><b>INTEGRATION TEST JMS</b></em>' literal object
+	 * @see #INTEGRATION_TEST_JMS_VALUE
+	 * @generated
+	 * @ordered
+	 */
+	INTEGRATION_TEST_JMS(32, "INTEGRATION_TEST_JMS", "INTEGRATION_TEST_JMS");
 
 	/**
 	 * The '<em><b>DOMAIN</b></em>' literal value
@@ -509,6 +549,51 @@ public enum BuildArtifactType implements Enumerator {
 	public static final int INTEGRATION_CLIENT_JMS_VALUE = 27;
 
 	/**
+	 * The '<em><b>INTEGRATION TEST SOAP</b></em>' literal value
+	 * @see #INTEGRATION_TEST_SOAP
+	 * @model
+	 * @generated
+	 * @ordered
+	 */
+	public static final int INTEGRATION_TEST_SOAP_VALUE = 28;
+
+	/**
+	 * The '<em><b>INTEGRATION TEST REST</b></em>' literal value
+	 * @see #INTEGRATION_TEST_REST
+	 * @model
+	 * @generated
+	 * @ordered
+	 */
+	public static final int INTEGRATION_TEST_REST_VALUE = 29;
+
+	/**
+	 * The '<em><b>INTEGRATION TEST RMI</b></em>' literal value
+	 * @see #INTEGRATION_TEST_RMI
+	 * @model
+	 * @generated
+	 * @ordered
+	 */
+	public static final int INTEGRATION_TEST_RMI_VALUE = 30;
+
+	/**
+	 * The '<em><b>INTEGRATION TEST KAFKA</b></em>' literal value
+	 * @see #INTEGRATION_TEST_KAFKA
+	 * @model
+	 * @generated
+	 * @ordered
+	 */
+	public static final int INTEGRATION_TEST_KAFKA_VALUE = 31;
+
+	/**
+	 * The '<em><b>INTEGRATION TEST JMS</b></em>' literal value
+	 * @see #INTEGRATION_TEST_JMS
+	 * @model
+	 * @generated
+	 * @ordered
+	 */
+	public static final int INTEGRATION_TEST_JMS_VALUE = 32;
+
+	/**
 	 * An array of all the '<em><b>Build Artifact Type</b></em>' enumerators
 	 * @generated
 	 */
@@ -516,7 +601,8 @@ public enum BuildArtifactType implements Enumerator {
 			SERVER, GUI, MASTER, DTO, DATA_EXCHANGE, INTEGRATION_IMP_SOAP, INTEGRATION_SEI_SOAP, INTEGRATION_CLIENT_SOAP,
 			INTEGRATION_IMP_REST, INTEGRATION_SEI_REST, INTEGRATION_CLIENT_REST, INTEGRATION_IMP_RMI, INTEGRATION_SEI_RMI,
 			INTEGRATION_CLIENT_RMI, SELENIUM_TEST, SHARED, INTEGRATION_IMP_KAFKA, INTEGRATION_SEI_KAFKA, INTEGRATION_CLIENT_KAFKA,
-			INTEGRATION_IMP_JMS, INTEGRATION_SEI_JMS, INTEGRATION_CLIENT_JMS };
+			INTEGRATION_IMP_JMS, INTEGRATION_SEI_JMS, INTEGRATION_CLIENT_JMS, INTEGRATION_TEST_SOAP, INTEGRATION_TEST_REST,
+			INTEGRATION_TEST_RMI, INTEGRATION_TEST_KAFKA, INTEGRATION_TEST_JMS };
 
 	/**
 	 * A public read-only list of all the '<em><b>Build Artifact Type</b></em>' enumerators
@@ -605,6 +691,16 @@ public enum BuildArtifactType implements Enumerator {
 				return INTEGRATION_SEI_JMS;
 			case INTEGRATION_CLIENT_JMS_VALUE:
 				return INTEGRATION_CLIENT_JMS;
+			case INTEGRATION_TEST_SOAP_VALUE:
+				return INTEGRATION_TEST_SOAP;
+			case INTEGRATION_TEST_REST_VALUE:
+				return INTEGRATION_TEST_REST;
+			case INTEGRATION_TEST_RMI_VALUE:
+				return INTEGRATION_TEST_RMI;
+			case INTEGRATION_TEST_KAFKA_VALUE:
+				return INTEGRATION_TEST_KAFKA;
+			case INTEGRATION_TEST_JMS_VALUE:
+				return INTEGRATION_TEST_JMS;
 		}
 
 		return null;

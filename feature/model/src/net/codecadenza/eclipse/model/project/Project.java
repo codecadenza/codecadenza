@@ -23,6 +23,7 @@ package net.codecadenza.eclipse.model.project;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import net.codecadenza.eclipse.model.boundary.BoundaryBean;
 import net.codecadenza.eclipse.model.client.Form;
 import net.codecadenza.eclipse.model.client.FormGroup;
@@ -34,11 +35,14 @@ import net.codecadenza.eclipse.model.dto.DTOBean;
 import net.codecadenza.eclipse.model.exchange.DataExchangeServiceBean;
 import net.codecadenza.eclipse.model.exchange.ExchangeMappingObject;
 import net.codecadenza.eclipse.model.integration.AbstractIntegrationBean;
+import net.codecadenza.eclipse.model.integration.AbstractIntegrationMethod;
 import net.codecadenza.eclipse.model.java.JavaType;
 import net.codecadenza.eclipse.model.java.Namespace;
+import net.codecadenza.eclipse.model.mapping.MappingAttribute;
 import net.codecadenza.eclipse.model.repository.Repository;
 import net.codecadenza.eclipse.model.testing.AbstractTestModule;
 import net.codecadenza.eclipse.model.testing.GUITestCase;
+import net.codecadenza.eclipse.model.testing.IntegrationTestCase;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
 
@@ -909,6 +913,30 @@ public interface Project extends EObject {
 	 * @generated not
 	 */
 	IntegrationModule getIntegrationModuleByArtifact(BuildArtifactType artifactType);
+
+	/**
+	 * Search for integration test cases that use the given mapping attribute
+	 * @param mappingAttribute
+	 * @return a list of integration test cases that use the provided mapping attribute
+	 * @generated not
+	 */
+	Set<IntegrationTestCase> searchIntegrationTestCasesByMappingAttribute(MappingAttribute mappingAttribute);
+
+	/**
+	 * Search for integration test cases that use the given integration bean
+	 * @param integrationBean
+	 * @return a list of integration test cases that use the provided integration bean
+	 * @generated not
+	 */
+	Set<IntegrationTestCase> searchIntegrationTestCasesByIntegrationBean(AbstractIntegrationBean integrationBean);
+
+	/**
+	 * Search for integration test cases that use the given integration method
+	 * @param integrationMethod
+	 * @return a list of integration test cases that use the provided integration method
+	 * @generated not
+	 */
+	Set<IntegrationTestCase> searchIntegrationTestCasesByIntegrationMethod(AbstractIntegrationMethod integrationMethod);
 
 	/**
 	 * Search an integration bean by using the provided parameters

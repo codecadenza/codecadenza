@@ -21,6 +21,7 @@
  */
 package net.codecadenza.eclipse.model.testing.impl;
 
+import net.codecadenza.eclipse.model.testing.AssertionOperator;
 import net.codecadenza.eclipse.model.testing.GUITestAction;
 import net.codecadenza.eclipse.model.testing.GUITestActionResult;
 import net.codecadenza.eclipse.model.testing.GUITestActionResultComponentType;
@@ -29,8 +30,14 @@ import net.codecadenza.eclipse.model.testing.GUITestActionType;
 import net.codecadenza.eclipse.model.testing.GUITestCase;
 import net.codecadenza.eclipse.model.testing.GUITestData;
 import net.codecadenza.eclipse.model.testing.GUITestDataType;
+import net.codecadenza.eclipse.model.testing.IntegrationMethodTestInvocation;
+import net.codecadenza.eclipse.model.testing.IntegrationTestCase;
+import net.codecadenza.eclipse.model.testing.IntegrationTestModule;
+import net.codecadenza.eclipse.model.testing.MethodInvocationParameter;
 import net.codecadenza.eclipse.model.testing.SeleniumDriver;
 import net.codecadenza.eclipse.model.testing.SeleniumTestModule;
+import net.codecadenza.eclipse.model.testing.TestDataAttribute;
+import net.codecadenza.eclipse.model.testing.TestDataObject;
 import net.codecadenza.eclipse.model.testing.TestSuite;
 import net.codecadenza.eclipse.model.testing.TestingFactory;
 import net.codecadenza.eclipse.model.testing.TestingPackage;
@@ -47,7 +54,7 @@ import org.eclipse.emf.ecore.plugin.EcorePlugin;
  */
 public class TestingFactoryImpl extends EFactoryImpl implements TestingFactory {
 	/**
-	 * Create the default factory implementation.
+	 * Create the default factory implementation
 	 * @return the factory
 	 * @generated
 	 */
@@ -79,6 +86,12 @@ public class TestingFactoryImpl extends EFactoryImpl implements TestingFactory {
 			case TestingPackage.GUI_TEST_ACTION -> createGUITestAction();
 			case TestingPackage.GUI_TEST_ACTION_RESULT -> createGUITestActionResult();
 			case TestingPackage.GUI_TEST_DATA -> createGUITestData();
+			case TestingPackage.INTEGRATION_TEST_MODULE -> createIntegrationTestModule();
+			case TestingPackage.INTEGRATION_TEST_CASE -> createIntegrationTestCase();
+			case TestingPackage.INTEGRATION_METHOD_TEST_INVOCATION -> createIntegrationMethodTestInvocation();
+			case TestingPackage.METHOD_INVOCATION_PARAMETER -> createMethodInvocationParameter();
+			case TestingPackage.TEST_DATA_OBJECT -> createTestDataObject();
+			case TestingPackage.TEST_DATA_ATTRIBUTE -> createTestDataAttribute();
 			default -> throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
 		};
 	}
@@ -97,6 +110,7 @@ public class TestingFactoryImpl extends EFactoryImpl implements TestingFactory {
 			case TestingPackage.SELENIUM_DRIVER -> createSeleniumDriverFromString(eDataType, initialValue);
 			case TestingPackage.GUI_TEST_ACTION_RESULT_COMPONENT_TYPE -> createGUITestActionResultComponentTypeFromString(eDataType,
 					initialValue);
+			case TestingPackage.ASSERTION_OPERATOR -> createAssertionOperatorFromString(eDataType, initialValue);
 			default -> throw new IllegalArgumentException("The datatype '" + eDataType.getName() + "' is not a valid classifier");
 		};
 	}
@@ -115,6 +129,7 @@ public class TestingFactoryImpl extends EFactoryImpl implements TestingFactory {
 			case TestingPackage.SELENIUM_DRIVER -> convertSeleniumDriverToString(eDataType, instanceValue);
 			case TestingPackage.GUI_TEST_ACTION_RESULT_COMPONENT_TYPE -> convertGUITestActionResultComponentTypeToString(eDataType,
 					instanceValue);
+			case TestingPackage.ASSERTION_OPERATOR -> convertAssertionOperatorToString(eDataType, instanceValue);
 			default -> throw new IllegalArgumentException("The datatype '" + eDataType.getName() + "' is not a valid classifier");
 		};
 	}
@@ -177,6 +192,66 @@ public class TestingFactoryImpl extends EFactoryImpl implements TestingFactory {
 	@Override
 	public GUITestData createGUITestData() {
 		return new GUITestDataImpl();
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see net.codecadenza.eclipse.model.testing.TestingFactory#createIntegrationTestModule()
+	 * @generated
+	 */
+	@Override
+	public IntegrationTestModule createIntegrationTestModule() {
+		return new IntegrationTestModuleImpl();
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see net.codecadenza.eclipse.model.testing.TestingFactory#createIntegrationTestCase()
+	 * @generated
+	 */
+	@Override
+	public IntegrationTestCase createIntegrationTestCase() {
+		return new IntegrationTestCaseImpl();
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see net.codecadenza.eclipse.model.testing.TestingFactory#createIntegrationMethodTestInvocation()
+	 * @generated
+	 */
+	@Override
+	public IntegrationMethodTestInvocation createIntegrationMethodTestInvocation() {
+		return new IntegrationMethodTestInvocationImpl();
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see net.codecadenza.eclipse.model.testing.TestingFactory#createMethodInvocationParameter()
+	 * @generated
+	 */
+	@Override
+	public MethodInvocationParameter createMethodInvocationParameter() {
+		return new MethodInvocationParameterImpl();
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see net.codecadenza.eclipse.model.testing.TestingFactory#createTestDataObject()
+	 * @generated
+	 */
+	@Override
+	public TestDataObject createTestDataObject() {
+		return new TestDataObjectImpl();
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see net.codecadenza.eclipse.model.testing.TestingFactory#createTestDataAttribute()
+	 * @generated
+	 */
+	@Override
+	public TestDataAttribute createTestDataAttribute() {
+		return new TestDataAttributeImpl();
 	}
 
 	/**
@@ -312,6 +387,33 @@ public class TestingFactoryImpl extends EFactoryImpl implements TestingFactory {
 	 */
 	@SuppressWarnings("unused")
 	public String convertGUITestActionResultComponentTypeToString(EDataType eDataType, Object instanceValue) {
+		return instanceValue == null ? null : instanceValue.toString();
+	}
+
+	/**
+	 * @param eDataType
+	 * @param initialValue
+	 * @return an enumeration based on given parameters
+	 * @generated
+	 */
+	public AssertionOperator createAssertionOperatorFromString(EDataType eDataType, String initialValue) {
+		final AssertionOperator result = AssertionOperator.get(initialValue);
+
+		if (result == null)
+			throw new IllegalArgumentException(
+					"The value '" + initialValue + "' is not a valid enumerator of '" + eDataType.getName() + "'");
+
+		return result;
+	}
+
+	/**
+	 * @param eDataType
+	 * @param instanceValue
+	 * @return the String value
+	 * @generated
+	 */
+	@SuppressWarnings("unused")
+	public String convertAssertionOperatorToString(EDataType eDataType, Object instanceValue) {
 		return instanceValue == null ? null : instanceValue.toString();
 	}
 

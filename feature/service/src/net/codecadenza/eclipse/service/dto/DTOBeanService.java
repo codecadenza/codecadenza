@@ -26,6 +26,8 @@ import static net.codecadenza.eclipse.shared.Constants.LIST_DTO_SUFFIX;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 import net.codecadenza.eclipse.generator.dto.DTOBeanGenerator;
 import net.codecadenza.eclipse.model.boundary.BoundaryBean;
 import net.codecadenza.eclipse.model.boundary.BoundaryMethod;
@@ -47,6 +49,7 @@ import net.codecadenza.eclipse.model.dto.DtoFactory;
 import net.codecadenza.eclipse.model.java.MethodParameter;
 import net.codecadenza.eclipse.model.java.Namespace;
 import net.codecadenza.eclipse.model.project.Project;
+import net.codecadenza.eclipse.model.testing.IntegrationTestCase;
 import net.codecadenza.eclipse.tools.ide.EclipseIDEService;
 
 /**
@@ -428,6 +431,16 @@ public class DTOBeanService {
 			final String formMsg = forms.stream().reduce((r, t) -> r + "\n" + t).orElse("");
 
 			throw new IllegalStateException(message + formMsg);
+		}
+
+		final Set<IntegrationTestCase> testCases = project.searchIntegrationTestCasesByMappingAttribute(dtoAttribute);
+
+		if (!testCases.isEmpty()) {
+			final var message = "The attribute cannot be removed, because it is referenced by following integration test cases:\n";
+			final String testCaseNames = testCases.stream().map(IntegrationTestCase::getName)
+					.collect(Collectors.joining(System.lineSeparator()));
+
+			throw new IllegalStateException(message + testCaseNames);
 		}
 
 		dtoBean.getAttributes().remove(dtoAttribute);

@@ -14,6 +14,7 @@ Bundle-RequiredExecutionEnvironment: JavaSE-21
 Export-Package: jakarta.xml.bind,
  jakarta.xml.bind.annotation,
  net.codecadenza.runtime.richclient.eclipse.widget,
+ net.codecadenza.runtime.conversion,
  net.codecadenza.eclipse.shared,
  net.codecadenza.eclipse.shared.dialog,
  net.codecadenza.eclipse.shared.event

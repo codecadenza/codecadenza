@@ -39,6 +39,7 @@
 		<version_avro>1.12.0</version_avro>
 		<version_jakarta_ee>10.0.0</version_jakarta_ee>
 		<version_jakarta_xml_bind>4.0.0</version_jakarta_xml_bind>
+		<version_jaxb_runtime>4.0.6</version_jaxb_runtime>
 		<version_javafx_controls>22.0.2</version_javafx_controls>
 		<version_poi>5.3.0</version_poi>
 		<version_primefaces>14.0.6</version_primefaces>
@@ -55,6 +56,7 @@
 		<version_jersey>3.1.9</version_jersey>
 		<version_log4j>2.23.1</version_log4j>
 		<version_mockito>5.10.0</version_mockito>
+		<version_h2>2.4.240</version_h2>
 	</properties>
 	
 	<dependencies>
@@ -174,6 +176,7 @@
 		<module>eclipse</module>
 		<module>rcp</module>
 		<module>rap</module>
+		<module>data-driven-testing</module>
 	</modules>
 
 </project>

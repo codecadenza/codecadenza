@@ -85,17 +85,23 @@ public class MavenProjectBuildService extends AbstractProjectBuildService {
 			buildConfig
 					.add(createDefaultArtifact(BuildArtifactType.INTEGRATION_IMP_SOAP, IntegrationTechnology.SOAP + INTEGR_SUFFIX_IMP));
 			buildConfig
+					.add(createDefaultArtifact(BuildArtifactType.INTEGRATION_TEST_SOAP, IntegrationTechnology.SOAP + INTEGR_TEST_SUFFIX));
+			buildConfig
 					.add(createDefaultArtifact(BuildArtifactType.INTEGRATION_SEI_REST, IntegrationTechnology.REST + INTEGR_SUFFIX_SEI));
 			buildConfig.add(
 					createDefaultArtifact(BuildArtifactType.INTEGRATION_CLIENT_REST, IntegrationTechnology.REST + INTEGR_SUFFIX_CLIENT));
 			buildConfig
 					.add(createDefaultArtifact(BuildArtifactType.INTEGRATION_IMP_REST, IntegrationTechnology.REST + INTEGR_SUFFIX_IMP));
 			buildConfig
+					.add(createDefaultArtifact(BuildArtifactType.INTEGRATION_TEST_REST, IntegrationTechnology.REST + INTEGR_TEST_SUFFIX));
+			buildConfig
 					.add(createDefaultArtifact(BuildArtifactType.INTEGRATION_SEI_JMS, IntegrationTechnology.JMS + INTEGR_SUFFIX_SEI));
 			buildConfig
 					.add(createDefaultArtifact(BuildArtifactType.INTEGRATION_CLIENT_JMS, IntegrationTechnology.JMS + INTEGR_SUFFIX_CLIENT));
 			buildConfig
 					.add(createDefaultArtifact(BuildArtifactType.INTEGRATION_IMP_JMS, IntegrationTechnology.JMS + INTEGR_SUFFIX_IMP));
+			buildConfig
+					.add(createDefaultArtifact(BuildArtifactType.INTEGRATION_TEST_JMS, IntegrationTechnology.JMS + INTEGR_TEST_SUFFIX));
 
 			if (project.isJakartaEEApplication()) {
 				buildConfig
@@ -104,6 +110,8 @@ public class MavenProjectBuildService extends AbstractProjectBuildService {
 						createDefaultArtifact(BuildArtifactType.INTEGRATION_CLIENT_RMI, IntegrationTechnology.RMI + INTEGR_SUFFIX_CLIENT));
 				buildConfig
 						.add(createDefaultArtifact(BuildArtifactType.INTEGRATION_IMP_RMI, IntegrationTechnology.RMI + INTEGR_SUFFIX_IMP));
+				buildConfig
+						.add(createDefaultArtifact(BuildArtifactType.INTEGRATION_TEST_RMI, IntegrationTechnology.RMI + INTEGR_TEST_SUFFIX));
 			}
 			else if (project.isBoundaryMode()) {
 				buildConfig
@@ -112,6 +120,8 @@ public class MavenProjectBuildService extends AbstractProjectBuildService {
 						IntegrationTechnology.KAFKA + INTEGR_SUFFIX_CLIENT));
 				buildConfig
 						.add(createDefaultArtifact(BuildArtifactType.INTEGRATION_IMP_KAFKA, IntegrationTechnology.KAFKA + INTEGR_SUFFIX_IMP));
+				buildConfig.add(
+						createDefaultArtifact(BuildArtifactType.INTEGRATION_TEST_KAFKA, IntegrationTechnology.KAFKA + INTEGR_TEST_SUFFIX));
 			}
 		}
 

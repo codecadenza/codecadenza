@@ -114,6 +114,7 @@ public abstract class AbstractProjectBuildService implements IProjectBuildServic
 	protected static final String INTEGR_SUFFIX_CLIENT = "-client";
 	protected static final String INTEGR_SUFFIX_SEI = "-sei";
 	protected static final String INTEGR_SUFFIX_IMP = "-imp";
+	protected static final String INTEGR_TEST_SUFFIX = "-test";
 
 	protected Project project;
 	protected PackageInfoService packageInfoService;

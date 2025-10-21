@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<test_data user_name="John Doe" password="mypassword">
+	<method_invocation class_name="CountryService" group_id="8931bcb4-e543-4b0f-8c8a-dbfb3437dc0e"
+		method_name="createCountry" timeout_millis="200">
+		<parameters>
+			<parameter name="country">
+				<object id="aab63a49-26f7-4b9b-983b-f83403a309c7">
+					<field name="code" value="DE" />
+					<field name="name" value="Germany" />
+				</object>
+			</parameter>
+		</parameters>
+		<post_processing_statement>
+			select code from countries a where name =?
+		</post_processing_statement>
+	</method_invocation>
+	<method_invocation class_name="CountryService" group_id="8931bcb4-e543-4b0f-8c8a-dbfb3437dc0e"
+		method_name="createCountry" timeout_millis="200">
+		<parameters>
+			<parameter name="country">
+				<object>
+					<field name="code" value="FR" />
+					<field name="name" value="France" />
+				</object>
+			</parameter>
+		</parameters>
+		<post_processing_statement>
+			select code from countries a where name =?
+		</post_processing_statement>
+	</method_invocation>
+	<method_invocation class_name="CountryService"
+		method_name="updateCountry" timeout_millis="100">
+		<parameters>
+			<parameter name="country">
+				<object>
+					<field name="code" value="DE" />
+					<field name="name" value="Germany - changed" />
+				</object>
+			</parameter>
+		</parameters>
+		<post_processing_statement>
+			select code from countries a where name =?
+		</post_processing_statement>
+	</method_invocation>
+	<method_invocation class_name="CountryService"
+		method_name="deleteCountry" timeout_millis="100">
+		<parameters>
+			<parameter name="code">
+				<object name="code" value="DE" />
+			</parameter>
+		</parameters>
+		<post_processing_statement>
+			select case when count(*) = 0 then 'Removed' else null end as country_exists from countries where code =?
+		</post_processing_statement>
+	</method_invocation>
+
+</test_data>

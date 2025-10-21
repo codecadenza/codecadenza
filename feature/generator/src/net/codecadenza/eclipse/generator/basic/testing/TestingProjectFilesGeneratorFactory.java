@@ -21,9 +21,11 @@
  */
 package net.codecadenza.eclipse.generator.basic.testing;
 
+import net.codecadenza.eclipse.generator.basic.testing.imp.IntegrationTestProjectFilesGenerator;
 import net.codecadenza.eclipse.generator.basic.testing.imp.SeleniumTestingProjectFilesGenerator;
 import net.codecadenza.eclipse.model.project.BuildArtifactType;
 import net.codecadenza.eclipse.model.testing.AbstractTestModule;
+import net.codecadenza.eclipse.model.testing.IntegrationTestModule;
 import net.codecadenza.eclipse.model.testing.SeleniumTestModule;
 
 /**
@@ -54,6 +56,10 @@ public class TestingProjectFilesGeneratorFactory {
 	public static ITestingProjectFilesGenerator getGenerator(AbstractTestModule module, BuildArtifactType artifactType) {
 		if (artifactType == BuildArtifactType.SELENIUM_TEST)
 			return new SeleniumTestingProjectFilesGenerator((SeleniumTestModule) module, artifactType);
+		else if (artifactType == BuildArtifactType.INTEGRATION_TEST_SOAP || artifactType == BuildArtifactType.INTEGRATION_TEST_REST
+				|| artifactType == BuildArtifactType.INTEGRATION_TEST_RMI || artifactType == BuildArtifactType.INTEGRATION_TEST_KAFKA
+				|| artifactType == BuildArtifactType.INTEGRATION_TEST_JMS)
+			return new IntegrationTestProjectFilesGenerator((IntegrationTestModule) module, artifactType);
 
 		throw new IllegalStateException("A generator for the artifact type '" + artifactType + "' is not available!");
 	}

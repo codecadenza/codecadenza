@@ -51,6 +51,7 @@ import net.codecadenza.eclipse.model.repository.Repository;
 import net.codecadenza.eclipse.model.repository.RepositoryMethod;
 import net.codecadenza.eclipse.model.repository.RepositoryMethodTypeEnumeration;
 import net.codecadenza.eclipse.model.service.ServiceMethod;
+import net.codecadenza.eclipse.model.testing.IntegrationTestCase;
 import net.codecadenza.eclipse.service.boundary.BoundaryService;
 import net.codecadenza.eclipse.service.dto.DTOBeanService;
 import net.codecadenza.eclipse.service.integration.IntegrationBeanService;
@@ -66,6 +67,7 @@ import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.jdt.ui.JavaUI;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IDialogConstants;
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.SashForm;
@@ -520,6 +522,18 @@ public class EditIntegrationBeanDialog extends CodeCadenzaTitleAreaDialog {
 
 				if (integrationMethod == null)
 					return;
+
+				final Set<IntegrationTestCase> testCases = project.searchIntegrationTestCasesByIntegrationMethod(integrationMethod);
+
+				if (!testCases.isEmpty()) {
+					final var message = "The method cannot be removed, because it is referenced by following integration test cases:\n";
+
+					final String testCaseNames = testCases.stream().map(IntegrationTestCase::getName)
+							.collect(Collectors.joining(System.lineSeparator()));
+
+					MessageDialog.openInformation(getShell(), "Remove", message + testCaseNames);
+					return;
+				}
 
 				integrationBean.getMethods().remove(integrationMethod);
 

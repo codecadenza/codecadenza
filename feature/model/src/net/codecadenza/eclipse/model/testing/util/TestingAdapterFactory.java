@@ -28,7 +28,13 @@ import net.codecadenza.eclipse.model.testing.GUITestAction;
 import net.codecadenza.eclipse.model.testing.GUITestActionResult;
 import net.codecadenza.eclipse.model.testing.GUITestCase;
 import net.codecadenza.eclipse.model.testing.GUITestData;
+import net.codecadenza.eclipse.model.testing.IntegrationMethodTestInvocation;
+import net.codecadenza.eclipse.model.testing.IntegrationTestCase;
+import net.codecadenza.eclipse.model.testing.IntegrationTestModule;
+import net.codecadenza.eclipse.model.testing.MethodInvocationParameter;
 import net.codecadenza.eclipse.model.testing.SeleniumTestModule;
+import net.codecadenza.eclipse.model.testing.TestDataAttribute;
+import net.codecadenza.eclipse.model.testing.TestDataObject;
 import net.codecadenza.eclipse.model.testing.TestSuite;
 import net.codecadenza.eclipse.model.testing.TestingPackage;
 import org.eclipse.emf.common.notify.Adapter;
@@ -79,8 +85,8 @@ public class TestingAdapterFactory extends AdapterFactoryImpl {
 	protected TestingSwitch<Adapter> modelSwitch = new TestingSwitch<>() {
 		/*
 		 * (non-Javadoc)
-		 * @see net.codecadenza.eclipse.model.testing.util.TestingSwitch#caseAbstractTestModule(net.codecadenza.eclipse.model.testing.
-		 * AbstractTestModule)
+		 * @see net.codecadenza.eclipse.model.testing.util.TestingSwitch#
+		 * caseAbstractTestModule(net.codecadenza.eclipse.model.testing.AbstractTestModule)
 		 */
 		@Override
 		public Adapter caseAbstractTestModule(AbstractTestModule object) {
@@ -89,8 +95,8 @@ public class TestingAdapterFactory extends AdapterFactoryImpl {
 
 		/*
 		 * (non-Javadoc)
-		 * @see net.codecadenza.eclipse.model.testing.util.TestingSwitch#caseSeleniumTestModule(net.codecadenza.eclipse.model.testing.
-		 * SeleniumTestModule)
+		 * @see net.codecadenza.eclipse.model.testing.util.TestingSwitch#
+		 * caseSeleniumTestModule(net.codecadenza.eclipse.model.testing.SeleniumTestModule)
 		 */
 		@Override
 		public Adapter caseSeleniumTestModule(SeleniumTestModule object) {
@@ -99,8 +105,8 @@ public class TestingAdapterFactory extends AdapterFactoryImpl {
 
 		/*
 		 * (non-Javadoc)
-		 * @see net.codecadenza.eclipse.model.testing.util.TestingSwitch#caseTestSuite(net.codecadenza.eclipse.model.testing.
-		 * TestSuite)
+		 * @see net.codecadenza.eclipse.model.testing.util.TestingSwitch#
+		 * caseTestSuite(net.codecadenza.eclipse.model.testing.TestSuite)
 		 */
 		@Override
 		public Adapter caseTestSuite(TestSuite object) {
@@ -109,8 +115,8 @@ public class TestingAdapterFactory extends AdapterFactoryImpl {
 
 		/*
 		 * (non-Javadoc)
-		 * @see net.codecadenza.eclipse.model.testing.util.TestingSwitch#caseAbstractTestCase(net.codecadenza.eclipse.model.testing.
-		 * AbstractTestCase)
+		 * @see net.codecadenza.eclipse.model.testing.util.TestingSwitch#
+		 * caseAbstractTestCase(net.codecadenza.eclipse.model.testing.AbstractTestCase)
 		 */
 		@Override
 		public Adapter caseAbstractTestCase(AbstractTestCase object) {
@@ -119,8 +125,8 @@ public class TestingAdapterFactory extends AdapterFactoryImpl {
 
 		/*
 		 * (non-Javadoc)
-		 * @see net.codecadenza.eclipse.model.testing.util.TestingSwitch#caseGUITestCase(net.codecadenza.eclipse.model.testing.
-		 * GUITestCase)
+		 * @see net.codecadenza.eclipse.model.testing.util.TestingSwitch#
+		 * caseGUITestCase(net.codecadenza.eclipse.model.testing.GUITestCase)
 		 */
 		@Override
 		public Adapter caseGUITestCase(GUITestCase object) {
@@ -129,8 +135,8 @@ public class TestingAdapterFactory extends AdapterFactoryImpl {
 
 		/*
 		 * (non-Javadoc)
-		 * @see net.codecadenza.eclipse.model.testing.util.TestingSwitch#caseGUITestAction(net.codecadenza.eclipse.model.testing.
-		 * GUITestAction)
+		 * @see net.codecadenza.eclipse.model.testing.util.TestingSwitch#
+		 * caseGUITestAction(net.codecadenza.eclipse.model.testing.GUITestAction)
 		 */
 		@Override
 		public Adapter caseGUITestAction(GUITestAction object) {
@@ -139,8 +145,8 @@ public class TestingAdapterFactory extends AdapterFactoryImpl {
 
 		/*
 		 * (non-Javadoc)
-		 * @see net.codecadenza.eclipse.model.testing.util.TestingSwitch#caseGUITestActionResult(net.codecadenza.eclipse.model.
-		 * testing.GUITestActionResult)
+		 * @see net.codecadenza.eclipse.model.testing.util.TestingSwitch#
+		 * caseGUITestActionResult(net.codecadenza.eclipse.model.testing.GUITestActionResult)
 		 */
 		@Override
 		public Adapter caseGUITestActionResult(GUITestActionResult object) {
@@ -149,12 +155,72 @@ public class TestingAdapterFactory extends AdapterFactoryImpl {
 
 		/*
 		 * (non-Javadoc)
-		 * @see net.codecadenza.eclipse.model.testing.util.TestingSwitch#caseGUITestData(net.codecadenza.eclipse.model.testing.
-		 * GUITestData)
+		 * @see net.codecadenza.eclipse.model.testing.util.TestingSwitch#
+		 * caseGUITestData(net.codecadenza.eclipse.model.testing.GUITestData)
 		 */
 		@Override
 		public Adapter caseGUITestData(GUITestData object) {
 			return createGUITestDataAdapter();
+		}
+
+		/*
+		 * (non-Javadoc)
+		 * @see net.codecadenza.eclipse.model.testing.util.TestingSwitch#
+		 * caseIntegrationTestModule(net.codecadenza.eclipse.model.testing.IntegrationTestModule)
+		 */
+		@Override
+		public Adapter caseIntegrationTestModule(IntegrationTestModule object) {
+			return createIntegrationTestModuleAdapter();
+		}
+
+		/*
+		 * (non-Javadoc)
+		 * @see net.codecadenza.eclipse.model.testing.util.TestingSwitch#
+		 * caseIntegrationTestCase(net.codecadenza.eclipse.model.testing.IntegrationTestCase)
+		 */
+		@Override
+		public Adapter caseIntegrationTestCase(IntegrationTestCase object) {
+			return createIntegrationTestCaseAdapter();
+		}
+
+		/*
+		 * (non-Javadoc)
+		 * @see net.codecadenza.eclipse.model.testing.util.TestingSwitch#
+		 * caseIntegrationMethodTestInvocation(net.codecadenza.eclipse.model.testing.IntegrationMethodTestInvocation)
+		 */
+		@Override
+		public Adapter caseIntegrationMethodTestInvocation(IntegrationMethodTestInvocation object) {
+			return createIntegrationMethodTestInvocationAdapter();
+		}
+
+		/*
+		 * (non-Javadoc)
+		 * @see net.codecadenza.eclipse.model.testing.util.TestingSwitch#
+		 * caseMethodInvocationParameter(net.codecadenza.eclipse.model.testing.MethodInvocationParameter)
+		 */
+		@Override
+		public Adapter caseMethodInvocationParameter(MethodInvocationParameter object) {
+			return createMethodInvocationParameterAdapter();
+		}
+
+		/*
+		 * (non-Javadoc)
+		 * @see net.codecadenza.eclipse.model.testing.util.TestingSwitch#
+		 * caseTestDataObject(net.codecadenza.eclipse.model.testing.TestDataObject)
+		 */
+		@Override
+		public Adapter caseTestDataObject(TestDataObject object) {
+			return createTestDataObjectAdapter();
+		}
+
+		/*
+		 * (non-Javadoc)
+		 * @see net.codecadenza.eclipse.model.testing.util.TestingSwitch#
+		 * caseTestDataAttribute(net.codecadenza.eclipse.model.testing.TestDataAttribute)
+		 */
+		@Override
+		public Adapter caseTestDataAttribute(TestDataAttribute object) {
+			return createTestDataAttributeAdapter();
 		}
 
 		/*
@@ -279,6 +345,78 @@ public class TestingAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createGUITestDataAdapter() {
+		return null;
+	}
+
+	/**
+	 * Create a new adapter for an object of class '{@link net.codecadenza.eclipse.model.testing.IntegrationTestModule
+	 * <em>Integration Test Module</em>}'. This default implementation returns null so that we can easily ignore cases; it's useful
+	 * to ignore a case when inheritance will catch all the cases anyway.
+	 * @return the new adapter
+	 * @see net.codecadenza.eclipse.model.testing.IntegrationTestModule
+	 * @generated
+	 */
+	public Adapter createIntegrationTestModuleAdapter() {
+		return null;
+	}
+
+	/**
+	 * Create a new adapter for an object of class '{@link net.codecadenza.eclipse.model.testing.IntegrationTestCase <em>Integration
+	 * Test Case</em>}'. This default implementation returns null so that we can easily ignore cases; it's useful to ignore a case
+	 * when inheritance will catch all the cases anyway.
+	 * @return the new adapter
+	 * @see net.codecadenza.eclipse.model.testing.IntegrationTestCase
+	 * @generated
+	 */
+	public Adapter createIntegrationTestCaseAdapter() {
+		return null;
+	}
+
+	/**
+	 * Create a new adapter for an object of class '{@link net.codecadenza.eclipse.model.testing.IntegrationMethodTestInvocation
+	 * <em>Integration Method Test Invocation</em>}'.This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * @return the new adapter
+	 * @see net.codecadenza.eclipse.model.testing.IntegrationMethodTestInvocation
+	 * @generated
+	 */
+	public Adapter createIntegrationMethodTestInvocationAdapter() {
+		return null;
+	}
+
+	/**
+	 * Create a new adapter for an object of class '{@link net.codecadenza.eclipse.model.testing.MethodInvocationParameter
+	 * <em>Method Invocation Parameter</em>}'. This default implementation returns null so that we can easily ignore cases; it's
+	 * useful to ignore a case when inheritance will catch all the cases anyway.
+	 * @return the new adapter
+	 * @see net.codecadenza.eclipse.model.testing.MethodInvocationParameter
+	 * @generated
+	 */
+	public Adapter createMethodInvocationParameterAdapter() {
+		return null;
+	}
+
+	/**
+	 * Create a new adapter for an object of class '{@link net.codecadenza.eclipse.model.testing.TestDataObject <em>Test Data
+	 * Object</em>}'. This default implementation returns null so that we can easily ignore cases; it's useful to ignore a case when
+	 * inheritance will catch all the cases anyway.
+	 * @return the new adapter
+	 * @see net.codecadenza.eclipse.model.testing.TestDataObject
+	 * @generated
+	 */
+	public Adapter createTestDataObjectAdapter() {
+		return null;
+	}
+
+	/**
+	 * Create a new adapter for an object of class '{@link net.codecadenza.eclipse.model.testing.TestDataAttribute <em>Test Data
+	 * Attribute</em>}'. This default implementation returns null so that we can easily ignore cases; it's useful to ignore a case
+	 * when inheritance will catch all the cases anyway.
+	 * @return the new adapter
+	 * @see net.codecadenza.eclipse.model.testing.TestDataAttribute
+	 * @generated
+	 */
+	public Adapter createTestDataAttributeAdapter() {
 		return null;
 	}
 

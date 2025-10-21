@@ -133,6 +133,11 @@
     <eLiterals name="INTEGRATION_IMP_JMS" value="25"/>
     <eLiterals name="INTEGRATION_SEI_JMS" value="26"/>
     <eLiterals name="INTEGRATION_CLIENT_JMS" value="27"/>
+    <eLiterals name="INTEGRATION_TEST_SOAP" value="28"/>
+    <eLiterals name="INTEGRATION_TEST_REST" value="29"/>
+    <eLiterals name="INTEGRATION_TEST_RMI" value="30"/>
+    <eLiterals name="INTEGRATION_TEST_KAFKA" value="31"/>
+    <eLiterals name="INTEGRATION_TEST_JMS" value="32"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="BuildArtifact">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>

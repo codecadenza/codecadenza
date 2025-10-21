@@ -87,7 +87,11 @@ import net.codecadenza.eclipse.model.project.WorkspaceFile;
 import net.codecadenza.eclipse.model.repository.Repository;
 import net.codecadenza.eclipse.model.repository.RepositoryMethod;
 import net.codecadenza.eclipse.model.repository.RepositoryMethodTypeEnumeration;
+import net.codecadenza.eclipse.model.testing.AbstractTestCase;
+import net.codecadenza.eclipse.model.testing.AbstractTestModule;
 import net.codecadenza.eclipse.model.testing.GUITestCase;
+import net.codecadenza.eclipse.model.testing.IntegrationTestCase;
+import net.codecadenza.eclipse.model.testing.IntegrationTestModule;
 import net.codecadenza.eclipse.model.testing.SeleniumTestModule;
 import net.codecadenza.eclipse.model.testing.TestSuite;
 import net.codecadenza.eclipse.resource.CodeCadenzaResourcePlugin;
@@ -123,6 +127,8 @@ import net.codecadenza.eclipse.ui.view.menu.GUITestModuleNamespaceMenuBuilder;
 import net.codecadenza.eclipse.ui.view.menu.IntegrationBeanMenuBuilder;
 import net.codecadenza.eclipse.ui.view.menu.IntegrationMethodMenuBuilder;
 import net.codecadenza.eclipse.ui.view.menu.IntegrationNamespaceMenuBuilder;
+import net.codecadenza.eclipse.ui.view.menu.IntegrationTestCaseMenuBuilder;
+import net.codecadenza.eclipse.ui.view.menu.IntegrationTestNamespaceMenuBuilder;
 import net.codecadenza.eclipse.ui.view.menu.JavaEnumMenuBuilder;
 import net.codecadenza.eclipse.ui.view.menu.PanelMenuBuilder;
 import net.codecadenza.eclipse.ui.view.menu.ProjectMenuBuilder;
@@ -412,7 +418,7 @@ public class ProjectView extends ViewPart implements GraphicalEditorEventListene
 				}
 
 				// Add a dummy item
-				if (!(t instanceof GUITestCase) && !(t instanceof TestSuite))
+				if (!(t instanceof AbstractTestCase) && !(t instanceof TestSuite))
 					new TreeItem(item, SWT.NONE);
 
 				ProjectTreeViewHelper.addJavaType(t.hashCode());
@@ -864,6 +870,8 @@ public class ProjectView extends ViewPart implements GraphicalEditorEventListene
 
 					if (module instanceof SeleniumTestModule)
 						moduleName = TEST_MODULE_NAME_SELENIUM;
+					else if (module instanceof final IntegrationTestModule integrationTestModule)
+						moduleName = integrationTestModule.getIntegrationModule().getTechnology().getName();
 
 					final var moduleItem = new TreeItem(testModuleRootItem, SWT.NONE);
 					moduleItem.setText(moduleName);
@@ -1092,10 +1100,21 @@ public class ProjectView extends ViewPart implements GraphicalEditorEventListene
 				tree.setMenu(new IntegrationBeanMenuBuilder(thisView, tree).createMenu());
 			else if (selItem.getData() instanceof AbstractIntegrationMethod)
 				tree.setMenu(new IntegrationMethodMenuBuilder(thisView, tree).createMenu());
-			else if (selItem.getData() instanceof Namespace && selItem.getParentItem().getText().equals(TEST_MODULES_LABEL))
-				tree.setMenu(new GUITestModuleNamespaceMenuBuilder(thisView, tree).createMenu());
 			else if (selItem.getData() instanceof GUITestCase)
 				tree.setMenu(new GUITestCaseMenuBuilder(thisView, tree).createMenu());
+			else if (selItem.getData() instanceof IntegrationTestCase)
+				tree.setMenu(new IntegrationTestCaseMenuBuilder(thisView, tree).createMenu());
+			else if (selItem.getData() instanceof final Namespace testModuleNamespace
+					&& selItem.getParentItem().getText().equals(TEST_MODULES_LABEL)) {
+				final Project project = testModuleNamespace.getProject();
+
+				for (final AbstractTestModule testModule : project.getTestModules())
+					if (testModule.getNamespace().equals(testModuleNamespace))
+						if (testModule instanceof IntegrationTestModule)
+							tree.setMenu(new IntegrationTestNamespaceMenuBuilder(thisView, tree).createMenu());
+						else
+							tree.setMenu(new GUITestModuleNamespaceMenuBuilder(thisView, tree).createMenu());
+			}
 			else if (selItem.getData() instanceof TestSuite)
 				tree.setMenu(new TestSuiteMenuBuilder(thisView, tree).createMenu());
 		});
@@ -1217,6 +1236,8 @@ public class ProjectView extends ViewPart implements GraphicalEditorEventListene
 					openIntegrationMethodInDialog(selItem);
 				else if (selItem.getData() instanceof GUITestCase)
 					openGUITestCaseInEditor(selItem);
+				else if (selItem.getData() instanceof IntegrationTestCase)
+					openIntegrationTestCaseInEditor(selItem);
 				else if (selItem.getData() instanceof TestSuite)
 					openTestSuiteInEditor(selItem);
 			}
@@ -1777,6 +1798,21 @@ public class ProjectView extends ViewPart implements GraphicalEditorEventListene
 	 */
 	public void openGUITestCaseInEditor(TreeItem item) {
 		final var testCase = (GUITestCase) item.getData();
+
+		try {
+			EclipseIDEService.openInEditor(testCase.getSourceFile());
+		}
+		catch (final Exception ex) {
+			CodeCadenzaUserInterfacePlugin.getInstance().handleInternalError(ex);
+		}
+	}
+
+	/**
+	 * Open the selected integration test case in the editor
+	 * @param item
+	 */
+	public void openIntegrationTestCaseInEditor(TreeItem item) {
+		final var testCase = (IntegrationTestCase) item.getData();
 
 		try {
 			EclipseIDEService.openInEditor(testCase.getSourceFile());

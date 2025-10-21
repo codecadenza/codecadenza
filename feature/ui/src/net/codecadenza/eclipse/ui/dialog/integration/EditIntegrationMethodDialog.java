@@ -377,12 +377,27 @@ public class EditIntegrationMethodDialog extends CodeCadenzaDialog {
 			}
 
 			final var kafkaMethod = (KafkaIntegrationMethod) integrationMethod;
+			final String existingResponseSchemaName = kafkaMethod.getResponseSchemaName() != null ? kafkaMethod.getResponseSchemaName()
+					: "";
+
+			if (!integrationMethod.getBoundaryMethod().getReturnType().isVoid()
+					&& !project.searchIntegrationTestCasesByIntegrationMethod(integrationMethod).isEmpty()
+					&& ((txtResponseSchema.getText().isEmpty() && !existingResponseSchemaName.isEmpty())
+							|| (!txtResponseSchema.getText().isEmpty() && existingResponseSchemaName.isEmpty())
+							|| chkSendResponse.getSelection() != kafkaMethod.isSendResponse())) {
+				final var validationErrorMsg = "The method signature must not be changed due to existing integration tests!";
+
+				MessageDialog.openInformation(getShell(), DLG_TITLE, validationErrorMsg);
+				return false;
+			}
+
 			kafkaMethod.setRequestSchemaName(txtRequestSchema.getText());
 			kafkaMethod.setResponseSchemaName(txtResponseSchema.getText());
 			kafkaMethod.setUseDedicatedPartition(chkDedicatedPartition.getSelection());
 			kafkaMethod.setSendResponse(chkSendResponse.getSelection());
 		}
 		else if (technology == IntegrationTechnology.JMS) {
+			final var jmsMethod = (JMSIntegrationMethod) integrationMethod;
 			String validationErrorMsg = null;
 
 			if (txtOperationID.getText().isEmpty())
@@ -396,13 +411,18 @@ public class EditIntegrationMethodDialog extends CodeCadenzaDialog {
 			if (methodWithSameOperationID.isPresent())
 				validationErrorMsg = "Duplicate operation ID found in method " + methodWithSameOperationID.get().getName() + "()!";
 
+			if (!integrationMethod.getBoundaryMethod().getReturnType().isVoid()
+					&& !project.searchIntegrationTestCasesByIntegrationMethod(integrationMethod).isEmpty()
+					&& chkSendResponse.getSelection() != jmsMethod.isSendResponse()) {
+				validationErrorMsg = "The method signature must not be changed due to existing integration tests!";
+			}
+
 			if (validationErrorMsg != null) {
 				txtOperationID.setFocus();
 				MessageDialog.openInformation(getShell(), DLG_TITLE, validationErrorMsg);
 				return false;
 			}
 
-			final var jmsMethod = (JMSIntegrationMethod) integrationMethod;
 			jmsMethod.setOperationID(txtOperationID.getText());
 			jmsMethod.setSendResponse(chkSendResponse.getSelection());
 		}

@@ -91,6 +91,9 @@ public class SearchObjectConverter {
 	 * @return the search object
 	 */
 	public SearchDTO convert() {
+		if (searchInput.getSearchFields() == null)
+			return searchObj;
+
 		for (final SearchInputField inputField : searchInput.getSearchFields())
 			for (final SearchFieldDTO searchField : searchObj.getSearchFields()) {
 				if (!inputField.getName().equals(searchField.getColLabel()))

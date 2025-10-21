@@ -24,8 +24,8 @@ package net.codecadenza.eclipse.ui.dialog.testing;
 import java.util.List;
 import net.codecadenza.eclipse.model.java.JavaType;
 import net.codecadenza.eclipse.model.project.Project;
-import net.codecadenza.eclipse.model.testing.AbstractTestCase;
 import net.codecadenza.eclipse.model.testing.AbstractTestModule;
+import net.codecadenza.eclipse.model.testing.GUITestCase;
 import net.codecadenza.eclipse.model.testing.TestSuite;
 import net.codecadenza.eclipse.model.testing.TestingFactory;
 import net.codecadenza.eclipse.service.testing.TestSuiteService;
@@ -65,7 +65,7 @@ public class EditTestSuiteDialog extends CodeCadenzaTitleAreaDialog {
 	private final TestSuite testSuite;
 	private Text txtName;
 	private Text txtComment;
-	private DualDataSelectionListComposite<AbstractTestCase> listTestCases;
+	private DualDataSelectionListComposite<GUITestCase> listTestCases;
 	private boolean editMode;
 	private String title = DLG_TITLE_CREATE;
 
@@ -139,7 +139,7 @@ public class EditTestSuiteDialog extends CodeCadenzaTitleAreaDialog {
 			 * @see net.codecadenza.runtime.richclient.eclipse.widget.DualDataSelectionListComposite#getItemText(java.lang. Object)
 			 */
 			@Override
-			public String getItemText(AbstractTestCase element) {
+			public String getItemText(GUITestCase element) {
 				return element.getName();
 			}
 
@@ -148,8 +148,9 @@ public class EditTestSuiteDialog extends CodeCadenzaTitleAreaDialog {
 			 * @see net.codecadenza.runtime.richclient.eclipse.widget.DualDataSelectionListComposite#searchItems(java.lang. String)
 			 */
 			@Override
-			public List<AbstractTestCase> searchItems(String filter) {
-				return testModule.getTestCases().stream().filter(e -> e.getName().toLowerCase().contains(filter.toLowerCase())).toList();
+			public List<GUITestCase> searchItems(String filter) {
+				return project.getAllGUITestCases().stream().filter(e -> e.getName().toLowerCase().contains(filter.toLowerCase()))
+						.toList();
 			}
 		};
 
@@ -158,7 +159,7 @@ public class EditTestSuiteDialog extends CodeCadenzaTitleAreaDialog {
 		if (editMode) {
 			txtName.setText(testSuite.getName());
 			txtComment.setText(testSuite.getComment());
-			listTestCases.setSelectedItems(testSuite.getTestCases());
+			listTestCases.setSelectedItems(testSuite.getTestCases().stream().map(GUITestCase.class::cast).toList());
 		}
 
 		setTitle(title);

@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<test_data user_name="John Doe" password="mypassword">
+	<method_invocation class_name="CustomerService"
+		method_name="createNewCustomer" timeout_millis="200">
+		<parameters>
+			<parameter name="customer">
+				<object id="aab63a49-26f7-4b9b-983b-f83403a309c7">
+					<field id="ddb63a49-26f7-4b9b-983b-f83403a309c7" name="id" />
+					<field name="code" value="0815" />
+					<field name="name" value="A new customer" />
+					<field name="zip" value="88765" />
+					<field name="creditLimit" value="150000.45" />
+					<field name="customerStatus" value="NEW" />
+					<field name="country">
+						<object>
+							<field name="code" value="DE" />
+						</object>
+					</field>
+					<field name="tags">
+						<object value="low margin" />
+						<object value="quality problems" />
+					</field>
+					<field id="13256a2b-4fed-43f0-a46e-d7869ef073e2" name="ratings" expected_size="2">
+						<object value="10" />
+						<object value="100" />
+					</field>
+				</object>
+			</parameter>
+		</parameters>
+		<return_value>
+			<object ref_id="aab63a49-26f7-4b9b-983b-f83403a309c7" />
+		</return_value>
+	</method_invocation>
+	<method_invocation class_name="CustomerService"
+		method_name="getCustomer" timeout_millis="300">
+		<parameters>
+			<parameter name="id">
+				<object id="57db30cf-b87b-49d7-8daa-b213f7338def" ref_field_id="ddb63a49-26f7-4b9b-983b-f83403a309c7" />
+			</parameter>
+		</parameters>
+		<return_value>
+			<object ref_id="aab63a49-26f7-4b9b-983b-f83403a309c7" />
+		</return_value>
+	</method_invocation>
+	<method_invocation class_name="CustomerService"
+		method_name="updateCustomer" timeout_millis="300">
+		<parameters>
+			<parameter name="customer">
+				<object id="f0dea9c6-649c-4e77-95ee-5add8f555dd7" ref_id="aab63a49-26f7-4b9b-983b-f83403a309c7">
+					<field name="code" value="XXXX" />
+				</object>
+			</parameter>
+		</parameters>
+		<return_value>
+			<object ref_id="f0dea9c6-649c-4e77-95ee-5add8f555dd7" />
+		</return_value>
+	</method_invocation>
+	<method_invocation class_name="CustomerService"
+		method_name="searchCustomers" timeout_millis="300" expected_size="1">
+		<parameters>
+			<parameter name="searchInput">
+				<object>
+					<field name="maxResult" value="10" />
+					<field name="caseSensitive" value="false" />
+					<field name="startIndex" value="0" />
+					<field name="exactFilterMatch" value="true" />
+					<field name="searchFields">
+						<object>
+							<field name="filterCriteria" value="A new customer" />
+							<field name="operator" value="EQUAL" />
+							<field name="name" value="name" />
+							<field name="sortOrder" value="ASC" />
+							<field name="sortIndex" value="1" />
+						</object>
+						<object>
+							<field name="filterCriteria" value="88765" />
+							<field name="operator" value="EQUAL" />
+							<field name="name" value="zip" />
+							<field name="sortOrder" value="DESC" />
+							<field name="sortIndex" value="2" />
+							<field name="dateTimeFormat" value="false" />
+						</object>
+					</field>
+				</object>
+			</parameter>
+		</parameters>
+		<return_value>
+			<object ref_id="aab63a49-26f7-4b9b-983b-f83403a309c7" />
+		</return_value>
+	</method_invocation>
+	<method_invocation class_name="CustomerService"
+		method_name="saveCustomers">
+		<parameters>
+			<parameter name="customers">
+				<object id="9dddae8a-e0a6-42c1-b341-1e075fdc0b8c" ref_id="f0dea9c6-649c-4e77-95ee-5add8f555dd7" />
+			</parameter>
+		</parameters>
+		<return_value>
+			<object ref_id="9dddae8a-e0a6-42c1-b341-1e075fdc0b8c" />
+		</return_value>
+	</method_invocation>
+	<method_invocation class_name="CustomerService"
+		method_name="deleteCustomer" timeout_millis="300">
+		<parameters>
+			<parameter name="id">
+				<object id="253cd987-4058-47e8-a2f4-035327e00e6a" ref_field_id="ddb63a49-26f7-4b9b-983b-f83403a309c7" />
+			</parameter>
+		</parameters>
+	</method_invocation>
+</test_data>

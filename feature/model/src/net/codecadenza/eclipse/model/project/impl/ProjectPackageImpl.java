@@ -1313,6 +1313,11 @@ public class ProjectPackageImpl extends EPackageImpl implements ProjectPackage {
 		addEEnumLiteral(buildArtifactTypeEEnum, BuildArtifactType.INTEGRATION_CLIENT_JMS);
 		addEEnumLiteral(buildArtifactTypeEEnum, BuildArtifactType.SELENIUM_TEST);
 		addEEnumLiteral(buildArtifactTypeEEnum, BuildArtifactType.SHARED);
+		addEEnumLiteral(buildArtifactTypeEEnum, BuildArtifactType.INTEGRATION_TEST_SOAP);
+		addEEnumLiteral(buildArtifactTypeEEnum, BuildArtifactType.INTEGRATION_TEST_REST);
+		addEEnumLiteral(buildArtifactTypeEEnum, BuildArtifactType.INTEGRATION_TEST_RMI);
+		addEEnumLiteral(buildArtifactTypeEEnum, BuildArtifactType.INTEGRATION_TEST_KAFKA);
+		addEEnumLiteral(buildArtifactTypeEEnum, BuildArtifactType.INTEGRATION_TEST_JMS);
 
 		initEEnum(mappingAnnotationStrategyEEnum, MappingAnnotationStrategy.class, "MappingAnnotationStrategy");
 		addEEnumLiteral(mappingAnnotationStrategyEEnum, MappingAnnotationStrategy.NEVER);

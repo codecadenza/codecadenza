@@ -110,6 +110,7 @@ public class Constants {
 	// Name of parameter that holds search input data
 	public static final String SEARCH_PARAM_NAME = "searchInput";
 	public static final String INTEGRATION_SEARCH_PARAM_TYPE = "SearchInput";
+	public static final String INTEGRATION_SEARCH_FIELD_TYPE = "SearchInputField";
 
 	// Standard Java package names
 	public static final String PACK_JAVA_LANG = "java.lang";

@@ -40,6 +40,8 @@ import java.util.Collections;
 import java.util.EnumSet;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import net.codecadenza.eclipse.model.boundary.BoundaryBean;
 import net.codecadenza.eclipse.model.boundary.BoundaryMethod;
@@ -57,12 +59,16 @@ import net.codecadenza.eclipse.model.domain.DomainTagEnumeration;
 import net.codecadenza.eclipse.model.dto.DTOBean;
 import net.codecadenza.eclipse.model.dto.DTOBeanAttribute;
 import net.codecadenza.eclipse.model.exchange.DataExchangeServiceBean;
+import net.codecadenza.eclipse.model.exchange.ExchangeMappingAttribute;
 import net.codecadenza.eclipse.model.exchange.ExchangeMappingObject;
 import net.codecadenza.eclipse.model.integration.AbstractIntegrationBean;
+import net.codecadenza.eclipse.model.integration.AbstractIntegrationMethod;
 import net.codecadenza.eclipse.model.java.EnumTagEnumeration;
 import net.codecadenza.eclipse.model.java.JavaEnum;
 import net.codecadenza.eclipse.model.java.JavaType;
 import net.codecadenza.eclipse.model.java.Namespace;
+import net.codecadenza.eclipse.model.mapping.MappingAttribute;
+import net.codecadenza.eclipse.model.mapping.MappingObject;
 import net.codecadenza.eclipse.model.project.BuildArtifact;
 import net.codecadenza.eclipse.model.project.BuildArtifactType;
 import net.codecadenza.eclipse.model.project.BuildToolEnumeration;
@@ -84,7 +90,12 @@ import net.codecadenza.eclipse.model.project.XMLMappingType;
 import net.codecadenza.eclipse.model.repository.Repository;
 import net.codecadenza.eclipse.model.testing.AbstractTestModule;
 import net.codecadenza.eclipse.model.testing.GUITestCase;
+import net.codecadenza.eclipse.model.testing.IntegrationMethodTestInvocation;
+import net.codecadenza.eclipse.model.testing.IntegrationTestCase;
+import net.codecadenza.eclipse.model.testing.IntegrationTestModule;
+import net.codecadenza.eclipse.model.testing.MethodInvocationParameter;
 import net.codecadenza.eclipse.model.testing.SeleniumTestModule;
+import net.codecadenza.eclipse.model.testing.TestDataAttribute;
 import net.codecadenza.eclipse.model.testing.TestingPackage;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.NotificationChain;
@@ -2664,6 +2675,135 @@ public class ProjectImpl extends EObjectImpl implements Project {
 
 	/*
 	 * (non-Javadoc)
+	 * @see net.codecadenza.eclipse.model.project.Project#
+	 * searchIntegrationTestCasesByMappingAttribute(net.codecadenza.eclipse.model.mapping.MappingAttribute)
+	 */
+	@Override
+	public Set<IntegrationTestCase> searchIntegrationTestCasesByMappingAttribute(MappingAttribute mappingAttribute) {
+		final Set<IntegrationTestCase> integrationTestCases = getAllIntegrationTestCases();
+		final var testCasesFound = new HashSet<IntegrationTestCase>();
+		final var mappingObjectSet = new HashSet<MappingObject>();
+
+		for (final IntegrationTestCase integrationTestCase : integrationTestCases) {
+			for (final IntegrationMethodTestInvocation invocation : integrationTestCase.getMethodInvocations()) {
+				for (final TestDataAttribute testDataAttribute : invocation.getPostProcessingAttributes())
+					if (mappingAttribute.equals(testDataAttribute.getMappingAttribute())) {
+						testCasesFound.add(integrationTestCase);
+						break;
+					}
+
+				if ((invocation.getIntegrationMethod().getReturnType() instanceof final MappingObject mappingObject)
+						&& isUsedByMappingObject(mappingObjectSet, mappingObject, mappingAttribute)) {
+					testCasesFound.add(integrationTestCase);
+					break;
+				}
+
+				for (final MethodInvocationParameter parameter : invocation.getParameters()) {
+					if ((parameter.getType() != null && parameter.getType() instanceof final MappingObject mappingObject)
+							&& isUsedByMappingObject(mappingObjectSet, mappingObject, mappingAttribute)) {
+						testCasesFound.add(integrationTestCase);
+						break;
+					}
+				}
+			}
+		}
+
+		return testCasesFound;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see net.codecadenza.eclipse.model.project.Project#
+	 * searchIntegrationTestCasesByIntegrationBean(net.codecadenza.eclipse.model.integration.AbstractIntegrationBean)
+	 * @generated not
+	 */
+	@Override
+	public Set<IntegrationTestCase> searchIntegrationTestCasesByIntegrationBean(AbstractIntegrationBean integrationBean) {
+		final Set<IntegrationTestCase> integrationTestCases = getAllIntegrationTestCases();
+		final var testCasesFound = new HashSet<IntegrationTestCase>();
+
+		for (final IntegrationTestCase integrationTestCase : integrationTestCases)
+			for (final IntegrationMethodTestInvocation invocation : integrationTestCase.getMethodInvocations())
+				if (invocation.getIntegrationMethod().getIntegrationBean().equals(integrationBean)) {
+					testCasesFound.add(integrationTestCase);
+					break;
+				}
+
+		return testCasesFound;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see net.codecadenza.eclipse.model.project.Project#
+	 * searchIntegrationTestCasesByIntegrationMethod(net.codecadenza.eclipse.model.integration.AbstractIntegrationMethod)
+	 * @generated not
+	 */
+	@Override
+	public Set<IntegrationTestCase> searchIntegrationTestCasesByIntegrationMethod(AbstractIntegrationMethod integrationMethod) {
+		final Set<IntegrationTestCase> integrationTestCases = getAllIntegrationTestCases();
+		final var testCasesFound = new HashSet<IntegrationTestCase>();
+
+		for (final IntegrationTestCase integrationTestCase : integrationTestCases)
+			for (final IntegrationMethodTestInvocation invocation : integrationTestCase.getMethodInvocations())
+				if (invocation.getIntegrationMethod().equals(integrationMethod)) {
+					testCasesFound.add(integrationTestCase);
+					break;
+				}
+
+		return testCasesFound;
+	}
+
+	/**
+	 * @return a set with all integration test cases of this project
+	 * @generated not
+	 */
+	private Set<IntegrationTestCase> getAllIntegrationTestCases() {
+		return getTestModules().stream().filter(IntegrationTestModule.class::isInstance).map(IntegrationTestModule.class::cast)
+				.flatMap(integrationTestModule -> integrationTestModule.getTestCases().stream()).map(IntegrationTestCase.class::cast)
+				.collect(Collectors.toSet());
+	}
+
+	/**
+	 * Recursively check if the given mapping attribute is used by a mapping object
+	 * @param mappingObjectSet a set used to check if a mapping object has already been tested to avoid infinite loops
+	 * @param mappingObject the mapping object
+	 * @param mappingAttribute the mapping attribute to check
+	 * @return true if the mapping attribute is used by the the given mapping object
+	 * @generated not
+	 */
+	private boolean isUsedByMappingObject(Set<MappingObject> mappingObjectSet, MappingObject mappingObject,
+			MappingAttribute mappingAttribute) {
+		if (mappingObjectSet.contains(mappingObject))
+			return false;
+		else
+			mappingObjectSet.add(mappingObject);
+
+		if (mappingObject instanceof final DTOBean dtoBean) {
+			for (final DTOBeanAttribute dtoAttribute : dtoBean.getAttributes()) {
+				if (mappingAttribute.equals(dtoAttribute))
+					return true;
+
+				if ((dtoAttribute.getReferencedDTOBean() != null)
+						&& isUsedByMappingObject(mappingObjectSet, dtoAttribute.getReferencedDTOBean(), mappingAttribute))
+					return true;
+			}
+		}
+		else if (mappingObject instanceof final ExchangeMappingObject exchangeMappingObject) {
+			for (final ExchangeMappingAttribute exchangeAttribute : exchangeMappingObject.getAttributes()) {
+				if (mappingAttribute.equals(exchangeAttribute))
+					return true;
+
+				if ((exchangeAttribute.getJavaType() instanceof final MappingObject refMappingObject)
+						&& isUsedByMappingObject(mappingObjectSet, refMappingObject, mappingAttribute))
+					return true;
+			}
+		}
+
+		return false;
+	}
+
+	/*
+	 * (non-Javadoc)
 	 * @see net.codecadenza.eclipse.model.project.Project#searchIntegrationBean(net.codecadenza.eclipse.model.project.
 	 * IntegrationTechnology, net.codecadenza.eclipse.model.domain.DomainObject)
 	 * @generated not
@@ -2705,9 +2845,25 @@ public class ProjectImpl extends EObjectImpl implements Project {
 	 */
 	@Override
 	public AbstractTestModule getTestModuleByArtifact(BuildArtifactType artifactType) {
-		return this.getTestModules().stream()
-				.filter(testModule -> artifactType == BuildArtifactType.SELENIUM_TEST && testModule instanceof SeleniumTestModule)
-				.findFirst().orElse(null);
+		for (final AbstractTestModule testModule : getTestModules()) {
+			if (artifactType == BuildArtifactType.SELENIUM_TEST && testModule instanceof SeleniumTestModule)
+				return testModule;
+
+			if (testModule instanceof final IntegrationTestModule integrationTestModule
+					&& ((artifactType == BuildArtifactType.INTEGRATION_TEST_SOAP
+							&& integrationTestModule.getIntegrationModule().getTechnology() == IntegrationTechnology.SOAP)
+							|| (artifactType == BuildArtifactType.INTEGRATION_TEST_REST
+									&& integrationTestModule.getIntegrationModule().getTechnology() == IntegrationTechnology.REST)
+							|| (artifactType == BuildArtifactType.INTEGRATION_TEST_RMI
+									&& integrationTestModule.getIntegrationModule().getTechnology() == IntegrationTechnology.RMI)
+							|| (artifactType == BuildArtifactType.INTEGRATION_TEST_KAFKA
+									&& integrationTestModule.getIntegrationModule().getTechnology() == IntegrationTechnology.KAFKA)
+							|| (artifactType == BuildArtifactType.INTEGRATION_TEST_JMS
+									&& integrationTestModule.getIntegrationModule().getTechnology() == IntegrationTechnology.JMS)))
+				return integrationTestModule;
+		}
+
+		return null;
 	}
 
 	/*
@@ -2722,7 +2878,7 @@ public class ProjectImpl extends EObjectImpl implements Project {
 		if (testModule == null)
 			return Collections.emptyList();
 
-		return testModule.getTestCases().stream().map(GUITestCase.class::cast).toList();
+		return testModule.getTestCases().stream().filter(GUITestCase.class::isInstance).map(GUITestCase.class::cast).toList();
 	}
 
 	/*

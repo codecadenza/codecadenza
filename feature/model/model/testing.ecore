@@ -110,4 +110,81 @@
     <eLiterals name="DIALOG"/>
     <eLiterals name="NOTIFICATION" value="1"/>
   </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="IntegrationTestModule" eSuperTypes="#//AbstractTestModule">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="defaultTimeout" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EIntegerObject"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="decimalFormat" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="dateTimeFormat" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="integrationModule" eType="ecore:EClass project.ecore#//IntegrationModule"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="dateFormat" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="decimalSeparator" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EChar"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="groupingSeparator" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EChar"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="AssertionOperator">
+    <eLiterals name="NONE"/>
+    <eLiterals name="EQUAL" value="1"/>
+    <eLiterals name="IS_NULL" value="2"/>
+    <eLiterals name="IS_NOT_NULL" value="3"/>
+    <eLiterals name="GREATER_OR_EQUAL" value="4"/>
+    <eLiterals name="GREATER" value="5"/>
+    <eLiterals name="SMALLER_OR_EQUAL" value="6"/>
+    <eLiterals name="SMALLER" value="7"/>
+    <eLiterals name="STARTS_WITH" value="8"/>
+    <eLiterals name="ENDS_WITH" value="9"/>
+    <eLiterals name="CONTAINS" value="10"/>
+    <eLiterals name="IS_EMPTY" value="11"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="IntegrationTestCase" eSuperTypes="#//AbstractTestCase">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="userName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="password" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="methodInvocations" upperBound="-1"
+        eType="#//IntegrationMethodTestInvocation" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="IntegrationMethodTestInvocation">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="expectToFail" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="postProcessingStatement"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="timeout" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EIntegerObject"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="integrationMethod" eType="ecore:EClass integration.ecore#//AbstractIntegrationMethod"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="parameters" upperBound="-1"
+        eType="#//MethodInvocationParameter" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="returnValues" upperBound="-1"
+        eType="#//TestDataObject" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="postProcessingAttributes"
+        upperBound="-1" eType="#//TestDataAttribute"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="nestedInvocations" upperBound="-1"
+        eType="#//IntegrationMethodTestInvocation" containment="true" eOpposite="#//IntegrationMethodTestInvocation/parentInvocation"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="parentInvocation" eType="#//IntegrationMethodTestInvocation"
+        eOpposite="#//IntegrationMethodTestInvocation/nestedInvocations"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="testMethodName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="expectedSize" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EIntegerObject"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="expectedSizeOperator" eType="#//AssertionOperator"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="expectedReturnNull" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="MethodInvocationParameter">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="parameterValues" upperBound="-1"
+        eType="#//TestDataObject" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="type" eType="ecore:EClass java.ecore#//JavaType"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="representsList" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="TestDataObject">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="mappingObject" eType="ecore:EClass mapping.ecore#//MappingObject"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="attributes" upperBound="-1"
+        eType="#//TestDataAttribute" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="referencedObject" eType="#//TestDataObject"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="TestDataAttribute">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="mappingAttribute" eType="ecore:EClass mapping.ecore#//MappingAttribute"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="trackValue" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="operator" eType="#//AssertionOperator"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="referencedAttribute" eType="#//TestDataAttribute"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="referencedObjects" upperBound="-1"
+        eType="#//TestDataObject" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="mappingType" eType="ecore:EClass java.ecore#//JavaType"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="expectedSize" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EIntegerObject"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="expectedSizeOperator" eType="#//AssertionOperator"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="id" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
 </ecore:EPackage>

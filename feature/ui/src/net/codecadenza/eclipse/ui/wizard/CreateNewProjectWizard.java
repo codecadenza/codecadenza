@@ -74,7 +74,7 @@ public class CreateNewProjectWizard extends Wizard implements INewWizard {
 		pageDBConnection = new DBConnectionWizardPage(pageCount++);
 		pageApp = new ApplicationWizardPage(pageCount++);
 		pageIntegration = new IntegrationWizardPage(pageCount++, pageApp, pageProject);
-		pageTesting = new TestingWizardPage(pageCount++, pageApp);
+		pageTesting = new TestingWizardPage(pageCount++, pageApp, pageIntegration);
 		pageBuild = new BuildConfigWizardPage(pageCount, pageProject, pageApp, pageIntegration, pageTesting);
 
 		addPage(pageProject);

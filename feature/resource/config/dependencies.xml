@@ -460,4 +460,162 @@
 		</filter>
 	</dependency_config>
 
+	<dependency_config buildType="INTEGRATION_TEST_SOAP" comment="SOAP integration test">
+		<filter clientPlatform="ALL" technology="ALL" serverPlatform="ALL" validationType="ALL" database="ALL" jpaProvider="ALL">
+			<dependency name="codecadenza-ddt" groupName="net.codecadenza.runtime" version="1.1.0" scope="test"/>
+		</filter>
+		<filter clientPlatform="ALL" technology="JAKARTA_EE" serverPlatform="ALL" validationType="ALL" database="ALL" jpaProvider="ALL">
+			<dependency name="junit-platform-suite-engine" groupName="org.junit.platform" version="1.11.3" scope="test"/>
+			<dependency name="assertj-core" groupName="org.assertj" version="3.27.3" scope="test"/>
+			<dependency name="log4j-slf4j2-impl" groupName="org.apache.logging.log4j" version="2.23.1" scope="test"/>
+		</filter>
+		<filter clientPlatform="ALL" technology="JAKARTA_EE" serverPlatform="ALL" validationType="ALL" database="MYSQL" jpaProvider="ALL">
+			<dependency name="mysql-connector-j" groupName="com.mysql" version="8.0.31" scope="test"/>
+		</filter>
+		<filter clientPlatform="ALL" technology="JAKARTA_EE" serverPlatform="ALL" validationType="ALL" database="DERBY" jpaProvider="ALL">
+			<dependency name="derbyclient" groupName="org.apache.derby" version="10.16.1.1" scope="test"/>
+			<dependency name="derbytools" groupName="org.apache.derby" version="10.16.1.1" scope="test"/>
+		</filter>
+		<filter clientPlatform="ALL" technology="JAKARTA_EE" serverPlatform="ALL" validationType="ALL" database="POSTGRESQL" jpaProvider="ALL">
+			<dependency name="postgresql" groupName="org.postgresql" version="42.5.1" scope="test"/>
+		</filter>
+		<filter clientPlatform="ALL" technology="SPRING_BOOT" serverPlatform="ALL" validationType="ALL" database="ALL" jpaProvider="ALL">
+			<dependency name="junit-platform-suite-engine" groupName="org.junit.platform" scope="test"/>
+			<dependency name="assertj-core" groupName="org.assertj" scope="test"/>
+			<dependency name="log4j-slf4j2-impl" groupName="org.apache.logging.log4j" scope="test"/>
+			<dependency name="spring-boot-starter" groupName="org.springframework.boot" scope="compile">
+				<exclusion name="spring-boot-starter-logging" groupName="org.springframework.boot" scope="compile"/>
+			</dependency>
+		</filter>
+		<filter clientPlatform="ALL" technology="SPRING_BOOT" serverPlatform="ALL" validationType="ALL" database="MYSQL" jpaProvider="ALL">
+			<dependency name="mysql-connector-j" groupName="com.mysql" scope="test"/>
+		</filter>
+		<filter clientPlatform="ALL" technology="SPRING_BOOT" serverPlatform="ALL" validationType="ALL" database="DERBY" jpaProvider="ALL">
+			<dependency name="derbyclient" groupName="org.apache.derby" scope="test"/>
+			<dependency name="derbytools" groupName="org.apache.derby" scope="test"/>
+		</filter>
+		<filter clientPlatform="ALL" technology="SPRING_BOOT" serverPlatform="ALL" validationType="ALL" database="POSTGRESQL" jpaProvider="ALL">
+			<dependency name="postgresql" groupName="org.postgresql" scope="test"/>
+		</filter>
+	</dependency_config>
+
+	<dependency_config buildType="INTEGRATION_TEST_REST" comment="REST integration test">
+		<filter clientPlatform="ALL" technology="ALL" serverPlatform="ALL" validationType="ALL" database="ALL" jpaProvider="ALL">
+			<dependency name="codecadenza-ddt" groupName="net.codecadenza.runtime" version="1.1.0" scope="test"/>
+		</filter>
+		<filter clientPlatform="ALL" technology="JAKARTA_EE" serverPlatform="ALL" validationType="ALL" database="ALL" jpaProvider="ALL">
+			<dependency name="junit-platform-suite-engine" groupName="org.junit.platform" version="1.11.3" scope="test"/>
+			<dependency name="assertj-core" groupName="org.assertj" version="3.27.3" scope="test"/>
+			<dependency name="log4j-slf4j2-impl" groupName="org.apache.logging.log4j" version="2.23.1" scope="test"/>
+		</filter>
+		<filter clientPlatform="ALL" technology="JAKARTA_EE" serverPlatform="ALL" validationType="ALL" database="MYSQL" jpaProvider="ALL">
+			<dependency name="mysql-connector-j" groupName="com.mysql" version="8.0.31" scope="test"/>
+		</filter>
+		<filter clientPlatform="ALL" technology="JAKARTA_EE" serverPlatform="ALL" validationType="ALL" database="DERBY" jpaProvider="ALL">
+			<dependency name="derbyclient" groupName="org.apache.derby" version="10.16.1.1" scope="test"/>
+			<dependency name="derbytools" groupName="org.apache.derby" version="10.16.1.1" scope="test"/>
+		</filter>
+		<filter clientPlatform="ALL" technology="JAKARTA_EE" serverPlatform="ALL" validationType="ALL" database="POSTGRESQL" jpaProvider="ALL">
+			<dependency name="postgresql" groupName="org.postgresql" version="42.5.1" scope="test"/>
+		</filter>
+		<filter clientPlatform="ALL" technology="SPRING_BOOT" serverPlatform="ALL" validationType="ALL" database="ALL" jpaProvider="ALL">
+			<dependency name="junit-platform-suite-engine" groupName="org.junit.platform" scope="test"/>
+			<dependency name="assertj-core" groupName="org.assertj" scope="test"/>
+			<dependency name="log4j-slf4j2-impl" groupName="org.apache.logging.log4j" scope="test"/>
+			<dependency name="spring-boot-starter" groupName="org.springframework.boot" scope="compile">
+				<exclusion name="spring-boot-starter-logging" groupName="org.springframework.boot" scope="compile"/>
+			</dependency>
+		</filter>
+		<filter clientPlatform="ALL" technology="SPRING_BOOT" serverPlatform="ALL" validationType="ALL" database="MYSQL" jpaProvider="ALL">
+			<dependency name="mysql-connector-j" groupName="com.mysql" scope="test"/>
+		</filter>
+		<filter clientPlatform="ALL" technology="SPRING_BOOT" serverPlatform="ALL" validationType="ALL" database="DERBY" jpaProvider="ALL">
+			<dependency name="derbyclient" groupName="org.apache.derby" scope="test"/>
+			<dependency name="derbytools" groupName="org.apache.derby" scope="test"/>
+		</filter>
+		<filter clientPlatform="ALL" technology="SPRING_BOOT" serverPlatform="ALL" validationType="ALL" database="POSTGRESQL" jpaProvider="ALL">
+			<dependency name="postgresql" groupName="org.postgresql" scope="test"/>
+		</filter>
+	</dependency_config>
+
+	<dependency_config buildType="INTEGRATION_TEST_RMI" comment="RMI integration test">
+		<filter clientPlatform="ALL" technology="ALL" serverPlatform="ALL" validationType="ALL" database="ALL" jpaProvider="ALL">
+			<dependency name="codecadenza-ddt" groupName="net.codecadenza.runtime" version="1.1.0" scope="test"/>
+			<dependency name="junit-platform-suite-engine" groupName="org.junit.platform" version="1.11.3" scope="test"/>
+			<dependency name="assertj-core" groupName="org.assertj" version="3.27.3" scope="test"/>
+			<dependency name="log4j-slf4j2-impl" groupName="org.apache.logging.log4j" version="2.23.1" scope="test"/>
+		</filter>
+		<filter clientPlatform="ALL" technology="ALL" serverPlatform="ALL" validationType="ALL" database="MYSQL" jpaProvider="ALL">
+			<dependency name="mysql-connector-j" groupName="com.mysql" version="8.0.31" scope="test"/>
+		</filter>
+		<filter clientPlatform="ALL" technology="ALL" serverPlatform="ALL" validationType="ALL" database="DERBY" jpaProvider="ALL">
+			<dependency name="derbyclient" groupName="org.apache.derby" version="10.16.1.1" scope="test"/>
+			<dependency name="derbytools" groupName="org.apache.derby" version="10.16.1.1" scope="test"/>
+		</filter>
+		<filter clientPlatform="ALL" technology="ALL" serverPlatform="ALL" validationType="ALL" database="POSTGRESQL" jpaProvider="ALL">
+			<dependency name="postgresql" groupName="org.postgresql" version="42.5.1" scope="test"/>
+		</filter>
+	</dependency_config>
+
+	<dependency_config buildType="INTEGRATION_TEST_KAFKA" comment="Kafka integration test">
+		<filter clientPlatform="ALL" technology="ALL" serverPlatform="ALL" validationType="ALL" database="ALL" jpaProvider="ALL">
+			<dependency name="codecadenza-ddt" groupName="net.codecadenza.runtime" version="1.1.0" scope="test"/>
+			<dependency name="junit-platform-suite-engine" groupName="org.junit.platform" scope="test"/>
+			<dependency name="assertj-core" groupName="org.assertj" scope="test"/>
+			<dependency name="log4j-slf4j2-impl" groupName="org.apache.logging.log4j" scope="test"/>
+			<dependency name="spring-boot-starter" groupName="org.springframework.boot" scope="compile">
+				<exclusion name="spring-boot-starter-logging" groupName="org.springframework.boot" scope="compile"/>
+			</dependency>
+		</filter>
+		<filter clientPlatform="ALL" technology="ALL" serverPlatform="ALL" validationType="ALL" database="MYSQL" jpaProvider="ALL">
+			<dependency name="mysql-connector-j" groupName="com.mysql" scope="test"/>
+		</filter>
+		<filter clientPlatform="ALL" technology="ALL" serverPlatform="ALL" validationType="ALL" database="DERBY" jpaProvider="ALL">
+			<dependency name="derbyclient" groupName="org.apache.derby" scope="test"/>
+			<dependency name="derbytools" groupName="org.apache.derby" scope="test"/>
+		</filter>
+		<filter clientPlatform="ALL" technology="ALL" serverPlatform="ALL" validationType="ALL" database="POSTGRESQL" jpaProvider="ALL">
+			<dependency name="postgresql" groupName="org.postgresql" scope="test"/>
+		</filter>
+	</dependency_config>
+
+	<dependency_config buildType="INTEGRATION_TEST_JMS" comment="JMS integration test">
+		<filter clientPlatform="ALL" technology="ALL" serverPlatform="ALL" validationType="ALL" database="ALL" jpaProvider="ALL">
+			<dependency name="codecadenza-ddt" groupName="net.codecadenza.runtime" version="1.1.0" scope="test"/>
+		</filter>
+		<filter clientPlatform="ALL" technology="JAKARTA_EE" serverPlatform="ALL" validationType="ALL" database="ALL" jpaProvider="ALL">
+			<dependency name="junit-platform-suite-engine" groupName="org.junit.platform" version="1.11.3" scope="test"/>
+			<dependency name="assertj-core" groupName="org.assertj" version="3.27.3" scope="test"/>
+			<dependency name="log4j-slf4j2-impl" groupName="org.apache.logging.log4j" version="2.23.1" scope="test"/>
+		</filter>
+		<filter clientPlatform="ALL" technology="JAKARTA_EE" serverPlatform="ALL" validationType="ALL" database="MYSQL" jpaProvider="ALL">
+			<dependency name="mysql-connector-j" groupName="com.mysql" version="8.0.31" scope="test"/>
+		</filter>
+		<filter clientPlatform="ALL" technology="JAKARTA_EE" serverPlatform="ALL" validationType="ALL" database="DERBY" jpaProvider="ALL">
+			<dependency name="derbyclient" groupName="org.apache.derby" version="10.16.1.1" scope="test"/>
+			<dependency name="derbytools" groupName="org.apache.derby" version="10.16.1.1" scope="test"/>
+		</filter>
+		<filter clientPlatform="ALL" technology="JAKARTA_EE" serverPlatform="ALL" validationType="ALL" database="POSTGRESQL" jpaProvider="ALL">
+			<dependency name="postgresql" groupName="org.postgresql" version="42.5.1" scope="test"/>
+		</filter>
+		<filter clientPlatform="ALL" technology="SPRING_BOOT" serverPlatform="ALL" validationType="ALL" database="ALL" jpaProvider="ALL">
+			<dependency name="junit-platform-suite-engine" groupName="org.junit.platform" scope="test"/>
+			<dependency name="assertj-core" groupName="org.assertj" scope="test"/>
+			<dependency name="log4j-slf4j2-impl" groupName="org.apache.logging.log4j" scope="test"/>
+			<dependency name="spring-boot-starter" groupName="org.springframework.boot" scope="compile">
+				<exclusion name="spring-boot-starter-logging" groupName="org.springframework.boot" scope="compile"/>
+			</dependency>
+		</filter>
+		<filter clientPlatform="ALL" technology="SPRING_BOOT" serverPlatform="ALL" validationType="ALL" database="MYSQL" jpaProvider="ALL">
+			<dependency name="mysql-connector-j" groupName="com.mysql" scope="test"/>
+		</filter>
+		<filter clientPlatform="ALL" technology="SPRING_BOOT" serverPlatform="ALL" validationType="ALL" database="DERBY" jpaProvider="ALL">
+			<dependency name="derbyclient" groupName="org.apache.derby" scope="test"/>
+			<dependency name="derbytools" groupName="org.apache.derby" scope="test"/>
+		</filter>
+		<filter clientPlatform="ALL" technology="SPRING_BOOT" serverPlatform="ALL" validationType="ALL" database="POSTGRESQL" jpaProvider="ALL">
+			<dependency name="postgresql" groupName="org.postgresql" scope="test"/>
+		</filter>
+	</dependency_config>
+
 </configuration>
