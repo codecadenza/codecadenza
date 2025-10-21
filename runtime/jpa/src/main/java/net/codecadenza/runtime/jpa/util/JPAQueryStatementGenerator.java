@@ -240,6 +240,10 @@ public class JPAQueryStatementGenerator {
 			addParameters(params, field, searchDTO);
 		}
 
+		if (logger.isTraceEnabled())
+			for (final Map.Entry<String, Object> entry : params.entrySet())
+				logger.trace("Created parameter '{}' using value '{}'", entry.getKey(), entry.getValue());
+
 		return params;
 	}
 
