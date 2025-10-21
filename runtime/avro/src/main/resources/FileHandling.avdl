@@ -10,7 +10,7 @@ protocol FileHandlingProtocol {
   record UploadFileRequest 
   {
     string fileName;
-    union {string, null} path;
+    string? path = null;
    	bytes content; 
   }
 
@@ -25,15 +25,15 @@ protocol FileHandlingProtocol {
   // Data that is contained in a file upload response message
   record UploadFileResponse 
   {
-   net.codecadenza.runtime.avro.response.ResponseStatus responseStatus;
-    union {null, string} path = null;
+    net.codecadenza.runtime.avro.response.ResponseStatus responseStatus;
+    string? path = null;
   }
 
   // Data that is contained in a file download response message
   record DowloadFileResponse 
   {
     net.codecadenza.runtime.avro.response.ResponseStatus responseStatus;
-    union {null, bytes} content = null;
+    bytes? content = null;
   }
 
 }

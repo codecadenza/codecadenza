@@ -32,12 +32,12 @@ protocol SearchInputProtocol {
   // Filter and sort settings for a single field
   record SearchInputField 
   {
-    union {string, null} filterCriteria;
+    string? filterCriteria = null;
     string name;
-    SortDirectionEnum sortOrder;
+    SortDirectionEnum? sortOrder = null;
     int sortIndex;
     boolean dateTimeFormat = true;
-    FilterOperatorEnum operator;
+    FilterOperatorEnum? operator = null;
   }
 
   // Record that is used for search operations
@@ -45,12 +45,12 @@ protocol SearchInputProtocol {
   {
     int maxResult;
     boolean caseSensitive;
-    union {string, null} numberFormat;
-    union {string, null} dateFormat;
-    union {string, null} dateTimeFormat;
+    string? numberFormat = null;
+    string? dateFormat = null;
+    string? dateTimeFormat = null;
     int startIndex;
     array<SearchInputField> searchFields;
-    boolean exactFilterMatch;
+    boolean exactFilterMatch = true;
     string decimalSeparator;
     string groupingSeparator;
   }

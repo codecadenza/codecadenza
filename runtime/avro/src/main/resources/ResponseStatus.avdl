@@ -16,7 +16,7 @@ protocol ResponseStatusProtocol {
   record ResponseStatus 
   {
     ResponseCode code;
-    union {null, string} message = null;
+    string? message = null;
   }
 
 }
