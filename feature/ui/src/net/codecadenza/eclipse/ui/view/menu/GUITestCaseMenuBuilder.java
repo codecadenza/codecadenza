@@ -145,10 +145,10 @@ public class GUITestCaseMenuBuilder extends AbstractMenuBuilder<GUITestCase> {
 		});
 
 		// Add a menu item to edit the selected test case
-		final var itemNewMethod = new MenuItem(menuTestCase, SWT.NONE);
-		itemNewMethod.setText(TITLE_EDIT);
+		final var itemEdit = new MenuItem(menuTestCase, SWT.NONE);
+		itemEdit.setText(TITLE_EDIT);
 
-		itemNewMethod.addSelectionListener(new SelectionAdapter() {
+		itemEdit.addSelectionListener(new SelectionAdapter() {
 			/*
 			 * (non-Javadoc)
 			 * @see org.eclipse.swt.events.SelectionAdapter#widgetSelected(org.eclipse.swt.events.SelectionEvent)
