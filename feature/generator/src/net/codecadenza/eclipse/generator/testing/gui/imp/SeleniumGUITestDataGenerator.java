@@ -38,6 +38,7 @@ import net.codecadenza.eclipse.model.testing.GUITestCase;
 import net.codecadenza.eclipse.model.testing.GUITestData;
 import net.codecadenza.eclipse.model.testing.GUITestDataType;
 import net.codecadenza.eclipse.tools.ide.EclipseIDEService;
+import org.apache.commons.text.StringEscapeUtils;
 
 /**
  * <p>
@@ -273,45 +274,17 @@ public class SeleniumGUITestDataGenerator {
 	}
 
 	/**
-	 * Escape XML characters
-	 * @param input
-	 * @return the converted string
+	 * Escape XML characters and replace all new-line characters by predefined tokens
+	 * @param input the input to be escaped
+	 * @return the converted string or an empty string if the input is null
 	 */
 	private String escapeXMLCharacters(String input) {
-		final var b = new StringBuilder();
-
 		if (input == null)
-			return b.toString();
+			return "";
 
-		for (int i = 0; i < input.length(); i++) {
-			final char c = input.charAt(i);
+		final String replacedNewLines = NEW_LINE_PATTERN.matcher(input).replaceAll(NEW_LINE_TOKEN);
 
-			switch (c) {
-				case '<':
-					b.append("&lt;");
-					break;
-				case '>':
-					b.append("&gt;");
-					break;
-				case '\"':
-					b.append("&quot;");
-					break;
-				case '&':
-					b.append("&amp;");
-					break;
-				case '\'':
-					b.append("&apos;");
-					break;
-				default:
-					if (c > 0x7e)
-						b.append("&#" + ((int) c) + ";");
-					else
-						b.append(c);
-			}
-		}
-
-		// Replace all new-line characters by predefined tokens and return the converted result!
-		return NEW_LINE_PATTERN.matcher(b.toString()).replaceAll(NEW_LINE_TOKEN);
+		return StringEscapeUtils.escapeXml10(replacedNewLines);
 	}
 
 }
