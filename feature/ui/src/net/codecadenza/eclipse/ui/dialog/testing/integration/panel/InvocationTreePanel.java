@@ -51,6 +51,7 @@ import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -73,6 +74,9 @@ import org.eclipse.swt.widgets.TreeItem;
  * @version 1.0.0
  */
 public class InvocationTreePanel extends Composite {
+	private static final Color EXPECT_TO_FAIL_COLOR = Display.getCurrent().getSystemColor(SWT.COLOR_RED);
+	private static final Color ATTR_TRACKING_COLOR = Display.getCurrent().getSystemColor(SWT.COLOR_DARK_BLUE);
+	private static final Color ATTR_REFERENCE_COLOR = Display.getCurrent().getSystemColor(SWT.COLOR_DARK_GREEN);
 	private static final String KEY_DOMAIN_OBJECT = "DomainObjectName";
 	private static final String KEY_PARENT_INVOCATION_INDEX = "ParentInvocationIndex";
 	private static final String KEY_NESTED_INVOCATION_INDEX = "NestedInvocationIndex";
@@ -184,6 +188,9 @@ public class InvocationTreePanel extends Composite {
 			itemInvocation.setText(methodSignature);
 			itemInvocation.setImage(JavaUI.getSharedImages().getImage(ISharedImages.IMG_OBJS_PUBLIC));
 
+			if (invocation.isExpectToFail())
+				itemInvocation.setForeground(EXPECT_TO_FAIL_COLOR);
+
 			addParameterTreeItems(itemInvocation, invocation);
 			addReturnValueTreeItem(itemInvocation, invocation);
 
@@ -192,6 +199,9 @@ public class InvocationTreePanel extends Composite {
 				itemNestedInvocation.setData(nestedInvocation);
 				itemNestedInvocation.setText(methodSignature);
 				itemNestedInvocation.setImage(JavaUI.getSharedImages().getImage(ISharedImages.IMG_OBJS_PUBLIC));
+
+				if (invocation.isExpectToFail())
+					itemNestedInvocation.setForeground(EXPECT_TO_FAIL_COLOR);
 
 				addParameterTreeItems(itemNestedInvocation, nestedInvocation);
 				addReturnValueTreeItem(itemNestedInvocation, nestedInvocation);
@@ -221,6 +231,7 @@ public class InvocationTreePanel extends Composite {
 			final var label = new StringBuilder("Parameter ");
 			final JavaType parameterType = parameter.getType();
 			final String typeName;
+			boolean hasReference = false;
 
 			if (methodType == BoundaryMethodTypeEnumeration.SEARCH || methodType == BoundaryMethodTypeEnumeration.COUNT)
 				typeName = Constants.INTEGRATION_SEARCH_PARAM_TYPE;
@@ -236,11 +247,18 @@ public class InvocationTreePanel extends Composite {
 
 				if (testDataAttribute.getValue() != null)
 					label.append(" = " + testDataAttribute.getValue());
+				else if (testDataAttribute.getReferencedAttribute() != null) {
+					label.append(" (set by field with ID " + testDataAttribute.getReferencedAttribute().getId() + ")");
+					hasReference = true;
+				}
 			}
 
 			final var itemParameter = new TreeItem(itemParameters, SWT.NONE);
 			itemParameter.setText(label.toString());
 			itemParameter.setImage(JavaUI.getSharedImages().getImage(ISharedImages.IMG_FIELD_PRIVATE));
+
+			if (hasReference)
+				itemParameter.setForeground(ATTR_REFERENCE_COLOR);
 
 			if (parameterType == null || parameterType instanceof MappingObject)
 				addTestDataObjects(itemParameter, typeName, parameter.getParameterValues(), testInvocation);
@@ -384,6 +402,7 @@ public class InvocationTreePanel extends Composite {
 					final var itemTestDataAttribute = new TreeItem(parentItem, SWT.NONE);
 					itemTestDataAttribute.setImage(JavaUI.getSharedImages().getImage(ISharedImages.IMG_FIELD_PRIVATE));
 					itemTestDataAttribute.setText(testDataAttribute.getLabel() + " (set by field with ID " + referencedId + ")");
+					itemTestDataAttribute.setForeground(ATTR_REFERENCE_COLOR);
 				}
 			}
 		}
@@ -401,6 +420,7 @@ public class InvocationTreePanel extends Composite {
 			IntegrationMethodTestInvocation testInvocation) {
 		treeItem.setData(testDataAttribute);
 		treeItem.setData(KEY_DOMAIN_OBJECT, domainObjectName);
+		treeItem.setForeground(ATTR_TRACKING_COLOR);
 
 		if (testInvocation.getParentInvocation() == null) {
 			treeItem.setData(KEY_PARENT_INVOCATION_INDEX, testCase.getMethodInvocations().indexOf(testInvocation));
