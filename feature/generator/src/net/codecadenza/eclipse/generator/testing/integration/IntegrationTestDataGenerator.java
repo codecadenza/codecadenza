@@ -147,7 +147,7 @@ public class IntegrationTestDataGenerator {
 			b.append("\t\t<parameters>\n");
 
 			for (final MethodInvocationParameter param : invocation.getParameters())
-				generateParameter(b, param, INITAL_INDENT);
+				b.append(generateParameter(param, INITAL_INDENT));
 
 			b.append("\t\t</parameters>\n");
 		}
@@ -155,12 +155,18 @@ public class IntegrationTestDataGenerator {
 			b.append("\t\t<parameters/>\n");
 
 		if (!invocation.getReturnValues().isEmpty()) {
-			b.append("\t\t<return_value>\n");
+			final var returnValueContent = new StringBuilder();
 
 			for (final TestDataObject returnValue : invocation.getReturnValues())
-				generateTestDataObject(b, returnValue, "returnValue", INITAL_INDENT);
+				returnValueContent.append(generateTestDataObject(returnValue, "returnValue", INITAL_INDENT));
 
-			b.append("\t\t</return_value>\n");
+			if (!returnValueContent.isEmpty()) {
+				b.append("\t\t<return_value>\n");
+				b.append(returnValueContent);
+				b.append("\t\t</return_value>\n");
+			}
+			else
+				b.append("\t\t<return_value/>\n");
 		}
 
 		String postProcessingStatement = null;
@@ -188,29 +194,39 @@ public class IntegrationTestDataGenerator {
 
 	/**
 	 * Generate the content for a given method parameter
-	 * @param b the {@link StringBuilder} to add the content to
 	 * @param param the method parameter
 	 * @param indentLevel the indent level
+	 * @return the generated content
 	 */
-	private void generateParameter(StringBuilder b, MethodInvocationParameter param, int indentLevel) {
+	private String generateParameter(MethodInvocationParameter param, int indentLevel) {
+		final var b = new StringBuilder();
+		final var parameterContent = new StringBuilder();
 		final String indent = "\t".repeat(indentLevel);
 
-		b.append(indent).append("<parameter name=\"" + param.getName() + "\">\n");
-
 		for (final TestDataObject obj : param.getParameterValues())
-			generateTestDataObject(b, obj, param.getName(), indentLevel + 1);
+			parameterContent.append(generateTestDataObject(obj, param.getName(), indentLevel + 1));
 
-		b.append(indent).append("</parameter>\n");
+		if (!parameterContent.isEmpty()) {
+			b.append(indent).append("<parameter name=\"" + param.getName() + "\">\n");
+			b.append(parameterContent);
+			b.append(indent).append("</parameter>\n");
+		}
+		else
+			b.append(indent).append("<parameter name=\"" + param.getName() + "\"/>\n");
+
+		return b.toString();
 	}
 
 	/**
 	 * Generate the content for a {@link TestDataObject}
-	 * @param b the {@link StringBuilder} to add the content to
 	 * @param testDataObject the test data object
 	 * @param name the name of the test object if it is not mapped to a {@link MappingObject}
 	 * @param indentLevel the indent level
+	 * @return the generated content
 	 */
-	private void generateTestDataObject(StringBuilder b, TestDataObject testDataObject, String name, int indentLevel) {
+	private String generateTestDataObject(TestDataObject testDataObject, String name, int indentLevel) {
+		final var b = new StringBuilder();
+		final var attributeContent = new StringBuilder();
 		final String indent = "\t".repeat(indentLevel);
 		final UUID newId = UUID.randomUUID();
 		final boolean addSingleAttribute = testDataObject.getMappingObject() == null && testDataObject.getAttributes().size() == 1;
@@ -250,14 +266,18 @@ public class IntegrationTestDataGenerator {
 				b.append(">\n");
 
 				// If the attribute is tracked, a dedicated field element must be added so that the generated value can be set correctly!
-				generateTestDataAttribute(b, attr, indentLevel + 1);
-
+				b.append(generateTestDataAttribute(attr, indentLevel + 1));
 				b.append(indent).append("</object>\n");
 			}
-			else
-				b.append("/>\n");
+			else {
+				// Do not add an empty object as it cannot be initialized by the test data runtime library!
+				if (attr.getValue() == null && attr.getReferencedAttribute() == null && testDataObject.getReferencedObject() == null)
+					return "";
 
-			return;
+				b.append("/>\n");
+			}
+
+			return b.toString();
 		}
 
 		b.append(">\n");
@@ -270,19 +290,26 @@ public class IntegrationTestDataGenerator {
 					|| (operator == AssertionOperator.IS_NULL || operator == AssertionOperator.IS_NOT_NULL))
 				continue;
 
-			generateTestDataAttribute(b, testDataAttribute, indentLevel + 1);
+			attributeContent.append(generateTestDataAttribute(testDataAttribute, indentLevel + 1));
 		}
 
+		if (attributeContent.isEmpty())
+			return "";
+
+		b.append(attributeContent.toString());
 		b.append(indent).append("</object>\n");
+
+		return b.toString();
 	}
 
 	/**
 	 * Generate the content for a {@link TestDataAttribute}
-	 * @param b the {@link StringBuilder} to add the content to
 	 * @param testDataAttribute the test data attribute
 	 * @param indentLevel the indent level
+	 * @return the generated content
 	 */
-	private void generateTestDataAttribute(StringBuilder b, TestDataAttribute testDataAttribute, int indentLevel) {
+	private String generateTestDataAttribute(TestDataAttribute testDataAttribute, int indentLevel) {
+		final var b = new StringBuilder();
 		final String indent = "\t".repeat(indentLevel);
 
 		b.append(indent);
@@ -318,7 +345,7 @@ public class IntegrationTestDataGenerator {
 				if (isSearchField && skipSearchInputField(refObject))
 					continue;
 
-				generateTestDataObject(b, refObject, null, indentLevel + 1);
+				b.append(generateTestDataObject(refObject, null, indentLevel + 1));
 			}
 
 			b.append(indent);
@@ -326,6 +353,8 @@ public class IntegrationTestDataGenerator {
 		}
 		else
 			b.append("/>\n");
+
+		return b.toString();
 	}
 
 	/**
