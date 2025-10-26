@@ -20,6 +20,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 2025-10-19: Disable precision and scale for new domain attributes that are not mapped to BigDecimal
 
 ### Fixed
+2025-10-26: Avoid exceptions when launching Java classes and unit tests by considering the name of the class and the project name
+            when searching for existing launch configurations
 2025-10-21: Fix the wrong initialization of the media type for a new REST integration method that performs a data export operation
 2025-10-21: Fix the wrong layout of the integration wizard page
 2025-10-19: Fix the wrong return value in generated Kafka client methods if they don't have a response schema

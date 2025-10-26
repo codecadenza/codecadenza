@@ -56,11 +56,11 @@ public class EclipseRAPLaunchSettingsGenerator extends AbstractLaunchSettingsGen
 
 	/**
 	 * Constructor
-	 * @param name the name of the launch configuration
+	 * @param projectName the name of the project or the name of the launch configuration
 	 * @param saveConfig flag that controls if a new launch configuration should be saved
 	 */
-	public EclipseRAPLaunchSettingsGenerator(String name, boolean saveConfig) {
-		super(name, saveConfig, null);
+	public EclipseRAPLaunchSettingsGenerator(String projectName, boolean saveConfig) {
+		super(projectName, null, saveConfig, null);
 	}
 
 	/*

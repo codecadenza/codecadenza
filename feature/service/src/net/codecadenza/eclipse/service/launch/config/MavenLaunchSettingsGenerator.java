@@ -43,12 +43,12 @@ public class MavenLaunchSettingsGenerator extends AbstractLaunchSettingsGenerato
 
 	/**
 	 * Constructor
-	 * @param name the name of the launch configuration
+	 * @param projectName the name of the project or the name of the launch configuration
 	 * @param saveConfig flag that controls if a new launch configuration should be saved
 	 * @param webApplicationURL the optional URL of the respective web application
 	 */
-	public MavenLaunchSettingsGenerator(String name, boolean saveConfig, String webApplicationURL) {
-		super(name, saveConfig, webApplicationURL);
+	public MavenLaunchSettingsGenerator(String projectName, boolean saveConfig, String webApplicationURL) {
+		super(projectName, null, saveConfig, webApplicationURL);
 	}
 
 	/*

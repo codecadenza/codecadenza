@@ -30,6 +30,7 @@ import org.eclipse.debug.core.ILaunchConfiguration;
 import org.eclipse.debug.core.ILaunchConfigurationType;
 import org.eclipse.debug.core.ILaunchConfigurationWorkingCopy;
 import org.eclipse.debug.core.ILaunchManager;
+import org.eclipse.jdt.launching.IJavaLaunchConfigurationConstants;
 
 /**
  * <p>
@@ -48,18 +49,22 @@ public abstract class AbstractLaunchSettingsGenerator {
 	public static final String ENV_VARIABLE_URL = "WEB_APPLICATION_URL";
 
 	private final ILaunchManager launchManager = DebugPlugin.getDefault().getLaunchManager();
-	protected final String name;
+	protected final String projectName;
+	protected final String launchClassName;
 	protected final boolean saveConfig;
 	protected final String webApplicationURL;
 
 	/**
 	 * Constructor
-	 * @param name the name of the launch configuration
+	 * @param projectName the name of the project or the name of the launch configuration
+	 * @param launchClassName the optional name of the Java class that should be launched
 	 * @param saveConfig flag that controls if a new launch configuration should be saved
 	 * @param webApplicationURL the optional URL of the respective web application
 	 */
-	protected AbstractLaunchSettingsGenerator(String name, boolean saveConfig, String webApplicationURL) {
-		this.name = name;
+	protected AbstractLaunchSettingsGenerator(String projectName, String launchClassName, boolean saveConfig,
+			String webApplicationURL) {
+		this.projectName = projectName;
+		this.launchClassName = launchClassName;
 		this.saveConfig = saveConfig;
 		this.webApplicationURL = webApplicationURL;
 	}
@@ -94,7 +99,7 @@ public abstract class AbstractLaunchSettingsGenerator {
 			return new LaunchSettings(existingLaunchConfiguration, urlToUse, DEFAULT_TIME_OUT, isDebugSupported());
 		}
 
-		final ILaunchConfigurationWorkingCopy launchConfig = launchConfigType.newInstance(null, name);
+		final ILaunchConfigurationWorkingCopy launchConfig = launchConfigType.newInstance(null, projectName);
 		initLaunchConfiguration(launchConfig);
 
 		if (webApplicationURL != null) {
@@ -115,7 +120,7 @@ public abstract class AbstractLaunchSettingsGenerator {
 	 * @return the working directory
 	 */
 	protected String getWorkingDirectory() {
-		return "${workspace_loc:/" + name + "}";
+		return "${workspace_loc:/" + projectName + "}";
 	}
 
 	/**
@@ -137,9 +142,20 @@ public abstract class AbstractLaunchSettingsGenerator {
 
 		final ILaunchConfiguration[] launchConfigs = launchManager.getLaunchConfigurations();
 
-		for (final ILaunchConfiguration config : launchConfigs)
-			if (config.getName().equals(name) && config.getType().getIdentifier().equals(getLaunchConfigurationType()))
+		for (final ILaunchConfiguration config : launchConfigs) {
+			if (!config.getType().getIdentifier().equals(getLaunchConfigurationType()))
+				continue;
+
+			if (launchClassName != null) {
+				final String projectNameOfLaunchConfig = config.getAttribute(IJavaLaunchConfigurationConstants.ATTR_PROJECT_NAME,
+						(String) null);
+
+				if (projectName.equals(projectNameOfLaunchConfig) && launchClassName.equals(config.getName()))
+					return config;
+			}
+			else if (config.getName().equals(projectName))
 				return config;
+		}
 
 		return null;
 	}

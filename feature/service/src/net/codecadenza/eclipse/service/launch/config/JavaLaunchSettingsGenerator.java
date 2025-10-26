@@ -44,19 +44,15 @@ public class JavaLaunchSettingsGenerator extends AbstractLaunchSettingsGenerator
 	private static final String M2E_CLASSPATH_PROVIDER = "org.eclipse.m2e.launchconfig.classpathProvider";
 	private static final String M2E_SOURCE_PATH_PROVIDER = "org.eclipse.m2e.launchconfig.sourcepathProvider";
 
-	private final String mainClass;
-
 	/**
 	 * Constructor
-	 * @param name the name of the launch configuration
+	 * @param projectName the name of the project or the name of the launch configuration
+	 * @param launchClassName the name of the Java main class that should be launched
 	 * @param saveConfig flag that controls if a new launch configuration should be saved
 	 * @param webApplicationURL the optional URL of the respective web application
-	 * @param mainClassName the name of the Java main class
 	 */
-	public JavaLaunchSettingsGenerator(String name, boolean saveConfig, String webApplicationURL, String mainClassName) {
-		super(name, saveConfig, webApplicationURL);
-
-		this.mainClass = mainClassName;
+	public JavaLaunchSettingsGenerator(String projectName, String launchClassName, boolean saveConfig, String webApplicationURL) {
+		super(projectName, launchClassName, saveConfig, webApplicationURL);
 	}
 
 	/*
@@ -77,8 +73,8 @@ public class JavaLaunchSettingsGenerator extends AbstractLaunchSettingsGenerator
 	public void initLaunchConfiguration(ILaunchConfigurationWorkingCopy launchConfig) {
 		launchConfig.setAttribute(ATTR_CLASSPATH_PROVIDER, M2E_CLASSPATH_PROVIDER);
 		launchConfig.setAttribute(ATTR_EXCLUDE_TEST_CODE, true);
-		launchConfig.setAttribute(ATTR_MAIN_TYPE_NAME, mainClass);
-		launchConfig.setAttribute(ATTR_PROJECT_NAME, name);
+		launchConfig.setAttribute(ATTR_MAIN_TYPE_NAME, launchClassName);
+		launchConfig.setAttribute(ATTR_PROJECT_NAME, projectName);
 		launchConfig.setAttribute(ATTR_SOURCE_PATH_PROVIDER, M2E_SOURCE_PATH_PROVIDER);
 	}
 

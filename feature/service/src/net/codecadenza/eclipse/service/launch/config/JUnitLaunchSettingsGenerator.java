@@ -58,7 +58,8 @@ public class JUnitLaunchSettingsGenerator extends AbstractLaunchSettingsGenerato
 	 * @param testToRun the representation of the Java source file of the JUnit test that should be executed
 	 */
 	public JUnitLaunchSettingsGenerator(boolean saveConfig, JavaFile testToRun) {
-		super(testToRun.getName().replace(JAVA_RESOURCE_SUFFIX, ""), saveConfig, null);
+		super(testToRun.getProjectName(), testToRun.getPackageName() + "." + testToRun.getName().replace(JAVA_RESOURCE_SUFFIX, ""),
+				saveConfig, null);
 
 		this.testToRun = testToRun;
 	}
@@ -79,13 +80,12 @@ public class JUnitLaunchSettingsGenerator extends AbstractLaunchSettingsGenerato
 	 */
 	@Override
 	public void initLaunchConfiguration(ILaunchConfigurationWorkingCopy launchConfig) {
-		final String projectName = testToRun.getProjectName();
 		final String testFolder = testToRun.getPath();
 		final String pathToTestFile = testToRun.getPackageName().replace('.', '/');
 		final String resourcePath = "/" + projectName + "/" + testFolder + "/" + pathToTestFile + "/" + testToRun.getName();
 
 		launchConfig.setAttribute(ATTR_CLASSPATH_PROVIDER, M2E_CLASSPATH_PROVIDER);
-		launchConfig.setAttribute(ATTR_MAIN_TYPE_NAME, testToRun.getPackageName() + "." + name);
+		launchConfig.setAttribute(ATTR_MAIN_TYPE_NAME, launchClassName);
 		launchConfig.setAttribute(ATTR_MAPPED_RESOURCE_PATH, List.of(resourcePath));
 		launchConfig.setAttribute(ATTR_MAPPED_RESOURCE_TYPES, List.of("1"));
 		launchConfig.setAttribute(ATTR_PROJECT_NAME, projectName);

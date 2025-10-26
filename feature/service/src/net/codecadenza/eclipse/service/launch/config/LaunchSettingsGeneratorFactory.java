@@ -79,7 +79,7 @@ public class LaunchSettingsGeneratorFactory {
 
 			final String mainClass = project.getRootNamespace().toString() + "." + DEFAULT_APPLICATION_NAME;
 
-			launchSettings.add(new JavaLaunchSettingsGenerator(projectName, true, url, mainClass).createLaunchSettings());
+			launchSettings.add(new JavaLaunchSettingsGenerator(projectName, mainClass, true, url).createLaunchSettings());
 		}
 		else if (project.isJakartaEEApplication()) {
 			final String projectName = project.getTargetProjectName(BuildArtifactType.MASTER);
@@ -99,12 +99,12 @@ public class LaunchSettingsGeneratorFactory {
 			else if (project.hasJavaFXClient()) {
 				final String mainClass = project.getClientNamespace().toString() + "." + JAVAFX_LAUNCHER_NAME;
 
-				launchSettings.add(new JavaLaunchSettingsGenerator(projectName, true, null, mainClass).createLaunchSettings());
+				launchSettings.add(new JavaLaunchSettingsGenerator(projectName, mainClass, true, null).createLaunchSettings());
 			}
 			else if (project.hasSwingClient()) {
 				final String mainClass = project.getClientNamespace().toString() + "." + DEFAULT_APPLICATION_NAME;
 
-				launchSettings.add(new JavaLaunchSettingsGenerator(projectName, true, null, mainClass).createLaunchSettings());
+				launchSettings.add(new JavaLaunchSettingsGenerator(projectName, mainClass, true, null).createLaunchSettings());
 			}
 			else if (project.hasRCPClient())
 				launchSettings.add(new EclipseRCPLaunchSettingsGenerator(projectName, true).createLaunchSettings());

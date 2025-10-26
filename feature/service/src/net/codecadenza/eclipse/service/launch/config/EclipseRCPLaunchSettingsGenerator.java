@@ -53,11 +53,11 @@ public class EclipseRCPLaunchSettingsGenerator extends AbstractLaunchSettingsGen
 
 	/**
 	 * Constructor
-	 * @param name the name of the launch configuration
+	 * @param projectName the name of the project or the name of the launch configuration
 	 * @param saveConfig flag that controls if a new launch configuration should be saved
 	 */
-	public EclipseRCPLaunchSettingsGenerator(String name, boolean saveConfig) {
-		super(name, saveConfig, null);
+	public EclipseRCPLaunchSettingsGenerator(String projectName, boolean saveConfig) {
+		super(projectName, null, saveConfig, null);
 	}
 
 	/*
@@ -82,7 +82,7 @@ public class EclipseRCPLaunchSettingsGenerator extends AbstractLaunchSettingsGen
 
 		launchConfig.setAttribute(ATTR_APPLICATION, ECLIPSE_APPLICATION);
 		launchConfig.setAttribute(ATTR_PRODUCT, PRODUCT_ID);
-		launchConfig.setAttribute(ATTR_PRODUCT_FILE, "/" + name + "/" + PRODUCT_FILE_NAME);
+		launchConfig.setAttribute(ATTR_PRODUCT_FILE, "/" + projectName + "/" + PRODUCT_FILE_NAME);
 		launchConfig.setAttribute(ATTR_PRODUCT_NAME, PRODUCT_NAME);
 		launchConfig.setAttribute(ATTR_USE_PRODUCT, true);
 		launchConfig.setAttribute(ATTR_BUNDLES, bundles);
