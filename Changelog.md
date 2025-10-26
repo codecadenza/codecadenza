@@ -12,6 +12,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 2025-10-19: Add support for converting values with primitive types in the ValueConverter class
 
 ### Changed
+2025-10-26: Initialize unique key repository method parameters that are mapped to an association using the type of the primary key
+            instead of the domain object
 2025-10-22: Escape XML characters by using the Apache commons text library when generating test data files for GUI tests
 2025-10-21: Correct a wrong local variable name in the menu builder for GUI test cases
 2025-10-21: Declare date attributes optional that are automatically set when creating a new object in the generated Kafka IDL file

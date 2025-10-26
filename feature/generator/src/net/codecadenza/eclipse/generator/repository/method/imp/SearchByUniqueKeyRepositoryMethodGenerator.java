@@ -90,15 +90,13 @@ public class SearchByUniqueKeyRepositoryMethodGenerator extends BasicRepositoryM
 		b.append(domainObjectName + "." + method.getHint() + ", " + domainObjectName + ".class);\n");
 
 		method.getMethodParameters().forEach(param -> {
-			b.append("query.setParameter(" + addQueryParameterConstant(param.getName()) + ", " + param.getName());
+			String queryParamName = param.getName();
 
-			if (param instanceof final RepositoryMethodParameter repositoryParam && repositoryParam.getAssociation() != null) {
-				final String targetPKGetter = repositoryParam.getAssociation().getTarget().getPKAttribute().getGetterName();
+			// Make sure to use the correct name defined in the named query!
+			if (param instanceof final RepositoryMethodParameter repositoryParam && repositoryParam.getAssociation() != null)
+				queryParamName = repositoryParam.getAssociation().getName();
 
-				b.append("." + targetPKGetter);
-			}
-
-			b.append(");\n");
+			b.append("query.setParameter(" + addQueryParameterConstant(queryParamName) + ", " + param.getName() + ");\n");
 		});
 
 		b.append("\nreturn query.getResultList();\n");

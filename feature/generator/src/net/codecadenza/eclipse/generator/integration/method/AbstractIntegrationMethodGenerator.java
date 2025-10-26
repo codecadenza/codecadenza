@@ -673,11 +673,19 @@ public abstract class AbstractIntegrationMethodGenerator {
 	 */
 	protected String createClientParameterChecks() {
 		final var b = new StringBuilder();
+		final BoundaryMethodTypeEnumeration methodType = method.getBoundaryMethod().getMethodType();
+		final IntegrationTechnology technology = method.getIntegrationBean().getIntegrationTechnology();
 
 		for (final IntegrationMethodParameter param : method.getIntegrationParameters()) {
 			final JavaType type = project.getJavaTypeByName(param.getType());
 
-			if (param.isResponseParameter())
+			// Filter values for parameters of unique key methods that are mapped to optional associations are allowed to be null!
+			// This rule doesn't apply for REST as respective path parameters must not be null!
+			if (param.isResponseParameter()
+					|| (technology != IntegrationTechnology.REST && (methodType == BoundaryMethodTypeEnumeration.EXISTS_BY_UNIQUE_KEY
+							|| methodType == BoundaryMethodTypeEnumeration.FIND_BY_UNIQUE_KEY
+							|| methodType == BoundaryMethodTypeEnumeration.EXISTS_BY_UNIQUE_KEY_WITH_ID
+							|| methodType == BoundaryMethodTypeEnumeration.SEARCH_BY_UNIQUE_KEY)))
 				continue;
 
 			if (type == null || !type.isPrimitive()) {

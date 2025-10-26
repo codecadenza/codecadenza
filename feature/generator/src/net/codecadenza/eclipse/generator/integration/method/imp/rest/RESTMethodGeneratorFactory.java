@@ -56,9 +56,6 @@ public class RESTMethodGeneratorFactory {
 			return new SearchRESTMethodGenerator(method, parentGenerator);
 		else if (methodType == BoundaryMethodTypeEnumeration.COUNT)
 			return new CountRESTMethodGenerator(method, parentGenerator);
-		else if (methodType == BoundaryMethodTypeEnumeration.EXISTS_BY_UNIQUE_KEY
-				|| methodType == BoundaryMethodTypeEnumeration.EXISTS_BY_UNIQUE_KEY_WITH_ID)
-			return new ExistsByUniqueKeyRESTMethodGenerator(method, parentGenerator);
 
 		return new BasicRESTMethodGenerator(method, parentGenerator);
 	}

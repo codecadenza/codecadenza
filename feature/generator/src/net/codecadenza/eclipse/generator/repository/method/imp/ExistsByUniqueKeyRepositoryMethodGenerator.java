@@ -23,6 +23,7 @@ package net.codecadenza.eclipse.generator.repository.method.imp;
 
 import java.util.Set;
 import net.codecadenza.eclipse.generator.repository.method.BasicRepositoryMethodGenerator;
+import net.codecadenza.eclipse.model.domain.AbstractDomainAssociation;
 import net.codecadenza.eclipse.model.domain.ManyToOneAssociation;
 import net.codecadenza.eclipse.model.domain.OneToOneAssociation;
 import net.codecadenza.eclipse.model.java.MethodParameter;
@@ -111,63 +112,57 @@ public class ExistsByUniqueKeyRepositoryMethodGenerator extends BasicRepositoryM
 			}
 
 			final var repositoryParam = (RepositoryMethodParameter) param;
+			final String paramName = param.getName();
+			String queryParamName = param.getName();
 			boolean isOptional = false;
-			var paramName = "";
 			var paramPath = "";
-			var paramGetter = "";
 			var paramOptPath = "";
 
 			if (repositoryParam.getAttribute() != null) {
-				paramName = repositoryParam.getAttribute().getName();
-				paramPath = repositoryParam.getName();
-				paramOptPath = repositoryParam.getName();
-				paramGetter = repositoryParam.getName();
+				paramPath = repositoryParam.getAttribute().getName();
+				paramOptPath = repositoryParam.getAttribute().getName();
 				isOptional = repositoryParam.getAttribute().getDomainAttributeValidator().isNullable();
 
-				if (isOptional)
-					hasOptionalParams = true;
-
 				if (!repositoryParam.getAttribute().getJavaType().isPrimitive() && !isOptional) {
-					paramCheck.append("if(" + repositoryParam.getName() + " == null)\n");
+					paramCheck.append("if(" + paramName + " == null)\n");
 					paramCheck.append("throw new IllegalArgumentException(\"Parameter \\\"");
-					paramCheck.append(repositoryParam.getName() + "\\\" must not be null!\");\n\n");
+					paramCheck.append(paramName + "\\\" must not be null!\");\n\n");
 				}
 			}
 			else {
-				paramName = repositoryParam.getAssociation().getName();
-				paramPath = repositoryParam.getAssociation().getName() + "."
-						+ repositoryParam.getAssociation().getTarget().getPKAttribute().getName();
-				paramGetter = repositoryParam.getAssociation().getName() + "."
-						+ repositoryParam.getAssociation().getTarget().getPKAttribute().getGetterName();
-				paramOptPath = repositoryParam.getAssociation().getName();
+				final AbstractDomainAssociation assoc = repositoryParam.getAssociation();
 
-				if (repositoryParam.getAssociation() instanceof final ManyToOneAssociation mto)
-					isOptional = mto.isOptional();
-				else if (repositoryParam.getAssociation() instanceof final OneToOneAssociation oto)
-					isOptional = oto.isOptional();
+				paramPath = assoc.getName() + "." + assoc.getTarget().getPKAttribute().getName();
+				paramOptPath = assoc.getName();
 
-				if (!isOptional) {
-					paramCheck.append("if(" + repositoryParam.getName() + " == null)\n");
+				isOptional = (assoc instanceof final ManyToOneAssociation mto && mto.isOptional())
+						|| (assoc instanceof final OneToOneAssociation oto && oto.isOptional());
+
+				// Make sure to use the correct name defined in the named query!
+				queryParamName = assoc.getName();
+
+				if (!repositoryParam.getAssociation().getTarget().getPKAttribute().getJavaType().isPrimitive() && !isOptional) {
+					paramCheck.append("if(" + paramName + " == null)\n");
 					paramCheck.append("throw new IllegalArgumentException(\"Parameter \\\"");
-					paramCheck.append(repositoryParam.getName() + "\\\" must not be null!\");\n\n");
+					paramCheck.append(paramName + "\\\" must not be null!\");\n\n");
 				}
-				else
-					hasOptionalParams = true;
 			}
 
-			final var concat = isFirstParam ? "where" : "and";
+			final var predicate = isFirstParam ? " where" : " and";
 
 			if (isOptional) {
-				queryParams.append("\nif(" + repositoryParam.getName() + " != null)\n");
-				queryStatement.append("\nif(" + repositoryParam.getName() + " == null)\n");
-				queryStatement.append("queryStatement += \"" + concat + " a." + paramOptPath + " is null \";\n");
+				queryParams.append("\nif(" + paramName + " != null)\n");
+
+				queryStatement.append("\nif(" + paramName + " == null)\n");
+				queryStatement.append("queryStatement += \"" + predicate + " a." + paramOptPath + " is null\";\n");
 				queryStatement.append("else\n");
 			}
 
-			queryStatement.append("queryStatement += \"" + concat + " a." + paramPath + " = :" + paramName + " \";\n");
-			queryParams.append("query.setParameter(" + addQueryParameterConstant(paramName) + ", " + paramGetter + ");\n");
+			queryStatement.append("queryStatement += \"" + predicate + " a." + paramPath + " = :" + queryParamName + "\";\n");
+			queryParams.append("query.setParameter(" + addQueryParameterConstant(queryParamName) + ", " + paramName + ");\n");
 
 			if (isOptional) {
+				hasOptionalParams = true;
 				queryStatement.append("\n");
 				queryParams.append("\n");
 			}
@@ -179,10 +174,10 @@ public class ExistsByUniqueKeyRepositoryMethodGenerator extends BasicRepositoryM
 
 		if (hasOptionalParams) {
 			// If at least one parameter is optional the respective named query cannot be used!
-			b.append("var queryStatement = \"select count(a) from " + domainObjectName + " a \";\n");
+			b.append("var queryStatement = \"select count(a) from " + domainObjectName + " a\";\n");
 
 			if (pkParamName != null)
-				b.append("queryStatement += \"where a." + pkAttributeName + " <> :" + pkParamName + " \";\n");
+				b.append("queryStatement += \" where a." + pkAttributeName + " <> :" + pkParamName + "\";\n");
 
 			b.append(queryStatement);
 			b.append("\n");

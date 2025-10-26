@@ -64,6 +64,7 @@ import net.codecadenza.eclipse.model.domain.OneToManyAssociation;
 import net.codecadenza.eclipse.model.domain.OneToOneAssociation;
 import net.codecadenza.eclipse.model.exchange.DataExchangeServiceBean;
 import net.codecadenza.eclipse.model.java.JavaFactory;
+import net.codecadenza.eclipse.model.java.JavaType;
 import net.codecadenza.eclipse.model.java.JavaTypeModifierEnumeration;
 import net.codecadenza.eclipse.model.java.MethodParameter;
 import net.codecadenza.eclipse.model.java.Namespace;
@@ -805,17 +806,8 @@ public class RepositoryService {
 
 		for (final DBColumn col : uniqueKey.getColumns())
 			for (final AbstractDomainAssociation assoc : assocs) {
-				if (assoc instanceof final ManyToOneAssociation manyToOne) {
-					if (col.equals(manyToOne.getColumn())) {
-						if (assoc1 == null)
-							assoc1 = assoc;
-						else
-							assoc2 = assoc;
-
-						checkCounter++;
-					}
-				}
-				else if (assoc instanceof final OneToOneAssociation oneToOne && oneToOne.isOwner() && col.equals(oneToOne.getColumn())) {
+				if ((assoc instanceof final ManyToOneAssociation manyToOne && col.equals(manyToOne.getColumn()))
+						|| (assoc instanceof final OneToOneAssociation oneToOne && oneToOne.isOwner() && col.equals(oneToOne.getColumn()))) {
 					if (assoc1 == null)
 						assoc1 = assoc;
 					else
@@ -996,8 +988,17 @@ public class RepositoryService {
 	 */
 	private void addParameterToUniqueKeyMethod(RepositoryMethod repositoryMethod, AbstractDomainAssociation assoc) {
 		final RepositoryMethodParameter param = RepositoryFactory.eINSTANCE.createRepositoryMethodParameter();
-		param.setType(assoc.getTarget());
-		param.setName(assoc.getName());
+		final JavaType pkType = assoc.getTarget().getPKAttribute().getJavaType();
+
+		if ((assoc instanceof final ManyToOneAssociation mto && mto.isOptional())
+				|| (assoc instanceof final OneToOneAssociation oto && oto.isOptional())) {
+			// The parameter for an optional association must be nullable!
+			param.setType(project.getJavaTypeByName(pkType.getWrapperTypeName()));
+		}
+		else
+			param.setType(pkType);
+
+		param.setName(assoc.getName() + assoc.getTarget().getPKAttribute().getUpperCaseName());
 		param.setMethod(repositoryMethod);
 		param.setAssociation(assoc);
 		param.setModifier(JavaTypeModifierEnumeration.NONE);

@@ -31,6 +31,7 @@ import java.util.stream.Collectors;
 import net.codecadenza.eclipse.model.domain.AbstractDomainAssociation;
 import net.codecadenza.eclipse.model.domain.DomainAttribute;
 import net.codecadenza.eclipse.model.domain.DomainObject;
+import net.codecadenza.eclipse.model.domain.ManyToOneAssociation;
 import net.codecadenza.eclipse.model.domain.OneToOneAssociation;
 import net.codecadenza.eclipse.model.dto.DTOBean;
 import net.codecadenza.eclipse.model.java.JavaTypeModifierEnumeration;
@@ -334,8 +335,25 @@ public class BasicRepositoryMethodGenerator {
 				if (param instanceof final RepositoryMethodParameter repositoryParam) {
 					if (repositoryParam.getAttribute() != null)
 						b.append(objectParam.getName() + "." + repositoryParam.getAttribute().getGetterName());
-					else if (repositoryParam.getAssociation() != null)
-						b.append(objectParam.getName() + "." + repositoryParam.getAssociation().getGetterName());
+					else if (repositoryParam.getAssociation() != null) {
+						final AbstractDomainAssociation assoc = repositoryParam.getAssociation();
+
+						final boolean isOptional = (assoc instanceof final ManyToOneAssociation mto && mto.isOptional())
+								|| (assoc instanceof final OneToOneAssociation oto && oto.isOptional());
+
+						b.append(objectParam.getName() + "." + assoc.getGetterName());
+
+						if (isOptional) {
+							// The parameter that is mapped to an optional association has never a primitive type!
+							b.append(" != null ? ");
+							b.append(objectParam.getName() + "." + assoc.getGetterName());
+							b.append("." + assoc.getTarget().getPKAttribute().getGetterName());
+							b.append(" : ");
+							b.append("null");
+						}
+						else
+							b.append("." + assoc.getTarget().getPKAttribute().getGetterName());
+					}
 				}
 				else {
 					// If the method parameter is not a repository method parameter it will represent the primary key attribute of the

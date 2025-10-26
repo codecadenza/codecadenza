@@ -25,6 +25,7 @@ import static net.codecadenza.eclipse.shared.Constants.REPO_METHOD_NAME_FIND_BY_
 
 import java.util.Set;
 import net.codecadenza.eclipse.generator.repository.method.BasicRepositoryMethodGenerator;
+import net.codecadenza.eclipse.model.domain.AbstractDomainAssociation;
 import net.codecadenza.eclipse.model.domain.DomainAttribute;
 import net.codecadenza.eclipse.model.java.MethodParameter;
 import net.codecadenza.eclipse.model.repository.RepositoryMethod;
@@ -100,7 +101,7 @@ public class ChangeParentRepositoryMethodGenerator extends BasicRepositoryMethod
 		final var b = new StringBuilder();
 		final DomainAttribute pkAttribute = domainObject.getPKAttribute();
 
-		b.append("final " + domainObjectName + " bean = " + REPO_METHOD_NAME_FIND_BY_ID + "(");
+		b.append("final " + domainObjectName + " entity = " + REPO_METHOD_NAME_FIND_BY_ID + "(");
 		b.append(pkAttribute.getName() + ", true);\n\n");
 
 		if (checkMethod != null)
@@ -116,9 +117,9 @@ public class ChangeParentRepositoryMethodGenerator extends BasicRepositoryMethod
 
 			if (param instanceof final RepositoryMethodParameter repositoryParam) {
 				if (repositoryParam.getAssociation() != null)
-					b.append("bean." + repositoryParam.getAssociation().getSetterName());
+					b.append("entity." + repositoryParam.getAssociation().getSetterName());
 				else
-					b.append("bean.set" + param.getName().substring(0, 1).toUpperCase() + param.getName().substring(1));
+					b.append("entity.set" + param.getName().substring(0, 1).toUpperCase() + param.getName().substring(1));
 
 				b.append("(" + param.getName() + ");\n");
 			}
@@ -149,12 +150,16 @@ public class ChangeParentRepositoryMethodGenerator extends BasicRepositoryMethod
 
 			if (param instanceof final RepositoryMethodParameter repositoryParam) {
 				if (repositoryParam.getAttribute() != null)
-					b.append("bean." + repositoryParam.getAttribute().getGetterName());
+					b.append("entity." + repositoryParam.getAttribute().getGetterName());
 				else if (repositoryParam.getAssociation() != null) {
+					final AbstractDomainAssociation assoc = repositoryParam.getAssociation();
+
 					if (!repositoryParam.equals(parentParam))
-						b.append("bean." + repositoryParam.getAssociation().getGetterName());
+						b.append("entity." + assoc.getGetterName());
 					else
-						b.append(parentParam.getName());
+						b.append(method.getMethodParameters().getLast().getName());
+
+					b.append("." + assoc.getTarget().getPKAttribute().getGetterName());
 				}
 			}
 			else

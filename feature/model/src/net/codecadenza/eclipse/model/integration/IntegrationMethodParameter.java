@@ -23,7 +23,6 @@ package net.codecadenza.eclipse.model.integration;
 
 import net.codecadenza.eclipse.model.boundary.BoundaryMethod;
 import net.codecadenza.eclipse.model.boundary.BoundaryMethodTypeEnumeration;
-import net.codecadenza.eclipse.model.dto.DTOBean;
 import net.codecadenza.eclipse.model.java.JavaType;
 import net.codecadenza.eclipse.model.java.MethodParameter;
 import net.codecadenza.eclipse.model.project.IntegrationTechnology;
@@ -41,7 +40,7 @@ import net.codecadenza.eclipse.model.project.IntegrationTechnology;
 public class IntegrationMethodParameter {
 	private final AbstractIntegrationMethod integrationMethod;
 	private final String name;
-	private String type;
+	private final String type;
 	private String comment;
 	private MethodParameter methodParameter;
 	private boolean pathParameter;
@@ -91,7 +90,6 @@ public class IntegrationMethodParameter {
 	private void initParameter(BoundaryMethod boundaryMethod) {
 		final BoundaryMethodTypeEnumeration methodType = boundaryMethod.getMethodType();
 		final MethodParameter firstParam = boundaryMethod.getFirstParameter(false);
-		final IntegrationTechnology technology = integrationMethod.getIntegrationBean().getIntegrationTechnology();
 
 		switch (methodType) {
 			case ADD_TO_ASSOCIATION, CHANGE_ASSOCIATION, CHANGE_PARENT, UPLOAD:
@@ -113,12 +111,6 @@ public class IntegrationMethodParameter {
 				queryParameter = true;
 				break;
 			case EXISTS_BY_UNIQUE_KEY, EXISTS_BY_UNIQUE_KEY_WITH_ID:
-				if (technology == IntegrationTechnology.REST && methodParameter.getType() instanceof final DTOBean dto) {
-					// When using REST, the type of the primary key attribute should be used, as a method may contain two DTO parameters
-					// that would require a special handling as only one DTO can be used as content parameter!
-					type = dto.getPKAttribute().getDomainAttribute().getJavaType().getName();
-				}
-
 				pathParameter = true;
 				break;
 			case UPLOAD_IMPORT:
