@@ -49,13 +49,14 @@ public class ExternalCommandLaunchSettingsGenerator extends AbstractLaunchSettin
 
 	/**
 	 * Constructor
-	 * @param name the name of the launch configuration
+	 * @param projectName the name of the launch configuration
 	 * @param saveConfig flag that controls if a new launch configuration should be saved
 	 * @param webApplicationURL the optional URL of the respective web application
 	 * @param command the command to be executed
 	 */
-	public ExternalCommandLaunchSettingsGenerator(String name, boolean saveConfig, String webApplicationURL, String command) {
-		super(name, saveConfig, webApplicationURL);
+	public ExternalCommandLaunchSettingsGenerator(String projectName, boolean saveConfig, String webApplicationURL,
+			String command) {
+		super(projectName, null, saveConfig, webApplicationURL);
 
 		this.command = command;
 	}
@@ -76,7 +77,7 @@ public class ExternalCommandLaunchSettingsGenerator extends AbstractLaunchSettin
 	 */
 	@Override
 	public void initLaunchConfiguration(ILaunchConfigurationWorkingCopy launchConfig) {
-		launchConfig.setAttribute(ATTR_PROJECT_NAME, name);
+		launchConfig.setAttribute(ATTR_PROJECT_NAME, projectName);
 		launchConfig.setAttribute(ATTR_WORKING_DIR, getWorkingDirectory());
 
 		if (OperatingSystem.isWindows()) {
