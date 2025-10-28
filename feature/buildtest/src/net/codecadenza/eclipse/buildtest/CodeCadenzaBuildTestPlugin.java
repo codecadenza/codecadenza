@@ -21,6 +21,7 @@
  */
 package net.codecadenza.eclipse.buildtest;
 
+import java.net.URL;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.dialogs.MessageDialog;
@@ -40,7 +41,9 @@ import org.osgi.framework.BundleContext;
  * @version 1.0.0
  */
 public class CodeCadenzaBuildTestPlugin extends AbstractUIPlugin {
+	public static final String INTEGRATION_TEST_FILE_NAME = "test-file.txt";
 	private static final String PLUGIN_ID = "net.codecadenza.eclipse.buildtest";
+	private static final String TEST_FILE_PATH = "/content/" + INTEGRATION_TEST_FILE_NAME;
 	private static CodeCadenzaBuildTestPlugin plugin;
 
 	/**
@@ -48,6 +51,13 @@ public class CodeCadenzaBuildTestPlugin extends AbstractUIPlugin {
 	 */
 	public static CodeCadenzaBuildTestPlugin getInstance() {
 		return plugin;
+	}
+
+	/**
+	 * @return the URL of the file intended for upload operations in integration tests
+	 */
+	public static URL getTestDataFilePath() {
+		return getInstance().getBundle().getEntry(TEST_FILE_PATH);
 	}
 
 	/*

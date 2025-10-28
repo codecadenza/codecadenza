@@ -22,5 +22,6 @@ Bundle-ActivationPolicy: lazy
 Bundle-RequiredExecutionEnvironment: JavaSE-21
 Bundle-ClassPath: .,
  config/,
+ content/,
  templates/
 Bundle-Vendor: Martin Ganserer

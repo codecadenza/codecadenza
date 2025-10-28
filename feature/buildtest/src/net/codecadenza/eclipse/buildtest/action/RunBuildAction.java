@@ -107,252 +107,6 @@ public class RunBuildAction implements IViewActionDelegate {
 
 	private Properties properties;
 
-	/**
-	 * @param projectConf
-	 * @return the default build configuration based on the given project settings
-	 */
-	private List<BuildArtifact> getDefaultBuildConfiguration(ProjectConfiguration projectConf) {
-		// Create a temporary project instance and fill it with required data
-		final Project project = ProjectFactory.eINSTANCE.createProject();
-		project.setBoundaryMode(projectConf.isBoundaryMode());
-		project.setBuildTool(projectConf.getBuildTool());
-		project.setName(projectConf.getProjectName());
-		project.setClientPlatform(projectConf.getClientPlatform());
-		project.setTechnology(projectConf.getTechnologyPlatform());
-
-		return ProjectBuildFactory.getBuildService(project).getDefaultBuildConfiguration();
-	}
-
-	/**
-	 * Build the project based on the provided configuration
-	 * @param projectConf
-	 * @param monitor
-	 * @throws Exception if an internal error has occurred
-	 */
-	private void buildProject(ProjectConfiguration projectConf, IProgressMonitor monitor) throws Exception {
-		final var metaModelFilePath = "/templates/" + projectConf.getProjectTemplateName() + ".zip";
-		final URL metaModelFileURL = CodeCadenzaBuildTestPlugin.getInstance().getBundle().getEntry(metaModelFilePath);
-		final IWorkspaceRoot workspaceRoot = ResourcesPlugin.getWorkspace().getRoot();
-		final List<BuildArtifact> buildConfig = getDefaultBuildConfiguration(projectConf);
-		var deploySubFolder = "";
-		Project project = null;
-
-		// Delete all existing workbench projects
-		for (final BuildArtifact buildArtifact : buildConfig) {
-			final IProject existingProject = workspaceRoot.getProject(buildArtifact.getName());
-
-			if (existingProject.exists())
-				existingProject.delete(true, monitor);
-		}
-
-		// Save the meta-data template files in a temporary directory
-		final Path metaModelTempPath = Files.createTempDirectory(MODEL_FOLDER);
-
-		ZipFileUtil.unzip(metaModelFileURL.openStream(), metaModelTempPath);
-
-		final var modelRootFile = new File(metaModelTempPath.toFile(), MODEL_ROOT_FILE);
-		final var resourceSet = new ResourceSetImpl();
-		final URI namespaceURI = URI.createFileURI(modelRootFile.getAbsolutePath());
-
-		// Get the resource object
-		final Resource projectResource = resourceSet.getResource(namespaceURI, true);
-
-		// Search for the project meta-data object
-		for (final EObject e : projectResource.getContents()) {
-			if (e instanceof final Project proj) {
-				project = proj;
-
-				project.setName(projectConf.getProjectName());
-				project.setBoundaryMode(projectConf.isBoundaryMode());
-				project.setServerPlatform(projectConf.getServerPlatform());
-				project.setClientPlatform(projectConf.getClientPlatform());
-				project.setTechnology(projectConf.getTechnologyPlatform());
-				project.setPersistenceProvider(projectConf.getPersistenceProvider());
-				project.setBuildTool(projectConf.getBuildTool());
-				project.setProtectManualChanges(projectConf.isProtectManualChanges());
-				project.getBuildConfiguration().addAll(buildConfig);
-
-				if (project.isDeployedOnGlassfish())
-					deploySubFolder = properties.getProperty(PROP_DIR_GLASSFISH);
-				else if (project.isDeployedOnJBoss())
-					deploySubFolder = properties.getProperty(PROP_DIR_JBOSS);
-				else if (project.isDeployedOnTomcat())
-					deploySubFolder = properties.getProperty(PROP_DIR_TOMCAT);
-
-				if (properties.getProperty(PROP_JDBC_DIR) != null) {
-					String jdbcPath = properties.getProperty(PROP_JDBC_DIR);
-					jdbcPath += project.getDatabase().getVendorGroup().getName().toLowerCase();
-
-					final var jdbcDir = new File(System.getProperty("user.home"), jdbcPath);
-
-					// Add JDBC libraries from the local system
-					if (jdbcDir.exists() && jdbcDir.isDirectory())
-						for (final File libFile : jdbcDir.listFiles())
-							if (libFile.isFile() && libFile.exists() && !libFile.isHidden())
-								project.getDataSource().getDriverList().add(libFile.getAbsolutePath());
-				}
-
-				// Copy all existing integration modules of the template to a new list
-				final var integrationModules = new ArrayList<>(project.getIntegrationModules());
-				final var buildArtifacts = new ArrayList<>(project.getBuildConfiguration());
-
-				for (final IntegrationModule module : integrationModules) {
-					// Check if this integration module must be removed
-					final boolean remove = (module.getTechnology() == IntegrationTechnology.REST && !projectConf.isAddREST())
-							|| (module.getTechnology() == IntegrationTechnology.SOAP && !projectConf.isAddSOAP())
-							|| (module.getTechnology() == IntegrationTechnology.RMI && !projectConf.isAddRMI())
-							|| (module.getTechnology() == IntegrationTechnology.KAFKA && !projectConf.isAddKafka())
-							|| (module.getTechnology() == IntegrationTechnology.JMS && !projectConf.isAddJMS());
-
-					if (!remove) {
-						if (module.getTechnology() == IntegrationTechnology.JMS && project.isDeployedOnJBoss()) {
-							// When deploying the application on Wildfly all JMS response destination names must be corrected!
-							module.getNamespace().getJavaTypes().stream().map(JMSIntegrationBean.class::cast)
-									.map(JMSIntegrationBean::getResponseDestination)
-									.forEach(destination -> destination.setName("java:/" + destination.getName()));
-						}
-
-						continue;
-					}
-
-					final Namespace integrationNamespace = module.getNamespace();
-
-					// Copy all integration beans of this module to a new list
-					final var integrationBeans = new ArrayList<>(integrationNamespace.getJavaTypes());
-
-					for (final JavaType type : integrationBeans) {
-						// Remove the integration bean from the respective namespace!
-						integrationNamespace.getJavaTypes().remove(type);
-
-						// Delete the integration bean
-						project.eResource().getContents().remove(type);
-					}
-
-					adaptExchangePaths(project);
-
-					module.setNamespace(null);
-
-					project.getIntegrationModules().remove(module);
-
-					// Remove all required build artifacts
-					for (final BuildArtifact buildArtifact : buildArtifacts) {
-						final var type = buildArtifact.getType();
-
-						if ((module.getTechnology() == IntegrationTechnology.REST
-								&& (type == BuildArtifactType.INTEGRATION_CLIENT_REST || type == BuildArtifactType.INTEGRATION_IMP_REST
-										|| type == BuildArtifactType.INTEGRATION_SEI_REST || type == BuildArtifactType.INTEGRATION_TEST_REST))
-								|| (module.getTechnology() == IntegrationTechnology.SOAP
-										&& (type == BuildArtifactType.INTEGRATION_CLIENT_SOAP || type == BuildArtifactType.INTEGRATION_IMP_SOAP
-												|| type == BuildArtifactType.INTEGRATION_SEI_SOAP || type == BuildArtifactType.INTEGRATION_TEST_SOAP))
-								|| (module.getTechnology() == IntegrationTechnology.RMI
-										&& (type == BuildArtifactType.INTEGRATION_CLIENT_RMI || type == BuildArtifactType.INTEGRATION_IMP_RMI
-												|| type == BuildArtifactType.INTEGRATION_SEI_RMI || type == BuildArtifactType.INTEGRATION_TEST_RMI))
-								|| (module.getTechnology() == IntegrationTechnology.KAFKA
-										&& (type == BuildArtifactType.INTEGRATION_CLIENT_KAFKA || type == BuildArtifactType.INTEGRATION_IMP_KAFKA
-												|| type == BuildArtifactType.INTEGRATION_SEI_KAFKA || type == BuildArtifactType.INTEGRATION_TEST_KAFKA))
-								|| (module.getTechnology() == IntegrationTechnology.JMS
-										&& (type == BuildArtifactType.INTEGRATION_CLIENT_JMS || type == BuildArtifactType.INTEGRATION_IMP_JMS
-												|| type == BuildArtifactType.INTEGRATION_SEI_JMS || type == BuildArtifactType.INTEGRATION_TEST_JMS)))
-							project.getBuildConfiguration().remove(buildArtifact);
-					}
-
-					// Delete the integration namespace physically!
-					project.eResource().getContents().remove(integrationNamespace);
-				}
-
-				// Remove the respective build artifact if no GUI should be added!
-				if (!project.hasClient())
-					for (final BuildArtifact buildArtifact : buildArtifacts)
-						if (buildArtifact.getType() == BuildArtifactType.GUI) {
-							project.getBuildConfiguration().remove(buildArtifact);
-							break;
-						}
-
-				final AbstractTestModule seleniumTestModule = project.getTestModuleByArtifact(BuildArtifactType.SELENIUM_TEST);
-				final var deployPath = new File(System.getProperty("user.home"), deploySubFolder);
-
-				// Set the path to the default Selenium driver if the project contains a respective test module
-				if (seleniumTestModule != null && properties.getProperty(PROP_SELENIUM_DRIVER_DIR) != null) {
-					final var driverFile = new File(System.getProperty("user.home"), properties.getProperty(PROP_SELENIUM_DRIVER_DIR));
-
-					if (driverFile.exists() && driverFile.isFile())
-						((SeleniumTestModule) seleniumTestModule).setDriverPath(driverFile.getAbsolutePath());
-
-					if (!projectConf.isAddSelenium())
-						removeTestModule(seleniumTestModule);
-				}
-
-				// Remove unused integration test modules
-				if (!projectConf.isAddREST() || !projectConf.isAddIntegrationTests())
-					removeTestModule(project.getTestModuleByArtifact(BuildArtifactType.INTEGRATION_TEST_REST));
-
-				if (!projectConf.isAddSOAP() || !projectConf.isAddIntegrationTests())
-					removeTestModule(project.getTestModuleByArtifact(BuildArtifactType.INTEGRATION_TEST_SOAP));
-
-				if (!projectConf.isAddRMI() || !projectConf.isAddIntegrationTests())
-					removeTestModule(project.getTestModuleByArtifact(BuildArtifactType.INTEGRATION_TEST_RMI));
-
-				if (!projectConf.isAddKafka() || !projectConf.isAddIntegrationTests())
-					removeTestModule(project.getTestModuleByArtifact(BuildArtifactType.INTEGRATION_TEST_KAFKA));
-
-				if (!projectConf.isAddJMS() || !projectConf.isAddIntegrationTests())
-					removeTestModule(project.getTestModuleByArtifact(BuildArtifactType.INTEGRATION_TEST_JMS));
-
-				// Run the integration bean synchronization as it might be the case that some methods are missing!
-				if (!project.getIntegrationModules().isEmpty())
-					new IntegrationBeanSyncService(project).sync(false);
-
-				ProjectBuildFactory.getBuildService(project).buildProject(deployPath.getAbsolutePath(), monitor);
-
-				// Save the project
-				EclipseIDEService.saveProjectMetaData(project);
-
-				// Copy the meta-model files to the model folder of the domain module
-				final IProject domainProject = workspaceRoot.getProject(project.getTargetProjectName(BuildArtifactType.DOMAIN));
-				final IFolder projectModelFolder = domainProject.getFolder(MODEL_FOLDER);
-
-				for (final File file : metaModelTempPath.toFile().listFiles()) {
-					if (file.isDirectory())
-						continue;
-
-					final File targetFile = projectModelFolder.getLocation().append(file.getName()).toFile();
-
-					Files.copy(file.toPath(), targetFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
-				}
-
-				projectModelFolder.refreshLocal(IResource.DEPTH_ONE, monitor);
-
-				// In case of Eclipse RCP/RAP applications we must add all views to the application model file!
-				if (project.hasEclipseClient()) {
-					final String guiProjectName = project.getTargetProjectName(BuildArtifactType.GUI);
-
-					for (final Form form : project.getAllFormsOfProject()) {
-						final FormTypeEnumeration t = form.getFormType();
-
-						if (t != FormTypeEnumeration.SIMPLE_VIEW && t != FormTypeEnumeration.SEARCHABLE_VIEW
-								&& t != FormTypeEnumeration.TREE_VIEW)
-							continue;
-
-						String packageName = project.getClientNamespace().toString();
-
-						if (t == FormTypeEnumeration.SIMPLE_VIEW || t == FormTypeEnumeration.SEARCHABLE_VIEW)
-							packageName += PACK_CLIENT_VIEW;
-						else
-							packageName += PACK_CLIENT_TREE;
-
-						// Add the view to the application model
-						EclipseIDEService.addViewToApplicationModel(guiProjectName, form.getTitle(), packageName + "." + form.getName());
-					}
-				}
-
-				break;
-			}
-		}
-
-		// Rebuild all objects of this project
-		ProjectBuildFactory.getBuildService(project).rebuildAllObjects(monitor);
-	}
-
 	/*
 	 * (non-Javadoc)
 	 * @see org.eclipse.ui.IActionDelegate#run(org.eclipse.jface.action.IAction)
@@ -442,8 +196,288 @@ public class RunBuildAction implements IViewActionDelegate {
 	}
 
 	/**
+	 * Build the project based on the provided configuration
+	 * @param projectConf the project configuration that contains all settings for creating a new project from a template
+	 * @param monitor the {@link IProgressMonitor}
+	 * @throws Exception if an internal error has occurred
+	 */
+	private void buildProject(ProjectConfiguration projectConf, IProgressMonitor monitor) throws Exception {
+		final var metaModelFilePath = "/templates/" + projectConf.getProjectTemplateName() + ".zip";
+		final URL metaModelFileURL = CodeCadenzaBuildTestPlugin.getInstance().getBundle().getEntry(metaModelFilePath);
+		final IWorkspaceRoot workspaceRoot = ResourcesPlugin.getWorkspace().getRoot();
+		final List<BuildArtifact> buildConfig = getDefaultBuildConfiguration(projectConf);
+		var deploySubFolder = "";
+		Project project = null;
+
+		// Delete all existing workbench projects
+		for (final BuildArtifact buildArtifact : buildConfig) {
+			final IProject existingProject = workspaceRoot.getProject(buildArtifact.getName());
+
+			if (existingProject.exists())
+				existingProject.delete(true, monitor);
+		}
+
+		// Save the meta-data template files in a temporary directory
+		final Path metaModelTempPath = Files.createTempDirectory(MODEL_FOLDER);
+
+		ZipFileUtil.unzip(metaModelFileURL.openStream(), metaModelTempPath);
+
+		final var modelRootFile = new File(metaModelTempPath.toFile(), MODEL_ROOT_FILE);
+		final var resourceSet = new ResourceSetImpl();
+		final URI namespaceURI = URI.createFileURI(modelRootFile.getAbsolutePath());
+
+		// Get the resource object
+		final Resource projectResource = resourceSet.getResource(namespaceURI, true);
+
+		// Search for the project meta-data object
+		for (final EObject e : projectResource.getContents()) {
+			if (e instanceof final Project proj) {
+				project = proj;
+
+				project.setName(projectConf.getProjectName());
+				project.setBoundaryMode(projectConf.isBoundaryMode());
+				project.setServerPlatform(projectConf.getServerPlatform());
+				project.setClientPlatform(projectConf.getClientPlatform());
+				project.setTechnology(projectConf.getTechnologyPlatform());
+				project.setPersistenceProvider(projectConf.getPersistenceProvider());
+				project.setBuildTool(projectConf.getBuildTool());
+				project.setProtectManualChanges(projectConf.isProtectManualChanges());
+				project.getBuildConfiguration().addAll(buildConfig);
+
+				if (project.isDeployedOnGlassfish())
+					deploySubFolder = properties.getProperty(PROP_DIR_GLASSFISH);
+				else if (project.isDeployedOnJBoss())
+					deploySubFolder = properties.getProperty(PROP_DIR_JBOSS);
+				else if (project.isDeployedOnTomcat())
+					deploySubFolder = properties.getProperty(PROP_DIR_TOMCAT);
+
+				if (properties.getProperty(PROP_JDBC_DIR) != null) {
+					String jdbcPath = properties.getProperty(PROP_JDBC_DIR);
+					jdbcPath += project.getDatabase().getVendorGroup().getName().toLowerCase();
+
+					final var jdbcDir = new File(System.getProperty("user.home"), jdbcPath);
+
+					// Add JDBC libraries from the local system
+					if (jdbcDir.exists() && jdbcDir.isDirectory())
+						for (final File libFile : jdbcDir.listFiles())
+							if (libFile.isFile() && libFile.exists() && !libFile.isHidden())
+								project.getDataSource().getDriverList().add(libFile.getAbsolutePath());
+				}
+
+				removeMetaDataObjects(project, projectConf);
+
+				adaptExchangePaths(project);
+
+				final var deployPath = new File(System.getProperty("user.home"), deploySubFolder);
+
+				// Build the project including all its artifacts
+				ProjectBuildFactory.getBuildService(project).buildProject(deployPath.getAbsolutePath(), monitor);
+
+				saveProjectMetaData(project, metaModelTempPath, monitor);
+
+				// In case of Eclipse RCP/RAP applications we must add all views to the application model file!
+				if (project.hasEclipseClient())
+					adaptEclipseApplicationModel(project);
+
+				copyIntegrationTestDataFile(project);
+				break;
+			}
+		}
+
+		// Rebuild all objects of this project
+		ProjectBuildFactory.getBuildService(project).rebuildAllObjects(monitor);
+	}
+
+	/**
+	 * @param projectConf the project configuration that contains all settings for creating a new project from a template
+	 * @return the default build configuration based on the given project settings
+	 */
+	private List<BuildArtifact> getDefaultBuildConfiguration(ProjectConfiguration projectConf) {
+		// Create a temporary project instance and fill it with required data
+		final Project project = ProjectFactory.eINSTANCE.createProject();
+		project.setBoundaryMode(projectConf.isBoundaryMode());
+		project.setBuildTool(projectConf.getBuildTool());
+		project.setName(projectConf.getProjectName());
+		project.setClientPlatform(projectConf.getClientPlatform());
+		project.setTechnology(projectConf.getTechnologyPlatform());
+
+		return ProjectBuildFactory.getBuildService(project).getDefaultBuildConfiguration();
+	}
+
+	/**
+	 * Save the project meta-data and overwrite the files of the template with the new content
+	 * @param project the project meta-data
+	 * @param metaModelTempPath the temporary folder where the new project meta-data files can be found
+	 * @param monitor the {@link IProgressMonitor}
+	 * @throws Exception if the project meta-data or the respective files could not be saved
+	 */
+	private void saveProjectMetaData(Project project, Path metaModelTempPath, IProgressMonitor monitor) throws Exception {
+		final IWorkspaceRoot workspaceRoot = ResourcesPlugin.getWorkspace().getRoot();
+
+		// Save the project
+		EclipseIDEService.saveProjectMetaData(project);
+
+		// Copy the meta-model files to the model folder of the domain module
+		final IProject domainProject = workspaceRoot.getProject(project.getTargetProjectName(BuildArtifactType.DOMAIN));
+		final IFolder projectModelFolder = domainProject.getFolder(MODEL_FOLDER);
+
+		for (final File file : metaModelTempPath.toFile().listFiles()) {
+			if (file.isDirectory())
+				continue;
+
+			final File targetFile = projectModelFolder.getLocation().append(file.getName()).toFile();
+
+			Files.copy(file.toPath(), targetFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
+		}
+
+		projectModelFolder.refreshLocal(IResource.DEPTH_ONE, monitor);
+	}
+
+	/**
+	 * Remove build artifacts, modules and other objects that are not necessary because of the given project configuration
+	 * @param project the project meta-data
+	 * @param projectConf the project configuration that contains all settings for creating a new project from a template
+	 * @throws Exception if something went wrong
+	 */
+	private void removeMetaDataObjects(Project project, ProjectConfiguration projectConf) throws Exception {
+		// Copy all existing integration modules of the template to a new list
+		final var integrationModules = new ArrayList<>(project.getIntegrationModules());
+		final var buildArtifacts = new ArrayList<>(project.getBuildConfiguration());
+
+		for (final IntegrationModule module : integrationModules) {
+			// Check if this integration module must be removed
+			final boolean remove = (module.getTechnology() == IntegrationTechnology.REST && !projectConf.isAddREST())
+					|| (module.getTechnology() == IntegrationTechnology.SOAP && !projectConf.isAddSOAP())
+					|| (module.getTechnology() == IntegrationTechnology.RMI && !projectConf.isAddRMI())
+					|| (module.getTechnology() == IntegrationTechnology.KAFKA && !projectConf.isAddKafka())
+					|| (module.getTechnology() == IntegrationTechnology.JMS && !projectConf.isAddJMS());
+
+			if (!remove) {
+				if (module.getTechnology() == IntegrationTechnology.JMS && project.isDeployedOnJBoss()) {
+					// When deploying the application on Wildfly all JMS response destination names must be corrected!
+					module.getNamespace().getJavaTypes().stream().map(JMSIntegrationBean.class::cast)
+							.map(JMSIntegrationBean::getResponseDestination)
+							.forEach(destination -> destination.setName("java:/" + destination.getName()));
+				}
+
+				continue;
+			}
+
+			final Namespace integrationNamespace = module.getNamespace();
+
+			// Copy all integration beans of this module to a new list
+			final var integrationBeans = new ArrayList<>(integrationNamespace.getJavaTypes());
+
+			for (final JavaType type : integrationBeans) {
+				// Remove the integration bean from the respective namespace!
+				integrationNamespace.getJavaTypes().remove(type);
+
+				// Delete the integration bean
+				project.eResource().getContents().remove(type);
+			}
+
+			module.setNamespace(null);
+
+			project.getIntegrationModules().remove(module);
+
+			// Remove all required build artifacts
+			for (final BuildArtifact buildArtifact : buildArtifacts) {
+				final var type = buildArtifact.getType();
+
+				if ((module.getTechnology() == IntegrationTechnology.REST
+						&& (type == BuildArtifactType.INTEGRATION_CLIENT_REST || type == BuildArtifactType.INTEGRATION_IMP_REST
+								|| type == BuildArtifactType.INTEGRATION_SEI_REST || type == BuildArtifactType.INTEGRATION_TEST_REST))
+						|| (module.getTechnology() == IntegrationTechnology.SOAP
+								&& (type == BuildArtifactType.INTEGRATION_CLIENT_SOAP || type == BuildArtifactType.INTEGRATION_IMP_SOAP
+										|| type == BuildArtifactType.INTEGRATION_SEI_SOAP || type == BuildArtifactType.INTEGRATION_TEST_SOAP))
+						|| (module.getTechnology() == IntegrationTechnology.RMI
+								&& (type == BuildArtifactType.INTEGRATION_CLIENT_RMI || type == BuildArtifactType.INTEGRATION_IMP_RMI
+										|| type == BuildArtifactType.INTEGRATION_SEI_RMI || type == BuildArtifactType.INTEGRATION_TEST_RMI))
+						|| (module.getTechnology() == IntegrationTechnology.KAFKA
+								&& (type == BuildArtifactType.INTEGRATION_CLIENT_KAFKA || type == BuildArtifactType.INTEGRATION_IMP_KAFKA
+										|| type == BuildArtifactType.INTEGRATION_SEI_KAFKA || type == BuildArtifactType.INTEGRATION_TEST_KAFKA))
+						|| (module.getTechnology() == IntegrationTechnology.JMS
+								&& (type == BuildArtifactType.INTEGRATION_CLIENT_JMS || type == BuildArtifactType.INTEGRATION_IMP_JMS
+										|| type == BuildArtifactType.INTEGRATION_SEI_JMS || type == BuildArtifactType.INTEGRATION_TEST_JMS)))
+					project.getBuildConfiguration().remove(buildArtifact);
+			}
+
+			// Delete the integration namespace physically!
+			project.eResource().getContents().remove(integrationNamespace);
+		}
+
+		// Remove the respective build artifact if no GUI should be added!
+		if (!project.hasClient())
+			for (final BuildArtifact buildArtifact : buildArtifacts)
+				if (buildArtifact.getType() == BuildArtifactType.GUI) {
+					project.getBuildConfiguration().remove(buildArtifact);
+					break;
+				}
+
+		final AbstractTestModule seleniumTestModule = project.getTestModuleByArtifact(BuildArtifactType.SELENIUM_TEST);
+
+		// Set the path to the default Selenium driver if the project contains a respective test module
+		if (seleniumTestModule != null && properties.getProperty(PROP_SELENIUM_DRIVER_DIR) != null) {
+			final var driverFile = new File(System.getProperty("user.home"), properties.getProperty(PROP_SELENIUM_DRIVER_DIR));
+
+			if (driverFile.exists() && driverFile.isFile())
+				((SeleniumTestModule) seleniumTestModule).setDriverPath(driverFile.getAbsolutePath());
+
+			if (!projectConf.isAddSelenium())
+				removeTestModule(seleniumTestModule);
+		}
+
+		// Remove unused integration test modules
+		if (!projectConf.isAddREST() || !projectConf.isAddIntegrationTests())
+			removeTestModule(project.getTestModuleByArtifact(BuildArtifactType.INTEGRATION_TEST_REST));
+
+		if (!projectConf.isAddSOAP() || !projectConf.isAddIntegrationTests())
+			removeTestModule(project.getTestModuleByArtifact(BuildArtifactType.INTEGRATION_TEST_SOAP));
+
+		if (!projectConf.isAddRMI() || !projectConf.isAddIntegrationTests())
+			removeTestModule(project.getTestModuleByArtifact(BuildArtifactType.INTEGRATION_TEST_RMI));
+
+		if (!projectConf.isAddKafka() || !projectConf.isAddIntegrationTests())
+			removeTestModule(project.getTestModuleByArtifact(BuildArtifactType.INTEGRATION_TEST_KAFKA));
+
+		if (!projectConf.isAddJMS() || !projectConf.isAddIntegrationTests())
+			removeTestModule(project.getTestModuleByArtifact(BuildArtifactType.INTEGRATION_TEST_JMS));
+
+		// Run the integration bean synchronization as it might be the case that some methods are missing!
+		if (!project.getIntegrationModules().isEmpty())
+			new IntegrationBeanSyncService(project).sync(false);
+	}
+
+	/**
+	 * Add all views to the Eclipse application model
+	 * @param project the project meta-data
+	 * @throws Exception if the Eclipse application model could not be changed
+	 */
+	private void adaptEclipseApplicationModel(Project project) throws Exception {
+		final String guiProjectName = project.getTargetProjectName(BuildArtifactType.GUI);
+
+		for (final Form form : project.getAllFormsOfProject()) {
+			final FormTypeEnumeration formType = form.getFormType();
+
+			if (formType != FormTypeEnumeration.SIMPLE_VIEW && formType != FormTypeEnumeration.SEARCHABLE_VIEW
+					&& formType != FormTypeEnumeration.TREE_VIEW)
+				continue;
+
+			String packageName = project.getClientNamespace().toString();
+
+			if (formType == FormTypeEnumeration.SIMPLE_VIEW || formType == FormTypeEnumeration.SEARCHABLE_VIEW)
+				packageName += PACK_CLIENT_VIEW;
+			else
+				packageName += PACK_CLIENT_TREE;
+
+			// Add the view to the application model
+			EclipseIDEService.addViewToApplicationModel(guiProjectName, form.getTitle(), packageName + "." + form.getName());
+		}
+	}
+
+	/**
 	 * Adapt the path of all data exchange methods for the given project in order to ease testing on different operating systems
-	 * @param project the project that contains the data exchange methods
+	 * @param project the project meta-data
 	 */
 	private void adaptExchangePaths(Project project) {
 		for (final DataExchangeServiceBean exchangeService : project.getAllExchangeServices()) {
@@ -460,8 +494,35 @@ public class RunBuildAction implements IViewActionDelegate {
 	}
 
 	/**
+	 * Copy a file for file upload tests to all integration test artifacts
+	 * @param project the project meta-data
+	 * @throws Exception if the file could not be copied to all integration test artifacts
+	 */
+	private void copyIntegrationTestDataFile(Project project) throws Exception {
+		final URL testDataFilePath = CodeCadenzaBuildTestPlugin.getTestDataFilePath();
+		final IWorkspaceRoot workspaceRoot = ResourcesPlugin.getWorkspace().getRoot();
+
+		for (final BuildArtifact buildArtifact : project.getBuildConfiguration()) {
+			final BuildArtifactType artifactType = buildArtifact.getType();
+
+			if (artifactType == BuildArtifactType.INTEGRATION_TEST_REST || artifactType == BuildArtifactType.INTEGRATION_TEST_SOAP
+					|| artifactType == BuildArtifactType.INTEGRATION_TEST_RMI || artifactType == BuildArtifactType.INTEGRATION_TEST_KAFKA
+					|| artifactType == BuildArtifactType.INTEGRATION_TEST_JMS) {
+				final IProject integrationTestProject = workspaceRoot.getProject(project.getTargetProjectName(artifactType));
+				final IFolder testDataFolder = integrationTestProject.getFolder(project.getTestDataFolder());
+				final File targetFile = testDataFolder.getLocation().append(CodeCadenzaBuildTestPlugin.INTEGRATION_TEST_FILE_NAME)
+						.toFile();
+
+				try (InputStream in = testDataFilePath.openStream()) {
+					Files.copy(in, targetFile.toPath());
+				}
+			}
+		}
+	}
+
+	/**
 	 * Remove the provided test module from the project meta-data
-	 * @param testModule
+	 * @param testModule the test module to be removed
 	 */
 	private void removeTestModule(AbstractTestModule testModule) {
 		final Project project = testModule.getProject();
