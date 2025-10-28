@@ -33,8 +33,7 @@ import net.codecadenza.eclipse.model.repository.RepositoryMethodTypeEnumeration;
 
 /**
  * <p>
- * Generator for repository methods of type {@link RepositoryMethodTypeEnumeration#EXISTS_BY_UNIQUE_KEY_WITH_ID} and
- * {@link RepositoryMethodTypeEnumeration#EXISTS_BY_UNIQUE_KEY}
+ * Generator for unique key repository methods
  * </p>
  * <p>
  * Copyright 2025 (C) by Martin Ganserer
@@ -42,13 +41,17 @@ import net.codecadenza.eclipse.model.repository.RepositoryMethodTypeEnumeration;
  * @author Martin Ganserer
  * @version 1.0.0
  */
-public class ExistsByUniqueKeyRepositoryMethodGenerator extends BasicRepositoryMethodGenerator {
+public class UniqueKeyRepositoryMethodGenerator extends BasicRepositoryMethodGenerator {
+	private final RepositoryMethodTypeEnumeration methodType;
+
 	/**
 	 * Constructor
 	 * @param method
 	 */
-	public ExistsByUniqueKeyRepositoryMethodGenerator(RepositoryMethod method) {
+	public UniqueKeyRepositoryMethodGenerator(RepositoryMethod method) {
 		super(method);
+
+		this.methodType = method.getMethodType();
 	}
 
 	/*
@@ -60,6 +63,10 @@ public class ExistsByUniqueKeyRepositoryMethodGenerator extends BasicRepositoryM
 		final var imports = super.getImports();
 		imports.add("import jakarta.persistence.*;");
 
+		if (methodType == RepositoryMethodTypeEnumeration.FIND_BY_UNIQUE_KEY
+				|| methodType == RepositoryMethodTypeEnumeration.SEARCH_BY_UNIQUE_KEY)
+			imports.add("import java.util.*;");
+
 		return imports;
 	}
 
@@ -70,12 +77,29 @@ public class ExistsByUniqueKeyRepositoryMethodGenerator extends BasicRepositoryM
 	@Override
 	protected String createComment() {
 		final var b = new StringBuilder();
+		final String comment;
+
+		if (methodType == RepositoryMethodTypeEnumeration.FIND_BY_UNIQUE_KEY)
+			comment = "Find a persistent " + domainObjectLabel + " object by using the provided parameters";
+		else if (methodType == RepositoryMethodTypeEnumeration.SEARCH_BY_UNIQUE_KEY)
+			comment = "Search for " + domainObjectLabel + " objects by using the provided parameters";
+		else
+			comment = "Check if the given " + domainObjectLabel + " already exists";
+
 		b.append("/**\n");
-		b.append(" * Check if the given " + domainObjectLabel + " already exists\n");
+		b.append(" * " + comment + "\n");
 
 		method.getMethodParameters().forEach(param -> b.append(" * @param " + param.getName() + "\n"));
 
-		b.append(" * @return true if the " + domainObjectLabel + " already exists\n");
+		if (methodType == RepositoryMethodTypeEnumeration.FIND_BY_UNIQUE_KEY) {
+			b.append(" * @return the " + domainObjectLabel + " object or null if it could not be found\n");
+			b.append(" * @throws IllegalStateException if the query returned more than one object\n");
+		}
+		else if (methodType == RepositoryMethodTypeEnumeration.SEARCH_BY_UNIQUE_KEY)
+			b.append(" * @return a list that contains all " + domainObjectLabel + " objects that match the provided filter criteria\n");
+		else
+			b.append(" * @return true if the " + domainObjectLabel + " already exists\n");
+
 		b.append(" */\n");
 
 		return b.toString();
@@ -91,22 +115,17 @@ public class ExistsByUniqueKeyRepositoryMethodGenerator extends BasicRepositoryM
 		final var queryParams = new StringBuilder();
 		final var paramCheck = new StringBuilder();
 		final var queryStatement = new StringBuilder();
-		final String pkAttributeName = domainObject.getPKAttribute().getName();
 		String pkParamName = null;
 		boolean isFirstParam = true;
 		boolean hasOptionalParams = false;
 
 		for (final MethodParameter param : method.getMethodParameters()) {
-			// The first parameter should not be considered!
 			if (isFirstParam && method.getMethodType() == RepositoryMethodTypeEnumeration.EXISTS_BY_UNIQUE_KEY_WITH_ID) {
 				isFirstParam = false;
 				pkParamName = param.getName();
 
-				if (!param.getType().isPrimitive()) {
-					paramCheck.append("if(" + pkParamName + " == null)\n");
-					paramCheck.append("throw new IllegalArgumentException(\"Parameter \\\"");
-					paramCheck.append(pkParamName + "\\\" must not be null!\");\n\n");
-				}
+				if (!param.getType().isPrimitive())
+					paramCheck.append(addParamCheck(pkParamName));
 
 				continue;
 			}
@@ -123,11 +142,8 @@ public class ExistsByUniqueKeyRepositoryMethodGenerator extends BasicRepositoryM
 				paramOptPath = repositoryParam.getAttribute().getName();
 				isOptional = repositoryParam.getAttribute().getDomainAttributeValidator().isNullable();
 
-				if (!repositoryParam.getAttribute().getJavaType().isPrimitive() && !isOptional) {
-					paramCheck.append("if(" + paramName + " == null)\n");
-					paramCheck.append("throw new IllegalArgumentException(\"Parameter \\\"");
-					paramCheck.append(paramName + "\\\" must not be null!\");\n\n");
-				}
+				if (!repositoryParam.getAttribute().getJavaType().isPrimitive() && !isOptional)
+					b.append(addParamCheck(paramName));
 			}
 			else {
 				final AbstractDomainAssociation assoc = repositoryParam.getAssociation();
@@ -141,11 +157,8 @@ public class ExistsByUniqueKeyRepositoryMethodGenerator extends BasicRepositoryM
 				// Make sure to use the correct name defined in the named query!
 				queryParamName = assoc.getName();
 
-				if (!repositoryParam.getAssociation().getTarget().getPKAttribute().getJavaType().isPrimitive() && !isOptional) {
-					paramCheck.append("if(" + paramName + " == null)\n");
-					paramCheck.append("throw new IllegalArgumentException(\"Parameter \\\"");
-					paramCheck.append(paramName + "\\\" must not be null!\");\n\n");
-				}
+				if (!repositoryParam.getAssociation().getTarget().getPKAttribute().getJavaType().isPrimitive() && !isOptional)
+					b.append(addParamCheck(paramName));
 			}
 
 			final var predicate = isFirstParam ? " where" : " and";
@@ -172,14 +185,36 @@ public class ExistsByUniqueKeyRepositoryMethodGenerator extends BasicRepositoryM
 
 		b.append(paramCheck);
 
-		if (hasOptionalParams) {
+		if (methodType == RepositoryMethodTypeEnumeration.FIND_BY_UNIQUE_KEY
+				|| methodType == RepositoryMethodTypeEnumeration.SEARCH_BY_UNIQUE_KEY)
+			b.append(createFindQuery(hasOptionalParams, queryStatement.toString(), queryParams.toString()));
+		else
+			b.append(createExistsQuery(hasOptionalParams, pkParamName, queryStatement.toString(), queryParams.toString()));
+
+		return b.toString();
+	}
+
+	/**
+	 * Create and initialize the query for checking if an object exists
+	 * @param createCustomStatement if true a custom query needs to be generated
+	 * @param pkParamName the name of the parameter that represents the primary key attribute
+	 * @param customFilterStatements a list of additional statements if the default named query cannot be used
+	 * @param queryParams a list of statements for setting the query parameters
+	 * @return the generated content
+	 */
+	private String createExistsQuery(boolean createCustomStatement, String pkParamName, String customFilterStatements,
+			String queryParams) {
+		final var b = new StringBuilder();
+		final String pkAttributeName = domainObject.getPKAttribute().getName();
+
+		if (createCustomStatement) {
 			// If at least one parameter is optional the respective named query cannot be used!
 			b.append("var queryStatement = \"select count(a) from " + domainObjectName + " a\";\n");
 
 			if (pkParamName != null)
 				b.append("queryStatement += \" where a." + pkAttributeName + " <> :" + pkParamName + "\";\n");
 
-			b.append(queryStatement);
+			b.append(customFilterStatements);
 			b.append("\n");
 			b.append("final TypedQuery<Long> query = em.createQuery(queryStatement, Long.class);\n");
 		}
@@ -198,6 +233,56 @@ public class ExistsByUniqueKeyRepositoryMethodGenerator extends BasicRepositoryM
 
 		b.append(queryParams);
 		b.append("\nreturn query.getSingleResult() != 0;\n");
+
+		return b.toString();
+	}
+
+	/**
+	 * Create and initialize the query for finding objects
+	 * @param createCustomStatement if true a custom query needs to be generated
+	 * @param customFilterStatements a list of additional statements if the default named query cannot be used
+	 * @param queryParams a list of statements for setting the query parameters
+	 * @return the generated content
+	 */
+	private String createFindQuery(boolean createCustomStatement, String customFilterStatements, String queryParams) {
+		final var b = new StringBuilder();
+
+		if (createCustomStatement) {
+			b.append("var queryStatement = \"select a from " + domainObjectName + " a\";\n");
+			b.append(customFilterStatements);
+			b.append("\n");
+			b.append("final TypedQuery<" + domainObjectName + "> query = ");
+			b.append("em.createQuery(queryStatement, " + domainObjectName + ".class);\n");
+		}
+		else {
+			b.append("final TypedQuery<" + domainObjectName + "> query = em.createNamedQuery(");
+			b.append(domainObjectName + "." + method.getHint() + ", " + domainObjectName + ".class);\n");
+		}
+
+		b.append(queryParams);
+
+		if (methodType == RepositoryMethodTypeEnumeration.FIND_BY_UNIQUE_KEY) {
+			b.append("\nfinal List<" + domainObjectName + "> resultList = query.getResultList();\n\n");
+			b.append("if(resultList.size() <= 1)\n");
+			b.append("return resultList.stream().findFirst().orElse(null);\n\n");
+			b.append("throw new IllegalStateException(\"Non unique result!\");\n");
+		}
+		else
+			b.append("\nreturn query.getResultList();\n");
+
+		return b.toString();
+	}
+
+	/**
+	 * Add a non-null check for the given parameter
+	 * @param paramName
+	 * @return the generated content
+	 */
+	private String addParamCheck(final String paramName) {
+		final var b = new StringBuilder();
+		b.append("if(" + paramName + " == null)\n");
+		b.append("throw new IllegalArgumentException(\"Parameter \\\"");
+		b.append(paramName + "\\\" must not be null!\");\n\n");
 
 		return b.toString();
 	}

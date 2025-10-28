@@ -25,14 +25,12 @@ import net.codecadenza.eclipse.generator.common.AbstractJavaSourceGenerator;
 import net.codecadenza.eclipse.generator.repository.method.imp.AddToAssociatonRepositoryMethodGenerator;
 import net.codecadenza.eclipse.generator.repository.method.imp.ChangeParentRepositoryMethodGenerator;
 import net.codecadenza.eclipse.generator.repository.method.imp.CopyRepositoryMethodGenerator;
-import net.codecadenza.eclipse.generator.repository.method.imp.ExistsByUniqueKeyRepositoryMethodGenerator;
 import net.codecadenza.eclipse.generator.repository.method.imp.FindByObjectRepositoryMethodGenerator;
-import net.codecadenza.eclipse.generator.repository.method.imp.FindByUniqueKeyRepositoryMethodGenerator;
 import net.codecadenza.eclipse.generator.repository.method.imp.GetAssociationRepositoryMethodGenerator;
 import net.codecadenza.eclipse.generator.repository.method.imp.MergeRepositoryMethodGenerator;
 import net.codecadenza.eclipse.generator.repository.method.imp.PersistRepositoryMethodGenerator;
 import net.codecadenza.eclipse.generator.repository.method.imp.RemoveFromAssociationRepositoryMethodGenerator;
-import net.codecadenza.eclipse.generator.repository.method.imp.SearchByUniqueKeyRepositoryMethodGenerator;
+import net.codecadenza.eclipse.generator.repository.method.imp.UniqueKeyRepositoryMethodGenerator;
 import net.codecadenza.eclipse.model.repository.RepositoryMethod;
 
 /**
@@ -73,10 +71,10 @@ public class RepositoryMethodGeneratorFactory {
 			case REMOVE_FROM_ASSOCIATION -> new RemoveFromAssociationRepositoryMethodGenerator(repositoryMethod);
 			case MERGE -> new MergeRepositoryMethodGenerator(repositoryMethod);
 			case PERSIST -> new PersistRepositoryMethodGenerator(repositoryMethod);
-			case EXISTS_BY_UNIQUE_KEY -> new ExistsByUniqueKeyRepositoryMethodGenerator(repositoryMethod);
-			case SEARCH_BY_UNIQUE_KEY -> new SearchByUniqueKeyRepositoryMethodGenerator(repositoryMethod);
-			case FIND_BY_UNIQUE_KEY -> new FindByUniqueKeyRepositoryMethodGenerator(repositoryMethod);
-			case EXISTS_BY_UNIQUE_KEY_WITH_ID -> new ExistsByUniqueKeyRepositoryMethodGenerator(repositoryMethod);
+			case EXISTS_BY_UNIQUE_KEY -> new UniqueKeyRepositoryMethodGenerator(repositoryMethod);
+			case EXISTS_BY_UNIQUE_KEY_WITH_ID -> new UniqueKeyRepositoryMethodGenerator(repositoryMethod);
+			case SEARCH_BY_UNIQUE_KEY -> new UniqueKeyRepositoryMethodGenerator(repositoryMethod);
+			case FIND_BY_UNIQUE_KEY -> new UniqueKeyRepositoryMethodGenerator(repositoryMethod);
 			default -> {
 				final var msg = "A repository method generator for the method type '" + repositoryMethod.getMethodType()
 						+ "' is not available!";

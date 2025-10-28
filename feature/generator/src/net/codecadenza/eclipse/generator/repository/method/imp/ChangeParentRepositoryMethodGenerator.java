@@ -27,6 +27,8 @@ import java.util.Set;
 import net.codecadenza.eclipse.generator.repository.method.BasicRepositoryMethodGenerator;
 import net.codecadenza.eclipse.model.domain.AbstractDomainAssociation;
 import net.codecadenza.eclipse.model.domain.DomainAttribute;
+import net.codecadenza.eclipse.model.domain.ManyToOneAssociation;
+import net.codecadenza.eclipse.model.domain.OneToOneAssociation;
 import net.codecadenza.eclipse.model.java.MethodParameter;
 import net.codecadenza.eclipse.model.repository.RepositoryMethod;
 import net.codecadenza.eclipse.model.repository.RepositoryMethodParameter;
@@ -154,12 +156,21 @@ public class ChangeParentRepositoryMethodGenerator extends BasicRepositoryMethod
 				else if (repositoryParam.getAssociation() != null) {
 					final AbstractDomainAssociation assoc = repositoryParam.getAssociation();
 
-					if (!repositoryParam.equals(parentParam))
-						b.append("entity." + assoc.getGetterName());
-					else
-						b.append(method.getMethodParameters().getLast().getName());
+					if (repositoryParam.equals(parentParam)) {
+						final String paramName = method.getMethodParameters().getLast().getName();
+						final String pkAttributeGetter = assoc.getTarget().getPKAttribute().getGetterName();
+						final boolean isOptional = (assoc instanceof final ManyToOneAssociation mto && mto.isOptional())
+								|| (assoc instanceof final OneToOneAssociation oto && oto.isOptional());
 
-					b.append("." + assoc.getTarget().getPKAttribute().getGetterName());
+						b.append(paramName);
+
+						if (isOptional)
+							b.append(" != null ? " + paramName + "." + pkAttributeGetter + " :  null");
+						else
+							b.append("." + pkAttributeGetter);
+					}
+					else
+						b.append(getPrimaryKeyAttributeValue("entity", assoc));
 				}
 			}
 			else

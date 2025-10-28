@@ -335,25 +335,8 @@ public class BasicRepositoryMethodGenerator {
 				if (param instanceof final RepositoryMethodParameter repositoryParam) {
 					if (repositoryParam.getAttribute() != null)
 						b.append(objectParam.getName() + "." + repositoryParam.getAttribute().getGetterName());
-					else if (repositoryParam.getAssociation() != null) {
-						final AbstractDomainAssociation assoc = repositoryParam.getAssociation();
-
-						final boolean isOptional = (assoc instanceof final ManyToOneAssociation mto && mto.isOptional())
-								|| (assoc instanceof final OneToOneAssociation oto && oto.isOptional());
-
-						b.append(objectParam.getName() + "." + assoc.getGetterName());
-
-						if (isOptional) {
-							// The parameter that is mapped to an optional association has never a primitive type!
-							b.append(" != null ? ");
-							b.append(objectParam.getName() + "." + assoc.getGetterName());
-							b.append("." + assoc.getTarget().getPKAttribute().getGetterName());
-							b.append(" : ");
-							b.append("null");
-						}
-						else
-							b.append("." + assoc.getTarget().getPKAttribute().getGetterName());
-					}
+					else if (repositoryParam.getAssociation() != null)
+						b.append(getPrimaryKeyAttributeValue(objectParam.getName(), repositoryParam.getAssociation()));
 				}
 				else {
 					// If the method parameter is not a repository method parameter it will represent the primary key attribute of the
@@ -415,20 +398,14 @@ public class BasicRepositoryMethodGenerator {
 
 			b.append(assoc1.getTarget().getLabel());
 			b.append(" '\" + ");
-
-			final DomainAttribute pkAssoc1 = assoc1.getTarget().getPKAttribute();
-
-			b.append(objectParam.getName() + "." + assoc1.getGetterName() + "." + pkAssoc1.getGetterName());
+			b.append(getPrimaryKeyAttributeValue(objectParam.getName(), assoc1));
 
 			if (assoc2 != null) {
 				b.append(" + \"'");
 				b.append(" and ");
 				b.append(assoc2.getTarget().getLabel());
 				b.append(" '\" + ");
-
-				final DomainAttribute pkAssoc2 = assoc2.getTarget().getPKAttribute();
-
-				b.append(objectParam.getName() + "." + assoc2.getGetterName() + "." + pkAssoc2.getGetterName());
+				b.append(getPrimaryKeyAttributeValue(objectParam.getName(), assoc2));
 			}
 		}
 
@@ -436,6 +413,39 @@ public class BasicRepositoryMethodGenerator {
 			b.append(" already exists!\");\n");
 		else
 			b.append(" + \"' already exists!\");\n");
+
+		return b.toString();
+	}
+
+	/**
+	 * Create a null-safe getter for the primary key attribute of the given association
+	 * @param paramName the name of the parameter
+	 * @param assoc the domain association
+	 * @return the generated fragment
+	 */
+	protected String getPrimaryKeyAttributeValue(String paramName, AbstractDomainAssociation assoc) {
+		final var b = new StringBuilder();
+		final boolean isOptional = (assoc instanceof final ManyToOneAssociation mto && mto.isOptional())
+				|| (assoc instanceof final OneToOneAssociation oto && oto.isOptional());
+
+		if (isOptional)
+			b.append("(");
+
+		b.append(paramName + "." + assoc.getGetterName());
+
+		if (isOptional) {
+			// The parameter that is mapped to an optional association has never a primitive type!
+			b.append(" != null ? ");
+			b.append(paramName + "." + assoc.getGetterName());
+			b.append("." + assoc.getTarget().getPKAttribute().getGetterName());
+			b.append(" : ");
+			b.append("null");
+		}
+		else
+			b.append("." + assoc.getTarget().getPKAttribute().getGetterName());
+
+		if (isOptional)
+			b.append(")");
 
 		return b.toString();
 	}
