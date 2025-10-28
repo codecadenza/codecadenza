@@ -871,23 +871,33 @@ public class IntegrationTestCaseGenerator extends AbstractJavaSourceGenerator {
 		}
 		else if (!testDataAttribute.getReferencedObjects().isEmpty()) {
 			final TestDataObject referencedObject = testDataAttribute.getReferencedObjects().getFirst();
-			String referencedObjectValidation = null;
 
-			for (final TestDataAttribute refAttribute : referencedObject.getAttributes()) {
-				if (refAttribute.skip())
-					continue;
-
-				referencedObjectValidation = validateTestAttribute(refAttribute,
-						actualGetter + "." + refAttribute.getMappingAttribute().getGetterName(),
-						expectedGetter + "." + refAttribute.getMappingAttribute().getGetterName());
-			}
-
-			if (referencedObjectValidation != null) {
-				b.append(addAssertThatWithNullCheck(actualGetter, AssertionOperator.IS_NOT_NULL));
-				b.append(referencedObjectValidation);
-			}
-			else if (operator == AssertionOperator.IS_NULL || operator == AssertionOperator.IS_NOT_NULL)
+			if (operator == AssertionOperator.IS_NULL || operator == AssertionOperator.IS_NOT_NULL)
 				b.append(addAssertThatWithNullCheck(actualGetter, operator));
+			else {
+				String referencedObjectValidation = null;
+
+				for (final TestDataAttribute refAttribute : referencedObject.getAttributes()) {
+					final JavaType javaType = refAttribute.getJavaType();
+
+					// Do not create an assertion statement for primitive primary key attributes of an optional association
+					if (refAttribute.skip() || (javaType != null && javaType.isPrimitive() && refAttribute.getMappingAttribute() != null
+							&& refAttribute.getMappingAttribute().getDomainAttribute() != null
+							&& refAttribute.getMappingAttribute().getDomainAttribute().isPk()
+							&& ((javaType.isLong() && Long.toString(Long.MIN_VALUE).equals(refAttribute.getValue()))
+									|| (javaType.isInteger() && Integer.toString(Integer.MIN_VALUE).equals(refAttribute.getValue())))))
+						continue;
+
+					referencedObjectValidation = validateTestAttribute(refAttribute,
+							actualGetter + "." + refAttribute.getMappingAttribute().getGetterName(),
+							expectedGetter + "." + refAttribute.getMappingAttribute().getGetterName());
+				}
+
+				if (referencedObjectValidation != null && !referencedObjectValidation.isEmpty()) {
+					b.append(addAssertThatWithNullCheck(actualGetter, AssertionOperator.IS_NOT_NULL));
+					b.append(referencedObjectValidation);
+				}
+			}
 		}
 		else
 			b.append(addAssertThat(actualGetter, expectedGetter, testDataAttribute));
