@@ -63,6 +63,8 @@ import net.codecadenza.eclipse.model.project.WorkspaceFile;
 import net.codecadenza.eclipse.model.repository.Repository;
 import net.codecadenza.eclipse.model.testing.AbstractTestModule;
 import net.codecadenza.eclipse.model.testing.GUITestCase;
+import net.codecadenza.eclipse.model.testing.IntegrationTestCase;
+import net.codecadenza.eclipse.model.testing.IntegrationTestModule;
 import net.codecadenza.eclipse.model.testing.TestSuite;
 import net.codecadenza.eclipse.resource.CodeCadenzaResourcePlugin;
 import net.codecadenza.eclipse.service.boundary.BoundaryService;
@@ -83,6 +85,7 @@ import net.codecadenza.eclipse.service.repository.RepositoryService;
 import net.codecadenza.eclipse.service.security.SecurityService;
 import net.codecadenza.eclipse.service.testing.TestSuiteService;
 import net.codecadenza.eclipse.service.testing.gui.GUITestCaseService;
+import net.codecadenza.eclipse.service.testing.integration.IntegrationTestCaseService;
 import net.codecadenza.eclipse.tools.angular.AngularProjectBuildService;
 import net.codecadenza.eclipse.tools.ide.EclipseIDEService;
 import net.codecadenza.eclipse.tools.util.file.ZipFileUtil;
@@ -458,46 +461,50 @@ public abstract class AbstractProjectBuildService implements IProjectBuildServic
 	@Override
 	public void buildObjectsOfNamespace(Namespace namespace, boolean rebuildPersitenceXML, IProgressMonitor monitor)
 			throws Exception {
-		for (final JavaType t : namespace.getJavaTypes()) {
-			if (t instanceof final BoundaryBean boundaryBean) {
+		for (final JavaType type : namespace.getJavaTypes()) {
+			if (type instanceof final BoundaryBean boundaryBean) {
 				monitor.beginTask("Building boundary " + boundaryBean.getInterfaceName(), IProgressMonitor.UNKNOWN);
 				new BoundaryService(project).rebuildBoundarySourceFiles(boundaryBean);
 			}
-			else if (t instanceof final DTOBean dto) {
+			else if (type instanceof final DTOBean dto) {
 				monitor.beginTask("Building DTO " + dto.getName(), IProgressMonitor.UNKNOWN);
 				new DTOBeanService(project).rebuildDTOBeanSourceFiles(dto);
 			}
-			else if (t instanceof final DomainObject domainObject) {
+			else if (type instanceof final DomainObject domainObject) {
 				monitor.beginTask("Building domain object " + domainObject.getName(), IProgressMonitor.UNKNOWN);
 				new DomainObjectService(project).rebuildDomainObjectSourceFiles(domainObject, rebuildPersitenceXML);
 			}
-			else if (t instanceof final JavaEnum javaEnum) {
+			else if (type instanceof final JavaEnum javaEnum) {
 				monitor.beginTask("Building enumeration " + javaEnum.getName(), IProgressMonitor.UNKNOWN);
 				new JavaEnumService(project).rebuildEnumerationSourceFile(javaEnum);
 			}
-			else if (t instanceof final Repository repository) {
+			else if (type instanceof final Repository repository) {
 				monitor.beginTask("Building repository " + repository.getName(), IProgressMonitor.UNKNOWN);
 				new RepositoryService(project).rebuildRepositorySourceFiles(repository);
 			}
-			else if (t instanceof final ExchangeMappingObject mappingObject) {
+			else if (type instanceof final ExchangeMappingObject mappingObject) {
 				monitor.beginTask("Building mapping object " + mappingObject.getName(), IProgressMonitor.UNKNOWN);
 				new ExchangeMappingObjectService().rebuildExchangeMappingObject(mappingObject);
 			}
-			else if (t instanceof final DataExchangeServiceBean exchangeService) {
+			else if (type instanceof final DataExchangeServiceBean exchangeService) {
 				monitor.beginTask("Building data exchange service " + exchangeService.getName(), IProgressMonitor.UNKNOWN);
 				new DataExchangeBeanService(project).rebuildDataExchangeServiceBeanSourceFiles(exchangeService);
 			}
-			else if (t instanceof final AbstractIntegrationBean integrationBean) {
+			else if (type instanceof final AbstractIntegrationBean integrationBean) {
 				monitor.beginTask("Building integration service " + integrationBean.getName(), IProgressMonitor.UNKNOWN);
 				new IntegrationBeanService(project).rebuildIntegrationBeanSourceFiles(integrationBean);
 			}
-			else if (t instanceof final GUITestCase testCase) {
+			else if (type instanceof final GUITestCase testCase) {
 				monitor.beginTask("Building GUI test case " + testCase.getName(), IProgressMonitor.UNKNOWN);
 				new GUITestCaseService(project).rebuildTestCaseSourceFiles(testCase);
 			}
-			else if (t instanceof final TestSuite testSuite) {
+			else if (type instanceof final TestSuite testSuite) {
 				monitor.beginTask("Building test suite " + testSuite.getName(), IProgressMonitor.UNKNOWN);
 				new TestSuiteService(project).rebuildTestSuiteSourceFile(testSuite);
+			}
+			else if (type instanceof final IntegrationTestCase testCase) {
+				monitor.beginTask("Building integration test case " + testCase.getName(), IProgressMonitor.UNKNOWN);
+				new IntegrationTestCaseService((IntegrationTestModule) testCase.getTestModule()).rebuildTestCaseSourceFiles(testCase);
 			}
 		}
 	}
@@ -576,6 +583,10 @@ public abstract class AbstractProjectBuildService implements IProjectBuildServic
 			if (module.getTechnology() == IntegrationTechnology.KAFKA)
 				new IntegrationBeanService(project).generateJavaClassesFromAvroIDLFiles();
 		}
+
+		// Rebuild all integration test cases
+		for (final AbstractTestModule module : project.getTestModules())
+			buildObjectsOfNamespace(module.getNamespace(), false, monitor);
 
 		if (project.hasJSFOrVaadinClient() || project.hasAngularClient())
 			for (final AbstractTestModule testModule : project.getTestModules()) {
