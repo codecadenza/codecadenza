@@ -281,7 +281,7 @@ public class IntegrationTestCaseGenerator extends AbstractJavaSourceGenerator {
 		b.append(" */\n");
 		b.append("@BeforeAll\n");
 		b.append(getAnnotationForGeneratedElement());
-		b.append("public static " + methodSignature);
+		b.append("static " + methodSignature);
 
 		if (!integrationBeans.isEmpty() && integrationTechnology == IntegrationTechnology.RMI) {
 			importClass("javax.naming.NamingException");
@@ -361,7 +361,7 @@ public class IntegrationTestCaseGenerator extends AbstractJavaSourceGenerator {
 		b.append(" */\n");
 		b.append("@Test\n");
 		b.append(getAnnotationForGeneratedElement());
-		b.append("public " + methodSignature + "\n");
+		b.append(methodSignature + "\n");
 		b.append("{\n");
 		b.append("MethodInvocation invocation = testDataProvider.getNextInvocation();\n\n");
 
@@ -423,7 +423,7 @@ public class IntegrationTestCaseGenerator extends AbstractJavaSourceGenerator {
 		b.append(" * @param invocation\n");
 		b.append(" */\n");
 		b.append(getAnnotationForGeneratedElement());
-		b.append("public " + methodSignature + "\n");
+		b.append("private " + methodSignature + "\n");
 		b.append("{\n");
 
 		if (searchInputOperation) {
