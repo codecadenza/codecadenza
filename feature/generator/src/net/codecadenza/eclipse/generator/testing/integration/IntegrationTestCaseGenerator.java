@@ -781,7 +781,7 @@ public class IntegrationTestCaseGenerator extends AbstractJavaSourceGenerator {
 
 		for (final TestDataAttribute attribute : testDataObject.getAttributes()) {
 			final MappingAttribute mappingAttribute = attribute.getMappingAttribute();
-			final String getter = mappingAttribute.getGetterName();
+			final String getter = generateAttributeGetter(attribute);
 			final String defaultValue = mappingAttribute.getDomainAttribute().getJavaType().getLocalVariableDefaultValue();
 			final boolean nullCheck = attribute.getOperator() == AssertionOperator.IS_NULL
 					|| attribute.getOperator() == AssertionOperator.IS_NOT_NULL;
@@ -828,7 +828,7 @@ public class IntegrationTestCaseGenerator extends AbstractJavaSourceGenerator {
 				if (attribute.skip())
 					continue;
 
-				final String getter = attribute.getMappingAttribute().getGetterName();
+				final String getter = generateAttributeGetter(attribute);
 
 				b.append(validateTestAttribute(attribute, ACTUAL_RESULT_OBJECT + "." + getter, EXPECTED_RESULT_OBJECT + "." + getter));
 			}
@@ -889,8 +889,8 @@ public class IntegrationTestCaseGenerator extends AbstractJavaSourceGenerator {
 						continue;
 
 					referencedObjectValidation = validateTestAttribute(refAttribute,
-							actualGetter + "." + refAttribute.getMappingAttribute().getGetterName(),
-							expectedGetter + "." + refAttribute.getMappingAttribute().getGetterName());
+							actualGetter + "." + generateAttributeGetter(refAttribute),
+							expectedGetter + "." + generateAttributeGetter(refAttribute));
 				}
 
 				if (referencedObjectValidation != null && !referencedObjectValidation.isEmpty()) {
@@ -986,6 +986,19 @@ public class IntegrationTestCaseGenerator extends AbstractJavaSourceGenerator {
 		}
 
 		return methodName;
+	}
+
+	/**
+	 * Create the getter for the given {@link TestDataAttribute}
+	 * @param testDataAttribute
+	 * @return the generated getter
+	 */
+	private String generateAttributeGetter(TestDataAttribute testDataAttribute) {
+		// The Avro IDL compiler generates a getter starting with "get" for every field, regardless of the field's type!
+		if (integrationTechnology == IntegrationTechnology.KAFKA && testDataAttribute.getJavaType().isBoolean())
+			return "get" + testDataAttribute.getMappingAttribute().getUpperCaseName() + "()";
+
+		return testDataAttribute.getMappingAttribute().getGetterName();
 	}
 
 }
