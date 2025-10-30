@@ -398,4 +398,16 @@ public class BuildArtifactImpl extends EObjectImpl implements BuildArtifact {
 		return getType().getName().replace('_', '-').toLowerCase();
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * @see net.codecadenza.eclipse.model.project.BuildArtifact#isTestArtifact()
+	 * @generated not
+	 */
+	@Override
+	public boolean isTestArtifact() {
+		return getType() == BuildArtifactType.INTEGRATION_TEST_REST || getType() == BuildArtifactType.INTEGRATION_TEST_SOAP
+				|| getType() == BuildArtifactType.INTEGRATION_TEST_RMI || getType() == BuildArtifactType.INTEGRATION_TEST_KAFKA
+				|| getType() == BuildArtifactType.INTEGRATION_TEST_JMS || getType() == BuildArtifactType.SELENIUM_TEST;
+	}
+
 }

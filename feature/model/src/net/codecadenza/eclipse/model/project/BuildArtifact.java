@@ -118,4 +118,10 @@ public interface BuildArtifact extends EObject {
 	 */
 	String getModuleName();
 
+	/**
+	 * @return true if the artifact is only used for tests
+	 * @generated not
+	 */
+	boolean isTestArtifact();
+
 }

@@ -27,6 +27,9 @@ import static net.codecadenza.eclipse.shared.Constants.LIB_SUFFIX;
 import static net.codecadenza.eclipse.shared.Constants.UTF_8;
 
 import java.io.StringWriter;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
 import net.codecadenza.eclipse.model.project.BuildArtifact;
 import net.codecadenza.eclipse.model.project.BuildArtifactType;
 import net.codecadenza.eclipse.model.project.WorkspaceFile;
@@ -248,7 +251,11 @@ public class MavenBuildFileService extends AbstractMavenBuildFileService impleme
 			mavenModel.setParent(parent);
 		}
 
-		for (final BuildArtifact buildArtifact : project.getBuildConfiguration()) {
+		// Sort modules so that test modules are added after non-test modules
+		final List<BuildArtifact> sortedArtifacts = new ArrayList<>(project.getBuildConfiguration());
+		sortedArtifacts.sort(Comparator.comparingInt(artifact -> artifact.isTestArtifact() ? 1 : 0));
+
+		for (final BuildArtifact buildArtifact : sortedArtifacts) {
 			if (buildArtifact.getType() == BuildArtifactType.MASTER)
 				continue;
 
