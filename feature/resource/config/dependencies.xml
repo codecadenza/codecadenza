@@ -465,7 +465,7 @@
 			<dependency name="codecadenza-ddt" groupName="net.codecadenza.runtime" version="1.2.0" scope="test"/>
 		</filter>
 		<filter clientPlatform="ALL" technology="JAKARTA_EE" serverPlatform="ALL" validationType="ALL" database="ALL" jpaProvider="ALL">
-			<dependency name="junit-platform-suite-engine" groupName="org.junit.platform" version="1.11.3" scope="test"/>
+			<dependency name="junit-jupiter-engine" groupName="org.junit.jupiter" version="5.14.0" scope="test"/>
 			<dependency name="assertj-core" groupName="org.assertj" version="3.27.3" scope="test"/>
 			<dependency name="log4j-slf4j2-impl" groupName="org.apache.logging.log4j" version="2.23.1" scope="test"/>
 		</filter>
@@ -480,11 +480,11 @@
 			<dependency name="postgresql" groupName="org.postgresql" version="42.5.1" scope="test"/>
 		</filter>
 		<filter clientPlatform="ALL" technology="SPRING_BOOT" serverPlatform="ALL" validationType="ALL" database="ALL" jpaProvider="ALL">
-			<dependency name="junit-platform-suite-engine" groupName="org.junit.platform" scope="test"/>
+			<dependency name="junit-jupiter-engine" groupName="org.junit.jupiter" scope="test"/>
 			<dependency name="assertj-core" groupName="org.assertj" scope="test"/>
 			<dependency name="log4j-slf4j2-impl" groupName="org.apache.logging.log4j" scope="test"/>
-			<dependency name="spring-boot-starter" groupName="org.springframework.boot" scope="compile">
-				<exclusion name="spring-boot-starter-logging" groupName="org.springframework.boot" scope="compile"/>
+			<dependency name="spring-boot-starter" groupName="org.springframework.boot" scope="test">
+				<exclusion name="spring-boot-starter-logging" groupName="org.springframework.boot" scope="test"/>
 			</dependency>
 		</filter>
 		<filter clientPlatform="ALL" technology="SPRING_BOOT" serverPlatform="ALL" validationType="ALL" database="MYSQL" jpaProvider="ALL">
@@ -504,7 +504,7 @@
 			<dependency name="codecadenza-ddt" groupName="net.codecadenza.runtime" version="1.2.0" scope="test"/>
 		</filter>
 		<filter clientPlatform="ALL" technology="JAKARTA_EE" serverPlatform="ALL" validationType="ALL" database="ALL" jpaProvider="ALL">
-			<dependency name="junit-platform-suite-engine" groupName="org.junit.platform" version="1.11.3" scope="test"/>
+			<dependency name="junit-jupiter-engine" groupName="org.junit.jupiter" version="5.14.0" scope="test"/>
 			<dependency name="assertj-core" groupName="org.assertj" version="3.27.3" scope="test"/>
 			<dependency name="log4j-slf4j2-impl" groupName="org.apache.logging.log4j" version="2.23.1" scope="test"/>
 		</filter>
@@ -519,11 +519,11 @@
 			<dependency name="postgresql" groupName="org.postgresql" version="42.5.1" scope="test"/>
 		</filter>
 		<filter clientPlatform="ALL" technology="SPRING_BOOT" serverPlatform="ALL" validationType="ALL" database="ALL" jpaProvider="ALL">
-			<dependency name="junit-platform-suite-engine" groupName="org.junit.platform" scope="test"/>
+			<dependency name="junit-jupiter-engine" groupName="org.junit.jupiter" scope="test"/>
 			<dependency name="assertj-core" groupName="org.assertj" scope="test"/>
 			<dependency name="log4j-slf4j2-impl" groupName="org.apache.logging.log4j" scope="test"/>
-			<dependency name="spring-boot-starter" groupName="org.springframework.boot" scope="compile">
-				<exclusion name="spring-boot-starter-logging" groupName="org.springframework.boot" scope="compile"/>
+			<dependency name="spring-boot-starter" groupName="org.springframework.boot" scope="test">
+				<exclusion name="spring-boot-starter-logging" groupName="org.springframework.boot" scope="test"/>
 			</dependency>
 		</filter>
 		<filter clientPlatform="ALL" technology="SPRING_BOOT" serverPlatform="ALL" validationType="ALL" database="MYSQL" jpaProvider="ALL">
@@ -541,7 +541,7 @@
 	<dependency_config buildType="INTEGRATION_TEST_RMI" comment="RMI integration test">
 		<filter clientPlatform="ALL" technology="ALL" serverPlatform="ALL" validationType="ALL" database="ALL" jpaProvider="ALL">
 			<dependency name="codecadenza-ddt" groupName="net.codecadenza.runtime" version="1.2.0" scope="test"/>
-			<dependency name="junit-platform-suite-engine" groupName="org.junit.platform" version="1.11.3" scope="test"/>
+			<dependency name="junit-jupiter-engine" groupName="org.junit.jupiter" version="5.14.0" scope="test"/>
 			<dependency name="assertj-core" groupName="org.assertj" version="3.27.3" scope="test"/>
 			<dependency name="log4j-slf4j2-impl" groupName="org.apache.logging.log4j" version="2.23.1" scope="test"/>
 		</filter>
@@ -560,11 +560,11 @@
 	<dependency_config buildType="INTEGRATION_TEST_KAFKA" comment="Kafka integration test">
 		<filter clientPlatform="ALL" technology="ALL" serverPlatform="ALL" validationType="ALL" database="ALL" jpaProvider="ALL">
 			<dependency name="codecadenza-ddt" groupName="net.codecadenza.runtime" version="1.2.0" scope="test"/>
-			<dependency name="junit-platform-suite-engine" groupName="org.junit.platform" scope="test"/>
+			<dependency name="junit-jupiter-engine" groupName="org.junit.jupiter" scope="test"/>
 			<dependency name="assertj-core" groupName="org.assertj" scope="test"/>
 			<dependency name="log4j-slf4j2-impl" groupName="org.apache.logging.log4j" scope="test"/>
-			<dependency name="spring-boot-starter" groupName="org.springframework.boot" scope="compile">
-				<exclusion name="spring-boot-starter-logging" groupName="org.springframework.boot" scope="compile"/>
+			<dependency name="spring-boot-starter" groupName="org.springframework.boot" scope="test">
+				<exclusion name="spring-boot-starter-logging" groupName="org.springframework.boot" scope="test"/>
 			</dependency>
 		</filter>
 		<filter clientPlatform="ALL" technology="ALL" serverPlatform="ALL" validationType="ALL" database="MYSQL" jpaProvider="ALL">
@@ -584,7 +584,7 @@
 			<dependency name="codecadenza-ddt" groupName="net.codecadenza.runtime" version="1.2.0" scope="test"/>
 		</filter>
 		<filter clientPlatform="ALL" technology="JAKARTA_EE" serverPlatform="ALL" validationType="ALL" database="ALL" jpaProvider="ALL">
-			<dependency name="junit-platform-suite-engine" groupName="org.junit.platform" version="1.11.3" scope="test"/>
+			<dependency name="junit-jupiter-engine" groupName="org.junit.jupiter" version="5.14.0" scope="test"/>
 			<dependency name="assertj-core" groupName="org.assertj" version="3.27.3" scope="test"/>
 			<dependency name="log4j-slf4j2-impl" groupName="org.apache.logging.log4j" version="2.23.1" scope="test"/>
 		</filter>
@@ -599,11 +599,11 @@
 			<dependency name="postgresql" groupName="org.postgresql" version="42.5.1" scope="test"/>
 		</filter>
 		<filter clientPlatform="ALL" technology="SPRING_BOOT" serverPlatform="ALL" validationType="ALL" database="ALL" jpaProvider="ALL">
-			<dependency name="junit-platform-suite-engine" groupName="org.junit.platform" scope="test"/>
+			<dependency name="junit-jupiter-engine" groupName="org.junit.jupiter" scope="test"/>
 			<dependency name="assertj-core" groupName="org.assertj" scope="test"/>
 			<dependency name="log4j-slf4j2-impl" groupName="org.apache.logging.log4j" scope="test"/>
-			<dependency name="spring-boot-starter" groupName="org.springframework.boot" scope="compile">
-				<exclusion name="spring-boot-starter-logging" groupName="org.springframework.boot" scope="compile"/>
+			<dependency name="spring-boot-starter" groupName="org.springframework.boot" scope="test">
+				<exclusion name="spring-boot-starter-logging" groupName="org.springframework.boot" scope="test"/>
 			</dependency>
 		</filter>
 		<filter clientPlatform="ALL" technology="SPRING_BOOT" serverPlatform="ALL" validationType="ALL" database="MYSQL" jpaProvider="ALL">
