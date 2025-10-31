@@ -88,6 +88,7 @@ public class KafkaIntegrationIDLGenerator extends AbstractContentFormatter {
 	private final Project project;
 	private final DomainObject domainObject;
 	private final List<KafkaIntegrationMethod> kafkaIntegrationMethods;
+	private final Set<DTOBean> listDTOs = new HashSet<>();
 
 	/**
 	 * Constructor
@@ -208,7 +209,10 @@ public class KafkaIntegrationIDLGenerator extends AbstractContentFormatter {
 				dataTypeName = getAvroTypeName(javaType, attr.getModifier(), attr.getDomainAttribute().getColumn());
 				isArray = attr.getDomainAttribute().getCollectionType() != CollectionTypeEnumeration.NONE;
 
-				if (attr.getDomainAttribute().isPersistent())
+				// Make list DTO attributes optional if they are not used for setting the reference!
+				if (listDTOs.contains(dto) && (attr.getAssociation() != null || !attr.getDomainAttribute().isPk()))
+					optional = true;
+				else if (attr.getDomainAttribute().isPersistent())
 					optional = attr.getDomainAttribute().isSetDateOnPersist()
 							|| attr.getDomainAttribute().getDomainAttributeValidator().isNullable();
 				else
@@ -439,12 +443,13 @@ public class KafkaIntegrationIDLGenerator extends AbstractContentFormatter {
 		dtoSet.addAll(method.getMethodParameters().stream().map(MethodParameter::getType).filter(DTOBean.class::isInstance)
 				.map(DTOBean.class::cast).toList());
 
-		// Search for all data transfer objects that are used by DTO attributes
-		final var attributeDTOs = dtoSet.stream().flatMap(dto -> dto.getAttributes().stream())
+		// Search for all list DTOs
+		final Set<DTOBean> listDTOsOfMethod = dtoSet.stream().flatMap(dto -> dto.getAttributes().stream())
 				.filter(attr -> attr.getReferencedDTOBean() != null).map(DTOBeanAttribute::getReferencedDTOBean)
 				.collect(Collectors.toSet());
 
-		dtoSet.addAll(attributeDTOs);
+		listDTOs.addAll(listDTOsOfMethod);
+		dtoSet.addAll(listDTOsOfMethod);
 
 		return dtoSet;
 	}
