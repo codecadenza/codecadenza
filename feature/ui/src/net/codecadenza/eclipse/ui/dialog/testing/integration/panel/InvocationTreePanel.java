@@ -23,7 +23,6 @@ package net.codecadenza.eclipse.ui.dialog.testing.integration.panel;
 
 import java.util.List;
 import java.util.StringJoiner;
-import net.codecadenza.eclipse.model.boundary.BoundaryMethodTypeEnumeration;
 import net.codecadenza.eclipse.model.integration.AbstractIntegrationBean;
 import net.codecadenza.eclipse.model.integration.AbstractIntegrationMethod;
 import net.codecadenza.eclipse.model.java.JavaType;
@@ -217,9 +216,6 @@ public class InvocationTreePanel extends Composite {
 	 * @param testInvocation the test invocation
 	 */
 	private void addParameterTreeItems(TreeItem parentItem, IntegrationMethodTestInvocation testInvocation) {
-		final AbstractIntegrationMethod integrationMethod = testInvocation.getIntegrationMethod();
-		final BoundaryMethodTypeEnumeration methodType = integrationMethod.getBoundaryMethod().getMethodType();
-
 		if (testInvocation.getParameters().isEmpty())
 			return;
 
@@ -233,7 +229,7 @@ public class InvocationTreePanel extends Composite {
 			final String typeName;
 			boolean hasReference = false;
 
-			if (methodType == BoundaryMethodTypeEnumeration.SEARCH || methodType == BoundaryMethodTypeEnumeration.COUNT)
+			if (parameterType == null)
 				typeName = Constants.INTEGRATION_SEARCH_PARAM_TYPE;
 			else
 				typeName = parameterType.getName();

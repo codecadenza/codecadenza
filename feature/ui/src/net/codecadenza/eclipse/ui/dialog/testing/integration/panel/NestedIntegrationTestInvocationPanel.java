@@ -21,13 +21,9 @@
  */
 package net.codecadenza.eclipse.ui.dialog.testing.integration.panel;
 
-import net.codecadenza.eclipse.model.boundary.BoundaryMethodTypeEnumeration;
-import net.codecadenza.eclipse.model.integration.AbstractIntegrationMethod;
 import net.codecadenza.eclipse.model.testing.IntegrationMethodTestInvocation;
 import net.codecadenza.eclipse.model.testing.IntegrationTestCase;
 import net.codecadenza.eclipse.model.testing.IntegrationTestModule;
-import net.codecadenza.eclipse.model.testing.MethodInvocationParameter;
-import net.codecadenza.eclipse.model.testing.TestDataObject;
 import net.codecadenza.eclipse.service.testing.integration.IntegrationTestCaseService;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
@@ -55,7 +51,6 @@ public class NestedIntegrationTestInvocationPanel extends TestInvocationPanel {
 	private final IntegrationTestCase testCase;
 	private final IntegrationMethodTestInvocation parentInvocation;
 	private final IntegrationMethodTestInvocation nestedInvocation;
-	private final AbstractIntegrationMethod integrationMethod;
 	private ReturnValuePanel panReturnValue;
 	private ParametersPanel panParameters;
 	private boolean editMode;
@@ -74,9 +69,8 @@ public class NestedIntegrationTestInvocationPanel extends TestInvocationPanel {
 		this.testModule = testModule;
 		this.testCase = testCase;
 		this.parentInvocation = parentInvocation;
-		this.integrationMethod = parentInvocation.getIntegrationMethod();
-		this.nestedInvocation = new IntegrationTestCaseService(testModule).initMethodInvocation(testCase, integrationMethod,
-				parentInvocation);
+		this.nestedInvocation = new IntegrationTestCaseService(testModule).initMethodInvocation(testCase,
+				parentInvocation.getIntegrationMethod(), parentInvocation);
 
 		initPanel();
 	}
@@ -97,7 +91,6 @@ public class NestedIntegrationTestInvocationPanel extends TestInvocationPanel {
 		this.testCase = testCase;
 		this.parentInvocation = parentInvocation;
 		this.nestedInvocation = nestedInvocation;
-		this.integrationMethod = nestedInvocation.getIntegrationMethod();
 		this.editMode = true;
 
 		initPanel();
@@ -140,33 +133,22 @@ public class NestedIntegrationTestInvocationPanel extends TestInvocationPanel {
 		if (parentInvocation.getTimeout() != null)
 			txtTimeout.setText(parentInvocation.getTimeout().toString());
 
-		final BoundaryMethodTypeEnumeration methodType = integrationMethod.getBoundaryMethod().getMethodType();
-		final boolean searchInputOperation = methodType == BoundaryMethodTypeEnumeration.SEARCH
-				|| methodType == BoundaryMethodTypeEnumeration.COUNT;
+		final boolean addReturnValuePanel = !parentInvocation.isDownloadFile() && !parentInvocation.isReturnVoid()
+				&& !parentInvocation.isExpectToFail() && !parentInvocation.isExpectedReturnNull();
 
-		if (!integrationMethod.getMethodParameters().isEmpty() || !nestedInvocation.isReturnVoid() || searchInputOperation) {
+		if (!parentInvocation.getParameters().isEmpty() || addReturnValuePanel) {
 			final var tabFolderMethod = new TabFolder(this, SWT.NONE);
 			tabFolderMethod.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 
-			if (!integrationMethod.getMethodParameters().isEmpty() || searchInputOperation) {
+			if (!parentInvocation.getParameters().isEmpty()) {
 				final var tabItemParameters = new TabItem(tabFolderMethod, SWT.NONE);
 				tabItemParameters.setText("Parameters");
 
-				if (searchInputOperation) {
-					final MethodInvocationParameter parameter = nestedInvocation.getParameters().getFirst();
-					final TestDataObject searchInputObject = parameter.getParameterValues().getFirst();
-
-					tabItemParameters
-							.setControl(new SearchInputPanel(tabFolderMethod, testModule, testCase, nestedInvocation, searchInputObject));
-				}
-				else {
-					panParameters = new ParametersPanel(tabFolderMethod, testModule, testCase, nestedInvocation);
-					tabItemParameters.setControl(panParameters);
-				}
+				panParameters = new ParametersPanel(tabFolderMethod, testModule, testCase, nestedInvocation);
+				tabItemParameters.setControl(panParameters);
 			}
 
-			if (!parentInvocation.isDownloadFile() && !parentInvocation.isReturnVoid() && !parentInvocation.isExpectToFail()
-					&& !parentInvocation.isExpectedReturnNull()) {
+			if (addReturnValuePanel) {
 				panReturnValue = new ReturnValuePanel(tabFolderMethod, testModule, testCase, nestedInvocation, false);
 
 				final var tabItemReturnValue = new TabItem(tabFolderMethod, SWT.NONE);

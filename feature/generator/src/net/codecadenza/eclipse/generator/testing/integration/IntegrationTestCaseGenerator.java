@@ -407,9 +407,6 @@ public class IntegrationTestCaseGenerator extends AbstractJavaSourceGenerator {
 		final var methodSignature = "void " + methodInvocation.getTestMethodName() + "(MethodInvocation invocation)";
 		final AbstractIntegrationMethod integrationMethod = methodInvocation.getIntegrationMethod();
 		final String serviceName = integrationMethod.getIntegrationBean().getDomainObject().getLowerCaseName() + "Service";
-		final BoundaryMethodTypeEnumeration methodType = integrationMethod.getBoundaryMethod().getMethodType();
-		final boolean searchInputOperation = methodType == BoundaryMethodTypeEnumeration.SEARCH
-				|| methodType == BoundaryMethodTypeEnumeration.COUNT;
 		final String validationResult = validateResult(methodInvocation);
 
 		b.append("/**\n");
@@ -426,18 +423,18 @@ public class IntegrationTestCaseGenerator extends AbstractJavaSourceGenerator {
 		b.append("private " + methodSignature + "\n");
 		b.append("{\n");
 
-		if (searchInputOperation) {
-			if (integrationTechnology == IntegrationTechnology.KAFKA)
-				importClass("net.codecadenza.runtime.avro.search.SearchInput");
-			else
-				importClass("net.codecadenza.runtime.search.dto.SearchInput");
+		for (final MethodInvocationParameter parameter : methodInvocation.getParameters()) {
+			final JavaType paramType = parameter.getType();
 
-			b.append("final var searchInput = testDataProvider.getNextParameter(SearchInput.class);\n");
-		}
-		else {
-			for (final MethodInvocationParameter parameter : methodInvocation.getParameters()) {
-				final JavaType paramType = parameter.getType();
+			if (paramType == null) {
+				if (integrationTechnology == IntegrationTechnology.KAFKA)
+					importClass("net.codecadenza.runtime.avro.search.SearchInput");
+				else
+					importClass("net.codecadenza.runtime.search.dto.SearchInput");
 
+				b.append("final var searchInput = testDataProvider.getNextParameter(SearchInput.class);\n");
+			}
+			else {
 				importType(integrationMethod, paramType);
 
 				b.append("final var " + parameter.getName() + " = ");

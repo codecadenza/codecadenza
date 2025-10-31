@@ -21,6 +21,9 @@
  */
 package net.codecadenza.eclipse.ui.dialog.testing.integration.panel;
 
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
 import net.codecadenza.eclipse.model.java.JavaType;
 import net.codecadenza.eclipse.model.mapping.MappingObject;
 import net.codecadenza.eclipse.model.testing.IntegrationMethodTestInvocation;
@@ -29,6 +32,7 @@ import net.codecadenza.eclipse.model.testing.IntegrationTestModule;
 import net.codecadenza.eclipse.model.testing.MethodInvocationParameter;
 import net.codecadenza.eclipse.model.testing.TestDataAttribute;
 import net.codecadenza.eclipse.model.testing.TestDataObject;
+import net.codecadenza.eclipse.shared.Constants;
 import net.codecadenza.eclipse.ui.dialog.testing.integration.attribute.AbstractTestDataAttributePanel;
 import net.codecadenza.eclipse.ui.dialog.testing.integration.attribute.TestDataAttributePanelData;
 import net.codecadenza.eclipse.ui.dialog.testing.integration.attribute.TestDataAttributePanelFactory;
@@ -79,8 +83,28 @@ public class ParametersPanel extends AbstractMethodPanel {
 		final var panParameters = new Composite(scrolledComposite, SWT.NONE);
 		panParameters.setLayout(new GridLayout(2, false));
 
-		for (final MethodInvocationParameter param : methodInvocation.getParameters()) {
+		final List<MethodInvocationParameter> sortedParameters = new ArrayList<>(methodInvocation.getParameters());
+		sortedParameters.sort(Comparator.comparingInt(param -> param.getType() == null ? 1 : 0));
+
+		for (final MethodInvocationParameter param : sortedParameters) {
 			final JavaType type = param.getType();
+
+			// Use the SearchInput type for parameters that have no type!
+			if (type == null) {
+				final var lblSearchInputParam = new Label(panParameters, SWT.NONE);
+				lblSearchInputParam.setText("Fields of parameter " + Constants.INTEGRATION_SEARCH_PARAM_TYPE + " " + param.getName());
+				lblSearchInputParam.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, false, 2, 1));
+				lblSearchInputParam.setForeground(Display.getCurrent().getSystemColor(SWT.COLOR_BLUE));
+
+				final MethodInvocationParameter parameter = methodInvocation.getParameters().getFirst();
+				final TestDataObject searchInputObject = parameter.getParameterValues().getFirst();
+
+				final var searchInputPanel = new SearchInputPanel(panParameters, testModule, testCase, methodInvocation,
+						searchInputObject);
+				searchInputPanel.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, 2, 1));
+
+				continue;
+			}
 
 			if (type instanceof final MappingObject mappingObject) {
 				final var label = new StringBuilder();

@@ -38,16 +38,13 @@ import net.codecadenza.eclipse.model.testing.TestDataAttribute;
 import net.codecadenza.eclipse.model.testing.TestDataObject;
 import net.codecadenza.eclipse.ui.dialog.testing.integration.attribute.AbstractTestDataAttributePanel;
 import net.codecadenza.eclipse.ui.dialog.testing.integration.util.AbstractTrackingAttributeDropListener;
-import org.eclipse.jface.resource.FontDescriptor;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.custom.ScrolledComposite;
 import org.eclipse.swt.dnd.DND;
 import org.eclipse.swt.dnd.DropTarget;
 import org.eclipse.swt.events.KeyAdapter;
 import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -115,40 +112,27 @@ public class SearchInputPanel extends Composite {
 	private void initPanel() {
 		setLayout(new FillLayout());
 
-		final var scrolledComposite = new ScrolledComposite(this, SWT.BORDER | SWT.V_SCROLL);
-		scrolledComposite.setExpandHorizontal(true);
-		scrolledComposite.setExpandVertical(true);
-		scrolledComposite.setAlwaysShowScrollBars(true);
-		scrolledComposite.setLayout(new FillLayout());
-
 		final var glFilter = new GridLayout(addSortOrder ? 4 : 3, false);
 		glFilter.horizontalSpacing = 2;
 		glFilter.verticalSpacing = 2;
 
 		// Composite for filter criteria
-		final var panFilter = new Composite(scrolledComposite, SWT.NONE);
+		final var panFilter = new Composite(this, SWT.NONE);
 		panFilter.setLayout(glFilter);
-
-		final FontDescriptor boldDescriptor = FontDescriptor.createFrom(getFont()).setStyle(SWT.BOLD);
-		final Font fontBold = boldDescriptor.createFont(getDisplay());
 
 		final var lblFieldTitle = new Label(panFilter, SWT.NONE);
 		lblFieldTitle.setText("Field");
-		lblFieldTitle.setFont(fontBold);
 
 		final var lblFieldOperator = new Label(panFilter, SWT.NONE);
 		lblFieldOperator.setText("Operator");
-		lblFieldOperator.setFont(fontBold);
 
 		if (addSortOrder) {
 			final var lblFieldSortOrder = new Label(panFilter, SWT.NONE);
 			lblFieldSortOrder.setText("Sort order");
-			lblFieldSortOrder.setFont(fontBold);
 		}
 
 		final var lblFilter = new Label(panFilter, SWT.NONE);
 		lblFilter.setText("Filter value");
-		lblFilter.setFont(fontBold);
 
 		for (final TestDataObject searchField : searchFieldsAttribute.getReferencedObjects()) {
 			final TestDataAttribute filterAttribute = searchField.getAttributeByName(ATTRIBUTE_NAME_FILTER_CRITERIA);
@@ -306,18 +290,6 @@ public class SearchInputPanel extends Composite {
 				addDropListener(txtField, filterAttribute);
 			}
 		}
-
-		panFilter.pack();
-
-		scrolledComposite.setContent(panFilter);
-		scrolledComposite.setMinSize(panFilter.computeSize(SWT.DEFAULT, SWT.DEFAULT));
-
-		// Dispose the font as soon as the shell is disposed
-		getShell().addDisposeListener(e -> {
-			if (!fontBold.isDisposed()) {
-				fontBold.dispose();
-			}
-		});
 	}
 
 	/**

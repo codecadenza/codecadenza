@@ -60,7 +60,6 @@ public class IntegrationTestInvocationPanel extends TestInvocationPanel {
 	private final IntegrationTestCase testCase;
 	private final IntegrationTestModule testModule;
 	private final IntegrationMethodTestInvocation methodInvocation;
-	private final AbstractIntegrationMethod integrationMethod;
 	private final BoundaryMethodTypeEnumeration methodType;
 	private TabFolder tabFolderMethod;
 	private TabItem tabItemReturnValue;
@@ -87,7 +86,6 @@ public class IntegrationTestInvocationPanel extends TestInvocationPanel {
 		this.testCase = testCase;
 		this.testModule = testModule;
 		this.methodInvocation = new IntegrationTestCaseService(testModule).initMethodInvocation(testCase, integrationMethod, null);
-		this.integrationMethod = methodInvocation.getIntegrationMethod();
 		this.methodInvocation.setTimeout(testModule.getDefaultTimeout());
 		this.methodType = integrationMethod.getBoundaryMethod().getMethodType();
 
@@ -108,8 +106,7 @@ public class IntegrationTestInvocationPanel extends TestInvocationPanel {
 		this.testCase = testCase;
 		this.testModule = testModule;
 		this.methodInvocation = testInvocation;
-		this.integrationMethod = testInvocation.getIntegrationMethod();
-		this.methodType = integrationMethod.getBoundaryMethod().getMethodType();
+		this.methodType = testInvocation.getIntegrationMethod().getBoundaryMethod().getMethodType();
 		this.editMode = true;
 
 		initPanel();
@@ -217,31 +214,22 @@ public class IntegrationTestInvocationPanel extends TestInvocationPanel {
 			tabItemPostProcessing.setControl(panPostProcessing);
 		}
 
-		final boolean searchInputOperation = methodType == BoundaryMethodTypeEnumeration.SEARCH
-				|| methodType == BoundaryMethodTypeEnumeration.COUNT;
+		final boolean addReturnValuePanel = !methodInvocation.isDownloadFile() && !methodInvocation.isReturnVoid()
+				&& !methodInvocation.isExpectToFail() && !methodInvocation.isExpectedReturnNull();
 
-		if (!integrationMethod.getMethodParameters().isEmpty() || !methodInvocation.isReturnVoid() || searchInputOperation) {
+		if (!methodInvocation.getParameters().isEmpty() || addReturnValuePanel) {
 			tabFolderMethod = new TabFolder(this, SWT.NONE);
 			tabFolderMethod.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 
-			if (!integrationMethod.getMethodParameters().isEmpty() || searchInputOperation) {
+			if (!methodInvocation.getParameters().isEmpty()) {
 				final var tabItemParameters = new TabItem(tabFolderMethod, SWT.NONE);
 				tabItemParameters.setText("Parameters");
 
-				if (searchInputOperation) {
-					final MethodInvocationParameter parameter = methodInvocation.getParameters().getFirst();
-					final TestDataObject searchInputObject = parameter.getParameterValues().getFirst();
-
-					tabItemParameters
-							.setControl(new SearchInputPanel(tabFolderMethod, testModule, testCase, methodInvocation, searchInputObject));
-				}
-				else {
-					panParameters = new ParametersPanel(tabFolderMethod, testModule, testCase, methodInvocation);
-					tabItemParameters.setControl(panParameters);
-				}
+				panParameters = new ParametersPanel(tabFolderMethod, testModule, testCase, methodInvocation);
+				tabItemParameters.setControl(panParameters);
 			}
 
-			if (!methodInvocation.isExpectToFail() && !methodInvocation.isExpectedReturnNull())
+			if (addReturnValuePanel)
 				addReturnValuePanel();
 		}
 	}
