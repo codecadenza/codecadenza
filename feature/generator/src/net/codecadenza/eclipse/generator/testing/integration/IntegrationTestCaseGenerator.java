@@ -214,31 +214,33 @@ public class IntegrationTestCaseGenerator extends AbstractJavaSourceGenerator {
 			for (final TestDataAttribute testDataAttribute : invocation.getTrackedAttributes()) {
 				final MappingAttribute mappingAttribute = testDataAttribute.getMappingAttribute();
 				final List<String> ids = invocation.getIdsOfTrackedAttributes(mappingAttribute);
-				String constantName;
+				String initialConstantName;
 				int counter = 0;
 
 				if (mappingAttribute != null)
-					constantName = "IDS_OF_FIELD_" + mappingAttribute.getName().toUpperCase();
+					initialConstantName = "IDS_OF_FIELD_" + mappingAttribute.getName().toUpperCase();
 				else
-					constantName = "IDS_OF_RETURN_VALUE";
+					initialConstantName = "IDS_OF_RETURN_VALUE";
+
+				String newConstantName = initialConstantName;
 
 				while (true) {
 					if (counter > 0)
-						constantName += "_" + counter;
+						newConstantName = initialConstantName + "_" + counter;
 
-					if (constantNames.contains(constantName)) {
+					if (constantNames.contains(newConstantName)) {
 						counter++;
 						continue;
 					}
 
-					constantNames.add(constantName);
+					constantNames.add(newConstantName);
 
 					invocationAttributes.computeIfAbsent(invocation, key -> new HashMap<>());
-					invocationAttributes.get(invocation).put(testDataAttribute, constantName);
+					invocationAttributes.get(invocation).put(testDataAttribute, newConstantName);
 					break;
 				}
 
-				attributeIds.put(constantName, ids.stream().map(id -> "\"" + id + "\"").collect(Collectors.joining(",")));
+				attributeIds.put(newConstantName, ids.stream().map(id -> "\"" + id + "\"").collect(Collectors.joining(",")));
 			}
 
 		for (final var constantName : constantNames) {
