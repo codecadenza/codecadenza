@@ -36,6 +36,7 @@ import net.codecadenza.eclipse.model.project.BuildArtifactType;
 import net.codecadenza.eclipse.model.project.WorkspaceFile;
 import net.codecadenza.eclipse.model.testing.AbstractTestModule;
 import org.eclipse.core.runtime.Path;
+import org.eclipse.jdt.core.IClasspathAttribute;
 import org.eclipse.jdt.core.IClasspathEntry;
 import org.eclipse.jdt.core.JavaCore;
 
@@ -98,11 +99,15 @@ public class IntegrationTestBuildModule extends AbstractBuildModule {
 	 */
 	@Override
 	public HashSet<IClasspathEntry> getClassPathEntries(String projectName) {
+		final IClasspathAttribute[] testAttributes = { JavaCore.newClasspathAttribute(TEST_ATTRIBUTE, Boolean.TRUE.toString()) };
+		final Path testSourcePath = new Path("/" + projectName + "/" + project.getTestSourceFolder());
+		final Path testTargetPath = new Path("/" + projectName + TEST_CLASSES_TARGET_PATH);
+
 		final var classPathEntries = new HashSet<IClasspathEntry>();
-		classPathEntries.add(JavaCore.newSourceEntry(new Path("/" + projectName + "/" + project.getTestSourceFolder())));
 		classPathEntries.add(JavaCore.newSourceEntry(new Path("/" + projectName + "/" + project.getTestResourceFolder())));
+		classPathEntries.add(JavaCore.newSourceEntry(testSourcePath, null, null, testTargetPath, testAttributes));
 		classPathEntries.add(JavaCore.newContainerEntry(new Path(CONT_PATH_MAVEN)));
-		classPathEntries.add(JavaCore.newContainerEntry(new Path(CONT_PATH_JUNIT)));
+		classPathEntries.add(JavaCore.newContainerEntry(new Path(CONT_PATH_JUNIT), null, testAttributes, false));
 
 		return classPathEntries;
 	}

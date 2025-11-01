@@ -53,6 +53,8 @@ import org.eclipse.jdt.core.JavaCore;
  */
 public abstract class AbstractBuildModule implements IBuildModule {
 	protected static final String BEANS_XML = "beans.xml";
+	protected static final String TEST_ATTRIBUTE = "test";
+	protected static final String TEST_CLASSES_TARGET_PATH = "/target/test-classes";
 
 	protected Project project;
 	protected BuildArtifact buildArtifact;
