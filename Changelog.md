@@ -12,6 +12,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 2025-10-19: Add support for converting values with primitive types in the ValueConverter class
 
 ### Changed
+2025-11-02: Do not return a value if a generated Kafka integration method has no response schema
 2025-10-31: Make list DTO attributes optional if they are not used for setting the reference in generated Avro IDL files
 2025-10-28: Improve handling of optional parameter filter values in generated unique key methods
 2025-10-26: Initialize unique key repository method parameters that are mapped to an association using the type of the primary key
