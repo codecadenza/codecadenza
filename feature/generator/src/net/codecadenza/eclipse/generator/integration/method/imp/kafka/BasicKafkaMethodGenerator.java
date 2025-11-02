@@ -282,12 +282,13 @@ public class BasicKafkaMethodGenerator extends AbstractIntegrationMethodGenerato
 	 */
 	public String getClientSignature(boolean waitForResponse, boolean addQualifier, boolean generateFullSignature) {
 		final var b = new StringBuilder();
-		final String returnType = method.getReturnType().getName();
 
 		if (addQualifier)
 			b.append("public ");
 
-		if (waitForResponse) {
+		if (waitForResponse && hasResponseSchema) {
+			final String returnType = method.getReturnType().getName();
+
 			if (method.getReturnTypeModifier() != JavaTypeModifierEnumeration.NONE)
 				b.append(method.getReturnTypeModifier().getName() + "<" + returnType + ">");
 			else
@@ -709,18 +710,13 @@ public class BasicKafkaMethodGenerator extends AbstractIntegrationMethodGenerato
 			}
 			else {
 				b.append("if(response.getCode() == ResponseCode.SUCCESS)\n");
-
-				if (!kafkaMethod.getReturnType().isVoid())
-					b.append("return null;\n\n");
-				else
-					b.append("return;\n\n");
-
+				b.append("return;\n\n");
 				b.append("throw new RemoteOperationException(response.getMessage());\n");
 			}
 
 			b.append("}\n");
 
-			if (!kafkaMethod.getReturnType().isVoid()) {
+			if (hasResponseSchema && !kafkaMethod.getReturnType().isVoid()) {
 				b.append("\n");
 				b.append("return " + kafkaMethod.getReturnType().getLocalVariableDefaultValue() + ";\n");
 			}

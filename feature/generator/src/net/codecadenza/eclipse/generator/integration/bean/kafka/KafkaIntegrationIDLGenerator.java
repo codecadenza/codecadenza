@@ -437,7 +437,8 @@ public class KafkaIntegrationIDLGenerator extends AbstractContentFormatter {
 	private Set<DTOBean> collectDataTransferObjects(KafkaIntegrationMethod method) {
 		final var dtoSet = new HashSet<DTOBean>();
 
-		if (method.getReturnType() instanceof final DTOBean dto)
+		if (method.getResponseSchemaName() != null && !method.getResponseSchemaName().isEmpty()
+				&& method.getReturnType() instanceof final DTOBean dto)
 			dtoSet.add(dto);
 
 		dtoSet.addAll(method.getMethodParameters().stream().map(MethodParameter::getType).filter(DTOBean.class::isInstance)
