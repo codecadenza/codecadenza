@@ -1145,7 +1145,7 @@ public class IntegrationMethodTestInvocationImpl extends EObjectImpl implements 
 		if (getIntegrationMethod() instanceof final KafkaIntegrationMethod kafkaIntegrationMethod)
 			return kafkaIntegrationMethod.isSendResponse();
 
-		if (getIntegrationMethod() instanceof final JMSIntegrationMethod jmsIntegrationMethod)
+		if (getIntegrationMethod() instanceof final JMSIntegrationMethod jmsIntegrationMethod && getTimeout() != null)
 			return jmsIntegrationMethod.isSendResponse();
 
 		return false;

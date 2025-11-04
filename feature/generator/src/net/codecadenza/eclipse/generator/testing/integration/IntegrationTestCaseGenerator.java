@@ -572,7 +572,7 @@ public class IntegrationTestCaseGenerator extends AbstractJavaSourceGenerator {
 
 			if (integrationTechnology == IntegrationTechnology.KAFKA)
 				parameterList += "true";
-			else if (integrationTechnology == IntegrationTechnology.JMS && methodInvocation.getTimeout() != null)
+			else if (integrationTechnology == IntegrationTechnology.JMS)
 				parameterList += "invocation.getTimeout()";
 		}
 
