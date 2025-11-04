@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+2025-11-04: Add support for converting values of type Instant in the ValueConverter
 2025-10-21: Log the generated JPA query parameters and their values
 2025-10-19: Add support for converting values with primitive types in the ValueConverter class
 

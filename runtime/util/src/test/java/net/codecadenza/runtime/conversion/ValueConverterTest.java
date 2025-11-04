@@ -28,6 +28,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.math.BigDecimal;
+import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -71,7 +72,7 @@ class ValueConverterTest {
 	private static final BigDecimal TEST_BIG_DECIMAL = BigDecimal.valueOf(123.45678);
 	private static final String TEST_BIG_DECIMAL_STRING = "123.45678";
 	private static final String TEST_BOOLEAN_STRING = "true";
-	private static final String TEST_DATE_STRING = "2025-01-01 12:00:00";
+	private static final String TEST_DATE_STRING = "2025-01-01 10:11:12";
 	private static final String TEST_LOCAL_DATE_STRING = "2025-01-01";
 	private static final String TEST_UUID_STRING = "123e4567-e89b-12d3-a456-426655440000";
 	private static final String TEST_INVALID_INTEGER = "abc";
@@ -336,6 +337,20 @@ class ValueConverterTest {
 	}
 
 	@Test
+	void testInstantConversion() {
+		final var converter = new ValueConverter<>(null, DATE_TIME_FORMAT, null, Instant.class);
+		final var dateTimeFormat = DateTimeFormatter.ofPattern(DATE_TIME_FORMAT).withZone(ZoneId.systemDefault());
+		final var expectedValue = Instant.from(dateTimeFormat.parse(TEST_DATE_STRING));
+		final Instant convertedValue = converter.convertToValue(TEST_DATE_STRING);
+
+		assertEquals(expectedValue, convertedValue);
+
+		final String convertedString = converter.convertToString(convertedValue);
+
+		assertEquals(TEST_DATE_STRING, convertedString);
+	}
+
+	@Test
 	void testLocalDateConversion() {
 		final var converter = new ValueConverter<>(null, null, DATE_FORMAT, LocalDate.class);
 		final var dateFormat = DateTimeFormatter.ofPattern(DATE_FORMAT).withZone(ZoneId.systemDefault());
@@ -422,6 +437,14 @@ class ValueConverterTest {
 	@Test
 	void testGetInitialDefaultLocalDateValue() {
 		final var converter = new ValueConverter<>(null, null, DATE_FORMAT, LocalDate.class);
+		final String convertedValue = converter.getInitialDefaultValue();
+
+		assertNotNull(convertedValue);
+	}
+
+	@Test
+	void testGetInitialDefaultInstantValue() {
+		final var converter = new ValueConverter<>(null, DATE_TIME_FORMAT, null, Instant.class);
 		final String convertedValue = converter.getInitialDefaultValue();
 
 		assertNotNull(convertedValue);

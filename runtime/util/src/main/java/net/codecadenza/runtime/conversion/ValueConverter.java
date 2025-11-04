@@ -186,6 +186,11 @@ public class ValueConverter<T> {
 
 				value = Date.from(zonedDateTime.toInstant());
 			}
+			else if (type.equals(Instant.class)) {
+				final TemporalAccessor temporalValue = dateTimeFormat.parse(string);
+
+				value = Instant.from(temporalValue);
+			}
 			else if (type.equals(GregorianCalendar.class)) {
 				final TemporalAccessor temporalValue = dateTimeFormat.parse(string);
 				final ZonedDateTime zonedDateTime = LocalDateTime.from(temporalValue).atZone(ZoneId.systemDefault());
@@ -248,6 +253,8 @@ public class ValueConverter<T> {
 			return dateTimeFormat.format((LocalDateTime) value);
 		else if (type.equals(Date.class))
 			return dateTimeFormat.format(Instant.ofEpochMilli(((Date) value).getTime()));
+		else if (type.equals(Instant.class))
+			return dateTimeFormat.format((Instant) value);
 		else if (type.equals(GregorianCalendar.class))
 			return dateTimeFormat.format(Instant.ofEpochMilli(((GregorianCalendar) value).getTimeInMillis()));
 		else if (type.equals(LocalDate.class))
@@ -261,7 +268,8 @@ public class ValueConverter<T> {
 	 * @return the initial default value
 	 */
 	public String getInitialDefaultValue() {
-		if (type.equals(Date.class) || type.equals(GregorianCalendar.class) || type.equals(LocalDateTime.class))
+		if (type.equals(Date.class) || type.equals(GregorianCalendar.class) || type.equals(LocalDateTime.class)
+				|| type.equals(Instant.class))
 			return dateTimeFormat.format(Instant.now());
 		else if (type.equals(LocalDate.class))
 			return dateFormat.format(Instant.now());
