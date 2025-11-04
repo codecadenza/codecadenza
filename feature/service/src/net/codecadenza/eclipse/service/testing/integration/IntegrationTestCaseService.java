@@ -153,6 +153,7 @@ public class IntegrationTestCaseService {
 			AbstractIntegrationMethod integrationMethod, IntegrationMethodTestInvocation parentInvocation) {
 		final BoundaryMethod boundaryMethod = integrationMethod.getBoundaryMethod();
 		final BoundaryMethodTypeEnumeration methodType = boundaryMethod.getMethodType();
+		boolean searchTrackingAttribute = true;
 
 		final IntegrationMethodTestInvocation invocation = TestingFactory.eINSTANCE.createIntegrationMethodTestInvocation();
 		invocation.setIntegrationMethod(integrationMethod);
@@ -186,7 +187,11 @@ public class IntegrationTestCaseService {
 
 				// Just search for a tracking attribute if the method returns void in order to prevent adding the same tracking attribute
 				// twice for the same method!
-				testObject = initTestObject(paramType, boundaryMethod, invocation.isReturnVoid(), true);
+				testObject = initTestObject(paramType, boundaryMethod, invocation.isReturnVoid() && searchTrackingAttribute, true);
+
+				// In the case of initial one-to-many associations there might be more than one tracking attribute but this is not
+				// supported as only one database statement can be executed per test invocation!
+				searchTrackingAttribute = testObject.getAttributes().stream().noneMatch(TestDataAttribute::isTrackValue);
 			}
 
 			if (methodType == BoundaryMethodTypeEnumeration.FIND_BY_ID || methodType == BoundaryMethodTypeEnumeration.COPY
@@ -206,8 +211,12 @@ public class IntegrationTestCaseService {
 
 		// Do not initialize a test data object if the method returns a list!
 		if (!invocation.isDownloadFile() && !invocation.isReturnVoid()
-				&& integrationMethod.getReturnTypeModifier() == JavaTypeModifierEnumeration.NONE)
-			invocation.getReturnValues().add(initTestObject(integrationMethod.getReturnType(), boundaryMethod, true, false));
+				&& integrationMethod.getReturnTypeModifier() == JavaTypeModifierEnumeration.NONE) {
+			final TestDataObject returnObject = initTestObject(integrationMethod.getReturnType(), boundaryMethod,
+					searchTrackingAttribute, false);
+
+			invocation.getReturnValues().add(returnObject);
+		}
 
 		if (invocation.isReturnVoid() && !invocation.getTrackedAttributes().isEmpty())
 			addPostProcessingStatement(invocation);
@@ -346,8 +355,16 @@ public class IntegrationTestCaseService {
 	private boolean isTrackAttribute(MappingAttribute mappingAttribute, BoundaryMethod boundaryMethod) {
 		final BoundaryMethodTypeEnumeration methodType = boundaryMethod.getMethodType();
 		final DomainAttribute domainAttribute = mappingAttribute.getDomainAttribute();
+		final DomainObject boundaryDomainObject = boundaryMethod.getBoundaryBean().getDomainObject();
+		DomainObject attributeDomainObject = null;
 
-		if (domainAttribute != null && domainAttribute.isPk() && mappingAttribute.getAssociation() == null
+		if (mappingAttribute instanceof final DTOBeanAttribute dtoAttribute)
+			attributeDomainObject = dtoAttribute.getDTOBean().getDomainObject();
+		else if (mappingAttribute instanceof final ExchangeMappingAttribute exchangeAttribute)
+			attributeDomainObject = exchangeAttribute.getExchangeMappingObject().getDomainObject();
+
+		if (boundaryDomainObject.equals(attributeDomainObject) && domainAttribute != null && domainAttribute.isPk()
+				&& mappingAttribute.getAssociation() == null
 				&& (methodType == BoundaryMethodTypeEnumeration.CREATE || methodType == BoundaryMethodTypeEnumeration.SAVE
 						|| (methodType == BoundaryMethodTypeEnumeration.UPLOAD_IMPORT
 								&& boundaryMethod.getServiceMethod() instanceof final DataExchangeMethod exchangeMethod
