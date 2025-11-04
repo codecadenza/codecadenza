@@ -458,7 +458,7 @@ public class EditIntegrationTestCaseDialog extends CodeCadenzaTitleAreaDialog {
 	 */
 	private void initInvocationButtonBar() {
 		panButtons = new Composite(groupInvocation, SWT.NONE);
-		panButtons.setLayout(new GridLayout(2, false));
+		panButtons.setLayout(new GridLayout(3, false));
 		panButtons.setLayoutData(new GridData(SWT.FILL, SWT.BOTTOM, true, false));
 
 		final var gdButton = new GridData(SWT.CENTER, SWT.CENTER, false, false);
@@ -487,6 +487,24 @@ public class EditIntegrationTestCaseDialog extends CodeCadenzaTitleAreaDialog {
 				setMessage("Invocation saved successfully");
 				disposeInvocation(true);
 				treeInvocations.refreshTree();
+			}
+		});
+
+		final var cmdRandomValues = new Button(panButtons, SWT.PUSH);
+		cmdRandomValues.setLayoutData(gdButton);
+		cmdRandomValues.setText("Random");
+
+		cmdRandomValues.addSelectionListener(new SelectionAdapter() {
+			/*
+			 * (non-Javadoc)
+			 * @see org.eclipse.swt.events.SelectionAdapter#widgetSelected(org.eclipse.swt.events.SelectionEvent)
+			 */
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				panActualInvocation.generateRandomValues();
+
+				setErrorMessage(null);
+				setMessage("Random values generated");
 			}
 		});
 

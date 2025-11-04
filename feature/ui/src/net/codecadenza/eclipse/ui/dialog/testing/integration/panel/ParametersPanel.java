@@ -197,4 +197,11 @@ public class ParametersPanel extends AbstractMethodPanel {
 		scrolledComposite.setMinSize(panParameters.computeSize(SWT.DEFAULT, SWT.DEFAULT));
 	}
 
+	/**
+	 * Generate random values
+	 */
+	public void generateRandomValues() {
+		testDataAttributePanels.forEach(AbstractTestDataAttributePanel::onRequestRandomValue);
+	}
+
 }

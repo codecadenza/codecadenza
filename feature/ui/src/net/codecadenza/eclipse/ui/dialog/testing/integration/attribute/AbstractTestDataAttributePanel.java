@@ -113,6 +113,13 @@ public abstract class AbstractTestDataAttributePanel extends Composite {
 	}
 
 	/**
+	 * A subclass can define how to set a random value
+	 */
+	public void onRequestRandomValue() {
+
+	}
+
+	/**
 	 * Set the layout
 	 */
 	protected void initPanel() {

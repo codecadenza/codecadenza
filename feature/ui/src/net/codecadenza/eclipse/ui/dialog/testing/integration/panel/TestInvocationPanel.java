@@ -49,4 +49,9 @@ public abstract class TestInvocationPanel extends Composite {
 	 */
 	public abstract String validateAndApplyInput();
 
+	/**
+	 * Generate random values
+	 */
+	public abstract void generateRandomValues();
+
 }

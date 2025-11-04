@@ -24,6 +24,7 @@ package net.codecadenza.eclipse.ui.dialog.testing.integration.attribute;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.text.ParseException;
+import java.util.concurrent.ThreadLocalRandom;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Text;
@@ -101,6 +102,20 @@ public class DecimalTestDataAttributePanel extends AbstractTestDataAttributePane
 		}
 
 		testDataAttribute.setValue(txtValue.getText());
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see net.codecadenza.eclipse.ui.dialog.testing.integration.attribute.AbstractTestDataAttributePanel#onRequestRandomValue()
+	 */
+	@Override
+	public void onRequestRandomValue() {
+		if (!txtValue.getText().isEmpty())
+			return;
+
+		final double randomValue = ThreadLocalRandom.current().nextDouble(0.0, 1000.0);
+
+		txtValue.setText(decimalFormat.format(randomValue));
 	}
 
 	/*

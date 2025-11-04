@@ -21,9 +21,12 @@
  */
 package net.codecadenza.eclipse.ui.dialog.testing.integration.attribute;
 
+import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
+import java.util.concurrent.ThreadLocalRandom;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Text;
@@ -102,6 +105,23 @@ public class DateTestDataAttributePanel extends AbstractTestDataAttributePanel {
 		}
 
 		testDataAttribute.setValue(txtValue.getText());
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see net.codecadenza.eclipse.ui.dialog.testing.integration.attribute.AbstractTestDataAttributePanel#onRequestRandomValue()
+	 */
+	@Override
+	public void onRequestRandomValue() {
+		if (!txtValue.getText().isEmpty())
+			return;
+
+		// Create a random date from last year, starting from today
+		final long end = LocalDateTime.now().toEpochSecond(ZoneOffset.UTC);
+		final long start = LocalDateTime.now().minusDays(356).toEpochSecond(ZoneOffset.UTC);
+		final long randomValue = ThreadLocalRandom.current().nextLong(start, end);
+
+		txtValue.setText(formatter.format(LocalDateTime.ofEpochSecond(randomValue, 0, ZoneOffset.UTC)));
 	}
 
 	/*

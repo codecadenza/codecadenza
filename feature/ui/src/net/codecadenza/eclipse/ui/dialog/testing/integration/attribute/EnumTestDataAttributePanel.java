@@ -21,6 +21,7 @@
  */
 package net.codecadenza.eclipse.ui.dialog.testing.integration.attribute;
 
+import java.util.concurrent.ThreadLocalRandom;
 import net.codecadenza.eclipse.model.java.JavaEnum;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Combo;
@@ -84,6 +85,21 @@ public class EnumTestDataAttributePanel extends AbstractTestDataAttributePanel {
 			testDataAttribute.setValue(null);
 		else
 			testDataAttribute.setValue(cboEnum.getItem(selectionIndex));
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see net.codecadenza.eclipse.ui.dialog.testing.integration.attribute.AbstractTestDataAttributePanel#onRequestRandomValue()
+	 */
+	@Override
+	public void onRequestRandomValue() {
+		if (cboEnum.getItemCount() <= 1 || cboEnum.getSelectionIndex() != -1)
+			return;
+
+		// Take an item starting from index 1 so that the default empty item won't we selected
+		final int randomValue = ThreadLocalRandom.current().nextInt(1, cboEnum.getItemCount());
+
+		cboEnum.select(randomValue);
 	}
 
 	/*

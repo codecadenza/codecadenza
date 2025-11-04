@@ -133,4 +133,17 @@ public class UUIDTestDataAttributePanel extends AbstractTestDataAttributePanel {
 			txtValue.setText("");
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * @see net.codecadenza.eclipse.ui.dialog.testing.integration.attribute.AbstractTestDataAttributePanel#onRequestRandomValue()
+	 */
+	@Override
+	public void onRequestRandomValue() {
+		if (testDataAttribute.isTrackValue() || (testDataAttribute.getMappingAttribute() != null
+				&& testDataAttribute.getMappingAttribute().getDomainAttribute().isPk()) || !txtValue.getText().isEmpty())
+			return;
+
+		txtValue.setText(UUID.randomUUID().toString());
+	}
+
 }

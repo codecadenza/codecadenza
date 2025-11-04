@@ -21,6 +21,7 @@
  */
 package net.codecadenza.eclipse.ui.dialog.testing.integration.attribute;
 
+import java.util.concurrent.ThreadLocalRandom;
 import net.codecadenza.eclipse.model.domain.DomainObject;
 import net.codecadenza.eclipse.model.testing.TestDataAttribute;
 import org.eclipse.swt.SWT;
@@ -99,6 +100,21 @@ public class IntegerTestDataAttributePanel extends AbstractTestDataAttributePane
 		}
 
 		testDataAttribute.setValue(txtValue.getText());
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see net.codecadenza.eclipse.ui.dialog.testing.integration.attribute.AbstractTestDataAttributePanel#onRequestRandomValue()
+	 */
+	@Override
+	public void onRequestRandomValue() {
+		if (testDataAttribute.isTrackValue() || (testDataAttribute.getMappingAttribute() != null
+				&& testDataAttribute.getMappingAttribute().getDomainAttribute().isPk()) || !txtValue.getText().isEmpty())
+			return;
+
+		final int randomValue = ThreadLocalRandom.current().nextInt(1, 1000);
+
+		txtValue.setText(Integer.toString(randomValue));
 	}
 
 	/*

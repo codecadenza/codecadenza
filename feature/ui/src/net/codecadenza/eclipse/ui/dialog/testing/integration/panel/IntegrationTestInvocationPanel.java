@@ -112,6 +112,15 @@ public class IntegrationTestInvocationPanel extends TestInvocationPanel {
 		initPanel();
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * @see net.codecadenza.eclipse.ui.dialog.testing.integration.panel.TestInvocationPanel#generateRandomValues()
+	 */
+	@Override
+	public void generateRandomValues() {
+		panParameters.generateRandomValues();
+	}
+
 	/**
 	 * Initialize the panel
 	 */

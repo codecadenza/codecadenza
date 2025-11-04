@@ -89,6 +89,16 @@ public class BooleanTestDataAttributePanel extends AbstractTestDataAttributePane
 
 	/*
 	 * (non-Javadoc)
+	 * @see net.codecadenza.eclipse.ui.dialog.testing.integration.attribute.AbstractTestDataAttributePanel#onRequestRandomValue()
+	 */
+	@Override
+	public void onRequestRandomValue() {
+		// Just select the checkbox
+		chkValue.setSelection(true);
+	}
+
+	/*
+	 * (non-Javadoc)
 	 * @see net.codecadenza.eclipse.ui.dialog.testing.integration.attribute.AbstractTestDataAttributePanel#
 	 * onSelectedOperatorChanged()
 	 */
