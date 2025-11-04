@@ -727,16 +727,23 @@ public class IntegrationTestCaseGenerator extends AbstractJavaSourceGenerator {
 		final var b = new StringBuilder();
 
 		if (methodInvocation.getExpectedSize() != null) {
-			String expression = actualResultList + ".";
+			if (project.isSpringBootApplication() && integrationTechnology == IntegrationTechnology.SOAP
+					&& methodInvocation.getExpectedSize() == 0) {
+				// When using Spring Boot, SOAP returns null instead of an empty list!
+				b.append(addAssertThatWithNullCheck(actualResultList, AssertionOperator.IS_NULL));
+			}
+			else {
+				String expression = actualResultList + ".";
 
-			if (methodInvocation.getIntegrationMethod().getIntegrationBean().getIntegrationTechnology() == IntegrationTechnology.SOAP)
-				expression += "length";
-			else
-				expression += "size()";
+				if (integrationTechnology == IntegrationTechnology.SOAP)
+					expression += "length";
+				else
+					expression += "size()";
 
-			b.append(addAssertThat(expression));
-			b.append(convertOperatorToMethod(methodInvocation.getExpectedSizeOperator()));
-			b.append("(invocation.getExpectedSize());\n");
+				b.append(addAssertThat(expression));
+				b.append(convertOperatorToMethod(methodInvocation.getExpectedSizeOperator()));
+				b.append("(invocation.getExpectedSize());\n");
+			}
 		}
 
 		if (methodInvocation.getReturnValues().isEmpty())
