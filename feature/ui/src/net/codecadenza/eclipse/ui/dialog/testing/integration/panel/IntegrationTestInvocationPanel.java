@@ -277,7 +277,7 @@ public class IntegrationTestInvocationPanel extends TestInvocationPanel {
 			if (expectToFail)
 				methodInvocation.setExpectToFail(false);
 
-			if (!methodInvocation.getTrackedAttributes().isEmpty()) {
+			if (methodInvocation.getTrackedAttribute() != null) {
 				txtCommand.setFocus();
 				validationMessage = "Tracking of generated values requires a post-processing command!";
 			}

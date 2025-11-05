@@ -218,7 +218,7 @@ public class IntegrationTestCaseService {
 			invocation.getReturnValues().add(returnObject);
 		}
 
-		if (invocation.isReturnVoid() && !invocation.getTrackedAttributes().isEmpty())
+		if (invocation.isReturnVoid() && invocation.getTrackedAttribute() != null)
 			addPostProcessingStatement(invocation);
 
 		return invocation;
@@ -403,37 +403,31 @@ public class IntegrationTestCaseService {
 	 */
 	private void initReferencedAttribute(IntegrationTestCase testCase, IntegrationMethodTestInvocation methodInvocation,
 			TestDataAttribute testDataAttribute, IntegrationMethodTestInvocation parentInvocation) {
+		final DomainObject invocationDomainObject = methodInvocation.getIntegrationMethod().getIntegrationBean().getDomainObject();
+
 		final List<IntegrationMethodTestInvocation> invocations = new ArrayList<>(testCase.getMethodInvocations());
 		invocations.add(methodInvocation);
 
 		// Search for previous invocations that track the respective attribute
 		for (final IntegrationMethodTestInvocation previousInvocation : invocations) {
-			for (final TestDataAttribute trackedAttribute : previousInvocation.getTrackedAttributes()) {
-				if (methodInvocation.getIntegrationMethod().getIntegrationBean().getDomainObject()
-						.equals(previousInvocation.getIntegrationMethod().getIntegrationBean().getDomainObject())
-						&& trackedAttribute.getMappingAttribute() != null
-						&& trackedAttribute.getMappingAttribute().getDomainAttribute().isPk()) {
+			final TestDataAttribute trackedAttribute = previousInvocation.getTrackedAttribute();
+			final DomainObject previousDomainObject = previousInvocation.getIntegrationMethod().getIntegrationBean().getDomainObject();
 
-					if (parentInvocation != null) {
-						// Try to bind the generated values in the "correct" order in subsequent invocations
-						final int index = parentInvocation.getNestedInvocations().size();
+			if (trackedAttribute != null && invocationDomainObject.equals(previousDomainObject)) {
+				if (parentInvocation != null) {
+					// Try to bind the generated values in the "correct" order in subsequent invocations
+					final int index = parentInvocation.getNestedInvocations().size();
 
-						if (index <= previousInvocation.getNestedInvocations().size() - 1) {
-							final IntegrationMethodTestInvocation nestedInvocation = previousInvocation.getNestedInvocations().get(index);
+					if (index <= previousInvocation.getNestedInvocations().size() - 1) {
+						final IntegrationMethodTestInvocation nestedInvocation = previousInvocation.getNestedInvocations().get(index);
 
-							for (final TestDataAttribute attribute : nestedInvocation.getTrackedAttributes()) {
-								if (trackedAttribute.getMappingAttribute().equals(attribute.getMappingAttribute())) {
-									testDataAttribute.setReferencedAttribute(attribute);
-									return;
-								}
-							}
-						}
+						testDataAttribute.setReferencedAttribute(nestedInvocation.getTrackedAttribute());
 					}
-					else
-						testDataAttribute.setReferencedAttribute(trackedAttribute);
-
-					return;
 				}
+				else
+					testDataAttribute.setReferencedAttribute(trackedAttribute);
+
+				return;
 			}
 		}
 	}

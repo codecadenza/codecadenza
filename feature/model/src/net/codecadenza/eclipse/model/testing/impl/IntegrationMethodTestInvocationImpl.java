@@ -906,28 +906,26 @@ public class IntegrationMethodTestInvocationImpl extends EObjectImpl implements 
 
 	/*
 	 * (non-Javadoc)
-	 * @see net.codecadenza.eclipse.model.testing.IntegrationMethodTestInvocation#getTrackedAttributes()
+	 * @see net.codecadenza.eclipse.model.testing.IntegrationMethodTestInvocation#getTrackedAttribute()
 	 * @generated not
 	 */
 	@Override
-	public List<TestDataAttribute> getTrackedAttributes() {
-		final List<TestDataAttribute> trackedAttributes = new ArrayList<>();
-
+	public TestDataAttribute getTrackedAttribute() {
 		if (isExpectToFail())
-			return trackedAttributes;
+			return null;
 
 		for (final TestDataObject testObject : getReturnValues())
 			for (final TestDataAttribute attribute : testObject.getAttributes())
 				if (attribute.getValue() == null && attribute.isTrackValue())
-					trackedAttributes.add(attribute);
+					return attribute;
 
 		for (final MethodInvocationParameter parameter : getParameters())
 			for (final TestDataObject testObject : parameter.getParameterValues())
 				for (final TestDataAttribute attribute : testObject.getAttributes())
 					if (attribute.getValue() == null && attribute.isTrackValue())
-						trackedAttributes.add(attribute);
+						return attribute;
 
-		return trackedAttributes;
+		return null;
 	}
 
 	/*
@@ -963,14 +961,18 @@ public class IntegrationMethodTestInvocationImpl extends EObjectImpl implements 
 		invocations.add(this);
 		invocations.addAll(getNestedInvocations());
 
-		for (final IntegrationMethodTestInvocation invocation : invocations)
-			for (final TestDataAttribute testDataAttribute : invocation.getTrackedAttributes())
+		for (final IntegrationMethodTestInvocation invocation : invocations) {
+			final TestDataAttribute trackedAttribute = invocation.getTrackedAttribute();
+
+			if (trackedAttribute != null) {
 				if (mappingAttribute == null) {
-					if (testDataAttribute.getMappingAttribute() == null)
-						ids.add(testDataAttribute.getId());
+					if (trackedAttribute.getMappingAttribute() == null)
+						ids.add(trackedAttribute.getId());
 				}
-				else if (mappingAttribute.equals(testDataAttribute.getMappingAttribute()))
-					ids.add(testDataAttribute.getId());
+				else if (mappingAttribute.equals(trackedAttribute.getMappingAttribute()))
+					ids.add(trackedAttribute.getId());
+			}
+		}
 
 		return ids;
 	}

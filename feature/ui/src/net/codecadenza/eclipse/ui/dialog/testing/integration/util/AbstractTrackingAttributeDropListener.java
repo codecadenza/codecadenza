@@ -152,10 +152,9 @@ public abstract class AbstractTrackingAttributeDropListener {
 				if (nestedIndexOfTrackingInvocation != -1)
 					trackingInvocation = trackingInvocation.getNestedInvocations().get(nestedIndexOfTrackingInvocation);
 
-				final TestDataAttribute trackedAttribute = trackingInvocation.getTrackedAttributes().stream()
-						.filter(a -> id.equals(a.getId())).findFirst().orElse(null);
+				final TestDataAttribute trackedAttribute = trackingInvocation.getTrackedAttribute();
 
-				if (trackedAttribute != null)
+				if (trackedAttribute != null && trackedAttribute.getId().equals(id))
 					onTrackingAttributeReceived(domainObject, trackedAttribute);
 			}
 		});

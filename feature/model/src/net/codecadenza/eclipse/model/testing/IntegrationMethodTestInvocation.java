@@ -296,10 +296,10 @@ public interface IntegrationMethodTestInvocation extends EObject {
 	boolean isReturnVoid();
 
 	/**
-	 * @return the list with all attributes that should be tracked
+	 * @return the tracked attribute or null if no tracking attribute exists
 	 * @generated not
 	 */
-	List<TestDataAttribute> getTrackedAttributes();
+	TestDataAttribute getTrackedAttribute();
 
 	/**
 	 * @return the list with all attributes of this method invocation

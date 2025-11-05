@@ -210,9 +210,11 @@ public class IntegrationTestCaseGenerator extends AbstractJavaSourceGenerator {
 		final Set<String> constantNames = new HashSet<>();
 		final Map<String, String> attributeIds = new HashMap<>();
 
-		for (final IntegrationMethodTestInvocation invocation : testCase.getMethodInvocations())
-			for (final TestDataAttribute testDataAttribute : invocation.getTrackedAttributes()) {
-				final MappingAttribute mappingAttribute = testDataAttribute.getMappingAttribute();
+		for (final IntegrationMethodTestInvocation invocation : testCase.getMethodInvocations()) {
+			final TestDataAttribute trackedAttribute = invocation.getTrackedAttribute();
+
+			if (trackedAttribute != null) {
+				final MappingAttribute mappingAttribute = trackedAttribute.getMappingAttribute();
 				final List<String> ids = invocation.getIdsOfTrackedAttributes(mappingAttribute);
 				String initialConstantName;
 				int counter = 0;
@@ -236,12 +238,13 @@ public class IntegrationTestCaseGenerator extends AbstractJavaSourceGenerator {
 					constantNames.add(newConstantName);
 
 					invocationAttributes.computeIfAbsent(invocation, key -> new HashMap<>());
-					invocationAttributes.get(invocation).put(testDataAttribute, newConstantName);
+					invocationAttributes.get(invocation).put(trackedAttribute, newConstantName);
 					break;
 				}
 
 				attributeIds.put(newConstantName, ids.stream().map(id -> "\"" + id + "\"").collect(Collectors.joining(",")));
 			}
+		}
 
 		for (final var constantName : constantNames) {
 			final String constantValue = "new LinkedList<>(List.of(" + attributeIds.get(constantName) + "))";
@@ -589,7 +592,7 @@ public class IntegrationTestCaseGenerator extends AbstractJavaSourceGenerator {
 		final AbstractIntegrationMethod integrationMethod = methodInvocation.getIntegrationMethod();
 
 		if (methodInvocation.isReturnVoid() && invocationAttributes.containsKey(methodInvocation)
-				&& !methodInvocation.getTrackedAttributes().isEmpty()) {
+				&& methodInvocation.getTrackedAttribute() != null) {
 			// Execute the given statement and inject the generated primary key value into the test data
 			final MappingObject mappingObject = (MappingObject) integrationMethod.getBoundaryMethod().getFirstParameter(true).getType();
 			final MappingAttribute pkAttr;
@@ -603,8 +606,7 @@ public class IntegrationTestCaseGenerator extends AbstractJavaSourceGenerator {
 
 			final JavaType pkType = pkAttr.getDomainAttribute().getJavaType();
 			final String pkTypeName = pkType.getName();
-			final String idConstant = invocationAttributes.get(methodInvocation)
-					.get(methodInvocation.getTrackedAttributes().getFirst());
+			final String idConstant = invocationAttributes.get(methodInvocation).get(methodInvocation.getTrackedAttribute());
 
 			if (pkType.getNamespace() != null)
 				importPackage(pkType.getNamespace().toString());
@@ -682,20 +684,19 @@ public class IntegrationTestCaseGenerator extends AbstractJavaSourceGenerator {
 		if (methodInvocation.isReturnVoid())
 			return b.toString();
 
-		for (final TestDataAttribute testDataAttribute : methodInvocation.getTrackedAttributes()) {
-			final JavaType attributeType = testDataAttribute.getJavaType();
-			final String constantName = invocationAttributes.get(methodInvocation).get(testDataAttribute);
+		final TestDataAttribute trackedAttribute = methodInvocation.getTrackedAttribute();
+
+		if (trackedAttribute != null) {
+			final JavaType attributeType = trackedAttribute.getJavaType();
+			final String constantName = invocationAttributes.get(methodInvocation).get(trackedAttribute);
 
 			if (!attributeType.isPrimitive() && attributeType.getNamespace() != null)
 				importClass(attributeType.getNamespace().toString() + "." + attributeType.getName());
 
 			b.append("testDataProvider.setGeneratedFieldValue(UUID.fromString(" + constantName + ".poll()), ");
 			b.append(ACTUAL_RESULT_OBJECT);
-
-			if (testDataAttribute.getMappingAttribute() != null)
-				b.append("." + testDataAttribute.getMappingAttribute().getGetterName());
-
-			b.append(", " + testDataAttribute.getJavaType().getName() + ".class);\n");
+			b.append("." + trackedAttribute.getMappingAttribute().getGetterName());
+			b.append(", " + trackedAttribute.getJavaType().getName() + ".class);\n");
 		}
 
 		final String validationFragment;
@@ -706,7 +707,7 @@ public class IntegrationTestCaseGenerator extends AbstractJavaSourceGenerator {
 			validationFragment = validateSingleResult(methodInvocation);
 
 		if (!validationFragment.isEmpty()) {
-			if (!methodInvocation.getTrackedAttributes().isEmpty())
+			if (trackedAttribute != null)
 				b.append("\n");
 
 			b.append(validationFragment);
