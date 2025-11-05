@@ -109,6 +109,7 @@ public class IntegerTestDataAttributePanel extends AbstractTestDataAttributePane
 	@Override
 	public void onRequestRandomValue() {
 		if (testDataAttribute.isTrackValue() || (testDataAttribute.getMappingAttribute() != null
+				&& testDataAttribute.getMappingAttribute().getDomainAttribute() != null
 				&& testDataAttribute.getMappingAttribute().getDomainAttribute().isPk()) || !txtValue.getText().isEmpty())
 			return;
 
