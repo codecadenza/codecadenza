@@ -956,15 +956,29 @@ public class IntegrationTestCaseGenerator extends AbstractJavaSourceGenerator {
 			b.append(".getTime()");
 
 		b.append(").");
-		b.append(convertOperatorToMethod(operator));
 
-		if (operator == AssertionOperator.IS_NULL || operator == AssertionOperator.IS_NOT_NULL
-				|| operator == AssertionOperator.IS_EMPTY)
-			b.append("();\n");
-		else if (javaType != null && javaType.isCalendar())
-			b.append("(" + expected + ".getTime());\n");
-		else
-			b.append("(" + expected + ");\n");
+		if (javaType != null && (javaType.isFloat() || javaType.isDouble())
+				&& (operator == AssertionOperator.EQUAL || operator == AssertionOperator.NONE)) {
+			importStaticClass("org.assertj.core.data.Offset.offset");
+
+			b.append("isCloseTo(" + expected + ", offset(0.01");
+
+			if (javaType.isFloat())
+				b.append("f");
+
+			b.append("));\n");
+		}
+		else {
+			b.append(convertOperatorToMethod(operator));
+
+			if (operator == AssertionOperator.IS_NULL || operator == AssertionOperator.IS_NOT_NULL
+					|| operator == AssertionOperator.IS_EMPTY)
+				b.append("();\n");
+			else if (javaType != null && javaType.isCalendar())
+				b.append("(" + expected + ".getTime());\n");
+			else
+				b.append("(" + expected + ");\n");
+		}
 
 		return b.toString();
 	}
