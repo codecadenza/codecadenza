@@ -24,7 +24,6 @@ package net.codecadenza.eclipse.model.testing.impl;
 import java.util.Collection;
 import net.codecadenza.eclipse.model.domain.AttributeTagEnumeration;
 import net.codecadenza.eclipse.model.domain.CollectionTypeEnumeration;
-import net.codecadenza.eclipse.model.domain.DomainAttribute;
 import net.codecadenza.eclipse.model.domain.DomainObject;
 import net.codecadenza.eclipse.model.domain.ManyToManyAssociation;
 import net.codecadenza.eclipse.model.domain.ManyToOneAssociation;
@@ -836,16 +835,8 @@ public class TestDataAttributeImpl extends EObjectImpl implements TestDataAttrib
 
 		if (getMappingAttribute().getMappingType() != null)
 			return !getMappingAttribute().getMappingType().isPrimitive();
-		else if (getMappingAttribute().getDomainAttribute() != null) {
-			final DomainAttribute attr = getMappingAttribute().getDomainAttribute();
-
-			if (attr.getJavaType().isPrimitive())
-				return !(attr.getJavaType().isChar() && attr.getMinFieldLength().isEmpty());
-			else if (attr.getJavaType().isString())
-				return attr.getMinFieldLength().isPresent();
-
-			return !attr.getDomainAttributeValidator().isNullable();
-		}
+		else if (getMappingAttribute().getDomainAttribute() != null)
+			return getMappingAttribute().getDomainAttribute().getDomainAttributeValidator().isNullable();
 		else if (getMappingAttribute() instanceof final DTOBeanAttribute dtoAttribute && dtoAttribute.getReferencedDTOBean() != null
 				&& dtoAttribute.getAssociation() != null && dtoAttribute.getAssociation() instanceof final ManyToOneAssociation mto)
 			return !mto.isOptional();
