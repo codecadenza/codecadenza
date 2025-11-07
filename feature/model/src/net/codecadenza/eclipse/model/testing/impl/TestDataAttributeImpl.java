@@ -836,7 +836,7 @@ public class TestDataAttributeImpl extends EObjectImpl implements TestDataAttrib
 		if (getMappingAttribute().getMappingType() != null)
 			return !getMappingAttribute().getMappingType().isPrimitive();
 		else if (getMappingAttribute().getDomainAttribute() != null)
-			return getMappingAttribute().getDomainAttribute().getDomainAttributeValidator().isNullable();
+			return !getMappingAttribute().getDomainAttribute().getDomainAttributeValidator().isNullable();
 		else if (getMappingAttribute() instanceof final DTOBeanAttribute dtoAttribute && dtoAttribute.getReferencedDTOBean() != null
 				&& dtoAttribute.getAssociation() != null && dtoAttribute.getAssociation() instanceof final ManyToOneAssociation mto)
 			return !mto.isOptional();
