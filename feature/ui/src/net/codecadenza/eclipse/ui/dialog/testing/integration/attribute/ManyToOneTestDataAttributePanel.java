@@ -77,6 +77,7 @@ public class ManyToOneTestDataAttributePanel extends AbstractTestDataAttributePa
 		txtValue = new Text(this, SWT.BORDER);
 		txtValue.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
 		txtValue.setEditable(isEditable());
+		txtValue.setToolTipText(createToolTipText());
 
 		if (pkAttr.getReferencedAttribute() != null)
 			txtValue.setText(TRACKING_PREFIX + pkAttr.getReferencedAttribute().getId());

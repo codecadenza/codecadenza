@@ -60,6 +60,7 @@ public class EnumTestDataAttributePanel extends AbstractTestDataAttributePanel {
 		cboEnum = new Combo(this, SWT.READ_ONLY);
 		cboEnum.add("");
 		cboEnum.setEnabled(isEditable());
+		cboEnum.setToolTipText(createToolTipText());
 
 		final var enumType = (JavaEnum) testDataAttribute.getJavaType();
 		enumType.getEnumerationValues().stream().forEach(e -> cboEnum.add(e.getName()));

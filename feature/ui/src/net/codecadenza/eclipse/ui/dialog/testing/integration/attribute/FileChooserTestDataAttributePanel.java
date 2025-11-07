@@ -83,6 +83,7 @@ public class FileChooserTestDataAttributePanel extends AbstractTestDataAttribute
 
 		txtPath = new Text(panFile, SWT.BORDER);
 		txtPath.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
+		txtPath.setToolTipText(createToolTipText());
 
 		if (testDataAttribute.getValue() != null)
 			txtPath.setText(testDataAttribute.getValue());

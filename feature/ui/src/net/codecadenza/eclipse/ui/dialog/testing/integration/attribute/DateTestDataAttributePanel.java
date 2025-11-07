@@ -74,12 +74,12 @@ public class DateTestDataAttributePanel extends AbstractTestDataAttributePanel {
 		txtValue = new Text(this, SWT.BORDER);
 		txtValue.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
 		txtValue.setEditable(isEditable());
-		txtValue.setToolTipText("Enter a date using format pattern '" + formatPattern + "'");
 
 		if (testDataAttribute.getValue() != null)
 			txtValue.setText(testDataAttribute.getValue());
 
 		setBackgroundColor(txtValue);
+		addToolTipText();
 	}
 
 	/*
@@ -136,6 +136,17 @@ public class DateTestDataAttributePanel extends AbstractTestDataAttributePanel {
 
 		if (!isEditable())
 			txtValue.setText("");
+	}
+
+	/**
+	 * Add a tool tip text to the input field
+	 */
+	private void addToolTipText() {
+		final var toolTipText = new StringBuilder(createToolTipText());
+		toolTipText.append("\n");
+		toolTipText.append("Enter a date using format pattern '" + formatPattern + "'");
+
+		txtValue.setToolTipText(toolTipText.toString());
 	}
 
 }

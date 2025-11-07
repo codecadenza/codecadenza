@@ -131,6 +131,7 @@ public class ElementCollectionTestDataAttributePanel extends AbstractTestDataAtt
 
 		listElements = new List(this, SWT.V_SCROLL | SWT.MULTI | SWT.H_SCROLL | SWT.BORDER);
 		listElements.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
+		listElements.setToolTipText(createToolTipText());
 
 		if (!testDataAttribute.getReferencedObjects().isEmpty()) {
 			final String[] elements = new String[testDataAttribute.getReferencedObjects().size()];

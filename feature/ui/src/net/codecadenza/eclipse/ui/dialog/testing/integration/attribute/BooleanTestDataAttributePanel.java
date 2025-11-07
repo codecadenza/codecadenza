@@ -58,6 +58,7 @@ public class BooleanTestDataAttributePanel extends AbstractTestDataAttributePane
 
 		chkValue = new Button(this, SWT.CHECK);
 		chkValue.setEnabled(isEditable());
+		chkValue.setToolTipText(createToolTipText());
 
 		if (testDataAttribute.getValue() != null && Boolean.valueOf(testDataAttribute.getValue()))
 			chkValue.setSelection(true);

@@ -87,6 +87,7 @@ public class ManyToManyTestDataAttributePanel extends AbstractTestDataAttributeP
 
 		txtValue = new Text(panAdd, SWT.BORDER);
 		txtValue.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
+		txtValue.setToolTipText(createToolTipText());
 
 		initDropListener(txtValue);
 

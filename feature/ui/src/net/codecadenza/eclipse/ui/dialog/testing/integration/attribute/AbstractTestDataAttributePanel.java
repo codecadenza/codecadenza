@@ -23,12 +23,18 @@ package net.codecadenza.eclipse.ui.dialog.testing.integration.attribute;
 
 import java.util.ArrayList;
 import java.util.List;
+import net.codecadenza.eclipse.model.db.DBColumn;
+import net.codecadenza.eclipse.model.domain.AbstractDomainAssociation;
+import net.codecadenza.eclipse.model.domain.DomainAttribute;
+import net.codecadenza.eclipse.model.domain.DomainAttributeValidator;
 import net.codecadenza.eclipse.model.domain.DomainObject;
 import net.codecadenza.eclipse.model.domain.ManyToManyAssociation;
+import net.codecadenza.eclipse.model.domain.ManyToOneAssociation;
 import net.codecadenza.eclipse.model.domain.OneToManyAssociation;
 import net.codecadenza.eclipse.model.dto.DTOBean;
 import net.codecadenza.eclipse.model.exchange.ExchangeMappingObject;
 import net.codecadenza.eclipse.model.java.JavaType;
+import net.codecadenza.eclipse.model.mapping.MappingAttribute;
 import net.codecadenza.eclipse.model.project.Project;
 import net.codecadenza.eclipse.model.testing.AssertionOperator;
 import net.codecadenza.eclipse.model.testing.IntegrationMethodTestInvocation;
@@ -260,6 +266,94 @@ public abstract class AbstractTestDataAttributePanel extends Composite {
 				onSetReference(domainObject, trackedAttribute);
 			}
 		};
+	}
+
+	/**
+	 * Create a tool tip text
+	 * @return the tool tip text for a {@link TestDataAttribute} that is mapped to either a domain attribute or a domain association
+	 */
+	protected String createToolTipText() {
+		final MappingAttribute mappingAttribute = testDataAttribute.getMappingAttribute();
+
+		if (mappingAttribute == null)
+			return "";
+
+		final var toolTipText = new StringBuilder();
+
+		if (mappingAttribute.getDomainAttribute() != null && mappingAttribute.getDomainAttribute().isPersistent()) {
+			final DomainAttribute domainAttribute = mappingAttribute.getDomainAttribute();
+			final DomainObject domainObject = domainAttribute.getDomainObject();
+
+			toolTipText.append(createToolTipText(domainObject, domainAttribute, domainAttribute.getColumn()));
+		}
+		else if (mappingAttribute.getAssociation() != null) {
+			final AbstractDomainAssociation assoc = mappingAttribute.getAssociation();
+			final DomainAttribute pkAttr = assoc.getTarget().getPKAttribute();
+
+			if (assoc instanceof final ManyToOneAssociation mto)
+				toolTipText.append(createToolTipText(assoc.getDomainObject(), pkAttr, mto.getColumn()));
+			else
+				toolTipText.append(createToolTipText(assoc.getTarget(), pkAttr, pkAttr.getColumn()));
+		}
+
+		return toolTipText.toString();
+	}
+
+	/**
+	 * Create a tool tip text
+	 * @param domainObject the domain object used to determine the name of the table
+	 * @param domainAttribute the domain attribute
+	 * @param column the database column
+	 * @return the tool tip text a based on the provided objects
+	 */
+	private String createToolTipText(DomainObject domainObject, DomainAttribute domainAttribute, DBColumn column) {
+		final DomainAttributeValidator validator = domainAttribute.getDomainAttributeValidator();
+		final JavaType type = domainAttribute.getJavaType();
+
+		final var toolTipText = new StringBuilder("Domain attribute:\n");
+		toolTipText.append("\tName: " + domainAttribute.getName() + "\n");
+		toolTipText.append("\tType: " + domainAttribute.getJavaType().getName() + "\n");
+		toolTipText.append("\tPrimary key attribute: " + domainAttribute.isPk() + "\n");
+		toolTipText.append("\tDisplay attribute: " + domainAttribute.isDisplayAttribute() + "\n\n");
+		toolTipText.append("Database mapping:\n");
+
+		// Do not display the name of a table that doesn't exist. In this context we cannot determine the actual table name!
+		if (!domainObject.isMappedSuperClass()) {
+			final String tableName;
+
+			if (domainObject.getDatabaseTable() != null)
+				tableName = domainObject.getDatabaseTable().getName();
+			else
+				tableName = domainObject.getRootParentDomainObject(false).getDatabaseTable().getName();
+
+			toolTipText.append("\tTable name: " + tableName + "\n");
+		}
+
+		toolTipText.append("\tColumn name: " + column.getName() + "\n\n");
+		toolTipText.append("Field constraints:\n");
+
+		if (type.isNumber()) {
+			if (validator.getMinValue() != null && !validator.getMinValue().isEmpty())
+				toolTipText.append("\tMin. value: " + validator.getMinValue() + "\n");
+
+			if (validator.getMaxValue() != null && !validator.getMaxValue().isEmpty())
+				toolTipText.append("\tMax. value: " + validator.getMaxValue() + "\n");
+		}
+		else if (type.isString() || type.isByteArray()) {
+			toolTipText.append("\tMin. length: " + (validator.getMinLength() != null ? validator.getMinLength() : "none") + "\n");
+			toolTipText.append("\tMax. length: " + (validator.getMaxLength() != null ? validator.getMaxLength() : "none") + "\n");
+
+			if (type.isString() && validator.getRegularExpression() != null && !validator.getRegularExpression().isEmpty())
+				toolTipText.append("\tRegular expression: " + validator.getRegularExpression() + "\n");
+		}
+		else if (type.isTemporalType()) {
+			toolTipText.append("\tFuture date: " + validator.isFutureDate() + "\n");
+			toolTipText.append("\tPast date: " + validator.isPastDate() + "\n");
+		}
+
+		toolTipText.append("\tNullable: " + validator.isNullable() + "\n");
+
+		return toolTipText.toString();
 	}
 
 }

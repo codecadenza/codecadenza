@@ -168,11 +168,7 @@ public class StringTestDataAttributePanel extends AbstractTestDataAttributePanel
 			if (!isValueEmpty) {
 				initDropListener(txtValue);
 
-				if (singleLineMode)
-					txtValue.setToolTipText("Press F5 to switch to multi-line mode");
-				else
-					txtValue.setToolTipText("Press F5 to switch to single-line mode");
-
+				addToolTipText();
 				addKeyListener();
 			}
 			else {
@@ -186,6 +182,21 @@ public class StringTestDataAttributePanel extends AbstractTestDataAttributePanel
 			addMenu();
 
 		getParent().layout(true, true);
+	}
+
+	/**
+	 * Add a tool tip text to the input field
+	 */
+	private void addToolTipText() {
+		final var toolTipText = new StringBuilder(createToolTipText());
+		toolTipText.append("\n");
+
+		if (singleLineMode)
+			toolTipText.append("Press F5 to switch to multi-line mode");
+		else
+			toolTipText.append("Press F5 to switch to single-line mode");
+
+		txtValue.setToolTipText(toolTipText.toString());
 	}
 
 	/**

@@ -71,12 +71,12 @@ public class DecimalTestDataAttributePanel extends AbstractTestDataAttributePane
 		txtValue = new Text(this, SWT.BORDER);
 		txtValue.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
 		txtValue.setEditable(isEditable());
-		txtValue.setToolTipText("Enter a decimal number using format '" + testModule.getDecimalFormat() + "'");
 
 		if (testDataAttribute.getValue() != null)
 			txtValue.setText(testDataAttribute.getValue());
 
 		setBackgroundColor(txtValue);
+		addToolTipText();
 	}
 
 	/*
@@ -130,6 +130,17 @@ public class DecimalTestDataAttributePanel extends AbstractTestDataAttributePane
 
 		if (!isEditable())
 			txtValue.setText("");
+	}
+
+	/**
+	 * Add a tool tip text to the input field
+	 */
+	private void addToolTipText() {
+		final var toolTipText = new StringBuilder(createToolTipText());
+		toolTipText.append("\n");
+		toolTipText.append("Enter a decimal number using format '" + testModule.getDecimalFormat() + "'");
+
+		txtValue.setToolTipText(toolTipText.toString());
 	}
 
 }
