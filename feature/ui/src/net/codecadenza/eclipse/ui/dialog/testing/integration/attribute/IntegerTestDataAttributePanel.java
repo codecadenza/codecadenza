@@ -23,6 +23,7 @@ package net.codecadenza.eclipse.ui.dialog.testing.integration.attribute;
 
 import java.util.concurrent.ThreadLocalRandom;
 import net.codecadenza.eclipse.model.domain.DomainObject;
+import net.codecadenza.eclipse.model.domain.IDGeneratorTypeEnumeration;
 import net.codecadenza.eclipse.model.testing.TestDataAttribute;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
@@ -109,9 +110,16 @@ public class IntegerTestDataAttributePanel extends AbstractTestDataAttributePane
 	 */
 	@Override
 	public void onRequestRandomValue() {
-		if (testDataAttribute.isTrackValue() || (testDataAttribute.getMappingAttribute() != null
-				&& testDataAttribute.getMappingAttribute().getDomainAttribute() != null
-				&& testDataAttribute.getMappingAttribute().getDomainAttribute().isPk()) || !txtValue.getText().isEmpty())
+		boolean generatedId = false;
+
+		if (testDataAttribute.getMappingAttribute() != null && testDataAttribute.getMappingAttribute().getDomainAttribute() != null
+				&& testDataAttribute.getMappingAttribute().getDomainAttribute().isPk()) {
+			final DomainObject rootDomainObject = testDataAttribute.getMappingAttribute().getDomainAttribute().getDomainObject()
+					.getRootParentDomainObject(true);
+			generatedId = rootDomainObject.getIDGenerator().getGeneratorType() != IDGeneratorTypeEnumeration.NONE;
+		}
+
+		if (testDataAttribute.isTrackValue() || !txtValue.getText().isEmpty() || generatedId)
 			return;
 
 		final int randomValue = ThreadLocalRandom.current().nextInt(1, 1000);
