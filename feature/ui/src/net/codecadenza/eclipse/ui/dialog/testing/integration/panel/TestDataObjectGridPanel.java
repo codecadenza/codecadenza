@@ -343,16 +343,23 @@ public class TestDataObjectGridPanel extends Composite {
 	 * @param trackedAttribute
 	 */
 	private void addObject(DomainObject domainObject, TestDataAttribute trackedAttribute) {
-		final TestDataObject testDataObject = new IntegrationTestCaseService(testModule).initTestObject(mappingObject,
+		final var integrationTestCaseService = new IntegrationTestCaseService(testModule);
+
+		final TestDataObject testDataObject = integrationTestCaseService.initTestObject(mappingObject,
 				methodInvocation.getIntegrationMethod().getBoundaryMethod(), false, false);
 
 		if (trackedAttribute != null && domainObject != null) {
 			// Do not add a new object if the reference is not allowed to be set!
-			if (testDataObject.getPKAttribute().isReferenceAllowed(domainObject))
+			if (testDataObject.getPKAttribute().isReferenceAllowed(domainObject)) {
 				testDataObject.getPKAttribute().setReferencedAttribute(trackedAttribute);
+
+				integrationTestCaseService.copyValuesFromPreviousInvocation(testCase, testDataObject, null, trackedAttribute);
+			}
 			else
 				return;
 		}
+		else
+			integrationTestCaseService.copyValuesFromPreviousInvocation(testCase, testDataObject, null, null);
 
 		final var dlg = new EditTestObjectDialog(getShell(), testModule, testCase, methodInvocation, testDataObject, validationMode);
 

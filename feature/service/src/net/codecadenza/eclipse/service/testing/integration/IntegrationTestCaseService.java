@@ -49,6 +49,7 @@ import net.codecadenza.eclipse.model.integration.IntegrationMethodParameter;
 import net.codecadenza.eclipse.model.java.JavaType;
 import net.codecadenza.eclipse.model.java.JavaTypeModifierEnumeration;
 import net.codecadenza.eclipse.model.mapping.MappingAttribute;
+import net.codecadenza.eclipse.model.mapping.MappingObject;
 import net.codecadenza.eclipse.model.project.BuildArtifactType;
 import net.codecadenza.eclipse.model.project.IntegrationTechnology;
 import net.codecadenza.eclipse.model.project.Project;
@@ -153,6 +154,7 @@ public class IntegrationTestCaseService {
 			AbstractIntegrationMethod integrationMethod, IntegrationMethodTestInvocation parentInvocation) {
 		final BoundaryMethod boundaryMethod = integrationMethod.getBoundaryMethod();
 		final BoundaryMethodTypeEnumeration methodType = boundaryMethod.getMethodType();
+		TestDataAttribute trackedAttribute = null;
 		boolean searchTrackingAttribute = true;
 
 		final IntegrationMethodTestInvocation invocation = TestingFactory.eINSTANCE.createIntegrationMethodTestInvocation();
@@ -198,7 +200,7 @@ public class IntegrationTestCaseService {
 					|| methodType == BoundaryMethodTypeEnumeration.DELETE || methodType == BoundaryMethodTypeEnumeration.EXISTS_BY_ID
 					|| methodType == BoundaryMethodTypeEnumeration.FIND_BY_PARENT || methodType == BoundaryMethodTypeEnumeration.DOWNLOAD)
 				for (final TestDataAttribute testDataAttribute : testObject.getAttributes())
-					initReferencedAttribute(testCase, invocation, testDataAttribute, parentInvocation);
+					trackedAttribute = initReferencedAttribute(testCase, invocation, testDataAttribute, parentInvocation);
 
 			final MethodInvocationParameter invocationParameter = TestingFactory.eINSTANCE.createMethodInvocationParameter();
 			invocationParameter.setType(paramType);
@@ -207,6 +209,8 @@ public class IntegrationTestCaseService {
 			invocationParameter.getParameterValues().add(testObject);
 
 			invocation.getParameters().add(invocationParameter);
+
+			copyValuesFromPreviousInvocation(testCase, testObject, parentInvocation, trackedAttribute);
 		}
 
 		// Do not initialize a test data object if the method returns a list!
@@ -214,6 +218,8 @@ public class IntegrationTestCaseService {
 				&& integrationMethod.getReturnTypeModifier() == JavaTypeModifierEnumeration.NONE) {
 			final TestDataObject returnObject = initTestObject(integrationMethod.getReturnType(), boundaryMethod,
 					searchTrackingAttribute, false);
+
+			copyValuesFromPreviousInvocation(testCase, returnObject, parentInvocation, trackedAttribute);
 
 			invocation.getReturnValues().add(returnObject);
 		}
@@ -347,6 +353,188 @@ public class IntegrationTestCaseService {
 	}
 
 	/**
+	 * Copy the values from a previous invocation to the given {@link TestDataObject}
+	 * @param testCase the integration test case
+	 * @param testDataObject the {@link TestDataObject} that should be filled. A {@link TestDataObject} that doesn't reference a
+	 *          {@link MappingObject} is ignored!
+	 * @param parentInvocation the optional parent invocation for searching in nested invocations
+	 * @param filterAttribute the optional {@link TestDataAttribute} to search for
+	 */
+	public void copyValuesFromPreviousInvocation(IntegrationTestCase testCase, TestDataObject testDataObject,
+			IntegrationMethodTestInvocation parentInvocation, TestDataAttribute filterAttribute) {
+		TestDataObject prevTestDataObject = null;
+
+		if (testDataObject.getMappingObject() == null)
+			return;
+
+		if (filterAttribute != null)
+			prevTestDataObject = searchTestDataObjectByTestDataAttribute(testCase, filterAttribute, testDataObject);
+
+		if (prevTestDataObject == null)
+			prevTestDataObject = searchTestDataObjectByPreviousInvocation(testCase, testDataObject, parentInvocation);
+
+		if (prevTestDataObject == null)
+			return;
+
+		for (final TestDataAttribute prevAttr : prevTestDataObject.getAttributes()) {
+			if (prevAttr.getMappingAttribute() == null || prevAttr.isTrackValue())
+				continue;
+
+			for (final TestDataAttribute testDataAttribute : testDataObject.getAttributes()) {
+				if (testDataAttribute.getMappingAttribute() == null || testDataAttribute.isTrackValue())
+					continue;
+
+				copyValueOfTestDataAttribute(prevAttr, testDataAttribute);
+			}
+		}
+	}
+
+	/**
+	 * Search for a {@link TestDataObject} using the given {@link TestDataAttribute}
+	 * @param testCase the integration test case
+	 * @param filterAttribute the {@link TestDataAttribute} used as filter criterion
+	 * @param testDataObject the test data object to search for
+	 * @return the test data object that has been found or null if no object has the {@link TestDataAttribute}
+	 */
+	private TestDataObject searchTestDataObjectByTestDataAttribute(IntegrationTestCase testCase, TestDataAttribute filterAttribute,
+			TestDataObject testDataObject) {
+		final var invocations = new ArrayList<>(testCase.getMethodInvocations());
+		final DomainObject domainObject = testDataObject.getMappingObject().getDomainObject();
+
+		for (final IntegrationMethodTestInvocation invocation : testCase.getMethodInvocations())
+			invocations.addAll(invocation.getNestedInvocations());
+
+		for (final IntegrationMethodTestInvocation invocation : invocations) {
+			final List<TestDataObject> foundObjects = getAllTestDataObjects(invocation).stream()
+					.filter(obj -> obj.getMappingObject() != null && obj.getMappingObject().getDomainObject().equals(domainObject))
+					.toList();
+
+			for (final TestDataObject foundObject : foundObjects) {
+				final boolean attributeFound = foundObject.getAttributes().stream()
+						.anyMatch(attribute -> attribute.equals(filterAttribute));
+
+				if (attributeFound)
+					return foundObject;
+			}
+		}
+
+		return null;
+	}
+
+	/**
+	 * Search for a {@link TestDataObject} of a previous invocation
+	 * @param testCase the integration test case
+	 * @param testDataObject the test data object used for filtering
+	 * @param parentInvocation the optional parent invocation for searching in nested invocations
+	 * @return the test data object of a previous invocation that has been found or null if no test data object could be found
+	 */
+	private TestDataObject searchTestDataObjectByPreviousInvocation(IntegrationTestCase testCase, TestDataObject testDataObject,
+			IntegrationMethodTestInvocation parentInvocation) {
+		final DomainObject domainObject = testDataObject.getMappingObject().getDomainObject();
+		IntegrationMethodTestInvocation previousInvocation = null;
+		final int indexToSkip = parentInvocation != null ? testCase.getMethodInvocations().indexOf(parentInvocation) : -1;
+		TestDataObject foundObject = null;
+
+		// Iterate over all existing invocations in reverse order
+		for (final IntegrationMethodTestInvocation invocation : testCase.getMethodInvocations().reversed()) {
+			// Do not search in subsequent invocations when initializing a nested invocation!
+			if (indexToSkip != -1 && testCase.getMethodInvocations().indexOf(invocation) >= indexToSkip)
+				continue;
+
+			foundObject = getAllTestDataObjects(invocation).stream()
+					.filter(obj -> obj.getMappingObject() != null && obj.getMappingObject().getDomainObject().equals(domainObject))
+					.findFirst().orElse(null);
+
+			if (foundObject != null) {
+				previousInvocation = invocation;
+
+				// Do not initialize a nested invocation using its parent!
+				if (parentInvocation == null || (!invocation.equals(parentInvocation) && !invocation.getNestedInvocations().isEmpty()))
+					break;
+			}
+		}
+
+		if (parentInvocation != null && previousInvocation != null && !previousInvocation.getNestedInvocations().isEmpty()) {
+			// Search for the matching previous nested invocation. There is no guarantee that it represents the "correct" invocation to
+			// copy the value from. But this approach seems to be much better than copying the same values again and again from one
+			// invocation.
+			int nestedIndex;
+			final int offset = previousInvocation.getNestedInvocations().size() - parentInvocation.getNestedInvocations().size();
+
+			if (offset > 0)
+				nestedIndex = previousInvocation.getNestedInvocations().size() - offset;
+			else
+				nestedIndex = previousInvocation.getNestedInvocations().size() - 1;
+
+			if (nestedIndex >= 0) {
+				final IntegrationMethodTestInvocation nestedInvocation = previousInvocation.getNestedInvocations().get(nestedIndex);
+
+				foundObject = getAllTestDataObjects(nestedInvocation).stream()
+						.filter(obj -> obj.getMappingObject() != null && obj.getMappingObject().getDomainObject().equals(domainObject))
+						.findFirst().orElse(null);
+			}
+		}
+
+		return foundObject;
+	}
+
+	/**
+	 * Copy a test data attribute value of a previous invocation to a newly initialized {@link TestDataAttribute}
+	 * @param prevAttr the previous test data attribute
+	 * @param testDataAttribute the test data attribute to copy the value to
+	 */
+	private void copyValueOfTestDataAttribute(TestDataAttribute prevAttr, TestDataAttribute testDataAttribute) {
+		final MappingAttribute prevMappingAttribute = prevAttr.getMappingAttribute();
+		final MappingAttribute mappingAttribute = testDataAttribute.getMappingAttribute();
+
+		if (prevMappingAttribute.getAssociation() != null && prevMappingAttribute.getDomainAttribute() == null
+				&& mappingAttribute.getDomainAttribute() == null
+				&& prevMappingAttribute.getAssociation().equals(mappingAttribute.getAssociation())) {
+			// Copy all test data objects including their attributes and add them to this test data attribute
+			for (final TestDataObject prevTestDataObject : prevAttr.getReferencedObjects()) {
+				final TestDataObject refTestDataObject = TestingFactory.eINSTANCE.createTestDataObject();
+				refTestDataObject.setMappingObject(prevTestDataObject.getMappingObject());
+
+				for (final TestDataAttribute prevRefTestDataAttribute : prevTestDataObject.getAttributes()) {
+					final TestDataAttribute newRefTestDataAttribute = TestingFactory.eINSTANCE.createTestDataAttribute();
+					newRefTestDataAttribute.setMappingAttribute(prevRefTestDataAttribute.getMappingAttribute());
+					newRefTestDataAttribute.setValue(prevRefTestDataAttribute.getValue());
+					newRefTestDataAttribute.setMappingType(prevRefTestDataAttribute.getMappingType());
+					newRefTestDataAttribute.setName(prevRefTestDataAttribute.getName());
+					newRefTestDataAttribute.setReferencedAttribute(prevRefTestDataAttribute.getReferencedAttribute());
+
+					refTestDataObject.getAttributes().add(newRefTestDataAttribute);
+				}
+
+				testDataAttribute.getReferencedObjects().add(refTestDataObject);
+			}
+		}
+		else if (prevMappingAttribute.getDomainAttribute() != null
+				&& prevMappingAttribute.getDomainAttribute().equals(mappingAttribute.getDomainAttribute())
+				&& ((prevMappingAttribute.getAssociation() == null && mappingAttribute.getAssociation() == null)
+						|| (prevMappingAttribute.getAssociation() != null
+								&& prevMappingAttribute.getAssociation().equals(mappingAttribute.getAssociation())))) {
+			testDataAttribute.setValue(prevAttr.getValue());
+		}
+	}
+
+	/**
+	 * Get the test data objects of all parameters and return values of the given method invocation
+	 * @param methodInvocation the method invocation
+	 * @return a list with all test data objects of the given {@link IntegrationMethodTestInvocation}
+	 */
+	private ArrayList<TestDataObject> getAllTestDataObjects(IntegrationMethodTestInvocation methodInvocation) {
+		final var testDataObjects = new ArrayList<TestDataObject>();
+
+		for (final MethodInvocationParameter prevParam : methodInvocation.getParameters())
+			testDataObjects.addAll(prevParam.getParameterValues());
+
+		testDataObjects.addAll(methodInvocation.getReturnValues());
+
+		return testDataObjects;
+	}
+
+	/**
 	 * Check if the attribute should be tracked
 	 * @param mappingAttribute
 	 * @param boundaryMethod
@@ -396,13 +584,15 @@ public class IntegrationTestCaseService {
 
 	/**
 	 * Search for a tracking attribute that can be referenced
-	 * @param testCase
-	 * @param methodInvocation
-	 * @param testDataAttribute
-	 * @param parentInvocation
+	 * @param testCase the test case
+	 * @param methodInvocation the method invocation
+	 * @param testDataAttribute the {@link TestDataAttribute}
+	 * @param parentInvocation the parent invocation
+	 * @return the tracked attribute used for setting the reference or null if no reference has been set
 	 */
-	private void initReferencedAttribute(IntegrationTestCase testCase, IntegrationMethodTestInvocation methodInvocation,
-			TestDataAttribute testDataAttribute, IntegrationMethodTestInvocation parentInvocation) {
+	private TestDataAttribute initReferencedAttribute(IntegrationTestCase testCase,
+			IntegrationMethodTestInvocation methodInvocation, TestDataAttribute testDataAttribute,
+			IntegrationMethodTestInvocation parentInvocation) {
 		final DomainObject invocationDomainObject = methodInvocation.getIntegrationMethod().getIntegrationBean().getDomainObject();
 
 		final List<IntegrationMethodTestInvocation> invocations = new ArrayList<>(testCase.getMethodInvocations());
@@ -422,14 +612,19 @@ public class IntegrationTestCaseService {
 						final IntegrationMethodTestInvocation nestedInvocation = previousInvocation.getNestedInvocations().get(index);
 
 						testDataAttribute.setReferencedAttribute(nestedInvocation.getTrackedAttribute());
+						return nestedInvocation.getTrackedAttribute();
 					}
+					else
+						return null;
 				}
 				else
 					testDataAttribute.setReferencedAttribute(trackedAttribute);
 
-				return;
+				return trackedAttribute;
 			}
 		}
+
+		return null;
 	}
 
 	/**
