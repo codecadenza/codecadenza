@@ -695,7 +695,11 @@ public class IntegrationTestCaseGenerator extends AbstractJavaSourceGenerator {
 
 			b.append("testDataProvider.setGeneratedFieldValue(UUID.fromString(" + constantName + ".poll()), ");
 			b.append(ACTUAL_RESULT_OBJECT);
-			b.append("." + trackedAttribute.getMappingAttribute().getGetterName());
+
+			// A copy operation just returns the tracked value!
+			if (trackedAttribute.getMappingAttribute() != null)
+				b.append("." + trackedAttribute.getMappingAttribute().getGetterName());
+
 			b.append(", " + trackedAttribute.getJavaType().getName() + ".class);\n");
 		}
 
