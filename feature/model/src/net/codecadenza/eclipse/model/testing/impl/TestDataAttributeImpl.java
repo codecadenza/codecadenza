@@ -803,14 +803,18 @@ public class TestDataAttributeImpl extends EObjectImpl implements TestDataAttrib
 			final boolean listField = isMappedToList();
 			final var label = new StringBuilder();
 
-			if (listField)
-				label.append("List<");
+			if (isMappedToElementCollection())
+				label.append(getMappingAttribute().getDomainAttribute().getTypeName());
+			else {
+				if (listField)
+					label.append("List<");
 
-			if (getJavaType() != null)
-				label.append(getJavaType().getName());
+				if (getJavaType() != null)
+					label.append(getJavaType().getName());
 
-			if (listField)
-				label.append(">");
+				if (listField)
+					label.append(">");
+			}
 
 			label.append(" ");
 			label.append(getMappingAttribute().getName());
