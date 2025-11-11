@@ -750,7 +750,7 @@ public class IntegrationTestCaseService {
 		final Collection<DomainObject> inheritanceTree = domainObject.getFullInheritanceTree();
 		final DomainAttribute displayAttribute = domainObject.getDisplayAttribute();
 		final DBTable rootTable = domainObject.getRootParentDomainObject(false).getDatabaseTable();
-		final String tableName = rootTable.getName();
+		final String tableName = rootTable.getFullDatabaseName();
 		final String pkColumnName = domainObject.getPKAttribute().getColumn().getName();
 		final var sqlCommand = new StringBuilder();
 		char alias = 'a';
@@ -775,8 +775,8 @@ public class IntegrationTestCaseService {
 				tableMap.put(alias, parentDomainObject.getDatabaseTable());
 			}
 
-			final String tableList = tableMap.entrySet().stream().map(entry -> entry.getValue().getName() + " " + entry.getKey())
-					.collect(Collectors.joining(", "));
+			final String tableList = tableMap.entrySet().stream()
+					.map(entry -> entry.getValue().getFullDatabaseName() + " " + entry.getKey()).collect(Collectors.joining(", "));
 
 			// Start from the initial alias again
 			alias = 'a';
