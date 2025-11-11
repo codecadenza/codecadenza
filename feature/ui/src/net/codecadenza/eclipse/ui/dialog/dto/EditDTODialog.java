@@ -320,7 +320,7 @@ public class EditDTODialog extends CodeCadenzaDialog {
 			return dtoAttribute.getReferencedDTOBean().getName() + " " + dtoAttribute.getName();
 		}
 
-		return dtoAttribute.getDomainAttribute().getJavaType().getName() + " " + dtoAttribute.getName();
+		return dtoAttribute.getDomainAttribute().getTypeName() + " " + dtoAttribute.getName();
 	}
 
 	/**
