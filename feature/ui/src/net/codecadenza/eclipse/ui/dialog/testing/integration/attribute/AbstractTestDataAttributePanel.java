@@ -25,6 +25,7 @@ import java.util.ArrayList;
 import java.util.List;
 import net.codecadenza.eclipse.model.db.DBColumn;
 import net.codecadenza.eclipse.model.domain.AbstractDomainAssociation;
+import net.codecadenza.eclipse.model.domain.CollectionMappingStrategyEnumeration;
 import net.codecadenza.eclipse.model.domain.DomainAttribute;
 import net.codecadenza.eclipse.model.domain.DomainAttributeValidator;
 import net.codecadenza.eclipse.model.domain.DomainObject;
@@ -309,25 +310,27 @@ public abstract class AbstractTestDataAttributePanel extends Composite {
 	private String createToolTipText(DomainObject domainObject, DomainAttribute domainAttribute, DBColumn column) {
 		final DomainAttributeValidator validator = domainAttribute.getDomainAttributeValidator();
 		final JavaType type = domainAttribute.getJavaType();
+		String tableName = null;
 
 		final var toolTipText = new StringBuilder("Domain attribute:\n");
 		toolTipText.append("\tName: " + domainAttribute.getName() + "\n");
-		toolTipText.append("\tType: " + domainAttribute.getJavaType().getName() + "\n");
+		toolTipText.append("\tType: " + domainAttribute.getTypeName() + "\n");
 		toolTipText.append("\tPrimary key attribute: " + domainAttribute.isPk() + "\n");
 		toolTipText.append("\tDisplay attribute: " + domainAttribute.isDisplayAttribute() + "\n\n");
 		toolTipText.append("Database mapping:\n");
 
-		// Do not display the name of a table that doesn't exist. In this context we cannot determine the actual table name!
-		if (!domainObject.isMappedSuperClass()) {
-			final String tableName;
-
+		if (domainAttribute.getCollectionMappingStrategy() == CollectionMappingStrategyEnumeration.TABLE)
+			tableName = domainAttribute.getCollectionTable().getName();
+		else if (!domainObject.isMappedSuperClass()) {
 			if (domainObject.getDatabaseTable() != null)
 				tableName = domainObject.getDatabaseTable().getName();
 			else
 				tableName = domainObject.getRootParentDomainObject(false).getDatabaseTable().getName();
-
-			toolTipText.append("\tTable name: " + tableName + "\n");
 		}
+
+		// Do not display the name of a table that doesn't exist. In this context we cannot determine the actual table name!
+		if (tableName != null)
+			toolTipText.append("\tTable name: " + tableName + "\n");
 
 		toolTipText.append("\tColumn name: " + column.getName() + "\n\n");
 		toolTipText.append("Field constraints:\n");
