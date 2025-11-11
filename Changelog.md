@@ -26,6 +26,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 2025-10-19: Disable precision and scale for new domain attributes that are not mapped to BigDecimal
 
 ### Fixed
+2025-11-11: Add the JavaTimeModule to the Jackson ObjectMapper in generated REST clients in order to avoid problems with fields of
+            type LocalDate and LocalDateTime
+2025-11-11: Display the correct type of a DTO attribute in the dialog for creating new DTOs
+2025-11-11: Avoid LazyLoadExceptions by adding transactions to generated integration bean methods
 2025-10-26: Avoid exceptions when launching Java classes and unit tests by considering the name of the class and the project name
             when searching for existing launch configurations
 2025-10-21: Fix the wrong initialization of the media type for a new REST integration method that performs a data export operation
