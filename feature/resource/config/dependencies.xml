@@ -327,10 +327,12 @@
 			<dependency name="resteasy-jaxb-provider" groupName="org.jboss.resteasy" version="6.2.2.Final" scope="compile"/>
 		</filter>
 		<filter clientPlatform="ALL" technology="JAKARTA_EE" serverPlatform="ALL" validationType="ALL" database="ALL" jpaProvider="ALL">
+			<dependency name="jackson-datatype-jsr310" groupName="com.fasterxml.jackson.datatype" version="2.20.1" scope="compile"/>
 			<dependency name="log4j-slf4j2-impl" groupName="org.apache.logging.log4j" version="2.23.1" scope="test"/>
 			<dependency name="junit-jupiter" groupName="org.junit.jupiter" version="5.11.3" scope="test"/>
 		</filter>
 		<filter clientPlatform="ALL" technology="SPRING_BOOT" serverPlatform="ALL" validationType="ALL" database="ALL" jpaProvider="ALL">
+			<dependency name="jackson-datatype-jsr310" groupName="com.fasterxml.jackson.datatype" scope="compile"/>
 			<dependency name="spring-context" groupName="org.springframework" scope="provided"/>
 			<dependency name="spring-web" groupName="org.springframework" scope="provided"/>
 			<dependency name="spring-boot-starter-log4j2" groupName="org.springframework.boot" scope="test"/>

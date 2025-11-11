@@ -124,21 +124,19 @@ public class RESTIntegrationProjectFilesGenerator extends AbstractIntegrationPro
 	private String createBaseClient() {
 		final var b = new StringBuilder();
 		b.append("import java.io.*;\n");
+		b.append("import java.text.*;\n");
 		b.append("import jakarta.annotation.*;\n");
 		b.append("import jakarta.ws.rs.client.*;\n");
 		b.append("import jakarta.ws.rs.core.*;\n");
+		b.append("import jakarta.ws.rs.ext.*;\n");
 		b.append("import net.codecadenza.runtime.property.*;\n");
+		b.append("import com.fasterxml.jackson.databind.*;\n");
+		b.append("import com.fasterxml.jackson.datatype.jsr310.*;\n");
 
 		if (project.isJakartaEEApplication())
 			b.append("import static net.codecadenza.runtime.authentication.BasicAuthentication.*;\n");
 		else
 			b.append("import static net.codecadenza.runtime.crypto.HashGenerator.*;\n");
-
-		if (project.isDeployedOnGlassfish()) {
-			b.append("import com.fasterxml.jackson.databind.*;\n");
-			b.append("import java.text.*;\n");
-			b.append("import jakarta.ws.rs.ext.*;\n");
-		}
 
 		new LoggingGenerator(false).getImports().forEach(imp -> b.append(imp + "\n"));
 
@@ -167,10 +165,7 @@ public class RESTIntegrationProjectFilesGenerator extends AbstractIntegrationPro
 		b.append("protected " + BASE_REST_CLIENT_CLASS_NAME + "(String userName, String password)\n");
 		b.append("{\n");
 		b.append("client = ClientBuilder.newClient();\n");
-
-		if (project.isDeployedOnGlassfish())
-			b.append("client.register(new JacksonConfig());\n");
-
+		b.append("client.register(new JacksonConfig());\n");
 		b.append("client.register(new ClientLogFilter());\n\n");
 		b.append("if(userName != null && password != null)\n");
 		b.append("client.register(new ClientRESTAuthFilter(userName, password));\n\n");
@@ -185,35 +180,31 @@ public class RESTIntegrationProjectFilesGenerator extends AbstractIntegrationPro
 		b.append("if(client != null)\n");
 		b.append("client.close();\n");
 		b.append("}\n\n");
-
-		if (project.isDeployedOnGlassfish()) {
-			// The JSon parser must be configured to handle the date format used by Glassfish!
-			b.append("/**\n");
-			b.append(" * Configuration of the date format that should be used by the {@link ObjectMapper}\n");
-			b.append(" */\n");
-			b.append("private class JacksonConfig implements ContextResolver<ObjectMapper>\n");
-			b.append("{\n");
-			b.append("private static final String DATE_FORMAT = \"yyyy-MM-dd'T'HH:mm:ss'Z[UTC]'\";\n\n");
-			b.append("private final ObjectMapper objectMapper;\n\n");
-			b.append("/**\n");
-			b.append(" * Constructor \n");
-			b.append(" */\n");
-			b.append("public JacksonConfig()\n");
-			b.append("{\n");
-			b.append("this.objectMapper = new ObjectMapper();\n");
-			b.append("this.objectMapper.setDateFormat(new SimpleDateFormat(DATE_FORMAT));\n");
-			b.append("}\n\n");
-			b.append("/* (non-Javadoc)\n");
-			b.append(" * @see jakarta.ws.rs.ext.ContextResolver#getContext(java.lang.Class)\n");
-			b.append(" */\n");
-			b.append("@Override\n");
-			b.append("public ObjectMapper getContext(Class<?> objectType)\n");
-			b.append("{\n");
-			b.append("return objectMapper;\n");
-			b.append("}\n");
-			b.append("}\n\n");
-		}
-
+		b.append("/**\n");
+		b.append(" * Configuration of the {@link ObjectMapper} for the conversion of date fields\n");
+		b.append(" */\n");
+		b.append("private class JacksonConfig implements ContextResolver<ObjectMapper>\n");
+		b.append("{\n");
+		b.append("private static final String DATE_FORMAT = \"yyyy-MM-dd'T'HH:mm:ss'Z[UTC]'\";\n\n");
+		b.append("private final ObjectMapper objectMapper;\n\n");
+		b.append("/**\n");
+		b.append(" * Constructor\n");
+		b.append(" */\n");
+		b.append("public JacksonConfig()\n");
+		b.append("{\n");
+		b.append("this.objectMapper = new ObjectMapper();\n");
+		b.append("this.objectMapper.registerModule(new JavaTimeModule());");
+		b.append("this.objectMapper.setDateFormat(new SimpleDateFormat(DATE_FORMAT));\n");
+		b.append("}\n\n");
+		b.append("/* (non-Javadoc)\n");
+		b.append(" * @see jakarta.ws.rs.ext.ContextResolver#getContext(java.lang.Class)\n");
+		b.append(" */\n");
+		b.append("@Override\n");
+		b.append("public ObjectMapper getContext(Class<?> objectType)\n");
+		b.append("{\n");
+		b.append("return objectMapper;\n");
+		b.append("}\n");
+		b.append("}\n\n");
 		b.append("/**\n");
 		b.append(" * Logging filter\n");
 		b.append(" */\n");
