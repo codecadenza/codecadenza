@@ -651,7 +651,9 @@ public abstract class AbstractIntegrationMethodGenerator {
 		final BoundaryMethodTypeEnumeration type = method.getBoundaryMethod().getMethodType();
 
 		return type == BoundaryMethodTypeEnumeration.CREATE || type == BoundaryMethodTypeEnumeration.UPDATE
-				|| type == BoundaryMethodTypeEnumeration.SAVE;
+				|| type == BoundaryMethodTypeEnumeration.SAVE || type == BoundaryMethodTypeEnumeration.FIND_BY_ID
+				|| type == BoundaryMethodTypeEnumeration.FIND_BY_OBJECT || type == BoundaryMethodTypeEnumeration.FIND_EXISTING
+				|| type == BoundaryMethodTypeEnumeration.SEARCH_BY_FILTER;
 	}
 
 	/**
