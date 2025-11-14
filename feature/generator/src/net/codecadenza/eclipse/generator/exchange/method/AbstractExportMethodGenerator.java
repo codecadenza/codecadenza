@@ -350,8 +350,10 @@ public abstract class AbstractExportMethodGenerator extends AbstractExchangeMeth
 
 		b.append(targetMappingObjectName + "." + setter + "(");
 
-		if (generator != null && domainAttr != null && domainAttr.getCollectionType() != CollectionTypeEnumeration.NONE)
+		if (generator != null && domainAttr != null && domainAttr.getCollectionType() != CollectionTypeEnumeration.NONE) {
+			generator.importPackage(PACK_JAVA_UTIL);
 			generator.importPackage("java.util.stream");
+		}
 
 		// By definition, we handle fields of type char by using a String with exactly one character!
 		if (attr.getJavaType().isChar() && (domainAttr == null || domainAttr.getCollectionType() == CollectionTypeEnumeration.NONE))

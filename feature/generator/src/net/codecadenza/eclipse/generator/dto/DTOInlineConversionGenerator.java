@@ -576,8 +576,10 @@ public class DTOInlineConversionGenerator {
 
 		b.append(dtoName + "." + attr.getSetterName() + "(" + domainObjName + "." + getter);
 
-		if (domainAttribute.getCollectionType() != CollectionTypeEnumeration.NONE)
+		if (domainAttribute.getCollectionType() != CollectionTypeEnumeration.NONE) {
+			imports.add("import java.util.*;");
 			imports.add("import java.util.stream.*;");
+		}
 
 		// A list or a set of an element collection must be converted, because it is unclear whether the implementation used by the
 		// persistence provider can be serialized!
