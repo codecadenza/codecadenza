@@ -594,29 +594,33 @@ public class IntegrationTestCaseGenerator extends AbstractJavaSourceGenerator {
 		if (methodInvocation.isReturnVoid() && invocationAttributes.containsKey(methodInvocation)
 				&& methodInvocation.getTrackedAttribute() != null) {
 			// Execute the given statement and inject the generated primary key value into the test data
-			final MappingObject mappingObject = (MappingObject) integrationMethod.getBoundaryMethod().getFirstParameter(true).getType();
-			final MappingAttribute pkAttr;
+			final JavaType returnType = integrationMethod.getBoundaryMethod().getFirstParameter(true).getType();
+			JavaType generatedType = returnType;
 
-			if (mappingObject instanceof final ExchangeMappingObject exchangeMappingObject)
-				pkAttr = exchangeMappingObject.getPKAttribute();
-			else if (mappingObject instanceof final DTOBean dto)
-				pkAttr = dto.getPKAttribute();
-			else
-				throw new IllegalStateException("Unsupported type for mapping object " + mappingObject.getName());
+			if (returnType instanceof final MappingObject mappingObject) {
+				final MappingAttribute pkAttr;
 
-			final JavaType pkType = pkAttr.getDomainAttribute().getJavaType();
-			final String pkTypeName = pkType.getName();
+				if (mappingObject instanceof final ExchangeMappingObject exchangeMappingObject)
+					pkAttr = exchangeMappingObject.getPKAttribute();
+				else if (mappingObject instanceof final DTOBean dto)
+					pkAttr = dto.getPKAttribute();
+				else
+					throw new IllegalStateException("Unsupported type for mapping object " + mappingObject.getName());
+
+				generatedType = pkAttr.getDomainAttribute().getJavaType();
+			}
+
 			final String idConstant = invocationAttributes.get(methodInvocation).get(methodInvocation.getTrackedAttribute());
 
-			if (pkType.getNamespace() != null)
-				importPackage(pkType.getNamespace().toString());
+			if (generatedType.getNamespace() != null)
+				importPackage(generatedType.getNamespace().toString());
 
-			b.append("final " + pkTypeName + " " + pkAttr.getName() + " = ");
-			b.append("completionHandler.waitForFinish(invocation.getPostProcessingStatement(), " + pkTypeName + ".class");
+			b.append("final " + generatedType.getName() + " generatedId = ");
+			b.append("completionHandler.waitForFinish(invocation.getPostProcessingStatement(), " + generatedType.getName() + ".class");
 			b.append(addWaitForFinishParameters(methodInvocation));
 			b.append(");\n");
 			b.append("testDataProvider.setGeneratedFieldValue(UUID.fromString(");
-			b.append(idConstant + ".poll()), " + pkAttr.getName() + ", " + pkTypeName + ".class);\n");
+			b.append(idConstant + ".poll()), generatedId, " + generatedType.getName() + ".class);\n");
 		}
 		else {
 			b.append("completionHandler.waitForFinish(invocation.getPostProcessingStatement() ");
