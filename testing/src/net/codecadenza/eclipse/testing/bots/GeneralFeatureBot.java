@@ -71,6 +71,7 @@ public class GeneralFeatureBot {
 		final var dtoBot = new DataTransferObjectBot(bot);
 		final var dataExchangeBot = new DataExchangeBot(bot);
 		final var integrationBeanBot = new IntegrationBeanBot(bot);
+		final var integrationTestBot = new IntegrationTestBot(bot);
 		final var guiTestBot = new GUITestBot(bot);
 		final var project = ProjectFactory.createProject(PROJECT_NAME, projectType, technologyPlatform, clientPlatform,
 				DatabaseVendor.MYSQL);
@@ -100,6 +101,9 @@ public class GeneralFeatureBot {
 		if (technologyPlatform != TechnologyPlatform.JAVA_SE) {
 			integrationBeanBot.createIntegrationBeans(project);
 			integrationBeanBot.editIntegrationBeans(project);
+
+			integrationTestBot.createIntegrationTestCases(project);
+			integrationTestBot.editIntegrationTestCases(project);
 		}
 
 		boundaryBot.openBoundaryBeans(project);
@@ -116,8 +120,10 @@ public class GeneralFeatureBot {
 
 		clientBot.deleteForms(project);
 
-		if (technologyPlatform != TechnologyPlatform.JAVA_SE)
+		if (technologyPlatform != TechnologyPlatform.JAVA_SE) {
+			integrationTestBot.deleteIntegrationTestCases(project);
 			integrationBeanBot.deleteIntegrationBeans(project);
+		}
 
 		boundaryBot.deleteBoundaryBeans(project);
 		dataExchangeBot.deleteExchangeMethods(project);

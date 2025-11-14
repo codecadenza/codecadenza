@@ -609,12 +609,12 @@ public class InvocationTreePanel extends Composite {
 					deleteAllowed = selInvocation.getNestedInvocations().stream().allMatch(n -> isInvocationAllowedToBeDeleted(n));
 
 				if (!deleteAllowed) {
-					MessageDialog.openInformation(Display.getCurrent().getActiveShell(), "Delete invocation",
+					MessageDialog.openInformation(Display.getCurrent().getActiveShell(), "Delete",
 							"Cannot delete the selected method invocation. Remove all references first!");
 					return;
 				}
 
-				if (!MessageDialog.openConfirm(Display.getCurrent().getActiveShell(), "Delete invocation",
+				if (!MessageDialog.openConfirm(Display.getCurrent().getActiveShell(), "Delete",
 						"Do you really want to delete the selected method invocation?"))
 					return;
 

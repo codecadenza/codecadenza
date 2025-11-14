@@ -39,6 +39,8 @@ public class DomainObject {
 	private static final String REPOSITORY_SUFFIX = "Repository";
 	private static final String EXCHANGE_SERVICE_SUFFIX = "ExchangeService";
 	private static final String TABLE_NAME_SUFFIX = "_tab";
+	private static final String INTEGRATION_SERVICE_SUFFIX = "ServiceBean";
+	private static final String CONSUMER_SUFFIX = "Consumer";
 
 	private final String name;
 	private final List<DomainAttribute> attributes = new ArrayList<>();
@@ -328,6 +330,21 @@ public class DomainObject {
 	 */
 	public String getToolbarTitleDelete() {
 		return "Delete selected " + label;
+	}
+
+	/**
+	 * @param type
+	 * @return the default name of the respective integration service bean
+	 */
+	public String getIntegrationBeanName(IntegrationBeanType type) {
+		String integrationBeanName = name + type.name();
+
+		if (type == IntegrationBeanType.KAFKA || type == IntegrationBeanType.JMS)
+			integrationBeanName += CONSUMER_SUFFIX;
+		else
+			integrationBeanName += INTEGRATION_SERVICE_SUFFIX;
+
+		return integrationBeanName;
 	}
 
 	/**

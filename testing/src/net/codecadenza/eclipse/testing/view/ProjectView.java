@@ -24,6 +24,7 @@ package net.codecadenza.eclipse.testing.view;
 import static org.junit.jupiter.api.Assertions.fail;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import net.codecadenza.eclipse.testing.domain.DomainObject;
 import net.codecadenza.eclipse.testing.domain.Project;
@@ -48,8 +49,8 @@ public class ProjectView extends AbstractView {
 	private static final String MNU_CREATE_DEFAULT_FORMS = "Create default forms";
 	private static final String MNU_CREATE_GRID_PANEL = "Create grid panel";
 	private static final String MNU_CREATE_INTEGRATION_BEAN = "New integration bean";
+	private static final String MNU_CREATE_TEST_CASE = "New test case";
 	private static final String MNU_CREATE_UPDATE_FORM = "Create update form";
-	private static final String MNU_CREATE_GUI_TEST = "New test case";
 	private static final String MNU_CREATE_VIEW_FORM = "Create view form";
 	private static final String MNU_EDIT_DATA_SOURCE = "Data source";
 	private static final String MNU_EDIT_PROJECT = "Edit";
@@ -395,7 +396,7 @@ public class ProjectView extends AbstractView {
 	 */
 	public void clickContextMenuCreateGUITest() {
 		getProjectTreeItem().getNode(TREE_ITEM_TEST_MODULES).expand().getNode(TREE_ITEM_SELENIUM).click()
-				.contextMenu(MNU_CREATE_GUI_TEST).click();
+				.contextMenu(MNU_CREATE_TEST_CASE).click();
 	}
 
 	/**
@@ -556,6 +557,49 @@ public class ProjectView extends AbstractView {
 	 */
 	public SWTBotTreeItem getIntegrationBeansTreeItem() {
 		return getProjectTreeItem().getNode(TREE_ITEM_INTEGRATION_OBJECTS).expand();
+	}
+
+	/**
+	 * @return the tree item that contains all test modules
+	 */
+	public SWTBotTreeItem getTestModulesTreeItem() {
+		return getProjectTreeItem().getNode(TREE_ITEM_TEST_MODULES).expand();
+	}
+
+	/**
+	 * @return all integration test module names of the current project
+	 */
+	public List<String> getIntegrationTestModuleNames() {
+		return Arrays.asList(getTestModulesTreeItem().getItems()).stream().map(SWTBotTreeItem::getText)
+				.filter(i -> !i.equals(TREE_ITEM_SELENIUM)).toList();
+	}
+
+	/**
+	 * Click on the context menu item for creating an integration test case
+	 * @param moduleTreeItem
+	 */
+	public void clickContextMenuCreateIntegrationTest(SWTBotTreeItem moduleTreeItem) {
+		moduleTreeItem.contextMenu(MNU_CREATE_TEST_CASE).click();
+	}
+
+	/**
+	 * Open the source code of the given integration test case in the editor
+	 * @param integrationTestCaseName
+	 */
+	public void openIntegrationTestCaseInEditor(String integrationTestCaseName) {
+		getTestModulesTreeItem().expand();
+
+		for (final var integrationTestModuleItem : getTestModulesTreeItem().getItems()) {
+			integrationTestModuleItem.expand();
+
+			for (final var integrationTestCaseItem : integrationTestModuleItem.getItems())
+				if (integrationTestCaseItem.getText().equals(integrationTestCaseName)) {
+					integrationTestCaseItem.doubleClick();
+					return;
+				}
+		}
+
+		fail("The integration test case '" + integrationTestCaseName + "' could not be found!");
 	}
 
 	/**

@@ -51,6 +51,7 @@ public abstract class AbstractBot {
 	protected static final String CMD_OK = "OK";
 	protected static final String CMD_OPEN = "Open";
 	protected static final String CMD_REMOVE = "Remove";
+	protected static final String CMD_SAVE = "Save";
 	protected static final String MNU_ADD = "Add";
 	protected static final String MNU_DELETE = "Delete";
 	protected static final String MNU_EDIT = "Edit";

@@ -106,7 +106,7 @@ public class IntegrationTestCaseGenerator extends AbstractJavaSourceGenerator {
 	@Override
 	protected void addImports() {
 		importPackage("java.io");
-		importPackage("net.codecadenza.runtime.ddt.service");
+		importPackage("net.codecadenza.runtime.ddt.service.data");
 		importPackage("org.junit.jupiter.api");
 
 		if (addCompletionHandler)

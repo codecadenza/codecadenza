@@ -26,7 +26,6 @@ import java.util.List;
 import net.codecadenza.eclipse.testing.dialog.DeleteDialog;
 import net.codecadenza.eclipse.testing.dialog.integration.CreateIntegrationBeanDialog;
 import net.codecadenza.eclipse.testing.dialog.integration.EditIntegrationBeanDialog;
-import net.codecadenza.eclipse.testing.domain.DomainObject;
 import net.codecadenza.eclipse.testing.domain.IntegrationBeanType;
 import net.codecadenza.eclipse.testing.domain.Project;
 import net.codecadenza.eclipse.testing.view.ProjectView;
@@ -46,9 +45,6 @@ import org.slf4j.LoggerFactory;
  * @version 1.0.0
  */
 public class IntegrationBeanBot extends AbstractBot {
-
-	private static final String INTEGRATION_SERVICE_SUFFIX = "ServiceBean";
-	private static final String KAFKA_CONSUMER_SUFFIX = "Consumer";
 	private static final Logger log = LoggerFactory.getLogger(IntegrationBeanBot.class);
 
 	/**
@@ -72,7 +68,7 @@ public class IntegrationBeanBot extends AbstractBot {
 			final var integrationBeanType = IntegrationBeanType.fromPackageName(packageName);
 
 			for (final var domainObject : project.getNonAbstractDomainObjects()) {
-				final var integrationBeanName = createIntegrationBeanName(integrationBeanType, domainObject);
+				final var integrationBeanName = domainObject.getIntegrationBeanName(integrationBeanType);
 
 				log.debug("Create integration bean '{}'", integrationBeanName);
 
@@ -106,7 +102,7 @@ public class IntegrationBeanBot extends AbstractBot {
 			final var integrationBeanType = IntegrationBeanType.fromPackageName(packageName);
 
 			for (final var domainObject : project.getNonAbstractDomainObjects()) {
-				final var integrationBeanName = createIntegrationBeanName(integrationBeanType, domainObject);
+				final var integrationBeanName = domainObject.getIntegrationBeanName(integrationBeanType);
 
 				log.debug("Edit integration bean '{}'", integrationBeanName);
 
@@ -135,7 +131,7 @@ public class IntegrationBeanBot extends AbstractBot {
 			final var integrationBeanType = IntegrationBeanType.fromPackageName(packageName);
 
 			for (final var domainObject : project.getNonAbstractDomainObjects()) {
-				final var integrationBeanName = createIntegrationBeanName(integrationBeanType, domainObject);
+				final var integrationBeanName = domainObject.getIntegrationBeanName(integrationBeanType);
 
 				log.debug("Delete integration bean '{}'", integrationBeanName);
 
@@ -149,17 +145,6 @@ public class IntegrationBeanBot extends AbstractBot {
 					break;
 			}
 		}
-	}
-
-	private String createIntegrationBeanName(final IntegrationBeanType type, final DomainObject domainObject) {
-		var integrationBeanName = domainObject.getName() + type.name();
-
-		if (type == IntegrationBeanType.KAFKA || type == IntegrationBeanType.JMS)
-			integrationBeanName += KAFKA_CONSUMER_SUFFIX;
-		else
-			integrationBeanName += INTEGRATION_SERVICE_SUFFIX;
-
-		return integrationBeanName;
 	}
 
 }

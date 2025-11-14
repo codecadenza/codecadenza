@@ -87,7 +87,7 @@ public class ElementCollectionTestDataAttributePanel extends AbstractTestDataAtt
 		txtNewElement.setEditable(isEditable());
 
 		final Button cmdAdd = new Button(panAdd, SWT.NONE);
-		cmdAdd.setText("Add");
+		cmdAdd.setText("Add item");
 		cmdAdd.setEnabled(isEditable());
 
 		cmdAdd.addSelectionListener(new SelectionAdapter() {
