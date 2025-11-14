@@ -19,18 +19,17 @@
  * along with this software; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
  */
-package net.codecadenza.runtime.ddt.service;
+package net.codecadenza.runtime.ddt.service.preparation;
 
 import java.lang.invoke.MethodHandles;
-import net.codecadenza.runtime.ddt.model.TestData;
 import net.codecadenza.runtime.service.ServiceInitializationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
  * <p>
- * Factory for creating a test data provider instance. The provider that should be used can be selected by the
- * 'TEST_DATA_PROVIDER_CLASS_NAME' property in the respective properties file.
+ * Factory for creating an {@link IStatementProcessor} instance. The implementation that should be used can be selected by the
+ * 'STATEMENT_PROCESSOR_CLASS_NAME' property in the the respective properties file.
  * </p>
  * <p>
  * Copyright 2025 (C) by Martin Ganserer
@@ -38,33 +37,32 @@ import org.slf4j.LoggerFactory;
  * @author Martin Ganserer
  * @version 1.0.0
  */
-public class TestDataProviderFactory {
+public class StatementProcessorFactory {
 	private static final Logger logger = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
 	/**
 	 * Prevent instantiation
 	 */
-	private TestDataProviderFactory() {
+	private StatementProcessorFactory() {
 
 	}
 
 	/**
-	 * Create and initialize a {@link ITestDataProvider} instance based on the respective properties
-	 * @param id the ID for finding the respective {@link TestData}
+	 * Create and initialize a {@link IStatementProcessor} instance based on the respective properties
 	 * @param properties the properties that should be used
-	 * @return a {@link ITestDataProvider} instance
-	 * @throws ServiceInitializationException if the {@link ITestDataProvider} could not be initialized
+	 * @return a {@link IStatementProcessor} instance
+	 * @throws ServiceInitializationException if the {@link IStatementProcessor} could not be initialized
 	 */
-	public static ITestDataProvider getTestDataProvider(Object id, TestDataProviderProperties properties) {
-		logger.debug("Create test data provider '{}'", properties.getTestDataProviderClassName());
+	public static IStatementProcessor getStatementProcessor(StatementProcessorProperties properties) {
+		logger.debug("Create statement processor '{}'", properties.getStatementProcessorClassName());
 
 		try {
-			final Class<? extends ITestDataProvider> providerClass = Class.forName(properties.getTestDataProviderClassName())
-					.asSubclass(ITestDataProvider.class);
-			return providerClass.getConstructor(id.getClass(), TestDataProviderProperties.class).newInstance(id, properties);
+			final Class<? extends IStatementProcessor> handlerClass = Class.forName(properties.getStatementProcessorClassName())
+					.asSubclass(IStatementProcessor.class);
+			return handlerClass.getConstructor(StatementProcessorProperties.class).newInstance(properties);
 		}
 		catch (final Exception ex) {
-			throw new ServiceInitializationException("Could not create test data provider!", ex);
+			throw new ServiceInitializationException("Could not create statement process!", ex);
 		}
 	}
 

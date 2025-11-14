@@ -19,7 +19,7 @@
  * along with this software; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
  */
-package net.codecadenza.runtime.ddt.service.util;
+package net.codecadenza.runtime.ddt.service.common;
 
 import java.io.File;
 import java.io.FileInputStream;

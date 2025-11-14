@@ -19,7 +19,7 @@
  * along with this software; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
  */
-package net.codecadenza.runtime.ddt.service.imp;
+package net.codecadenza.runtime.ddt.service.data.imp;
 
 import java.lang.invoke.MethodHandles;
 import java.util.ArrayDeque;
@@ -36,10 +36,10 @@ import net.codecadenza.runtime.ddt.model.ReturnValue;
 import net.codecadenza.runtime.ddt.model.TestData;
 import net.codecadenza.runtime.ddt.model.TestField;
 import net.codecadenza.runtime.ddt.model.TestObject;
-import net.codecadenza.runtime.ddt.service.ITestDataProvider;
-import net.codecadenza.runtime.ddt.service.TestDataProviderProperties;
-import net.codecadenza.runtime.ddt.service.util.ReferenceResolver;
-import net.codecadenza.runtime.ddt.service.util.TestObjectInitizalizer;
+import net.codecadenza.runtime.ddt.service.data.ITestDataProvider;
+import net.codecadenza.runtime.ddt.service.data.TestDataProviderProperties;
+import net.codecadenza.runtime.ddt.service.data.util.ReferenceResolver;
+import net.codecadenza.runtime.ddt.service.data.util.TestObjectInitizalizer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

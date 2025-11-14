@@ -19,9 +19,9 @@
  * along with this software; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
  */
-package net.codecadenza.runtime.ddt.service;
+package net.codecadenza.runtime.ddt.service.data;
 
-import net.codecadenza.runtime.ddt.service.util.AbstractFileProperties;
+import net.codecadenza.runtime.ddt.service.common.AbstractFileProperties;
 
 /**
  * <p>

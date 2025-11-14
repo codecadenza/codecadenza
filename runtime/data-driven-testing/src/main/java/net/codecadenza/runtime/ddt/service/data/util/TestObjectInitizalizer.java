@@ -19,7 +19,7 @@
  * along with this software; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
  */
-package net.codecadenza.runtime.ddt.service.util;
+package net.codecadenza.runtime.ddt.service.data.util;
 
 import java.lang.invoke.MethodHandles;
 import java.lang.reflect.Array;
@@ -35,7 +35,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import net.codecadenza.runtime.conversion.ValueConverter;
 import net.codecadenza.runtime.ddt.model.TestField;
 import net.codecadenza.runtime.ddt.model.TestObject;
-import net.codecadenza.runtime.ddt.service.TestDataProviderProperties;
+import net.codecadenza.runtime.ddt.service.data.TestDataProviderProperties;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

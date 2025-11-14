@@ -26,12 +26,17 @@ import java.time.Duration;
 import net.codecadenza.runtime.ddt.example.domain.CountryDTO;
 import net.codecadenza.runtime.ddt.example.service.CountryService;
 import net.codecadenza.runtime.ddt.model.MethodInvocation;
-import net.codecadenza.runtime.ddt.service.ITestDataProvider;
-import net.codecadenza.runtime.ddt.service.TestDataProviderFactory;
-import net.codecadenza.runtime.ddt.service.TestDataProviderProperties;
+import net.codecadenza.runtime.ddt.model.TestData;
 import net.codecadenza.runtime.ddt.service.completion.IInvocationCompletionHandler;
 import net.codecadenza.runtime.ddt.service.completion.InvocationCompletionHandlerFactory;
 import net.codecadenza.runtime.ddt.service.completion.InvocationCompletionHandlerProperties;
+import net.codecadenza.runtime.ddt.service.data.ITestDataProvider;
+import net.codecadenza.runtime.ddt.service.data.TestDataProviderFactory;
+import net.codecadenza.runtime.ddt.service.data.TestDataProviderProperties;
+import net.codecadenza.runtime.ddt.service.preparation.IStatementProcessor;
+import net.codecadenza.runtime.ddt.service.preparation.StatementProcessorFactory;
+import net.codecadenza.runtime.ddt.service.preparation.StatementProcessorProperties;
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
@@ -50,7 +55,9 @@ class CountryServiceTest {
 
 	private static ITestDataProvider testDataProvider;
 	private static IInvocationCompletionHandler completionHandler;
+	private static IStatementProcessor statementProcessor;
 	private static CountryService countryService;
+	private static TestData testData;
 
 	/**
 	 * Initialize the {@link ITestDataProvider} and the service that should be tested
@@ -61,14 +68,30 @@ class CountryServiceTest {
 		testDataProviderProperties.load();
 
 		testDataProvider = TestDataProviderFactory.getTestDataProvider(new File(XML_FILE_PATH), testDataProviderProperties);
-		testDataProvider.loadTestData();
+		testData = testDataProvider.loadTestData();
 
 		final var invocationHandlerProperties = new InvocationCompletionHandlerProperties();
 		invocationHandlerProperties.load();
 
 		completionHandler = InvocationCompletionHandlerFactory.getPostProcessor(invocationHandlerProperties);
+
 		countryService = new CountryService(invocationHandlerProperties.getResourceURL(), invocationHandlerProperties.getUserName(),
 				invocationHandlerProperties.getPassword());
+
+		final var statementProcessorProperties = new StatementProcessorProperties();
+		statementProcessorProperties.load();
+
+		statementProcessor = StatementProcessorFactory.getStatementProcessor(statementProcessorProperties);
+		statementProcessor.executeStatements(testData.getPreProcessingStatements());
+	}
+
+	/**
+	 * Run all post-processing commands
+	 */
+	@AfterAll
+	static void cleanUp() {
+		if (statementProcessor != null)
+			statementProcessor.executeStatements(testData.getPostProcessingStatements());
 	}
 
 	/**

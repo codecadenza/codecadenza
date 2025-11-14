@@ -19,17 +19,11 @@
  * along with this software; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
  */
-package net.codecadenza.runtime.ddt.service.imp.xml;
-
-import java.io.File;
-import net.codecadenza.runtime.ddt.model.TestData;
-import net.codecadenza.runtime.ddt.service.ITestDataProvider;
-import net.codecadenza.runtime.ddt.service.TestDataProviderProperties;
-import net.codecadenza.runtime.ddt.service.imp.AbstractTestDataProvider;
+package net.codecadenza.runtime.ddt.service.data.util;
 
 /**
  * <p>
- * A {@link ITestDataProvider} that loads {@link TestData} from an XML file
+ * Exception that indicates that an object could not be initialized
  * </p>
  * <p>
  * Copyright 2025 (C) by Martin Ganserer
@@ -37,28 +31,25 @@ import net.codecadenza.runtime.ddt.service.imp.AbstractTestDataProvider;
  * @author Martin Ganserer
  * @version 1.0.0
  */
-public class XMLTestDataProvider extends AbstractTestDataProvider<File> {
+public class ObjectInitializationException extends RuntimeException {
+	private static final long serialVersionUID = -5778052224607704684L;
+
 	/**
 	 * Constructor
-	 * @param testDataFile the XML file that contains the test data
-	 * @param properties the test properties
+	 * @param message a human-readable message explaining the reason for the failure
+	 * @param cause the {@link Throwable} that caused this exception to be thrown
 	 */
-	public XMLTestDataProvider(File testDataFile, TestDataProviderProperties properties) {
-		super(testDataFile, properties);
+	public ObjectInitializationException(String message, Throwable cause) {
+		super(message, cause);
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * @see net.codecadenza.runtime.ddt.service.ITestDataProvider#loadTestData()
+	/**
+	 * Constructor
+	 * @param objectType the class that represents the type of the object
+	 * @param cause the {@link Throwable} that caused this exception to be thrown
 	 */
-	@Override
-	public TestData loadTestData() {
-		final var parser = new XMLTestDataParser(identifier);
-		testData = parser.parseTestData();
-
-		init(testData);
-
-		return testData;
+	public ObjectInitializationException(Class<?> objectType, Throwable cause) {
+		this("Error initializing object of type '" + objectType.getName() + "'", cause);
 	}
 
 }

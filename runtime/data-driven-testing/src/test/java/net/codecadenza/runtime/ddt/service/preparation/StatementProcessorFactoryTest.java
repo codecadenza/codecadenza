@@ -19,7 +19,7 @@
  * along with this software; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
  */
-package net.codecadenza.runtime.ddt.service;
+package net.codecadenza.runtime.ddt.service.preparation;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -30,7 +30,7 @@ import org.junit.jupiter.api.Test;
 
 /**
  * <p>
- * Test the functionality of the {@link TestDataProviderFactory}
+ * Test the functionality of the {@link StatementProcessorFactory}
  * </p>
  * <p>
  * Copyright 2025 (C) by Martin Ganserer
@@ -38,26 +38,24 @@ import org.junit.jupiter.api.Test;
  * @author Martin Ganserer
  * @version 1.0.0
  */
-class TestDataProviderFactoryTest {
-	private static final String XML_FILE_PATH = "src/test/resources/data/country_testdata.xml";
+class StatementProcessorFactoryTest {
 	private static final String INVALID_PROPERTIES = "src/test/resources/invalid_test.properties";
 
 	@Test
-	void testGetTestDataProvider() {
-		final var properties = new TestDataProviderProperties();
+	void testGetStatementProcessor() {
+		final var properties = new StatementProcessorProperties();
 		properties.load();
 
-		final ITestDataProvider testDataProvider = TestDataProviderFactory.getTestDataProvider(new File(XML_FILE_PATH), properties);
-		assertNotNull(testDataProvider);
+		final IStatementProcessor statementProcessor = StatementProcessorFactory.getStatementProcessor(properties);
+		assertNotNull(statementProcessor);
 	}
 
 	@Test
-	void testThrowsExceptionIfProviderDoesNotExist() {
-		final var properties = new TestDataProviderProperties();
+	void testThrowsExceptionIfStatementProcessorDoesNotExist() {
+		final var properties = new StatementProcessorProperties();
 		properties.load(new File(INVALID_PROPERTIES));
 
-		assertThrows(ServiceInitializationException.class,
-				() -> TestDataProviderFactory.getTestDataProvider(new File(XML_FILE_PATH), properties));
+		assertThrows(ServiceInitializationException.class, () -> StatementProcessorFactory.getStatementProcessor(properties));
 	}
 
 }

@@ -19,13 +19,11 @@
  * along with this software; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
  */
-package net.codecadenza.runtime.ddt.model;
-
-import java.util.List;
+package net.codecadenza.runtime.ddt.service.data.util;
 
 /**
  * <p>
- * Interface for all test data of a specific test case
+ * Exception that indicates that a field could not be initialized
  * </p>
  * <p>
  * Copyright 2025 (C) by Martin Ganserer
@@ -33,30 +31,16 @@ import java.util.List;
  * @author Martin Ganserer
  * @version 1.0.0
  */
-public interface TestData {
-	/**
-	 * @return the user name
-	 */
-	String getUserName();
+public class FieldInitializationException extends RuntimeException {
+	private static final long serialVersionUID = 1416092430547845689L;
 
 	/**
-	 * @return the password
+	 * Constructor
+	 * @param message a human-readable message explaining the reason for the failure
+	 * @param cause the {@link Throwable} that caused this exception to be thrown
 	 */
-	String getPassword();
-
-	/**
-	 * @return a list of the methods that are invoked during a test. Note, that a correct ordering is expected!
-	 */
-	List<MethodInvocation> getMethodInvocations();
-
-	/**
-	 * @return a list with all pre-processing statements
-	 */
-	List<String> getPreProcessingStatements();
-
-	/**
-	 * @return a list with all post-processing statements
-	 */
-	List<String> getPostProcessingStatements();
+	public FieldInitializationException(String message, Throwable cause) {
+		super(message, cause);
+	}
 
 }

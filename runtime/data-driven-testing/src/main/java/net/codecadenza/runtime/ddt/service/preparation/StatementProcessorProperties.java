@@ -19,13 +19,13 @@
  * along with this software; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
  */
-package net.codecadenza.runtime.ddt.service.completion;
+package net.codecadenza.runtime.ddt.service.preparation;
 
 import net.codecadenza.runtime.ddt.service.common.AbstractFileProperties;
 
 /**
  * <p>
- * Properties that are used to initialize an {@link IInvocationCompletionHandler}
+ * Properties that are used to initialize an {@link IStatementProcessor}
  * </p>
  * <p>
  * Copyright 2025 (C) by Martin Ganserer
@@ -33,20 +33,19 @@ import net.codecadenza.runtime.ddt.service.common.AbstractFileProperties;
  * @author Martin Ganserer
  * @version 1.0.0
  */
-public class InvocationCompletionHandlerProperties extends AbstractFileProperties {
+public class StatementProcessorProperties extends AbstractFileProperties {
 	private static final long serialVersionUID = -532068038412219206L;
 
-	private static final String PROPERTY_INVOCATION_HANDLER_CLASS_NAME = "INVOCATION_HANDLER_CLASS_NAME";
+	private static final String PROPERTY_STATEMENT_PROCESSOR_CLASS_NAME = "STATEMENT_PROCESSOR_CLASS_NAME";
 	private static final String PROPERTY_RESOURCE_URL = "RESOURCE_URL";
 	private static final String PROPERTY_USER_NAME = "USER_NAME";
 	private static final String PROPERTY_PASSWORD = "PASSWORD";
-	private static final String PROPERTY_DEFAULT_TIMEOUT = "DEFAULT_TIMEOUT_MS";
 
 	/**
-	 * @return the fully-qualified provider class name of the {@link IInvocationCompletionHandler} that should be used
+	 * @return the fully-qualified provider class name of the {@link IStatementProcessor} that should be used
 	 */
-	public String getInvocationHandlerClassName() {
-		return getStringProperty(PROPERTY_INVOCATION_HANDLER_CLASS_NAME);
+	public String getStatementProcessorClassName() {
+		return getStringProperty(PROPERTY_STATEMENT_PROCESSOR_CLASS_NAME);
 	}
 
 	/**
@@ -70,10 +69,4 @@ public class InvocationCompletionHandlerProperties extends AbstractFilePropertie
 		return getStringProperty(PROPERTY_PASSWORD);
 	}
 
-	/**
-	 * @return the default timeout in milliseconds
-	 */
-	public long getDefaultTimeout() {
-		return getLongProperty(PROPERTY_DEFAULT_TIMEOUT);
-	}
 }

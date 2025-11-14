@@ -44,6 +44,8 @@ public class XMLTestData implements TestData {
 	private String userName;
 	private String password;
 	private List<MethodInvocation> methodInvocations = new ArrayList<>();
+	private List<String> preProcessingStatements = new ArrayList<>();
+	private List<String> postProcessingStatements = new ArrayList<>();
 
 	/*
 	 * (non-Javadoc)
@@ -97,6 +99,42 @@ public class XMLTestData implements TestData {
 	 */
 	public void setMethodInvocations(List<MethodInvocation> methodInvocations) {
 		this.methodInvocations = methodInvocations;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see net.codecadenza.runtime.ddt.model.TestData#getPreProcessingStatements()
+	 */
+	@Override
+	@XmlElement(type = String.class, name = "pre_processing_statement")
+	public List<String> getPreProcessingStatements() {
+		return preProcessingStatements;
+	}
+
+	/**
+	 * Set the pre-processing statements
+	 * @param preProcessingStatements
+	 */
+	public void setPreProcessingStatements(List<String> preProcessingStatements) {
+		this.preProcessingStatements = preProcessingStatements;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see net.codecadenza.runtime.ddt.model.TestData#getPostProcessingStatements()
+	 */
+	@Override
+	@XmlElement(type = String.class, name = "post_processing_statement")
+	public List<String> getPostProcessingStatements() {
+		return postProcessingStatements;
+	}
+
+	/**
+	 * Set the post-processing statements
+	 * @param postProcessingStatements
+	 */
+	public void setPostProcessingStatements(List<String> postProcessingStatements) {
+		this.postProcessingStatements = postProcessingStatements;
 	}
 
 }

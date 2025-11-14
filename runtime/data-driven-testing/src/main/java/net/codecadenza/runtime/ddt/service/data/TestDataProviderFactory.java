@@ -19,17 +19,18 @@
  * along with this software; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
  */
-package net.codecadenza.runtime.ddt.service.completion;
+package net.codecadenza.runtime.ddt.service.data;
 
 import java.lang.invoke.MethodHandles;
+import net.codecadenza.runtime.ddt.model.TestData;
 import net.codecadenza.runtime.service.ServiceInitializationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
  * <p>
- * Factory for creating an {@link IInvocationCompletionHandler} instance. The implementation that should be used can be selected
- * by the 'INVOCATION_HANDLER_CLASS_NAME' property in the the respective properties file.
+ * Factory for creating a test data provider instance. The provider that should be used can be selected by the
+ * 'TEST_DATA_PROVIDER_CLASS_NAME' property in the respective properties file.
  * </p>
  * <p>
  * Copyright 2025 (C) by Martin Ganserer
@@ -37,32 +38,33 @@ import org.slf4j.LoggerFactory;
  * @author Martin Ganserer
  * @version 1.0.0
  */
-public class InvocationCompletionHandlerFactory {
+public class TestDataProviderFactory {
 	private static final Logger logger = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
 	/**
 	 * Prevent instantiation
 	 */
-	private InvocationCompletionHandlerFactory() {
+	private TestDataProviderFactory() {
 
 	}
 
 	/**
-	 * Create and initialize an {@link IInvocationCompletionHandler} instance based on the respective properties
+	 * Create and initialize a {@link ITestDataProvider} instance based on the respective properties
+	 * @param id the ID for finding the respective {@link TestData}
 	 * @param properties the properties that should be used
-	 * @return a {@link IInvocationCompletionHandler} instance
-	 * @throws ServiceInitializationException if the {@link IInvocationCompletionHandler} could not be initialized
+	 * @return a {@link ITestDataProvider} instance
+	 * @throws ServiceInitializationException if the {@link ITestDataProvider} could not be initialized
 	 */
-	public static IInvocationCompletionHandler getPostProcessor(InvocationCompletionHandlerProperties properties) {
-		logger.debug("Create invocation completion handler '{}'", properties.getInvocationHandlerClassName());
+	public static ITestDataProvider getTestDataProvider(Object id, TestDataProviderProperties properties) {
+		logger.debug("Create test data provider '{}'", properties.getTestDataProviderClassName());
 
 		try {
-			final Class<? extends IInvocationCompletionHandler> handlerClass = Class.forName(properties.getInvocationHandlerClassName())
-					.asSubclass(IInvocationCompletionHandler.class);
-			return handlerClass.getConstructor(InvocationCompletionHandlerProperties.class).newInstance(properties);
+			final Class<? extends ITestDataProvider> providerClass = Class.forName(properties.getTestDataProviderClassName())
+					.asSubclass(ITestDataProvider.class);
+			return providerClass.getConstructor(id.getClass(), TestDataProviderProperties.class).newInstance(id, properties);
 		}
 		catch (final Exception ex) {
-			throw new ServiceInitializationException("Could not create invocation completion handler!", ex);
+			throw new ServiceInitializationException("Could not create test data provider!", ex);
 		}
 	}
 

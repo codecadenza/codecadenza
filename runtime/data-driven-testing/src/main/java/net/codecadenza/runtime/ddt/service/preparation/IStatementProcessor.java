@@ -19,11 +19,13 @@
  * along with this software; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
  */
-package net.codecadenza.runtime.ddt.service.util;
+package net.codecadenza.runtime.ddt.service.preparation;
+
+import java.util.List;
 
 /**
  * <p>
- * Exception that indicates that a field could not be initialized
+ * An interface that must be implemented by all statement processors
  * </p>
  * <p>
  * Copyright 2025 (C) by Martin Ganserer
@@ -31,16 +33,11 @@ package net.codecadenza.runtime.ddt.service.util;
  * @author Martin Ganserer
  * @version 1.0.0
  */
-public class FieldInitializationException extends RuntimeException {
-	private static final long serialVersionUID = 1416092430547845689L;
-
+public interface IStatementProcessor {
 	/**
-	 * Constructor
-	 * @param message a human-readable message explaining the reason for the failure
-	 * @param cause the {@link Throwable} that caused this exception to be thrown
+	 * Execute the given statement
+	 * @param statements a list of statements that should be executed
 	 */
-	public FieldInitializationException(String message, Throwable cause) {
-		super(message, cause);
-	}
+	void executeStatements(List<String> statements);
 
 }
