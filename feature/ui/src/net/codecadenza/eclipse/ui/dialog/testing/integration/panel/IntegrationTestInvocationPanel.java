@@ -201,7 +201,7 @@ public class IntegrationTestInvocationPanel extends TestInvocationPanel {
 
 		if (enablePostProcessingStatement()) {
 			final var tabItemPostProcessing = new TabItem(tabFolder, SWT.NONE);
-			tabItemPostProcessing.setText("Post processing");
+			tabItemPostProcessing.setText("Post-processing");
 
 			final var panPostProcessing = new Composite(tabFolder, SWT.NONE);
 			panPostProcessing.setLayout(new GridLayout(2, false));
@@ -300,7 +300,7 @@ public class IntegrationTestInvocationPanel extends TestInvocationPanel {
 
 		try {
 			if (txtCommand != null)
-				validatePostProcessingStatement(txtCommand.getText());
+				validateAndSetPostProcessingStatement();
 
 			if (panParameters != null)
 				panParameters.validateAndApplyInput();
@@ -332,18 +332,21 @@ public class IntegrationTestInvocationPanel extends TestInvocationPanel {
 
 	/**
 	 * Check if the given statement is basically correct
-	 * @param statement the statement to be checked
 	 * @throws IllegalStateException if the validation has failed
 	 */
-	private void validatePostProcessingStatement(String statement) {
-		final String postProcessingStatement = statement.trim();
+	private void validateAndSetPostProcessingStatement() {
+		final String postProcessingStatement = txtCommand.getText().trim();
+		final String previousStatement = methodInvocation.getPostProcessingStatement();
 
-		if (postProcessingStatement.isEmpty())
+		if (postProcessingStatement.isEmpty()) {
+			methodInvocation.setPostProcessingStatement(postProcessingStatement);
 			return;
+		}
 
 		if (!postProcessingStatement.toLowerCase().startsWith("select"))
-			throw new IllegalStateException("The post processing statement must start with 'select'!");
+			throw new IllegalStateException("The post-processing statement must start with 'select'!");
 
+		methodInvocation.setPostProcessingStatement(postProcessingStatement);
 		methodInvocation.getPostProcessingAttributes().clear();
 
 		for (final String attributeName : methodInvocation.extractAttributeNamesFromStatement()) {
@@ -374,8 +377,12 @@ public class IntegrationTestInvocationPanel extends TestInvocationPanel {
 					break;
 			}
 
-			if (!found)
+			if (!found) {
+				// Do not overwrite the post-processing statement if an attribute could not be found!
+				methodInvocation.setPostProcessingStatement(previousStatement);
+
 				throw new IllegalStateException("An attribute with the name '" + attributeName + "' could not be found!");
+			}
 		}
 	}
 
