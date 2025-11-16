@@ -41,6 +41,7 @@ import net.codecadenza.eclipse.model.dto.DTOBean;
 import net.codecadenza.eclipse.model.exchange.ExchangeMappingObject;
 import net.codecadenza.eclipse.model.integration.AbstractIntegrationBean;
 import net.codecadenza.eclipse.model.integration.AbstractIntegrationMethod;
+import net.codecadenza.eclipse.model.integration.JMSIntegrationMethod;
 import net.codecadenza.eclipse.model.java.JavaType;
 import net.codecadenza.eclipse.model.mapping.MappingAttribute;
 import net.codecadenza.eclipse.model.mapping.MappingObject;
@@ -685,7 +686,9 @@ public class IntegrationTestCaseGenerator extends AbstractJavaSourceGenerator {
 	private String validateResult(IntegrationMethodTestInvocation methodInvocation) {
 		final var b = new StringBuilder();
 
-		if (methodInvocation.isReturnVoid())
+		// A JMS method that sends a response without a specified timeout is returning void!
+		if (methodInvocation.isReturnVoid() || (methodInvocation.getTimeout() == null
+				&& methodInvocation.getIntegrationMethod() instanceof final JMSIntegrationMethod jmsMethod && jmsMethod.isSendResponse()))
 			return b.toString();
 
 		final TestDataAttribute trackedAttribute = methodInvocation.getTrackedAttribute();
