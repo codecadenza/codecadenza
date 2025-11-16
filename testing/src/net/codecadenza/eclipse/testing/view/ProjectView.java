@@ -584,20 +584,15 @@ public class ProjectView extends AbstractView {
 
 	/**
 	 * Open the source code of the given integration test case in the editor
+	 * @param moduleName
 	 * @param integrationTestCaseName
 	 */
-	public void openIntegrationTestCaseInEditor(String integrationTestCaseName) {
-		getTestModulesTreeItem().expand();
-
-		for (final var integrationTestModuleItem : getTestModulesTreeItem().getItems()) {
-			integrationTestModuleItem.expand();
-
-			for (final var integrationTestCaseItem : integrationTestModuleItem.getItems())
-				if (integrationTestCaseItem.getText().equals(integrationTestCaseName)) {
-					integrationTestCaseItem.doubleClick();
-					return;
-				}
-		}
+	public void openIntegrationTestCaseInEditor(String moduleName, String integrationTestCaseName) {
+		for (final var integrationTestCaseItem : getTestModulesTreeItem().expand().getNode(moduleName).expand().getItems())
+			if (integrationTestCaseItem.getText().equals(integrationTestCaseName)) {
+				integrationTestCaseItem.doubleClick();
+				return;
+			}
 
 		fail("The integration test case '" + integrationTestCaseName + "' could not be found!");
 	}

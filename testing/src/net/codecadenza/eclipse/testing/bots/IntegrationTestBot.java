@@ -74,7 +74,7 @@ public class IntegrationTestBot extends AbstractBot {
 
 				waitForPendingBackgroundJobs();
 
-				projectView.openIntegrationTestCaseInEditor(integrationTestName);
+				projectView.openIntegrationTestCaseInEditor(moduleName, integrationTestName);
 
 				addNestedInvocations = !addNestedInvocations;
 
