@@ -101,13 +101,16 @@ public class CreateIntegrationTestCaseDialog extends AbstractDialog {
 
 		final var cboMethod = bot.comboBoxWithLabel(LBL_INTEGRATION_METHOD);
 		final int itemCount = cboMethod.itemCount();
+		boolean withoutTimeout = false;
 
 		// Iterate over all available integration methods and add them to the test
 		for (int i = 0; i < itemCount; i++) {
 			cboMethod.setSelection(i);
 			bot.button(CMD_ADD).click();
 
-			addInvocation(cboMethod.getText());
+			addInvocation(cboMethod.getText(), withoutTimeout);
+
+			withoutTimeout = !withoutTimeout;
 		}
 
 		bot.button(CMD_OK).click();
@@ -116,10 +119,11 @@ public class CreateIntegrationTestCaseDialog extends AbstractDialog {
 	/**
 	 * Add a new integration test method invocation
 	 * @param methodName the name of the method that is currently processed
+	 * @param withoutTimeout flag that controls if the default timeout should be removed
 	 */
-	private void addInvocation(final String methodName) {
+	private void addInvocation(final String methodName, boolean withoutTimeout) {
 		log.trace("Enter test data for invocation of method '{}'", methodName);
-		enterTestData(methodName, true);
+		enterTestData(methodName, true, withoutTimeout);
 
 		bot.button(CMD_SAVE).click();
 
@@ -139,7 +143,7 @@ public class CreateIntegrationTestCaseDialog extends AbstractDialog {
 				treeItem.contextMenu(MNU_ADD).click();
 
 				log.trace("Enter test data for nested invocation of method '{}'", methodName);
-				enterTestData(methodName, false);
+				enterTestData(methodName, false, false);
 				break;
 			}
 		}
@@ -151,23 +155,22 @@ public class CreateIntegrationTestCaseDialog extends AbstractDialog {
 	 * Enter some test data for a new integration test method invocation
 	 * @param methodName the name of the method that is currently processed
 	 * @param setAssertionOperators flag that controls if assertion operators should be set
+	 * @param withoutTimeout flag that controls if the default timeout should be removed
 	 */
-	private void enterTestData(String methodName, boolean setAssertionOperators) {
+	private void enterTestData(String methodName, boolean setAssertionOperators, boolean withoutTimeout) {
 		boolean hasReturnValue = true;
 
 		if (integrationBeanType == IntegrationBeanType.JMS || integrationBeanType == IntegrationBeanType.KAFKA) {
 			// Asynchronous methods do not always have a return value!
 			hasReturnValue = false;
-
-			final var txtTimeout = bot.textWithLabel(LBL_TIMEOUT);
-
-			if (!txtTimeout.isReadOnly())
-				txtTimeout.setText("200");
 		}
 		else {
 			bot.textWithLabel(LBL_USER_NAME).setText(DEFAULT_USER);
 			bot.textWithLabel(LBL_PASSWORD).setText(DEFAULT_PASSWORD);
 		}
+
+		if (withoutTimeout)
+			bot.textWithLabel(LBL_TIMEOUT).setText("");
 
 		// Initialize fields with random values
 		bot.button(CMD_RANDOM).click();
