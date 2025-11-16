@@ -21,8 +21,13 @@
  */
 package net.codecadenza.eclipse.testing.dialog.integration.test;
 
+import java.util.Arrays;
 import net.codecadenza.eclipse.testing.dialog.AbstractDialog;
+import net.codecadenza.eclipse.testing.dialog.DeleteDialog;
 import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
+import org.eclipse.swtbot.swt.finder.widgets.SWTBotTreeItem;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * <p>
@@ -36,6 +41,9 @@ import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
  */
 public class EditIntegrationTestCaseDialog extends AbstractDialog {
 	private static final String SHELL_TITLE = "Edit integration test case ";
+	private static final Logger log = LoggerFactory.getLogger(EditIntegrationTestCaseDialog.class);
+
+	private final String testCaseName;
 
 	/**
 	 * Constructor
@@ -44,6 +52,8 @@ public class EditIntegrationTestCaseDialog extends AbstractDialog {
 	 */
 	public EditIntegrationTestCaseDialog(SWTWorkbenchBot bot, String testCaseName) {
 		super(bot, SHELL_TITLE + testCaseName);
+
+		this.testCaseName = testCaseName;
 	}
 
 	/*
@@ -52,6 +62,19 @@ public class EditIntegrationTestCaseDialog extends AbstractDialog {
 	 */
 	@Override
 	public void enterData() {
+		final var invocations = Arrays.asList(bot.tree().getAllItems()).stream().map(SWTBotTreeItem::getText).toList().reversed();
+		final var tree = bot.tree();
+
+		// Delete all invocations in reverse order
+		for (final var invocation : invocations) {
+			log.debug("Delete integration test invocation '{}'", invocation);
+
+			tree.getTreeItem(invocation).contextMenu(MNU_DELETE).click();
+			new DeleteDialog(bot).enterData();
+		}
+
+		activateShellWithTitle(SHELL_TITLE + testCaseName);
+
 		bot.button(CMD_OK).click();
 	}
 

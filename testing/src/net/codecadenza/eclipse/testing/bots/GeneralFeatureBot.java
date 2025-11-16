@@ -103,7 +103,6 @@ public class GeneralFeatureBot {
 			integrationBeanBot.editIntegrationBeans(project);
 
 			integrationTestBot.createIntegrationTestCases(project);
-			integrationTestBot.editIntegrationTestCases(project);
 		}
 
 		boundaryBot.openBoundaryBeans(project);
@@ -114,6 +113,9 @@ public class GeneralFeatureBot {
 
 		// Wait until all compilation errors are gone
 		new ProblemsView(bot, project).waitForNoErrors();
+
+		if (technologyPlatform != TechnologyPlatform.JAVA_SE)
+			integrationTestBot.editIntegrationTestCases(project);
 
 		if (project.addGUITests())
 			guiTestBot.deleteGUITests(project);
