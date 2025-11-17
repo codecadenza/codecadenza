@@ -41,6 +41,7 @@ import net.codecadenza.eclipse.model.testing.MethodInvocationParameter;
 import net.codecadenza.eclipse.model.testing.TestDataAttribute;
 import net.codecadenza.eclipse.model.testing.TestDataObject;
 import net.codecadenza.eclipse.tools.ide.EclipseIDEService;
+import net.codecadenza.eclipse.tools.util.db.SQLStatementSplitter;
 import org.apache.commons.text.StringEscapeUtils;
 
 /**
@@ -96,6 +97,18 @@ public class IntegrationTestDataGenerator {
 		}
 
 		b.append(">\n");
+
+		for (final String preProcessingStatement : SQLStatementSplitter.splitSQLStatements(testCase.getPreProcessingStatements())) {
+			b.append("\t<pre_processing_statement>");
+			b.append(StringEscapeUtils.escapeXml10(preProcessingStatement));
+			b.append("</pre_processing_statement>\n");
+		}
+
+		for (final String postProcessingStatement : SQLStatementSplitter.splitSQLStatements(testCase.getPostProcessingStatements())) {
+			b.append("\t<post_processing_statement>");
+			b.append(StringEscapeUtils.escapeXml10(postProcessingStatement));
+			b.append("</post_processing_statement>\n");
+		}
 
 		for (final IntegrationMethodTestInvocation invocation : testCase.getMethodInvocations()) {
 			UUID groupId = null;

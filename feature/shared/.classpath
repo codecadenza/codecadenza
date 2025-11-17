@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
+	<classpathentry exported="true" kind="lib" path="lib/jsqlparser-5.3.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/poi-5.3.0.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/poi-ooxml-5.3.0.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/slf4j-api-2.0.16.jar"/>
@@ -18,9 +19,9 @@
 			<attribute name="module" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" exported="true" path="lib/codecadenza-eclipse-1.2.0.jar"/>
-	<classpathentry kind="lib" exported="true" path="lib/codecadenza-rcp-1.2.0.jar"/>
-	<classpathentry kind="lib" exported="true" path="lib/codecadenza-richclient-1.2.0.jar"/>
-	<classpathentry kind="lib" exported="true" path="lib/codecadenza-util-1.2.0.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/codecadenza-eclipse-1.2.0.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/codecadenza-rcp-1.2.0.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/codecadenza-richclient-1.2.0.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/codecadenza-util-1.2.0.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

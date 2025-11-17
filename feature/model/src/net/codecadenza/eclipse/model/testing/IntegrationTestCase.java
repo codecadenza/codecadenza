@@ -32,6 +32,10 @@ import org.eclipse.emf.common.util.EList;
  * <li>{@link net.codecadenza.eclipse.model.testing.IntegrationTestCase#getUserName <em>User Name</em>}</li>
  * <li>{@link net.codecadenza.eclipse.model.testing.IntegrationTestCase#getPassword <em>Password</em>}</li>
  * <li>{@link net.codecadenza.eclipse.model.testing.IntegrationTestCase#getMethodInvocations <em>Method Invocations</em>}</li>
+ * <li>{@link net.codecadenza.eclipse.model.testing.IntegrationTestCase#getPreProcessingStatements <em>Pre-Processing
+ * Statements</em>}</li>
+ * <li>{@link net.codecadenza.eclipse.model.testing.IntegrationTestCase#getPostProcessingStatements <em>Post-Processing
+ * Statements</em>}</li>
  * </ul>
  * @see net.codecadenza.eclipse.model.testing.TestingPackage#getIntegrationTestCase()
  * @model
@@ -85,6 +89,44 @@ public interface IntegrationTestCase extends AbstractTestCase {
 	 * @generated
 	 */
 	EList<IntegrationMethodTestInvocation> getMethodInvocations();
+
+	/**
+	 * Return the value of the '<em><b>Pre-Processing Statements</b></em>' attribute
+	 * @return the value of the '<em>Pre-Processing Statements</em>' attribute
+	 * @see #setPreProcessingStatements(String)
+	 * @see net.codecadenza.eclipse.model.testing.TestingPackage#getIntegrationTestCase_PreProcessingStatements()
+	 * @model
+	 * @generated
+	 */
+	String getPreProcessingStatements();
+
+	/**
+	 * Set the value of the '{@link net.codecadenza.eclipse.model.testing.IntegrationTestCase#getPreProcessingStatements
+	 * <em>Pre-Processing Statements</em>}' attribute
+	 * @param value the new value of the '<em>Pre-Processing Statements</em>' attribute
+	 * @see #getPreProcessingStatements()
+	 * @generated
+	 */
+	void setPreProcessingStatements(String value);
+
+	/**
+	 * Return the value of the '<em><b>Post-Processing Statements</b></em>' attribute
+	 * @return the value of the '<em>Post-Processing Statements</em>' attribute
+	 * @see #setPostProcessingStatements(String)
+	 * @see net.codecadenza.eclipse.model.testing.TestingPackage#getIntegrationTestCase_PostProcessingStatements()
+	 * @model
+	 * @generated
+	 */
+	String getPostProcessingStatements();
+
+	/**
+	 * Set the value of the '{@link net.codecadenza.eclipse.model.testing.IntegrationTestCase#getPostProcessingStatements
+	 * <em>Post-Processing Statements</em>}' attribute
+	 * @param value the new value of the '<em>Post-Processing Statements</em>' attribute
+	 * @see #getPostProcessingStatements()
+	 * @generated
+	 */
+	void setPostProcessingStatements(String value);
 
 	/**
 	 * @return if at least one invocation needs to either upload or download a file

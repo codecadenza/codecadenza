@@ -818,6 +818,26 @@ public class TestingPackageImpl extends EPackageImpl implements TestingPackage {
 
 	/*
 	 * (non-Javadoc)
+	 * @see net.codecadenza.eclipse.model.testing.TestingPackage#getIntegrationTestCase_PreProcessingStatements()
+	 * @generated
+	 */
+	@Override
+	public EAttribute getIntegrationTestCase_PreProcessingStatements() {
+		return (EAttribute) integrationTestCaseEClass.getEStructuralFeatures().get(3);
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see net.codecadenza.eclipse.model.testing.TestingPackage#getIntegrationTestCase_PostProcessingStatements()
+	 * @generated
+	 */
+	@Override
+	public EAttribute getIntegrationTestCase_PostProcessingStatements() {
+		return (EAttribute) integrationTestCaseEClass.getEStructuralFeatures().get(4);
+	}
+
+	/*
+	 * (non-Javadoc)
 	 * @see net.codecadenza.eclipse.model.testing.TestingPackage#getIntegrationMethodTestInvocation()
 	 * @generated
 	 */
@@ -1313,6 +1333,8 @@ public class TestingPackageImpl extends EPackageImpl implements TestingPackage {
 		createEAttribute(integrationTestCaseEClass, INTEGRATION_TEST_CASE__USER_NAME);
 		createEAttribute(integrationTestCaseEClass, INTEGRATION_TEST_CASE__PASSWORD);
 		createEReference(integrationTestCaseEClass, INTEGRATION_TEST_CASE__METHOD_INVOCATIONS);
+		createEAttribute(integrationTestCaseEClass, INTEGRATION_TEST_CASE__PRE_PROCESSING_STATEMENTS);
+		createEAttribute(integrationTestCaseEClass, INTEGRATION_TEST_CASE__POST_PROCESSING_STATEMENTS);
 
 		integrationMethodTestInvocationEClass = createEClass(INTEGRATION_METHOD_TEST_INVOCATION);
 		createEAttribute(integrationMethodTestInvocationEClass, INTEGRATION_METHOD_TEST_INVOCATION__EXPECT_TO_FAIL);
@@ -1547,6 +1569,12 @@ public class TestingPackageImpl extends EPackageImpl implements TestingPackage {
 		initEReference(getIntegrationTestCase_MethodInvocations(), this.getIntegrationMethodTestInvocation(), null,
 				"methodInvocations", null, 0, -1, IntegrationTestCase.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE,
 				!IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getIntegrationTestCase_PreProcessingStatements(), ecorePackage.getEString(), "preProcessingStatements", null,
+				0, 1, IntegrationTestCase.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE,
+				!IS_DERIVED, IS_ORDERED);
+		initEAttribute(getIntegrationTestCase_PostProcessingStatements(), ecorePackage.getEString(), "postProcessingStatements", null,
+				0, 1, IntegrationTestCase.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE,
+				!IS_DERIVED, IS_ORDERED);
 
 		initEClass(integrationMethodTestInvocationEClass, IntegrationMethodTestInvocation.class, "IntegrationMethodTestInvocation",
 				!IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);

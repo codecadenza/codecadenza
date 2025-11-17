@@ -47,6 +47,10 @@ import org.eclipse.emf.ecore.util.InternalEList;
  * <li>{@link net.codecadenza.eclipse.model.testing.impl.IntegrationTestCaseImpl#getPassword <em>Password</em>}</li>
  * <li>{@link net.codecadenza.eclipse.model.testing.impl.IntegrationTestCaseImpl#getMethodInvocations <em>Method
  * Invocations</em>}</li>
+ * <li>{@link net.codecadenza.eclipse.model.testing.impl.IntegrationTestCaseImpl#getPreProcessingStatements <em>Pre-Processing
+ * Statements</em>}</li>
+ * <li>{@link net.codecadenza.eclipse.model.testing.impl.IntegrationTestCaseImpl#getPostProcessingStatements <em>Post-Processing
+ * Statements</em>}</li>
  * </ul>
  * @generated
  */
@@ -90,6 +94,38 @@ public class IntegrationTestCaseImpl extends AbstractTestCaseImpl implements Int
 	 * @ordered
 	 */
 	protected EList<IntegrationMethodTestInvocation> methodInvocations;
+
+	/**
+	 * The default value of the '{@link #getPreProcessingStatements() <em>Pre-Processing Statements</em>}' attribute
+	 * @see #getPreProcessingStatements()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final String PRE_PROCESSING_STATEMENTS_EDEFAULT = null;
+
+	/**
+	 * The cached value of the '{@link #getPreProcessingStatements() <em>Pre-Processing Statements</em>}' attribute
+	 * @see #getPreProcessingStatements()
+	 * @generated
+	 * @ordered
+	 */
+	protected String preProcessingStatements = PRE_PROCESSING_STATEMENTS_EDEFAULT;
+
+	/**
+	 * The default value of the '{@link #getPostProcessingStatements() <em>Post-Processing Statements</em>}' attribute
+	 * @see #getPostProcessingStatements()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final String POST_PROCESSING_STATEMENTS_EDEFAULT = null;
+
+	/**
+	 * The cached value of the '{@link #getPostProcessingStatements() <em>Post Processing Statements</em>}' attribute
+	 * @see #getPostProcessingStatements()
+	 * @generated
+	 * @ordered
+	 */
+	protected String postProcessingStatements = POST_PROCESSING_STATEMENTS_EDEFAULT;
 
 	/**
 	 * @generated
@@ -189,6 +225,56 @@ public class IntegrationTestCaseImpl extends AbstractTestCaseImpl implements Int
 
 	/*
 	 * (non-Javadoc)
+	 * @see net.codecadenza.eclipse.model.testing.IntegrationTestCase#getPreProcessingStatements()
+	 * @generated
+	 */
+	@Override
+	public String getPreProcessingStatements() {
+		return preProcessingStatements;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see net.codecadenza.eclipse.model.testing.IntegrationTestCase#setPreProcessingStatements(java.lang.String)
+	 * @generated
+	 */
+	@Override
+	public void setPreProcessingStatements(String newPreProcessingStatements) {
+		final String oldPreProcessingStatements = preProcessingStatements;
+		preProcessingStatements = newPreProcessingStatements;
+
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, TestingPackage.INTEGRATION_TEST_CASE__PRE_PROCESSING_STATEMENTS,
+					oldPreProcessingStatements, preProcessingStatements));
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see net.codecadenza.eclipse.model.testing.IntegrationTestCase#getPostProcessingStatements()
+	 * @generated
+	 */
+	@Override
+	public String getPostProcessingStatements() {
+		return postProcessingStatements;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see net.codecadenza.eclipse.model.testing.IntegrationTestCase#setPostProcessingStatements(java.lang.String)
+	 * @generated
+	 */
+	@Override
+	public void setPostProcessingStatements(String newPostProcessingStatements) {
+		final String oldPostProcessingStatements = postProcessingStatements;
+		postProcessingStatements = newPostProcessingStatements;
+
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, TestingPackage.INTEGRATION_TEST_CASE__POST_PROCESSING_STATEMENTS,
+					oldPostProcessingStatements, postProcessingStatements));
+	}
+
+	/*
+	 * (non-Javadoc)
 	 * @see org.eclipse.emf.ecore.impl.BasicEObjectImpl#eGet(int, boolean, boolean)
 	 * @generated
 	 */
@@ -201,6 +287,10 @@ public class IntegrationTestCaseImpl extends AbstractTestCaseImpl implements Int
 				return getPassword();
 			case TestingPackage.INTEGRATION_TEST_CASE__METHOD_INVOCATIONS:
 				return getMethodInvocations();
+			case TestingPackage.INTEGRATION_TEST_CASE__PRE_PROCESSING_STATEMENTS:
+				return getPreProcessingStatements();
+			case TestingPackage.INTEGRATION_TEST_CASE__POST_PROCESSING_STATEMENTS:
+				return getPostProcessingStatements();
 		}
 
 		return super.eGet(featureID, resolve, coreType);
@@ -225,6 +315,12 @@ public class IntegrationTestCaseImpl extends AbstractTestCaseImpl implements Int
 				getMethodInvocations().clear();
 				getMethodInvocations().addAll((Collection<? extends IntegrationMethodTestInvocation>) newValue);
 				return;
+			case TestingPackage.INTEGRATION_TEST_CASE__PRE_PROCESSING_STATEMENTS:
+				setPreProcessingStatements((String) newValue);
+				return;
+			case TestingPackage.INTEGRATION_TEST_CASE__POST_PROCESSING_STATEMENTS:
+				setPostProcessingStatements((String) newValue);
+				return;
 		}
 
 		super.eSet(featureID, newValue);
@@ -247,6 +343,12 @@ public class IntegrationTestCaseImpl extends AbstractTestCaseImpl implements Int
 			case TestingPackage.INTEGRATION_TEST_CASE__METHOD_INVOCATIONS:
 				getMethodInvocations().clear();
 				return;
+			case TestingPackage.INTEGRATION_TEST_CASE__PRE_PROCESSING_STATEMENTS:
+				setPreProcessingStatements(PRE_PROCESSING_STATEMENTS_EDEFAULT);
+				return;
+			case TestingPackage.INTEGRATION_TEST_CASE__POST_PROCESSING_STATEMENTS:
+				setPostProcessingStatements(POST_PROCESSING_STATEMENTS_EDEFAULT);
+				return;
 		}
 
 		super.eUnset(featureID);
@@ -266,6 +368,10 @@ public class IntegrationTestCaseImpl extends AbstractTestCaseImpl implements Int
 				return password != null;
 			case TestingPackage.INTEGRATION_TEST_CASE__METHOD_INVOCATIONS:
 				return methodInvocations != null && !methodInvocations.isEmpty();
+			case TestingPackage.INTEGRATION_TEST_CASE__PRE_PROCESSING_STATEMENTS:
+				return preProcessingStatements != null;
+			case TestingPackage.INTEGRATION_TEST_CASE__POST_PROCESSING_STATEMENTS:
+				return postProcessingStatements != null;
 		}
 
 		return super.eIsSet(featureID);
@@ -286,6 +392,10 @@ public class IntegrationTestCaseImpl extends AbstractTestCaseImpl implements Int
 		result.append(userName);
 		result.append(", password: ");
 		result.append(password);
+		result.append(", preProcessingStatements: ");
+		result.append(preProcessingStatements);
+		result.append(", postProcessingStatements: ");
+		result.append(postProcessingStatements);
 		result.append(')');
 
 		return result.toString();

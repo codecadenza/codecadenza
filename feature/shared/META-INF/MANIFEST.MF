@@ -13,11 +13,13 @@ Bundle-ActivationPolicy: lazy
 Bundle-RequiredExecutionEnvironment: JavaSE-21
 Export-Package: jakarta.xml.bind,
  jakarta.xml.bind.annotation,
- net.codecadenza.runtime.richclient.eclipse.widget,
- net.codecadenza.runtime.conversion,
  net.codecadenza.eclipse.shared,
  net.codecadenza.eclipse.shared.dialog,
- net.codecadenza.eclipse.shared.event
+ net.codecadenza.eclipse.shared.event,
+ net.codecadenza.runtime.conversion,
+ net.codecadenza.runtime.richclient.eclipse.widget,
+ net.sf.jsqlparser.parser,
+ net.sf.jsqlparser.statement
 Bundle-Vendor: Martin Ganserer
 Bundle-ClassPath: .,
  lib/codecadenza-util-1.2.0.jar,
@@ -34,4 +36,5 @@ Bundle-ClassPath: .,
  lib/jaxb/jakarta.xml.bind-api-4.0.0.jar,
  lib/jaxb/jaxb-core-4.0.1.jar,
  lib/jaxb/jaxb-runtime-4.0.1.jar,
- lib/jaxb/txw2-4.0.1.jar
+ lib/jaxb/txw2-4.0.1.jar,
+ lib/jsqlparser-5.3.jar

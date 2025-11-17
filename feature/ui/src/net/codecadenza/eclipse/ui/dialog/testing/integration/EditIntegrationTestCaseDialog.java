@@ -46,6 +46,7 @@ import net.codecadenza.runtime.richclient.eclipse.widget.DataComboViewer;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.jface.dialogs.IDialogConstants;
+import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.SashForm;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -58,6 +59,8 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
+import org.eclipse.swt.widgets.TabFolder;
+import org.eclipse.swt.widgets.TabItem;
 import org.eclipse.swt.widgets.Text;
 
 /**
@@ -87,6 +90,8 @@ public class EditIntegrationTestCaseDialog extends CodeCadenzaTitleAreaDialog {
 	private Group groupInvocation;
 	private SashForm sashForm;
 	private Composite panButtons;
+	private Text txtPreStatements;
+	private Text txtPostStatements;
 	private TestInvocationPanel panActualInvocation;
 
 	/**
@@ -135,7 +140,6 @@ public class EditIntegrationTestCaseDialog extends CodeCadenzaTitleAreaDialog {
 		panDialogArea.setLayout(new GridLayout());
 
 		initBasicPanel(panDialogArea);
-		initTreePanel(panDialogArea);
 		initFields();
 
 		setTitle(title);
@@ -189,7 +193,17 @@ public class EditIntegrationTestCaseDialog extends CodeCadenzaTitleAreaDialog {
 		txtComment = new Text(groupBasicData, SWT.V_SCROLL | SWT.MULTI | SWT.BORDER | SWT.H_SCROLL);
 		txtComment.setLayoutData(gdComment);
 
-		final var groupAddNew = new Group(panDialogArea, SWT.NONE);
+		final var tabFolder = new TabFolder(panDialogArea, SWT.NONE);
+		tabFolder.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
+
+		final var tabItemInvocations = new TabItem(tabFolder, SWT.NONE);
+		tabItemInvocations.setText("Method invocations");
+
+		final var panInvocations = new Composite(tabFolder, SWT.NONE);
+		panInvocations.setLayout(new GridLayout());
+		panInvocations.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
+
+		final var groupAddNew = new Group(panInvocations, SWT.NONE);
 		groupAddNew.setText("Add new invocation");
 		groupAddNew.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, false));
 		groupAddNew.setLayout(new GridLayout(5, false));
@@ -291,6 +305,15 @@ public class EditIntegrationTestCaseDialog extends CodeCadenzaTitleAreaDialog {
 					createNewInvocation(selectedMethod);
 			}
 		});
+
+		initTreePanel(panInvocations);
+
+		tabItemInvocations.setControl(panInvocations);
+
+		final var tabItemStatements = new TabItem(tabFolder, SWT.NONE);
+		tabItemStatements.setText("Statements");
+
+		tabItemStatements.setControl(initStatementsPanel(tabFolder));
 	}
 
 	/**
@@ -344,6 +367,42 @@ public class EditIntegrationTestCaseDialog extends CodeCadenzaTitleAreaDialog {
 		groupInvocation.setLayout(new GridLayout());
 
 		sashForm.setWeights(30, 70);
+	}
+
+	/**
+	 * Initialize the panel for the pre-processing and the post-processing statements
+	 * @param panParent
+	 * @return the new panel
+	 */
+	private Composite initStatementsPanel(Composite panParent) {
+		final var sashStatements = new SashForm(panParent, SWT.VERTICAL);
+		sashStatements.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
+
+		final var panPreStatements = new Composite(sashStatements, SWT.NONE);
+		panPreStatements.setLayout(new GridLayout());
+		panPreStatements.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
+
+		final var lblPreStatements = new Label(panPreStatements, SWT.NONE);
+		lblPreStatements.setText("Pre-processing statements:");
+
+		txtPreStatements = new Text(panPreStatements, SWT.BORDER | SWT.WRAP | SWT.V_SCROLL | SWT.CANCEL | SWT.MULTI);
+		txtPreStatements.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
+		txtPreStatements.setFont(JFaceResources.getFont(JFaceResources.TEXT_FONT));
+		txtPreStatements.setToolTipText("Statements must be delimited by a ';' character");
+
+		final var panPostStatements = new Composite(sashStatements, SWT.NONE);
+		panPostStatements.setLayout(new GridLayout());
+		panPostStatements.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
+
+		final var lblPostStatements = new Label(panPostStatements, SWT.NONE);
+		lblPostStatements.setText("Post-processing statements:");
+		lblPostStatements.setToolTipText("Statements must be delimited by a ';' character");
+
+		txtPostStatements = new Text(panPostStatements, SWT.BORDER | SWT.WRAP | SWT.V_SCROLL | SWT.CANCEL | SWT.MULTI);
+		txtPostStatements.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
+		txtPostStatements.setFont(JFaceResources.getFont(JFaceResources.TEXT_FONT));
+
+		return sashStatements;
 	}
 
 	/**
@@ -579,6 +638,12 @@ public class EditIntegrationTestCaseDialog extends CodeCadenzaTitleAreaDialog {
 		txtUserName.setText(testCase.getUserName());
 		txtPassword.setText(testCase.getPassword());
 
+		if (testCase.getPreProcessingStatements() != null)
+			txtPreStatements.setText(testCase.getPreProcessingStatements());
+
+		if (testCase.getPostProcessingStatements() != null)
+			txtPostStatements.setText(testCase.getPostProcessingStatements());
+
 		treeInvocations.refreshTree();
 	}
 
@@ -601,6 +666,8 @@ public class EditIntegrationTestCaseDialog extends CodeCadenzaTitleAreaDialog {
 		testCase.setComment(txtComment.getText());
 		testCase.setUserName(txtUserName.getText());
 		testCase.setPassword(txtPassword.getText());
+		testCase.setPreProcessingStatements(txtPreStatements.getText());
+		testCase.setPostProcessingStatements(txtPostStatements.getText());
 
 		final Resource eResource = testModule.getNamespace().eResource();
 

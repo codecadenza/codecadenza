@@ -692,11 +692,25 @@ public interface TestingPackage extends EPackage {
 	int INTEGRATION_TEST_CASE__METHOD_INVOCATIONS = ABSTRACT_TEST_CASE_FEATURE_COUNT + 2;
 
 	/**
+	 * The feature ID for the '<em><b>Pre-Processing Statements</b></em>' attribute
+	 * @generated
+	 * @ordered
+	 */
+	int INTEGRATION_TEST_CASE__PRE_PROCESSING_STATEMENTS = ABSTRACT_TEST_CASE_FEATURE_COUNT + 3;
+
+	/**
+	 * The feature ID for the '<em><b>Post-Processing Statements</b></em>' attribute
+	 * @generated
+	 * @ordered
+	 */
+	int INTEGRATION_TEST_CASE__POST_PROCESSING_STATEMENTS = ABSTRACT_TEST_CASE_FEATURE_COUNT + 4;
+
+	/**
 	 * The number of structural features of the '<em>Integration Test Case</em>' class
 	 * @generated
 	 * @ordered
 	 */
-	int INTEGRATION_TEST_CASE_FEATURE_COUNT = ABSTRACT_TEST_CASE_FEATURE_COUNT + 3;
+	int INTEGRATION_TEST_CASE_FEATURE_COUNT = ABSTRACT_TEST_CASE_FEATURE_COUNT + 5;
 
 	/**
 	 * The meta object ID for the '{@link net.codecadenza.eclipse.model.testing.impl.IntegrationMethodTestInvocationImpl
@@ -1533,6 +1547,28 @@ public interface TestingPackage extends EPackage {
 	EReference getIntegrationTestCase_MethodInvocations();
 
 	/**
+	 * Return the meta object for the attribute
+	 * '{@link net.codecadenza.eclipse.model.testing.IntegrationTestCase#getPreProcessingStatements <em>Pre-Processing
+	 * Statements</em>}'
+	 * @return the meta object for the attribute '<em>Pre-Processing Statements</em>'
+	 * @see net.codecadenza.eclipse.model.testing.IntegrationTestCase#getPreProcessingStatements()
+	 * @see #getIntegrationTestCase()
+	 * @generated
+	 */
+	EAttribute getIntegrationTestCase_PreProcessingStatements();
+
+	/**
+	 * Return the meta object for the attribute
+	 * '{@link net.codecadenza.eclipse.model.testing.IntegrationTestCase#getPostProcessingStatements <em>Post-Processing
+	 * Statements</em>}'
+	 * @return the meta object for the attribute '<em>Post-Processing Statements</em>'
+	 * @see net.codecadenza.eclipse.model.testing.IntegrationTestCase#getPostProcessingStatements()
+	 * @see #getIntegrationTestCase()
+	 * @generated
+	 */
+	EAttribute getIntegrationTestCase_PostProcessingStatements();
+
+	/**
 	 * Return the meta object for class '{@link net.codecadenza.eclipse.model.testing.IntegrationMethodTestInvocation
 	 * <em>Integration Method Test Invocation</em>}'
 	 * @return the meta object for class '<em>Integration Method Test Invocation</em>'
@@ -2293,6 +2329,18 @@ public interface TestingPackage extends EPackage {
 		 * @generated
 		 */
 		EReference INTEGRATION_TEST_CASE__METHOD_INVOCATIONS = eINSTANCE.getIntegrationTestCase_MethodInvocations();
+
+		/**
+		 * The meta object literal for the '<em><b>Pre-Processing Statements</b></em>' attribute feature
+		 * @generated
+		 */
+		EAttribute INTEGRATION_TEST_CASE__PRE_PROCESSING_STATEMENTS = eINSTANCE.getIntegrationTestCase_PreProcessingStatements();
+
+		/**
+		 * The meta object literal for the '<em><b>Post-Processing Statements</b></em>' attribute feature
+		 * @generated
+		 */
+		EAttribute INTEGRATION_TEST_CASE__POST_PROCESSING_STATEMENTS = eINSTANCE.getIntegrationTestCase_PostProcessingStatements();
 
 		/**
 		 * The meta object literal for the '{@link net.codecadenza.eclipse.model.testing.impl.IntegrationMethodTestInvocationImpl

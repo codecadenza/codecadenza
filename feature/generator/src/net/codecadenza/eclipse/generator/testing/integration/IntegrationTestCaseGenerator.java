@@ -78,6 +78,8 @@ public class IntegrationTestCaseGenerator extends AbstractJavaSourceGenerator {
 	private final Project project;
 	private final boolean addCompletionHandler;
 	private final boolean addFileHandling;
+	private final boolean addPreProcessingStatements;
+	private final boolean addPostProcessingStatements;
 	private final IntegrationTechnology integrationTechnology;
 	private String fileServiceClientName;
 	private boolean importAssertThat;
@@ -95,6 +97,10 @@ public class IntegrationTestCaseGenerator extends AbstractJavaSourceGenerator {
 				.map(AbstractIntegrationMethod::getIntegrationBean).collect(Collectors.toSet());
 		this.addCompletionHandler = testCase.getMethodInvocations().stream().anyMatch(
 				i -> !i.isExpectToFail() && i.getPostProcessingStatement() != null && !i.getPostProcessingStatement().isEmpty());
+		this.addPreProcessingStatements = testCase.getPreProcessingStatements() != null
+				&& !testCase.getPreProcessingStatements().isEmpty();
+		this.addPostProcessingStatements = testCase.getPostProcessingStatements() != null
+				&& !testCase.getPostProcessingStatements().isEmpty();
 		this.addFileHandling = testCase.isFileHandlingRequired();
 		this.integrationTechnology = integrationBeans.stream().map(AbstractIntegrationBean::getIntegrationTechnology).findFirst()
 				.orElse(null);
@@ -112,6 +118,9 @@ public class IntegrationTestCaseGenerator extends AbstractJavaSourceGenerator {
 
 		if (addCompletionHandler)
 			importPackage("net.codecadenza.runtime.ddt.service.completion");
+
+		if (addPreProcessingStatements || addPostProcessingStatements)
+			importPackage("net.codecadenza.runtime.ddt.service.preparation");
 	}
 
 	/*
@@ -139,6 +148,12 @@ public class IntegrationTestCaseGenerator extends AbstractJavaSourceGenerator {
 
 		addConstantsForTrackingAttributes();
 		addConstantsForFieldsWithExpectedSize();
+
+		if (addPreProcessingStatements || addPostProcessingStatements)
+			addPrivateField("IStatementProcessor", "statementProcessor").withStaticModifier().create();
+
+		if (testCase.addCredentials() || addPreProcessingStatements || addPostProcessingStatements)
+			addPrivateField("TestData", "testData").withStaticModifier().create();
 
 		for (final AbstractIntegrationBean integrationBean : integrationBeans) {
 			final String serviceName = integrationBean.getDomainObject().getLowerCaseName() + "Service";
@@ -202,6 +217,9 @@ public class IntegrationTestCaseGenerator extends AbstractJavaSourceGenerator {
 			for (final IntegrationMethodTestInvocation invocation : testCase.getMethodInvocations())
 				addTestMethod(invocation);
 		}
+
+		if (addPostProcessingStatements)
+			addCleanUpMethod();
 	}
 
 	/**
@@ -299,18 +317,27 @@ public class IntegrationTestCaseGenerator extends AbstractJavaSourceGenerator {
 		b.append("final var testDataProviderProperties = new TestDataProviderProperties();\n");
 		b.append("testDataProviderProperties.load();\n\n");
 		b.append("testDataProvider = TestDataProviderFactory.getTestDataProvider(");
-		b.append("new File(XML_FILE_PATH), testDataProviderProperties);\n\n");
+		b.append("new File(XML_FILE_PATH), testDataProviderProperties);\n");
 
-		if (testCase.addCredentials()) {
+		if (testCase.addCredentials() || addPreProcessingStatements || addPostProcessingStatements) {
 			importClass("net.codecadenza.runtime.ddt.model.TestData");
 
-			b.append("final TestData testData = testDataProvider.loadTestData();\n\n");
+			b.append("testData = testDataProvider.loadTestData();\n");
 		}
+
+		b.append("\n");
 
 		if (addCompletionHandler) {
 			b.append("final var invocationHandlerProperties = new InvocationCompletionHandlerProperties();\n");
 			b.append("invocationHandlerProperties.load();\n\n");
 			b.append("completionHandler = InvocationCompletionHandlerFactory.getPostProcessor(invocationHandlerProperties);\n\n");
+		}
+
+		if (addPreProcessingStatements || addPostProcessingStatements) {
+			b.append("final var statementProcessorProperties = new StatementProcessorProperties();\n");
+			b.append("statementProcessorProperties.load();\n\n");
+			b.append("statementProcessor = StatementProcessorFactory.getStatementProcessor(statementProcessorProperties);\n");
+			b.append("statementProcessor.executeStatements(testData.getPreProcessingStatements());\n\n");
 		}
 
 		for (final AbstractIntegrationBean integrationBean : integrationBeans) {
@@ -349,6 +376,26 @@ public class IntegrationTestCaseGenerator extends AbstractJavaSourceGenerator {
 				b.append(FILE_SERVICE_NAME + ".init();\n");
 		}
 
+		b.append("}\n\n");
+
+		addMethod(methodSignature, b.toString());
+	}
+
+	/**
+	 * Add the method for running the post-processing statements
+	 */
+	private void addCleanUpMethod() {
+		final var b = new StringBuilder();
+		final var methodSignature = "void cleanUp()";
+
+		b.append("/**\n");
+		b.append(" * Run all post-processing statements\n");
+		b.append(" */\n");
+		b.append("@AfterAll\n");
+		b.append("static " + methodSignature + "\n");
+		b.append("{\n");
+		b.append("if(statementProcessor != null)\n");
+		b.append("statementProcessor.executeStatements(testData.getPostProcessingStatements());\n");
 		b.append("}\n\n");
 
 		addMethod(methodSignature, b.toString());

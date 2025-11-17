@@ -138,6 +138,10 @@
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="password" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="methodInvocations" upperBound="-1"
         eType="#//IntegrationMethodTestInvocation" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="preProcessingStatements"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="postProcessingStatements"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="IntegrationMethodTestInvocation">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="expectToFail" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>

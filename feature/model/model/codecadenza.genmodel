@@ -1177,6 +1177,8 @@
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute testing.ecore#//IntegrationTestCase/userName"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute testing.ecore#//IntegrationTestCase/password"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference testing.ecore#//IntegrationTestCase/methodInvocations"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute testing.ecore#//IntegrationTestCase/preProcessingStatements"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute testing.ecore#//IntegrationTestCase/postProcessingStatements"/>
     </genClasses>
     <genClasses ecoreClass="testing.ecore#//IntegrationMethodTestInvocation">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute testing.ecore#//IntegrationMethodTestInvocation/expectToFail"/>
