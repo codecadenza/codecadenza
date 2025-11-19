@@ -25,11 +25,9 @@ import java.lang.invoke.MethodHandles;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
-import java.sql.SQLException;
 import java.util.List;
 import net.codecadenza.runtime.ddt.service.preparation.IStatementProcessor;
 import net.codecadenza.runtime.ddt.service.preparation.StatementProcessorProperties;
-import net.codecadenza.runtime.service.ServiceProcessingException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -67,16 +65,29 @@ public class JDBCStatementProcessor implements IStatementProcessor {
 	@Override
 	public void executeStatements(List<String> statements) {
 		try (final Connection connection = DriverManager.getConnection(databaseURL, userName, password)) {
-			for (final String statement : statements)
-				try (final PreparedStatement preparedStatement = connection.prepareStatement(statement)) {
-					if (logger.isDebugEnabled())
-						logger.debug("Execute SQL statement: '{}'", statement.trim());
-
-					preparedStatement.executeUpdate();
-				}
+			for (final String statement : statements) {
+				executeStatement(connection, statement);
+			}
 		}
-		catch (final SQLException e) {
-			throw new ServiceProcessingException("Error while processing SQL statement", e);
+		catch (final Exception e) {
+			logger.warn("Error while opening database connection!", e);
+		}
+	}
+
+	/**
+	 * Execute a statement
+	 * @param connection the database connection to be used
+	 * @param statement the statement to be processed
+	 */
+	private void executeStatement(Connection connection, String statement) {
+		if (logger.isDebugEnabled())
+			logger.debug("Execute SQL statement: '{}'", statement.trim());
+
+		try (final PreparedStatement preparedStatement = connection.prepareStatement(statement)) {
+			preparedStatement.executeUpdate();
+		}
+		catch (final Exception e) {
+			logger.warn("Error while processing SQL statement!", e);
 		}
 	}
 
