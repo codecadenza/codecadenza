@@ -36,6 +36,7 @@ import net.codecadenza.eclipse.model.testing.TestingFactory;
 import net.codecadenza.eclipse.service.testing.integration.IntegrationTestCaseService;
 import net.codecadenza.eclipse.shared.dialog.CodeCadenzaTitleAreaDialog;
 import net.codecadenza.eclipse.tools.ide.EclipseIDEService;
+import net.codecadenza.eclipse.tools.util.db.SQLStatementSplitter;
 import net.codecadenza.eclipse.ui.CodeCadenzaUserInterfacePlugin;
 import net.codecadenza.eclipse.ui.dialog.testing.integration.panel.IntegrationTestInvocationPanel;
 import net.codecadenza.eclipse.ui.dialog.testing.integration.panel.InvocationTreePanel;
@@ -85,7 +86,6 @@ public class EditIntegrationTestCaseDialog extends CodeCadenzaTitleAreaDialog {
 	private Text txtComment;
 	private Text txtUserName;
 	private Text txtPassword;
-	private Button cmdAdd;
 	private InvocationTreePanel treeInvocations;
 	private Group groupInvocation;
 	private SashForm sashForm;
@@ -265,8 +265,6 @@ public class EditIntegrationTestCaseDialog extends CodeCadenzaTitleAreaDialog {
 			 */
 			@Override
 			public void onSelectionChanged(AbstractIntegrationMethod method) {
-				cmdAdd.setEnabled(true);
-
 				if (!editMode) {
 					if (txtName.getText().equals(defaultName))
 						txtName.setText(method.getIntegrationBean().getDomainObject().getName() + testModule.getTestCaseSuffix());
@@ -287,10 +285,9 @@ public class EditIntegrationTestCaseDialog extends CodeCadenzaTitleAreaDialog {
 		gdAdd.heightHint = 40;
 		gdAdd.widthHint = 60;
 
-		cmdAdd = new Button(panAddButton, SWT.PUSH);
+		final var cmdAdd = new Button(panAddButton, SWT.PUSH);
 		cmdAdd.setText("Add");
 		cmdAdd.setLayoutData(gdAdd);
-		cmdAdd.setEnabled(false);
 
 		cmdAdd.addSelectionListener(new SelectionAdapter() {
 			/*
@@ -329,16 +326,6 @@ public class EditIntegrationTestCaseDialog extends CodeCadenzaTitleAreaDialog {
 		sashForm.setLayoutData(gdSashForm);
 
 		treeInvocations = new InvocationTreePanel(sashForm, testCase) {
-			/*
-			 * (non-Javadoc)
-			 * @see net.codecadenza.eclipse.ui.dialog.testing.integration.component.InvocationTreePanel#
-			 * onCreateNewInvocation(net.codecadenza.eclipse.model.integration.AbstractIntegrationMethod)
-			 */
-			@Override
-			protected void onCreateNewInvocation(AbstractIntegrationMethod integrationMethod) {
-				onCreateNewInvocation(integrationMethod);
-			}
-
 			/*
 			 * (non-Javadoc)
 			 * @see net.codecadenza.eclipse.ui.dialog.testing.integration.component.InvocationTreePanel#
@@ -412,7 +399,8 @@ public class EditIntegrationTestCaseDialog extends CodeCadenzaTitleAreaDialog {
 	private void createNewNestedInvocation(final IntegrationMethodTestInvocation parentInvocation) {
 		final var message = "Create new nested invocation for " + parentInvocation.getTestMethodName() + "()";
 
-		disposeInvocation(false);
+		if (!saveAndDisposeInvocation(true))
+			return;
 
 		setMessage(message);
 
@@ -420,6 +408,8 @@ public class EditIntegrationTestCaseDialog extends CodeCadenzaTitleAreaDialog {
 
 		panActualInvocation = new NestedIntegrationTestInvocationPanel(groupInvocation, testModule, testCase, parentInvocation);
 		panActualInvocation.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
+
+		treeInvocations.setEnableDelete(false);
 
 		initInvocationButtonBar();
 
@@ -433,7 +423,8 @@ public class EditIntegrationTestCaseDialog extends CodeCadenzaTitleAreaDialog {
 	private void createNewInvocation(final AbstractIntegrationMethod integrationMethod) {
 		final var message = "Create new invocation for " + integrationMethod.getName() + "()";
 
-		disposeInvocation(false);
+		if (!saveAndDisposeInvocation(true))
+			return;
 
 		setMessage(message);
 
@@ -441,6 +432,8 @@ public class EditIntegrationTestCaseDialog extends CodeCadenzaTitleAreaDialog {
 
 		panActualInvocation = new IntegrationTestInvocationPanel(groupInvocation, testModule, testCase, integrationMethod);
 		panActualInvocation.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
+
+		treeInvocations.setEnableDelete(false);
 
 		initInvocationButtonBar();
 
@@ -452,7 +445,8 @@ public class EditIntegrationTestCaseDialog extends CodeCadenzaTitleAreaDialog {
 	 * @param methodInvocation
 	 */
 	private void editInvocation(final IntegrationMethodTestInvocation methodInvocation) {
-		disposeInvocation(false);
+		if (!saveAndDisposeInvocation(true))
+			return;
 
 		if (methodInvocation.getParentInvocation() == null) {
 			final var message = "Edit invocation " + methodInvocation.getTestMethodName() + "()";
@@ -471,6 +465,8 @@ public class EditIntegrationTestCaseDialog extends CodeCadenzaTitleAreaDialog {
 			panActualInvocation = new NestedIntegrationTestInvocationPanel(groupInvocation, testModule, testCase,
 					methodInvocation.getParentInvocation(), methodInvocation);
 		}
+
+		treeInvocations.setEnableDelete(false);
 
 		panActualInvocation.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 
@@ -535,17 +531,7 @@ public class EditIntegrationTestCaseDialog extends CodeCadenzaTitleAreaDialog {
 			 */
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				final String errorMessage = panActualInvocation.validateAndApplyInput();
-
-				if (errorMessage != null) {
-					setErrorMessage(errorMessage);
-					return;
-				}
-
-				setErrorMessage(null);
-				setMessage("Invocation saved successfully");
-				disposeInvocation(true);
-				treeInvocations.refreshTree();
+				saveAndDisposeInvocation(true);
 			}
 		});
 
@@ -578,42 +564,47 @@ public class EditIntegrationTestCaseDialog extends CodeCadenzaTitleAreaDialog {
 			 */
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				setErrorMessage(null);
+				saveAndDisposeInvocation(false);
 				setMessage("Operation cancelled");
-				disposeInvocation(true);
 			}
 		});
 	}
 
 	/**
-	 * Dispose the invocation panel and the button bar
-	 * @param enabled controls if all controls that are responsible for either creating a new or selecting an existing invocation
-	 *          should be either enabled or disabled
+	 * Save the invocation and dispose the invocation panel and the button bar
+	 * @param save controls if the active invocation should be saved
+	 * @return true if the active invocation was saved successfully or if the no save operation was requested
 	 */
-	private void disposeInvocation(boolean enabled) {
-		if (panActualInvocation != null)
+	private boolean saveAndDisposeInvocation(boolean save) {
+		setErrorMessage(null);
+
+		if (panActualInvocation != null && save) {
+			final String errorMessage = panActualInvocation.validateAndApplyInput();
+
+			if (errorMessage != null) {
+				setErrorMessage(errorMessage);
+				return false;
+			}
+			else
+				setMessage("Invocation saved successfully");
+		}
+
+		treeInvocations.refreshTree();
+
+		if (panActualInvocation != null) {
 			panActualInvocation.dispose();
+			panActualInvocation = null;
+		}
 
 		if (panButtons != null)
 			panButtons.dispose();
 
 		groupInvocation.setText("No invocation selected");
+		treeInvocations.setEnableDelete(true);
 
 		sashForm.layout(true, true);
 
-		setSelectionControlsEnabled(enabled);
-	}
-
-	/**
-	 * Either enable or disable all controls that are responsible for either creating a new or selecting an existing invocation
-	 * @param enabled flag that controls if the respective controls should be enabled
-	 */
-	private void setSelectionControlsEnabled(boolean enabled) {
-		txtIntegrationBean.getControl().setEnabled(enabled);
-		cboMethods.setEnabled(enabled);
-		treeInvocations.setEnabled(enabled);
-		getButton(OK).setEnabled(enabled);
-		getButton(CANCEL).setEnabled(enabled);
+		return true;
 	}
 
 	/**
@@ -690,6 +681,18 @@ public class EditIntegrationTestCaseDialog extends CodeCadenzaTitleAreaDialog {
 		if (status.getSeverity() > IStatus.INFO) {
 			setErrorMessage(status.getMessage());
 			txtName.setFocus();
+			return false;
+		}
+
+		try {
+			if (!txtPreStatements.getText().isEmpty())
+				SQLStatementSplitter.splitSQLStatements(txtPreStatements.getText());
+
+			if (!txtPostStatements.getText().isEmpty())
+				SQLStatementSplitter.splitSQLStatements(txtPostStatements.getText());
+		}
+		catch (final Exception e) {
+			setErrorMessage(e.getMessage());
 			return false;
 		}
 

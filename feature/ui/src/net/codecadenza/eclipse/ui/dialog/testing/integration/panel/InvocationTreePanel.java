@@ -61,6 +61,7 @@ import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.MenuItem;
 import org.eclipse.swt.widgets.Tree;
 import org.eclipse.swt.widgets.TreeItem;
+import org.eclipse.ui.PlatformUI;
 
 /**
  * <p>
@@ -76,6 +77,7 @@ public class InvocationTreePanel extends Composite {
 	private static final Color EXPECT_TO_FAIL_COLOR = Display.getCurrent().getSystemColor(SWT.COLOR_RED);
 	private static final Color ATTR_TRACKING_COLOR = Display.getCurrent().getSystemColor(SWT.COLOR_DARK_BLUE);
 	private static final Color ATTR_REFERENCE_COLOR = Display.getCurrent().getSystemColor(SWT.COLOR_DARK_GREEN);
+	private static final String IMG_TOOL_DELETE = org.eclipse.ui.ISharedImages.IMG_TOOL_DELETE;
 	private static final String KEY_DOMAIN_OBJECT = "DomainObjectName";
 	private static final String KEY_PARENT_INVOCATION_INDEX = "ParentInvocationIndex";
 	private static final String KEY_NESTED_INVOCATION_INDEX = "NestedInvocationIndex";
@@ -83,6 +85,7 @@ public class InvocationTreePanel extends Composite {
 	private final IntegrationTestCase testCase;
 	private Tree treeInvocations;
 	private Menu mnuTree;
+	private MenuItem mniDeleteInvocation;
 
 	/**
 	 * Constructor
@@ -97,22 +100,12 @@ public class InvocationTreePanel extends Composite {
 		initTreePanel();
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * @see org.eclipse.swt.widgets.Control#setEnabled(boolean)
-	 */
-	@Override
-	public void setEnabled(boolean enabled) {
-		mnuTree.setEnabled(enabled);
-	}
-
 	/**
-	 * Callback that is invoked when creating a new {@link IntegrationMethodTestInvocation}
-	 * @param integrationMethod
+	 * Either enable or disable the menu item for deleting an invocation
+	 * @param enableDelete
 	 */
-	@SuppressWarnings("unused")
-	protected void onCreateNewInvocation(final AbstractIntegrationMethod integrationMethod) {
-		// Needs to be implemented by a subclass!
+	public void setEnableDelete(boolean enableDelete) {
+		mniDeleteInvocation.setEnabled(enableDelete);
 	}
 
 	/**
@@ -588,8 +581,9 @@ public class InvocationTreePanel extends Composite {
 			}
 		});
 
-		final var mniDeleteInvocation = new MenuItem(mnuTree, SWT.NONE);
+		mniDeleteInvocation = new MenuItem(mnuTree, SWT.NONE);
 		mniDeleteInvocation.setText("Delete");
+		mniDeleteInvocation.setImage(PlatformUI.getWorkbench().getSharedImages().getImage(IMG_TOOL_DELETE));
 
 		mniDeleteInvocation.addSelectionListener(new SelectionAdapter() {
 			/*
