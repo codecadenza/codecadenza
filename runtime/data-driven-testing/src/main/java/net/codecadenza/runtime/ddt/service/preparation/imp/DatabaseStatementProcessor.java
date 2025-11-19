@@ -41,7 +41,7 @@ import org.slf4j.LoggerFactory;
  * @author Martin Ganserer
  * @version 1.0.0
  */
-public class JDBCStatementProcessor implements IStatementProcessor {
+public class DatabaseStatementProcessor implements IStatementProcessor {
 	private static final Logger logger = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
 	private final String databaseURL;
@@ -52,7 +52,7 @@ public class JDBCStatementProcessor implements IStatementProcessor {
 	 * Constructor
 	 * @param properties
 	 */
-	public JDBCStatementProcessor(StatementProcessorProperties properties) {
+	public DatabaseStatementProcessor(StatementProcessorProperties properties) {
 		this.databaseURL = properties.getResourceURL();
 		this.userName = properties.getUserName();
 		this.password = properties.getPassword();

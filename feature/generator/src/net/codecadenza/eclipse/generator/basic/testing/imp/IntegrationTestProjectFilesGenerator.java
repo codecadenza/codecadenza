@@ -87,8 +87,8 @@ public class IntegrationTestProjectFilesGenerator implements ITestingProjectFile
 		final var b = new StringBuilder();
 		b.append("TEST_DATA_PROVIDER_CLASS_NAME=net.codecadenza.runtime.ddt.service.data.imp.xml.XMLTestDataProvider\n");
 		b.append("INVOCATION_HANDLER_CLASS_NAME=");
-		b.append("net.codecadenza.runtime.ddt.service.completion.imp.JDBCInvocationCompletionHandler\n");
-		b.append("STATEMENT_PROCESSOR_CLASS_NAME=net.codecadenza.runtime.ddt.service.preparation.imp.JDBCStatementProcessor\n");
+		b.append("net.codecadenza.runtime.ddt.service.completion.imp.DatabaseInvocationCompletionHandler\n");
+		b.append("STATEMENT_PROCESSOR_CLASS_NAME=net.codecadenza.runtime.ddt.service.preparation.imp.DatabaseStatementProcessor\n");
 		b.append("DEFAULT_TIMEOUT_MS=" + testModule.getDefaultTimeout() + "\n");
 		b.append("DATE_FORMAT=" + testModule.getDateFormat() + "\n");
 		b.append("DATE_TIME_FORMAT=" + testModule.getDateTimeFormat() + "\n");

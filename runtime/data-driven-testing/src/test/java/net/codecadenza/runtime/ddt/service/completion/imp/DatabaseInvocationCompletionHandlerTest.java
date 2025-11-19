@@ -50,7 +50,7 @@ import org.junit.jupiter.api.Test;
 
 /**
  * <p>
- * Test the functionality of the {@link JDBCInvocationCompletionHandler}
+ * Test the functionality of the {@link DatabaseInvocationCompletionHandler}
  * </p>
  * <p>
  * Copyright 2025 (C) by Martin Ganserer
@@ -58,7 +58,7 @@ import org.junit.jupiter.api.Test;
  * @author Martin Ganserer
  * @version 1.0.0
  */
-class JDBCInvocationCompletionHandlerTest {
+class DatabaseInvocationCompletionHandlerTest {
 	private static final String TEST_NAME = "Test Name";
 
 	private static IInvocationCompletionHandler invocationHandler;
