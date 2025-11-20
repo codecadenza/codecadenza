@@ -837,7 +837,7 @@ public class IntegrationTestCaseGenerator extends AbstractJavaSourceGenerator {
 
 		importPackage("java.util");
 
-		b.append(addAssertThat(expectedResultList) + "allSatisfy(expectedItem -> {\n");
+		b.append(addAssertThat(expectedResultList) + "isNotEmpty().allSatisfy(expectedItem -> {\n");
 		b.append(addAssertThat(actualResultList) + "filteredOn(actualItem ->\n");
 		b.append("Objects.equals(actualItem." + pkAttr.getMappingAttribute().getGetterName() + ", ");
 		b.append("expectedItem." + pkAttr.getMappingAttribute().getGetterName() + ")");
