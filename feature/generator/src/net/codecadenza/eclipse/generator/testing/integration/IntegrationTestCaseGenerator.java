@@ -201,8 +201,7 @@ public class IntegrationTestCaseGenerator extends AbstractJavaSourceGenerator {
 					importPackage("org.junit.jupiter.api.io");
 					importPackage("java.nio.file");
 
-					addPrivateField(JavaType.STRING, DOWNLOAD_FILE_CONSTANT).withDefaultValue(DOWNLOAD_FILE_CONSTANT_VALUE)
-							.withStaticModifier().create();
+					addPrivateConstant(JavaType.STRING, DOWNLOAD_FILE_CONSTANT, DOWNLOAD_FILE_CONSTANT_VALUE).create();
 					addPrivateField("Path", "testDir").withAnnotations("@TempDir\n").create();
 					break;
 				}
