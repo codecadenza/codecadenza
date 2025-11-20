@@ -112,6 +112,9 @@ public class IntegrationTestCaseGenerator extends AbstractJavaSourceGenerator {
 	 */
 	@Override
 	protected void addImports() {
+		if (testCase.getMethodInvocations().isEmpty())
+			return;
+
 		importPackage("java.io");
 		importPackage("net.codecadenza.runtime.ddt.service.data");
 		importPackage("org.junit.jupiter.api");
@@ -138,6 +141,9 @@ public class IntegrationTestCaseGenerator extends AbstractJavaSourceGenerator {
 	 */
 	@Override
 	protected void addFields() {
+		if (testCase.getMethodInvocations().isEmpty())
+			return;
+
 		final String xmlPath = project.getTestDataFolder() + "/" + testCase.getName() + ".xml";
 
 		addPrivateConstant(JavaType.STRING, "XML_FILE_PATH", "\"" + xmlPath + "\"").create();
@@ -209,14 +215,15 @@ public class IntegrationTestCaseGenerator extends AbstractJavaSourceGenerator {
 	 */
 	@Override
 	protected void addMethods() {
+		if (testCase.getMethodInvocations().isEmpty())
+			return;
+
 		addInitMethod();
 
-		if (!testCase.getMethodInvocations().isEmpty()) {
-			addBasicWorkflowMethod();
+		addBasicWorkflowMethod();
 
-			for (final IntegrationMethodTestInvocation invocation : testCase.getMethodInvocations())
-				addTestMethod(invocation);
-		}
+		for (final IntegrationMethodTestInvocation invocation : testCase.getMethodInvocations())
+			addTestMethod(invocation);
 
 		if (addPostProcessingStatements)
 			addCleanUpMethod();
@@ -307,7 +314,7 @@ public class IntegrationTestCaseGenerator extends AbstractJavaSourceGenerator {
 		b.append(getAnnotationForGeneratedElement());
 		b.append("static " + methodSignature);
 
-		if (!integrationBeans.isEmpty() && integrationTechnology == IntegrationTechnology.RMI) {
+		if (integrationTechnology == IntegrationTechnology.RMI) {
 			importClass("javax.naming.NamingException");
 
 			b.append(" throws NamingException");
@@ -392,6 +399,7 @@ public class IntegrationTestCaseGenerator extends AbstractJavaSourceGenerator {
 		b.append(" * Run all post-processing statements\n");
 		b.append(" */\n");
 		b.append("@AfterAll\n");
+		b.append(getAnnotationForGeneratedElement());
 		b.append("static " + methodSignature + "\n");
 		b.append("{\n");
 		b.append("if(statementProcessor != null)\n");
