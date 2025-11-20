@@ -158,48 +158,61 @@ public class EditIntegrationTestCaseDialog extends CodeCadenzaTitleAreaDialog {
 	 * @param panDialogArea
 	 */
 	private void initBasicPanel(final Composite panDialogArea) {
-		final var groupBasicData = new Group(panDialogArea, SWT.NONE);
-		groupBasicData.setText("Basic data");
-		groupBasicData.setLayout(new GridLayout(4, false));
-		groupBasicData.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
+		final var tabFolderBasic = new TabFolder(panDialogArea, SWT.NONE);
+		tabFolderBasic.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, false));
 
-		final var lblName = new Label(groupBasicData, SWT.NONE);
+		final var tabItemBasicData = new TabItem(tabFolderBasic, SWT.NONE);
+		tabItemBasicData.setText("Basic data");
+
+		final var panBasicData = new Composite(tabFolderBasic, SWT.NONE);
+		panBasicData.setLayout(new GridLayout(4, false));
+		panBasicData.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
+
+		final var lblName = new Label(panBasicData, SWT.NONE);
 		lblName.setText("Name:");
 
-		txtName = new Text(groupBasicData, SWT.BORDER);
+		txtName = new Text(panBasicData, SWT.BORDER);
 		txtName.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
 
-		new Label(groupBasicData, SWT.NONE);
-		new Label(groupBasicData, SWT.NONE);
+		new Label(panBasicData, SWT.NONE);
+		new Label(panBasicData, SWT.NONE);
 
-		final var lblUserName = new Label(groupBasicData, SWT.NONE);
+		final var lblUserName = new Label(panBasicData, SWT.NONE);
 		lblUserName.setText("User name:");
 
-		txtUserName = new Text(groupBasicData, SWT.BORDER);
+		txtUserName = new Text(panBasicData, SWT.BORDER);
 		txtUserName.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
 
-		final var lblPassword = new Label(groupBasicData, SWT.NONE);
+		final var lblPassword = new Label(panBasicData, SWT.NONE);
 		lblPassword.setText("Password:");
 
-		txtPassword = new Text(groupBasicData, SWT.BORDER);
+		txtPassword = new Text(panBasicData, SWT.BORDER);
 		txtPassword.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
 
-		final var lblComment = new Label(groupBasicData, SWT.NONE);
+		tabItemBasicData.setControl(panBasicData);
+
+		final var tabItemComment = new TabItem(tabFolderBasic, SWT.NONE);
+		tabItemComment.setText("Comment");
+
+		final var panComment = new Composite(tabFolderBasic, SWT.NONE);
+		panComment.setLayout(new GridLayout(2, false));
+		panComment.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
+
+		final var lblComment = new Label(panComment, SWT.NONE);
 		lblComment.setText("Comment:");
 
-		final var gdComment = new GridData(SWT.FILL, SWT.CENTER, true, false, 3, 1);
-		gdComment.heightHint = 50;
+		txtComment = new Text(panComment, SWT.V_SCROLL | SWT.MULTI | SWT.BORDER | SWT.H_SCROLL);
+		txtComment.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 
-		txtComment = new Text(groupBasicData, SWT.V_SCROLL | SWT.MULTI | SWT.BORDER | SWT.H_SCROLL);
-		txtComment.setLayoutData(gdComment);
+		tabItemComment.setControl(panComment);
 
-		final var tabFolder = new TabFolder(panDialogArea, SWT.NONE);
-		tabFolder.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
+		final var tabFolderDetails = new TabFolder(panDialogArea, SWT.NONE);
+		tabFolderDetails.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 
-		final var tabItemInvocations = new TabItem(tabFolder, SWT.NONE);
+		final var tabItemInvocations = new TabItem(tabFolderDetails, SWT.NONE);
 		tabItemInvocations.setText("Method invocations");
 
-		final var panInvocations = new Composite(tabFolder, SWT.NONE);
+		final var panInvocations = new Composite(tabFolderDetails, SWT.NONE);
 		panInvocations.setLayout(new GridLayout());
 		panInvocations.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 
@@ -307,10 +320,10 @@ public class EditIntegrationTestCaseDialog extends CodeCadenzaTitleAreaDialog {
 
 		tabItemInvocations.setControl(panInvocations);
 
-		final var tabItemStatements = new TabItem(tabFolder, SWT.NONE);
+		final var tabItemStatements = new TabItem(tabFolderDetails, SWT.NONE);
 		tabItemStatements.setText("Statements");
 
-		tabItemStatements.setControl(initStatementsPanel(tabFolder));
+		tabItemStatements.setControl(initStatementsPanel(tabFolderDetails));
 	}
 
 	/**
