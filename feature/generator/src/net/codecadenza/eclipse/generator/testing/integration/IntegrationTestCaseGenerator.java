@@ -799,15 +799,8 @@ public class IntegrationTestCaseGenerator extends AbstractJavaSourceGenerator {
 				b.append(addAssertThatWithNullCheck(actualResultList, AssertionOperator.IS_NULL));
 			}
 			else {
-				String expression = actualResultList + ".";
-
-				if (integrationTechnology == IntegrationTechnology.SOAP)
-					expression += "length";
-				else
-					expression += "size()";
-
-				b.append(addAssertThat(expression));
-				b.append(convertOperatorToMethod(methodInvocation.getExpectedSizeOperator()));
+				b.append(addAssertThat(actualResultList));
+				b.append(convertOperatorToSizeMethod(methodInvocation.getExpectedSizeOperator()));
 				b.append("(invocation.getExpectedSize());\n");
 			}
 		}
@@ -925,8 +918,8 @@ public class IntegrationTestCaseGenerator extends AbstractJavaSourceGenerator {
 		if (testDataAttribute.getExpectedSize() != null) {
 			importPackage("java.util");
 
-			b.append(addAssertThat(actualGetter + ".size()"));
-			b.append(convertOperatorToMethod(testDataAttribute.getExpectedSizeOperator()));
+			b.append(addAssertThat(actualGetter));
+			b.append(convertOperatorToSizeMethod(testDataAttribute.getExpectedSizeOperator()));
 			b.append("(testDataProvider.getExpectedSizeOfField(UUID.fromString(EXPECTED_SIZE_IDS.poll())));\n");
 		}
 
@@ -1050,15 +1043,14 @@ public class IntegrationTestCaseGenerator extends AbstractJavaSourceGenerator {
 
 	/**
 	 * Convert the given operator to the corresponding AssertJ method name
-	 * @param operator
+	 * @param operator the assertion operator
 	 * @return the method name
 	 */
 	private String convertOperatorToMethod(AssertionOperator operator) {
-		String methodName = "undefined";
+		final String methodName;
 
 		switch (operator) {
-			case AssertionOperator.NONE -> methodName = "isEqualTo";
-			case AssertionOperator.EQUAL -> methodName = "isEqualTo";
+			case AssertionOperator.NONE, AssertionOperator.EQUAL -> methodName = "isEqualTo";
 			case AssertionOperator.CONTAINS -> methodName = "contains";
 			case AssertionOperator.STARTS_WITH -> methodName = "startsWith";
 			case AssertionOperator.ENDS_WITH -> methodName = "endsWith";
@@ -1069,6 +1061,27 @@ public class IntegrationTestCaseGenerator extends AbstractJavaSourceGenerator {
 			case AssertionOperator.IS_NULL -> methodName = "isNull";
 			case AssertionOperator.IS_NOT_NULL -> methodName = "isNotNull";
 			case AssertionOperator.IS_EMPTY -> methodName = "isEmpty";
+			default -> throw new IllegalStateException("Assertion operator '" + operator.name() + "' is not supported!");
+		}
+
+		return methodName;
+	}
+
+	/**
+	 * Convert the given operator to the corresponding AssertJ "size" method name
+	 * @param operator the assertion operator
+	 * @return the method name
+	 */
+	private String convertOperatorToSizeMethod(AssertionOperator operator) {
+		final String methodName;
+
+		switch (operator) {
+			case AssertionOperator.NONE, AssertionOperator.EQUAL -> methodName = "hasSize";
+			case AssertionOperator.GREATER -> methodName = "hasSizeGreaterThan";
+			case AssertionOperator.GREATER_OR_EQUAL -> methodName = "hasSizeGreaterThanOrEqualTo";
+			case AssertionOperator.SMALLER -> methodName = "hasSizeLessThan";
+			case AssertionOperator.SMALLER_OR_EQUAL -> methodName = "hasSizeLessThanOrEqualTo";
+			default -> throw new IllegalStateException("Assertion operator '" + operator.name() + "' is not supported!");
 		}
 
 		return methodName;
