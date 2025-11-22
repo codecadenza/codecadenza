@@ -255,6 +255,17 @@ class JPAQueryStatementGeneratorTest {
 	}
 
 	@Test
+	void testSearchStatementWithEnumIgnoreCaseSensitive() throws Exception {
+		final var searchDTO = initSearchDTO(SearchFieldDataTypeEnum.ENUM, OPERATOR_LIKE, FILTER_STRING_UPPER_CASE);
+		searchDTO.setCaseSensitive(true);
+
+		final var statement = JPAQueryStatementGenerator.createStatement(searchDTO);
+
+		assertEquals(SELECT_ID + WHERE_LOWER_ID_LIKE + "'" + FILTER_STRING_UPPER_CASE.toLowerCase() + "'", statement);
+		assertTrue(JPAQueryStatementGenerator.createParameters(searchDTO).isEmpty());
+	}
+
+	@Test
 	void testSearchStatementWithMultipleFields() throws Exception {
 		final var searchDTO = new SearchDTO();
 		searchDTO.setFromClause(SELECT_ID);

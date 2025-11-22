@@ -277,8 +277,8 @@ public class JPAQueryStatementGenerator {
 		else if (operator.getValue().equals(OPERATOR_IN) || operator.getValue().equals(OPERATOR_NOT_IN))
 			b.append(addInStatement(field));
 		else {
-			if (!caseSensitive && (field.getDataType() == SearchFieldDataTypeEnum.STRING
-					|| field.getDataType() == SearchFieldDataTypeEnum.CHAR || field.getDataType() == SearchFieldDataTypeEnum.ENUM)) {
+			if (field.getDataType() == SearchFieldDataTypeEnum.ENUM || (!caseSensitive
+					&& (field.getDataType() == SearchFieldDataTypeEnum.STRING || field.getDataType() == SearchFieldDataTypeEnum.CHAR))) {
 				b.append("lower(");
 				b.append(field.getColName());
 				b.append(")");
@@ -289,8 +289,15 @@ public class JPAQueryStatementGenerator {
 			b.append(" ");
 			b.append(operator.getValue());
 
-			if (skipParameterBinding(field, operator))
-				b.append(" '" + convertStringValue(field.getFilterCriteria(), exactMatch, caseSensitive) + "'");
+			if (skipParameterBinding(field, operator)) {
+				if (field.getDataType() == SearchFieldDataTypeEnum.ENUM) {
+					// Ignore the case‑sensitive search mode for enum fields. This avoids problems with EclipseLink, which otherwise
+					// requires an exact type!
+					b.append(" '" + convertStringValue(field.getFilterCriteria(), true, false) + "'");
+				}
+				else
+					b.append(" '" + convertStringValue(field.getFilterCriteria(), exactMatch, caseSensitive) + "'");
+			}
 			else {
 				b.append(" :");
 				b.append(PARAM);
