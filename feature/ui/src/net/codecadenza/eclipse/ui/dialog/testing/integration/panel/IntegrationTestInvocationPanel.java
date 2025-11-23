@@ -67,7 +67,7 @@ public class IntegrationTestInvocationPanel extends TestInvocationPanel {
 	private ParametersPanel panParameters;
 	private boolean editMode;
 	private Text txtName;
-	private Text txtCommand;
+	private Text txtStatement;
 	private Button chkExpectToFail;
 	private Button chkExpectReturnNull;
 	private Text txtTimeout;
@@ -207,18 +207,18 @@ public class IntegrationTestInvocationPanel extends TestInvocationPanel {
 			panPostProcessing.setLayout(new GridLayout(2, false));
 			panPostProcessing.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, false));
 
-			final var lblCommand = new Label(panPostProcessing, SWT.NONE);
-			lblCommand.setText("Command:");
+			final var lblStatement = new Label(panPostProcessing, SWT.NONE);
+			lblStatement.setText("Statement:");
 
-			final var gdCommand = new GridData(SWT.FILL, SWT.CENTER, true, false);
-			gdCommand.heightHint = 50;
+			final var gdStatement = new GridData(SWT.FILL, SWT.CENTER, true, false);
+			gdStatement.heightHint = 50;
 
-			txtCommand = new Text(panPostProcessing, SWT.V_SCROLL | SWT.MULTI | SWT.BORDER | SWT.H_SCROLL);
-			txtCommand.setFont(JFaceResources.getFont(JFaceResources.TEXT_FONT));
-			txtCommand.setLayoutData(gdCommand);
+			txtStatement = new Text(panPostProcessing, SWT.V_SCROLL | SWT.MULTI | SWT.BORDER | SWT.H_SCROLL);
+			txtStatement.setFont(JFaceResources.getFont(JFaceResources.TEXT_FONT));
+			txtStatement.setLayoutData(gdStatement);
 
 			if (methodInvocation.getPostProcessingStatement() != null)
-				txtCommand.setText(methodInvocation.getPostProcessingStatement());
+				txtStatement.setText(methodInvocation.getPostProcessingStatement());
 
 			tabItemPostProcessing.setControl(panPostProcessing);
 		}
@@ -267,8 +267,8 @@ public class IntegrationTestInvocationPanel extends TestInvocationPanel {
 		}
 
 		// If a method returns void and should track generated attributes it is necessary to define a post-processing command!
-		if (!chkExpectToFail.getSelection() && methodInvocation.isReturnVoid() && txtCommand != null
-				&& txtCommand.getText().isEmpty()) {
+		if (!chkExpectToFail.getSelection() && methodInvocation.isReturnVoid() && txtStatement != null
+				&& txtStatement.getText().isEmpty()) {
 			// Preserve the original state of the 'isExpectToFail' attribute as it must be set properly before calling
 			// getTrackedAttributes()!
 			final boolean expectToFail = methodInvocation.isExpectToFail();
@@ -278,7 +278,7 @@ public class IntegrationTestInvocationPanel extends TestInvocationPanel {
 				methodInvocation.setExpectToFail(false);
 
 			if (methodInvocation.getTrackedAttribute() != null) {
-				txtCommand.setFocus();
+				txtStatement.setFocus();
 				validationMessage = "Tracking of generated values requires a post-processing command!";
 			}
 
@@ -299,7 +299,7 @@ public class IntegrationTestInvocationPanel extends TestInvocationPanel {
 			}
 
 		try {
-			if (txtCommand != null)
+			if (txtStatement != null)
 				validateAndSetPostProcessingStatement();
 
 			if (panParameters != null)
@@ -312,8 +312,8 @@ public class IntegrationTestInvocationPanel extends TestInvocationPanel {
 			methodInvocation.setExpectToFail(chkExpectToFail.getSelection());
 			methodInvocation.setExpectedReturnNull(chkExpectReturnNull != null && chkExpectReturnNull.getSelection());
 
-			if (txtCommand != null)
-				methodInvocation.setPostProcessingStatement(txtCommand.getText());
+			if (txtStatement != null)
+				methodInvocation.setPostProcessingStatement(txtStatement.getText());
 
 			if (!txtTimeout.getText().isEmpty())
 				methodInvocation.setTimeout(Integer.parseInt(txtTimeout.getText()));
@@ -335,7 +335,7 @@ public class IntegrationTestInvocationPanel extends TestInvocationPanel {
 	 * @throws IllegalStateException if the validation has failed
 	 */
 	private void validateAndSetPostProcessingStatement() {
-		final String postProcessingStatement = txtCommand.getText().trim();
+		final String postProcessingStatement = txtStatement.getText().trim();
 		final String previousStatement = methodInvocation.getPostProcessingStatement();
 
 		if (postProcessingStatement.isEmpty()) {
