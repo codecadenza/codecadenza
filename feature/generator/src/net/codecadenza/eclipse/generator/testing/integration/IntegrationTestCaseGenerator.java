@@ -791,21 +791,68 @@ public class IntegrationTestCaseGenerator extends AbstractJavaSourceGenerator {
 	private String validateListResult(IntegrationMethodTestInvocation methodInvocation, String actualResultList,
 			String expectedResultList) {
 		final var b = new StringBuilder();
+		boolean checkSize = true;
+		boolean validateItems = true;
 
 		if (methodInvocation.getExpectedSize() != null) {
-			if (project.isSpringBootApplication() && integrationTechnology == IntegrationTechnology.SOAP
-					&& methodInvocation.getExpectedSize() == 0) {
+			final AssertionOperator sizeOperator = methodInvocation.getExpectedSizeOperator();
+
+			if (project.isSpringBootApplication() && integrationTechnology == IntegrationTechnology.SOAP) {
+				boolean addNullCheck = false;
+				boolean mustBeNull = false;
+				boolean mustNotBeNull = false;
+
 				// When using Spring Boot, SOAP returns null instead of an empty list!
-				b.append(addAssertThatWithNullCheck(actualResultList, AssertionOperator.IS_NULL));
+				if (methodInvocation.getExpectedSize() == 0) {
+					checkSize = false;
+
+					if (sizeOperator == AssertionOperator.GREATER)
+						mustNotBeNull = true;
+					else if (sizeOperator == AssertionOperator.GREATER_OR_EQUAL)
+						addNullCheck = true;
+					else {
+						mustBeNull = true;
+						validateItems = false;
+					}
+				}
+				else if (methodInvocation.getExpectedSize() == 1 && sizeOperator == AssertionOperator.SMALLER) {
+					mustBeNull = true;
+					checkSize = false;
+					validateItems = false;
+				}
+				else if (sizeOperator == AssertionOperator.SMALLER_OR_EQUAL || sizeOperator == AssertionOperator.SMALLER)
+					addNullCheck = true;
+				else
+					mustNotBeNull = true;
+
+				if (mustBeNull)
+					b.append(addAssertThatWithNullCheck(actualResultList, AssertionOperator.IS_NULL));
+				else if (mustNotBeNull)
+					b.append(addAssertThatWithNullCheck(actualResultList, AssertionOperator.IS_NOT_NULL));
+
+				if (addNullCheck) {
+					b.append("// The actual list is allowed to be null!\n");
+					b.append("if(" + actualResultList + " == null)\n");
+					b.append("return;\n\n");
+				}
 			}
-			else {
+			else if (methodInvocation.getExpectedSize() == 0
+					|| (methodInvocation.getExpectedSize() == 1 && sizeOperator == AssertionOperator.SMALLER))
+				validateItems = false;
+			else if (sizeOperator == AssertionOperator.SMALLER_OR_EQUAL && !methodInvocation.getReturnValues().isEmpty()) {
+				b.append("// The actual list is allowed to be empty!\n");
+				b.append("if(" + actualResultList + ".isEmpty())\n");
+				b.append("return;\n\n");
+			}
+
+			if (checkSize) {
 				b.append(addAssertThat(actualResultList));
-				b.append(convertOperatorToSizeMethod(methodInvocation.getExpectedSizeOperator()));
+				b.append(convertOperatorToSizeMethod(sizeOperator));
 				b.append("(invocation.getExpectedSize());\n");
 			}
 		}
 
-		if (methodInvocation.getReturnValues().isEmpty())
+		if (methodInvocation.getReturnValues().isEmpty() || !validateItems)
 			return b.toString();
 
 		final TestDataObject testDataObject = methodInvocation.getReturnValues().getFirst();
