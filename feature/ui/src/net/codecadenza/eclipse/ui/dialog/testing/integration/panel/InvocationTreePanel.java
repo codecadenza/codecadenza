@@ -74,7 +74,7 @@ import org.eclipse.ui.PlatformUI;
  * @version 1.0.0
  */
 public class InvocationTreePanel extends Composite {
-	private static final Color EXPECT_TO_FAIL_COLOR = Display.getCurrent().getSystemColor(SWT.COLOR_RED);
+	private static final Color EXPECT_TO_FAIL_COLOR = Display.getCurrent().getSystemColor(SWT.COLOR_DARK_GRAY);
 	private static final Color ATTR_TRACKING_COLOR = Display.getCurrent().getSystemColor(SWT.COLOR_DARK_BLUE);
 	private static final Color ATTR_REFERENCE_COLOR = Display.getCurrent().getSystemColor(SWT.COLOR_DARK_GREEN);
 	private static final String IMG_TOOL_DELETE = org.eclipse.ui.ISharedImages.IMG_TOOL_DELETE;
