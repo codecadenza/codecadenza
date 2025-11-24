@@ -101,7 +101,8 @@ public class IntegrationTestCaseGenerator extends AbstractJavaSourceGenerator {
 				&& !testCase.getPreProcessingStatements().isEmpty();
 		this.addPostProcessingStatements = testCase.getPostProcessingStatements() != null
 				&& !testCase.getPostProcessingStatements().isEmpty();
-		this.addFileHandling = testCase.isFileHandlingRequired();
+		this.addFileHandling = testCase.getMethodInvocations().stream()
+				.anyMatch(invocation -> invocation.isUploadFile() || (invocation.isDownloadFile() && !invocation.isExpectToFail()));
 		this.integrationTechnology = integrationBeans.stream().map(AbstractIntegrationBean::getIntegrationTechnology).findFirst()
 				.orElse(null);
 	}
@@ -197,7 +198,7 @@ public class IntegrationTestCaseGenerator extends AbstractJavaSourceGenerator {
 			}
 
 			for (final IntegrationMethodTestInvocation invocation : testCase.getMethodInvocations())
-				if (invocation.isDownloadFile()) {
+				if (invocation.isDownloadFile() && !invocation.isExpectToFail()) {
 					importPackage("org.junit.jupiter.api.io");
 					importPackage("java.nio.file");
 
@@ -505,43 +506,45 @@ public class IntegrationTestCaseGenerator extends AbstractJavaSourceGenerator {
 		if (methodInvocation.isUploadFile())
 			b.append(new FileHandlingGenerator(methodInvocation).addFileUpload());
 
-		if (validationResult.contains(EXPECTED_RESULT_OBJECT) || validationResult.contains(EXPECTED_RESULT_LIST)) {
-			final JavaType returnType = methodInvocation.getIntegrationMethod().getReturnType();
-
-			importType(integrationMethod, returnType);
-
-			b.append("final var ");
-
-			if (methodInvocation.isReturnList())
-				b.append(EXPECTED_RESULT_LIST + " = testDataProvider.getReturnListValue");
-			else
-				b.append(EXPECTED_RESULT_OBJECT + " = testDataProvider.getReturnValue");
-
-			b.append("(" + returnType.getName() + ".class);\n\n");
-		}
-
-		if (validationResult.contains(ACTUAL_RESULT_OBJECT) || validationResult.contains(ACTUAL_RESULT_LIST)
-				|| methodInvocation.isDownloadFile()) {
-			b.append("final var ");
-
-			if (methodInvocation.isReturnList())
-				b.append(ACTUAL_RESULT_LIST);
-			else
-				b.append(ACTUAL_RESULT_OBJECT);
-
-			b.append(" = ");
-		}
-
 		// Ignore the timeout if the method is expected to fail!
 		if (methodInvocation.isExpectToFail()) {
 			importStaticClass("org.junit.jupiter.api.Assertions.assertThrows");
 
 			b.append("assertThrows(Exception.class, () -> ");
 		}
-		else if (methodInvocation.getTimeout() != null && !methodInvocation.isWaitForResponseParameterRequired()) {
-			importStaticClass("org.junit.jupiter.api.Assertions.assertTimeoutPreemptively");
+		else {
+			if (validationResult.contains(EXPECTED_RESULT_OBJECT) || validationResult.contains(EXPECTED_RESULT_LIST)) {
+				final JavaType returnType = methodInvocation.getIntegrationMethod().getReturnType();
 
-			b.append("assertTimeoutPreemptively(invocation.getTimeout(), () -> ");
+				importType(integrationMethod, returnType);
+
+				b.append("final var ");
+
+				if (methodInvocation.isReturnList())
+					b.append(EXPECTED_RESULT_LIST + " = testDataProvider.getReturnListValue");
+				else
+					b.append(EXPECTED_RESULT_OBJECT + " = testDataProvider.getReturnValue");
+
+				b.append("(" + returnType.getName() + ".class);\n\n");
+			}
+
+			if (validationResult.contains(ACTUAL_RESULT_OBJECT) || validationResult.contains(ACTUAL_RESULT_LIST)
+					|| methodInvocation.isDownloadFile()) {
+				b.append("final var ");
+
+				if (methodInvocation.isReturnList())
+					b.append(ACTUAL_RESULT_LIST);
+				else
+					b.append(ACTUAL_RESULT_OBJECT);
+
+				b.append(" = ");
+			}
+
+			if (methodInvocation.getTimeout() != null && !methodInvocation.isWaitForResponseParameterRequired()) {
+				importStaticClass("org.junit.jupiter.api.Assertions.assertTimeoutPreemptively");
+
+				b.append("assertTimeoutPreemptively(invocation.getTimeout(), () -> ");
+			}
 		}
 
 		b.append(serviceName + "." + integrationMethod.getName() + "(");
@@ -554,21 +557,22 @@ public class IntegrationTestCaseGenerator extends AbstractJavaSourceGenerator {
 
 		b.append(";\n");
 
-		if (methodInvocation.isDownloadFile()) {
-			importAssertThat = true;
+		if (!methodInvocation.isExpectToFail()) {
+			if (methodInvocation.isDownloadFile()) {
+				importAssertThat = true;
 
-			b.append(new FileHandlingGenerator(methodInvocation).addFileDownload());
-		}
-		else if (!validationResult.isEmpty()) {
-			b.append("\n");
-			b.append(validationResult);
+				b.append(new FileHandlingGenerator(methodInvocation).addFileDownload());
+			}
+			else if (!validationResult.isEmpty()) {
+				b.append("\n");
+				b.append(validationResult);
+			}
+
+			if (methodInvocation.getPostProcessingStatement() != null && !methodInvocation.getPostProcessingStatement().isEmpty())
+				b.append(addPostProcessing(methodInvocation));
 		}
 		else
 			importAssertThat = false;
-
-		if (!methodInvocation.isExpectToFail() && methodInvocation.getPostProcessingStatement() != null
-				&& !methodInvocation.getPostProcessingStatement().isEmpty())
-			b.append(addPostProcessing(methodInvocation));
 
 		b.append("}\n\n");
 
