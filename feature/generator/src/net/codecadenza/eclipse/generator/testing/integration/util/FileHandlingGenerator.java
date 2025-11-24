@@ -174,7 +174,7 @@ public class FileHandlingGenerator {
 		b.append("try\n");
 		b.append("{\n");
 
-		if (integrationTechnology == IntegrationTechnology.SOAP || integrationTechnology == IntegrationTechnology.REST) {
+		if (integrationTechnology == IntegrationTechnology.SOAP) {
 			b.append("final byte[] content = Files.readAllBytes(fileToUpload.toPath());\n\n");
 			b.append(UPLOAD_FILE_PATH + " = " + FILE_SERVICE_NAME + ".uploadFile(fileToUpload.getName(), content);\n");
 		}
