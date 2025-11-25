@@ -21,6 +21,7 @@
  */
 package net.codecadenza.eclipse.generator.testing.integration.util;
 
+import net.codecadenza.eclipse.generator.common.AbstractJavaSourceGenerator;
 import net.codecadenza.eclipse.model.boundary.BoundaryMethodTypeEnumeration;
 import net.codecadenza.eclipse.model.integration.AbstractIntegrationBean;
 import net.codecadenza.eclipse.model.project.IntegrationTechnology;
@@ -44,15 +45,18 @@ public class FileHandlingGenerator {
 
 	private final IntegrationMethodTestInvocation methodInvocation;
 	private final IntegrationTechnology integrationTechnology;
+	private final AbstractJavaSourceGenerator parentGenerator;
 
 	/**
 	 * Constructor
 	 * @param methodInvocation
+	 * @param parentGenerator
 	 */
-	public FileHandlingGenerator(IntegrationMethodTestInvocation methodInvocation) {
+	public FileHandlingGenerator(IntegrationMethodTestInvocation methodInvocation, AbstractJavaSourceGenerator parentGenerator) {
 		final AbstractIntegrationBean integrationBean = methodInvocation.getIntegrationMethod().getIntegrationBean();
 
 		this.methodInvocation = methodInvocation;
+		this.parentGenerator = parentGenerator;
 		this.integrationTechnology = integrationBean.getIntegrationTechnology();
 	}
 
@@ -62,6 +66,13 @@ public class FileHandlingGenerator {
 	 */
 	public String addFileUpload() {
 		final BoundaryMethodTypeEnumeration methodType = methodInvocation.getIntegrationMethod().getBoundaryMethod().getMethodType();
+
+		parentGenerator.importPackage("java.io");
+
+		if (integrationTechnology == IntegrationTechnology.RMI)
+			parentGenerator.importPackage("net.codecadenza.runtime.transport.file");
+		else if (integrationTechnology == IntegrationTechnology.JMS)
+			parentGenerator.importPackage("java.time");
 
 		if (methodType == BoundaryMethodTypeEnumeration.UPLOAD || methodType == BoundaryMethodTypeEnumeration.UPLOAD_IMPORT)
 			return addDirectFileUpload();
@@ -77,6 +88,10 @@ public class FileHandlingGenerator {
 		final var b = new StringBuilder();
 		b.append("\n");
 		b.append("final Path tempFilePath = testDir.resolve(" + DOWNLOAD_FILE_CONSTANT + ");\n");
+
+		parentGenerator.importPackage("java.io");
+		parentGenerator.importPackage("java.nio.file");
+		parentGenerator.importPackage("org.junit.jupiter.api.io");
 
 		if (integrationTechnology == IntegrationTechnology.SOAP) {
 			b.append("final var dataHandler = " + FILE_SERVICE_NAME + ".downloadFile(actualResultObject);\n\n");
@@ -95,9 +110,14 @@ public class FileHandlingGenerator {
 
 		if (integrationTechnology == IntegrationTechnology.REST || integrationTechnology == IntegrationTechnology.KAFKA)
 			b.append(FILE_SERVICE_NAME + ".downloadFile(actualResultObject, tempFilePath.toFile());\n\n");
-		else if (integrationTechnology == IntegrationTechnology.JMS)
+		else if (integrationTechnology == IntegrationTechnology.JMS) {
+			parentGenerator.importPackage("java.time");
+
 			b.append(FILE_SERVICE_NAME + ".downloadFile(actualResultObject, tempFilePath.toFile(), Duration.ofSeconds(1));\n\n");
+		}
 		else if (integrationTechnology == IntegrationTechnology.RMI) {
+			parentGenerator.importPackage("net.codecadenza.runtime.transport.file");
+
 			b.append("final byte[] content = " + FILE_SERVICE_NAME + ".downloadFile(actualResultObject);\n");
 			b.append("Files.write(tempFilePath, content);\n\n");
 		}
@@ -136,6 +156,8 @@ public class FileHandlingGenerator {
 		b.append("{\n");
 
 		if (integrationTechnology == IntegrationTechnology.SOAP || integrationTechnology == IntegrationTechnology.RMI) {
+			parentGenerator.importPackage("java.nio.file");
+
 			b.append("final byte[] content = Files.readAllBytes(fileToUpload.toPath());\n");
 			b.append("final String pathInBackend = " + FILE_SERVICE_NAME);
 			b.append(".uploadFile(" + fileName + ", content);\n\n");
@@ -174,7 +196,9 @@ public class FileHandlingGenerator {
 		b.append("try\n");
 		b.append("{\n");
 
-		if (integrationTechnology == IntegrationTechnology.SOAP) {
+		if (integrationTechnology == IntegrationTechnology.SOAP || integrationTechnology == IntegrationTechnology.RMI) {
+			parentGenerator.importPackage("java.nio.file");
+
 			b.append("final byte[] content = Files.readAllBytes(fileToUpload.toPath());\n\n");
 			b.append(UPLOAD_FILE_PATH + " = " + FILE_SERVICE_NAME + ".uploadFile(fileToUpload.getName(), content);\n");
 		}

@@ -183,25 +183,14 @@ public class IntegrationTestCaseGenerator extends AbstractJavaSourceGenerator {
 
 			if (integrationTechnology == IntegrationTechnology.SOAP || integrationTechnology == IntegrationTechnology.RMI) {
 				importPackage(integrationBean.getNamespace().toString());
-				importPackage("java.nio.file");
-
-				if (integrationTechnology == IntegrationTechnology.RMI)
-					importPackage("net.codecadenza.runtime.transport.file");
 
 				addPrivateField(integrationModule.getFileServiceName(), FILE_SERVICE_NAME).withStaticModifier().create();
 			}
-			else {
-				if (integrationTechnology == IntegrationTechnology.JMS)
-					importPackage("java.time");
-
+			else
 				addPrivateField(fileServiceClientName, FILE_SERVICE_NAME).withStaticModifier().create();
-			}
 
 			for (final IntegrationMethodTestInvocation invocation : testCase.getMethodInvocations())
 				if (invocation.isDownloadFile() && !invocation.isExpectToFail()) {
-					importPackage("org.junit.jupiter.api.io");
-					importPackage("java.nio.file");
-
 					addPrivateConstant(JavaType.STRING, DOWNLOAD_FILE_CONSTANT, DOWNLOAD_FILE_CONSTANT_VALUE).create();
 					addPrivateField("Path", "testDir").withAnnotations("@TempDir\n").create();
 					break;
@@ -504,7 +493,7 @@ public class IntegrationTestCaseGenerator extends AbstractJavaSourceGenerator {
 		}
 
 		if (methodInvocation.isUploadFile())
-			b.append(new FileHandlingGenerator(methodInvocation).addFileUpload());
+			b.append(new FileHandlingGenerator(methodInvocation, this).addFileUpload());
 
 		// Ignore the timeout if the method is expected to fail!
 		if (methodInvocation.isExpectToFail()) {
@@ -561,7 +550,7 @@ public class IntegrationTestCaseGenerator extends AbstractJavaSourceGenerator {
 			if (methodInvocation.isDownloadFile()) {
 				importAssertThat = true;
 
-				b.append(new FileHandlingGenerator(methodInvocation).addFileDownload());
+				b.append(new FileHandlingGenerator(methodInvocation, this).addFileDownload());
 			}
 			else if (!validationResult.isEmpty()) {
 				b.append("\n");
