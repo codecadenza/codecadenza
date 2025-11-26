@@ -199,6 +199,9 @@ public class TestDataObjectGridPanel extends Composite {
 			try {
 				final int expectedSize = Integer.parseInt(txtExpectedSize.getText());
 
+				if (expectedSize < 0)
+					throw new IllegalStateException("The expected size must not be negative!");
+
 				if (testDataAttribute != null) {
 					testDataAttribute.setExpectedSize(expectedSize);
 
@@ -208,7 +211,7 @@ public class TestDataObjectGridPanel extends Composite {
 				else
 					methodInvocation.setExpectedSize(expectedSize);
 			}
-			catch (final NumberFormatException e) {
+			catch (final Exception e) {
 				txtExpectedSize.setFocus();
 				throw e;
 			}

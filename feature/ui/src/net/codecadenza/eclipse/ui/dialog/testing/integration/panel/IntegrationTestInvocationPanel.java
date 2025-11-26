@@ -315,8 +315,14 @@ public class IntegrationTestInvocationPanel extends TestInvocationPanel {
 			if (txtStatement != null)
 				methodInvocation.setPostProcessingStatement(txtStatement.getText());
 
-			if (!txtTimeout.getText().isEmpty())
-				methodInvocation.setTimeout(Integer.parseInt(txtTimeout.getText()));
+			if (!txtTimeout.getText().isEmpty()) {
+				final int timeout = Integer.parseInt(txtTimeout.getText());
+
+				if (timeout <= 0)
+					throw new IllegalStateException("The timeout must be greater than 0!");
+
+				methodInvocation.setTimeout(timeout);
+			}
 			else
 				methodInvocation.setTimeout(null);
 
