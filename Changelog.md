@@ -26,6 +26,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 2025-10-19: Disable precision and scale for new domain attributes that are not mapped to BigDecimal
 
 ### Fixed
+2025-11-27: Wait for the partition assignment in generated Kafka clients
 2025-11-22: Ignore the case‑sensitive search mode for enum fields when generating JPA query statements
 2025-11-14: Add missing imports when generating conversion fragments for element collections
 2025-11-11: Add the JavaTimeModule to the Jackson ObjectMapper in generated REST clients in order to avoid problems with fields of
