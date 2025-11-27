@@ -650,7 +650,7 @@ public class IntegrationTestCaseService {
 
 		final TestDataAttribute maxResultAttribute = TestingFactory.eINSTANCE.createTestDataAttribute();
 		maxResultAttribute.setName(TestDataAttribute.ATTRIBUTE_NAME_MAX_RESULT);
-		maxResultAttribute.setValue("50");
+		maxResultAttribute.setValue("1000");
 		maxResultAttribute.setMappingType(project.getJavaTypeByName(JavaType.INT));
 
 		final TestDataAttribute dateFormatAttribute = TestingFactory.eINSTANCE.createTestDataAttribute();
