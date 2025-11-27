@@ -510,6 +510,10 @@ public class EditIntegrationTestCaseDialog extends CodeCadenzaTitleAreaDialog {
 				return;
 
 			try {
+				// Save the active method invocation
+				if (!saveAndDisposeInvocation(true))
+					return;
+
 				saveTestCase();
 			}
 			catch (final Exception e) {
