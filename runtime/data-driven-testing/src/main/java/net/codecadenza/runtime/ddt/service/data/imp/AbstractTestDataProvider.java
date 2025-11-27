@@ -22,6 +22,7 @@
 package net.codecadenza.runtime.ddt.service.data.imp;
 
 import java.lang.invoke.MethodHandles;
+import java.time.Duration;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Deque;
@@ -38,6 +39,7 @@ import net.codecadenza.runtime.ddt.model.TestField;
 import net.codecadenza.runtime.ddt.model.TestObject;
 import net.codecadenza.runtime.ddt.service.data.ITestDataProvider;
 import net.codecadenza.runtime.ddt.service.data.TestDataProviderProperties;
+import net.codecadenza.runtime.ddt.service.data.util.MethodInvocationGroupIterator;
 import net.codecadenza.runtime.ddt.service.data.util.ReferenceResolver;
 import net.codecadenza.runtime.ddt.service.data.util.TestObjectInitizalizer;
 import org.slf4j.Logger;
@@ -100,6 +102,16 @@ public abstract class AbstractTestDataProvider<I> implements ITestDataProvider {
 		}
 
 		return methodInvocation;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see net.codecadenza.runtime.ddt.service.data.ITestDataProvider#pushBackInvocation(net.codecadenza.runtime.ddt.model.
+	 * MethodInvocation)
+	 */
+	@Override
+	public void pushBackInvocation(MethodInvocation methodInvocation) {
+		methodInvocations.addFirst(methodInvocation);
 	}
 
 	/*
@@ -219,6 +231,63 @@ public abstract class AbstractTestDataProvider<I> implements ITestDataProvider {
 			return null;
 
 		return testField.getExpectedSize();
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see net.codecadenza.runtime.ddt.service.data.ITestDataProvider#getPostProcessingStatement()
+	 */
+	@Override
+	public String getPostProcessingStatement() {
+		if (methodInvocation == null)
+			throw new IllegalStateException("No method invocation available!");
+
+		return methodInvocation.getPostProcessingStatement();
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see net.codecadenza.runtime.ddt.service.data.ITestDataProvider#getTimeout()
+	 */
+	@Override
+	public Duration getTimeout() {
+		if (methodInvocation == null)
+			throw new IllegalStateException("No method invocation available!");
+
+		return methodInvocation.getTimeout();
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see net.codecadenza.runtime.ddt.service.data.ITestDataProvider#getGroupId()
+	 */
+	@Override
+	public UUID getGroupId() {
+		if (methodInvocation == null)
+			throw new IllegalStateException("No method invocation available!");
+
+		return methodInvocation.getGroupId();
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see net.codecadenza.runtime.ddt.service.data.ITestDataProvider#getMethodInvocationGroupIterator()
+	 */
+	@Override
+	public MethodInvocationGroupIterator getMethodInvocationGroupIterator() {
+		return new MethodInvocationGroupIterator(this);
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see net.codecadenza.runtime.ddt.service.data.ITestDataProvider#getExpectedSize()
+	 */
+	@Override
+	public Integer getExpectedSize() {
+		if (methodInvocation == null)
+			throw new IllegalStateException("No method invocation available!");
+
+		return methodInvocation.getExpectedSize();
 	}
 
 	/**

@@ -25,7 +25,6 @@ import java.io.File;
 import java.time.Duration;
 import net.codecadenza.runtime.ddt.example.domain.CountryDTO;
 import net.codecadenza.runtime.ddt.example.service.CountryService;
-import net.codecadenza.runtime.ddt.model.MethodInvocation;
 import net.codecadenza.runtime.ddt.model.TestData;
 import net.codecadenza.runtime.ddt.service.completion.IInvocationCompletionHandler;
 import net.codecadenza.runtime.ddt.service.completion.InvocationCompletionHandlerFactory;
@@ -99,59 +98,55 @@ class CountryServiceTest {
 	 */
 	@Test
 	void testBasicWorkflow() {
-		MethodInvocation invocation = testDataProvider.getNextInvocation();
+		final var iterator = testDataProvider.getMethodInvocationGroupIterator();
 
-		while (true) {
-			final var groupId = invocation.getGroupId();
+		while (iterator.hasNext()) {
+			createCountry();
 
-			createCountry(invocation);
-
-			invocation = testDataProvider.getNextInvocation();
-
-			if (!groupId.equals(invocation.getGroupId()))
-				break;
+			iterator.next();
 		}
 
-		updateCountry(invocation);
+		updateCountry();
 
-		deleteCountry(testDataProvider.getNextInvocation());
+		deleteCountry();
 	}
 
 	/**
 	 * Test creating a new country
-	 * @param invocation
 	 */
-	private void createCountry(MethodInvocation invocation) {
+	private void createCountry() {
 		final var paramCountry = testDataProvider.getNextParameter(CountryDTO.class);
 
 		countryService.createCountry(paramCountry);
 
-		completionHandler.waitForFinish(invocation.getPostProcessingStatement(), paramCountry.getName());
+		completionHandler.waitForFinish(testDataProvider.getPostProcessingStatement(), paramCountry.getName());
 	}
 
 	/**
 	 * Test updating a country
-	 * @param invocation
 	 */
-	private void updateCountry(MethodInvocation invocation) {
+	private void updateCountry() {
+		testDataProvider.getNextInvocation();
+
 		final var paramCountry = testDataProvider.getNextParameter(CountryDTO.class);
 
 		countryService.updateCountry(paramCountry);
 
-		completionHandler.waitForFinish(invocation.getPostProcessingStatement(), paramCountry.getName());
+		completionHandler.waitForFinish(testDataProvider.getPostProcessingStatement(), paramCountry.getName());
 	}
 
 	/**
 	 * Test deleting a country
-	 * @param invocation
 	 */
-	private void deleteCountry(MethodInvocation invocation) {
-		final Duration completionTimeout = invocation.getTimeout();
+	private void deleteCountry() {
+		testDataProvider.getNextInvocation();
+
+		final Duration completionTimeout = testDataProvider.getTimeout();
 		final var paramCode = testDataProvider.getNextParameter(String.class);
 
 		countryService.deleteCountry(paramCode);
 
-		completionHandler.waitForFinish(invocation.getPostProcessingStatement(), completionTimeout, paramCode);
+		completionHandler.waitForFinish(testDataProvider.getPostProcessingStatement(), completionTimeout, paramCode);
 	}
 
 }

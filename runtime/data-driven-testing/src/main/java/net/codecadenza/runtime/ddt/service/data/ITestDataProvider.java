@@ -21,10 +21,12 @@
  */
 package net.codecadenza.runtime.ddt.service.data;
 
+import java.time.Duration;
 import java.util.List;
 import java.util.UUID;
 import net.codecadenza.runtime.ddt.model.MethodInvocation;
 import net.codecadenza.runtime.ddt.model.TestData;
+import net.codecadenza.runtime.ddt.service.data.util.MethodInvocationGroupIterator;
 
 /**
  * <p>
@@ -48,6 +50,12 @@ public interface ITestDataProvider {
 	 * @return the method invocation
 	 */
 	MethodInvocation getNextInvocation();
+
+	/**
+	 * Put the supplied {@link MethodInvocation} back to the front of the internal queue
+	 * @param methodInvocation the invocation that must be re‑queued
+	 */
+	void pushBackInvocation(MethodInvocation methodInvocation);
 
 	/**
 	 * Get the next method parameter
@@ -96,5 +104,30 @@ public interface ITestDataProvider {
 	 * @return the expected number of objects
 	 */
 	Integer getExpectedSizeOfField(UUID id);
+
+	/**
+	 * @return the post-processing statement of the current method invocation
+	 */
+	String getPostProcessingStatement();
+
+	/**
+	 * @return the timeout of the current method invocation
+	 */
+	Duration getTimeout();
+
+	/**
+	 * @return the group ID of the current method invocation
+	 */
+	UUID getGroupId();
+
+	/**
+	 * @return the iterator for all method invocations of the same group
+	 */
+	MethodInvocationGroupIterator getMethodInvocationGroupIterator();
+
+	/**
+	 * @return the expected number of elements in the list returned by the current method invocation
+	 */
+	Integer getExpectedSize();
 
 }

@@ -404,6 +404,7 @@ public class IntegrationTestCaseGenerator extends AbstractJavaSourceGenerator {
 	private void addBasicWorkflowMethod() {
 		final var b = new StringBuilder();
 		final var methodSignature = "void testBasicWorkflow()";
+		boolean firstIterator = true;
 		IntegrationMethodTestInvocation previousInvocation = null;
 
 		b.append("/**\n");
@@ -413,32 +414,27 @@ public class IntegrationTestCaseGenerator extends AbstractJavaSourceGenerator {
 		b.append(getAnnotationForGeneratedElement());
 		b.append(methodSignature + "\n");
 		b.append("{\n");
-		b.append("MethodInvocation invocation = testDataProvider.getNextInvocation();\n\n");
 
 		for (final IntegrationMethodTestInvocation methodInvocation : testCase.getMethodInvocations()) {
-			importClass("net.codecadenza.runtime.ddt.model.MethodInvocation");
-
-			if (previousInvocation != null) {
+			if (previousInvocation != null)
 				b.append("\n");
 
-				if (previousInvocation.getNestedInvocations().isEmpty())
-					b.append("invocation = testDataProvider.getNextInvocation();\n\n");
-			}
-
 			if (!methodInvocation.getNestedInvocations().isEmpty()) {
-				importPackage("java.util");
+				if (firstIterator) {
+					b.append("var ");
 
-				b.append("while(true)\n");
+					firstIterator = false;
+				}
+
+				b.append("invocationGroupIterator = testDataProvider.getMethodInvocationGroupIterator();\n\n");
+				b.append("while(invocationGroupIterator.hasNext())\n");
 				b.append("{\n");
-				b.append("final UUID groupId = invocation.getGroupId();\n\n");
-				b.append(methodInvocation.getTestMethodName() + "(invocation);\n\n");
-				b.append("invocation = testDataProvider.getNextInvocation();\n\n");
-				b.append("if(invocation == null || !groupId.equals(invocation.getGroupId()))\n");
-				b.append("break;\n");
+				b.append(methodInvocation.getTestMethodName() + "();\n\n");
+				b.append("invocationGroupIterator.next();\n");
 				b.append("}\n");
 			}
 			else
-				b.append(methodInvocation.getTestMethodName() + "(invocation);\n");
+				b.append(methodInvocation.getTestMethodName() + "();\n");
 
 			previousInvocation = methodInvocation;
 		}
@@ -454,7 +450,7 @@ public class IntegrationTestCaseGenerator extends AbstractJavaSourceGenerator {
 	 */
 	private void addTestMethod(IntegrationMethodTestInvocation methodInvocation) {
 		final var b = new StringBuilder();
-		final var methodSignature = "void " + methodInvocation.getTestMethodName() + "(MethodInvocation invocation)";
+		final var methodSignature = "void " + methodInvocation.getTestMethodName() + "()";
 		final AbstractIntegrationMethod integrationMethod = methodInvocation.getIntegrationMethod();
 		final String serviceName = integrationMethod.getIntegrationBean().getDomainObject().getLowerCaseName() + "Service";
 		final String validationResult = validateResult(methodInvocation);
@@ -467,11 +463,13 @@ public class IntegrationTestCaseGenerator extends AbstractJavaSourceGenerator {
 			b.append(" which is expected to fail");
 
 		b.append("\n");
-		b.append(" * @param invocation\n");
 		b.append(" */\n");
 		b.append(getAnnotationForGeneratedElement());
 		b.append("private " + methodSignature + "\n");
 		b.append("{\n");
+
+		if (methodInvocation.getNestedInvocations().isEmpty())
+			b.append("testDataProvider.getNextInvocation();\n\n");
 
 		for (final MethodInvocationParameter parameter : methodInvocation.getParameters()) {
 			final JavaType paramType = parameter.getType();
@@ -532,7 +530,7 @@ public class IntegrationTestCaseGenerator extends AbstractJavaSourceGenerator {
 			if (methodInvocation.getTimeout() != null && !methodInvocation.isWaitForResponseParameterRequired()) {
 				importStaticClass("org.junit.jupiter.api.Assertions.assertTimeoutPreemptively");
 
-				b.append("assertTimeoutPreemptively(invocation.getTimeout(), () -> ");
+				b.append("assertTimeoutPreemptively(testDataProvider.getTimeout(), () -> ");
 			}
 		}
 
@@ -624,7 +622,7 @@ public class IntegrationTestCaseGenerator extends AbstractJavaSourceGenerator {
 			if (integrationTechnology == IntegrationTechnology.KAFKA)
 				parameterList += "true";
 			else if (integrationTechnology == IntegrationTechnology.JMS)
-				parameterList += "invocation.getTimeout()";
+				parameterList += "testDataProvider.getTimeout()";
 		}
 
 		return parameterList;
@@ -664,14 +662,15 @@ public class IntegrationTestCaseGenerator extends AbstractJavaSourceGenerator {
 				importPackage(generatedType.getNamespace().toString());
 
 			b.append("final " + generatedType.getName() + " generatedId = ");
-			b.append("completionHandler.waitForFinish(invocation.getPostProcessingStatement(), " + generatedType.getName() + ".class");
+			b.append("completionHandler.waitForFinish(testDataProvider.getPostProcessingStatement(), ");
+			b.append(generatedType.getName() + ".class");
 			b.append(addWaitForFinishParameters(methodInvocation));
 			b.append(");\n");
 			b.append("testDataProvider.setGeneratedFieldValue(UUID.fromString(");
 			b.append(idConstant + ".poll()), generatedId, " + generatedType.getName() + ".class);\n");
 		}
 		else {
-			b.append("completionHandler.waitForFinish(invocation.getPostProcessingStatement() ");
+			b.append("completionHandler.waitForFinish(testDataProvider.getPostProcessingStatement() ");
 			b.append(addWaitForFinishParameters(methodInvocation));
 			b.append(");\n");
 		}
@@ -841,7 +840,7 @@ public class IntegrationTestCaseGenerator extends AbstractJavaSourceGenerator {
 			if (checkSize) {
 				b.append(addAssertThat(actualResultList));
 				b.append(convertOperatorToSizeMethod(sizeOperator));
-				b.append("(invocation.getExpectedSize());\n");
+				b.append("(testDataProvider.getExpectedSize());\n");
 			}
 		}
 

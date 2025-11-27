@@ -32,7 +32,6 @@ import java.io.File;
 import java.util.UUID;
 import net.codecadenza.runtime.ddt.example.domain.CustomerDTO;
 import net.codecadenza.runtime.ddt.example.service.CustomerService;
-import net.codecadenza.runtime.ddt.model.MethodInvocation;
 import net.codecadenza.runtime.ddt.model.TestData;
 import net.codecadenza.runtime.ddt.service.data.ITestDataProvider;
 import net.codecadenza.runtime.ddt.service.data.TestDataProviderFactory;
@@ -137,12 +136,12 @@ class CustomerServiceTest {
 	 * Test updating an existing customer
 	 */
 	private void updateCustomer() {
-		final var updateInvocation = testDataProvider.getNextInvocation();
+		testDataProvider.getNextInvocation();
 
 		final var paramCustomer = testDataProvider.getNextParameter(CustomerDTO.class);
 		final var expectedCustomerUpdate = testDataProvider.getReturnValue(CustomerDTO.class);
 
-		final var updatedCustomer = assertTimeoutPreemptively(updateInvocation.getTimeout(),
+		final var updatedCustomer = assertTimeoutPreemptively(testDataProvider.getTimeout(),
 				() -> customerService.updateCustomer(paramCustomer));
 
 		assertTrue(expectedCustomerUpdate.getId() > 0);
@@ -154,7 +153,7 @@ class CustomerServiceTest {
 	 * Test searching for customer objects
 	 */
 	private void searchCustomers() {
-		final MethodInvocation invocation = testDataProvider.getNextInvocation();
+		testDataProvider.getNextInvocation();
 
 		final var paramSearchInput = testDataProvider.getNextParameter(SearchInput.class);
 		paramSearchInput.setDateFormat(properties.getDateFormat());
@@ -167,7 +166,7 @@ class CustomerServiceTest {
 
 		final var customerList = customerService.searchCustomers(paramSearchInput);
 
-		assertEquals(invocation.getExpectedSize(), customerList.size());
+		assertEquals(testDataProvider.getExpectedSize(), customerList.size());
 		assertEquals(expectedResult.getFirst().getName(), customerList.getFirst().getName());
 		assertEquals(expectedResult.getFirst().getZip(), customerList.getFirst().getZip());
 	}
@@ -176,13 +175,14 @@ class CustomerServiceTest {
 	 * Test saving a customer
 	 */
 	private void saveCustomers() {
-		final var invocation = testDataProvider.getNextInvocation();
+		testDataProvider.getNextInvocation();
+
 		final var paramCustomers = testDataProvider.getNextListParameter(CustomerDTO.class);
 		final var expectedList = testDataProvider.getReturnListValue(CustomerDTO.class);
 
 		final var resultList = customerService.saveCustomers(paramCustomers);
 
-		assertNull(invocation.getTimeout());
+		assertNull(testDataProvider.getTimeout());
 		assertEquals(expectedList.size(), resultList.size());
 	}
 
@@ -190,10 +190,11 @@ class CustomerServiceTest {
 	 * Test deleting a customer
 	 */
 	private void deleteCustomer() {
-		final var invocation = testDataProvider.getNextInvocation();
+		testDataProvider.getNextInvocation();
+
 		final var paramId = testDataProvider.getNextParameter(long.class);
 
-		assertTimeoutPreemptively(invocation.getTimeout(), () -> customerService.deleteCustomer(paramId));
+		assertTimeoutPreemptively(testDataProvider.getTimeout(), () -> customerService.deleteCustomer(paramId));
 
 		assertThrows(IllegalStateException.class, () -> testDataProvider.getReturnValue(String.class));
 		assertThrows(IllegalStateException.class, () -> testDataProvider.getReturnListValue(String.class));
