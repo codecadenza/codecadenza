@@ -119,6 +119,7 @@ public class IntegrationTestCaseGenerator extends AbstractJavaSourceGenerator {
 		importPackage("java.io");
 		importPackage("net.codecadenza.runtime.ddt.service.data");
 		importPackage("org.junit.jupiter.api");
+		importPackage("org.junit.jupiter.api.TestInstance");
 
 		if (addCompletionHandler)
 			importPackage("net.codecadenza.runtime.ddt.service.completion");
@@ -133,6 +134,9 @@ public class IntegrationTestCaseGenerator extends AbstractJavaSourceGenerator {
 	 */
 	@Override
 	protected void addClassDeclaration(StringBuilder b) {
+		if (!testCase.getMethodInvocations().isEmpty())
+			b.append("@TestInstance(Lifecycle.PER_CLASS)\n");
+
 		b.append("class " + testCase.getName());
 	}
 
@@ -148,19 +152,19 @@ public class IntegrationTestCaseGenerator extends AbstractJavaSourceGenerator {
 		final String xmlPath = project.getTestDataFolder() + "/" + testCase.getName() + ".xml";
 
 		addPrivateConstant(JavaType.STRING, "XML_FILE_PATH", "\"" + xmlPath + "\"").create();
-		addPrivateField("ITestDataProvider", "testDataProvider").withStaticModifier().create();
+		addPrivateField("ITestDataProvider", "testDataProvider").create();
 
 		if (addCompletionHandler)
-			addPrivateField("IInvocationCompletionHandler", "completionHandler").withStaticModifier().create();
+			addPrivateField("IInvocationCompletionHandler", "completionHandler").create();
 
 		addConstantsForTrackingAttributes();
 		addConstantsForFieldsWithExpectedSize();
 
 		if (addPreProcessingStatements || addPostProcessingStatements)
-			addPrivateField("IStatementProcessor", "statementProcessor").withStaticModifier().create();
+			addPrivateField("IStatementProcessor", "statementProcessor").create();
 
 		if (testCase.addCredentials() || addPreProcessingStatements || addPostProcessingStatements)
-			addPrivateField("TestData", "testData").withStaticModifier().create();
+			addPrivateField("TestData", "testData").create();
 
 		for (final AbstractIntegrationBean integrationBean : integrationBeans) {
 			final String serviceName = integrationBean.getDomainObject().getLowerCaseName() + "Service";
@@ -168,10 +172,10 @@ public class IntegrationTestCaseGenerator extends AbstractJavaSourceGenerator {
 			if (integrationTechnology == IntegrationTechnology.SOAP || integrationTechnology == IntegrationTechnology.RMI) {
 				importPackage(integrationBean.getNamespace().toString());
 
-				addPrivateField(integrationBean.getInterfaceName(), serviceName).withStaticModifier().create();
+				addPrivateField(integrationBean.getInterfaceName(), serviceName).create();
 			}
 			else
-				addPrivateField(integrationBean.getClientClassName(), serviceName).withStaticModifier().create();
+				addPrivateField(integrationBean.getClientClassName(), serviceName).create();
 		}
 
 		if (addFileHandling) {
@@ -184,10 +188,10 @@ public class IntegrationTestCaseGenerator extends AbstractJavaSourceGenerator {
 			if (integrationTechnology == IntegrationTechnology.SOAP || integrationTechnology == IntegrationTechnology.RMI) {
 				importPackage(integrationBean.getNamespace().toString());
 
-				addPrivateField(integrationModule.getFileServiceName(), FILE_SERVICE_NAME).withStaticModifier().create();
+				addPrivateField(integrationModule.getFileServiceName(), FILE_SERVICE_NAME).create();
 			}
 			else
-				addPrivateField(fileServiceClientName, FILE_SERVICE_NAME).withStaticModifier().create();
+				addPrivateField(fileServiceClientName, FILE_SERVICE_NAME).create();
 
 			for (final IntegrationMethodTestInvocation invocation : testCase.getMethodInvocations())
 				if (invocation.isDownloadFile() && !invocation.isExpectToFail()) {
@@ -299,9 +303,9 @@ public class IntegrationTestCaseGenerator extends AbstractJavaSourceGenerator {
 		b.append("/**\n");
 		b.append(" * Initialize the {@link ITestDataProvider} and the services that should be tested\n");
 		b.append(" */\n");
-		b.append("@BeforeAll\n");
+		b.append("@BeforeEach\n");
 		b.append(getAnnotationForGeneratedElement());
-		b.append("static " + methodSignature);
+		b.append(methodSignature);
 
 		if (integrationTechnology == IntegrationTechnology.RMI) {
 			importClass("javax.naming.NamingException");
@@ -387,9 +391,9 @@ public class IntegrationTestCaseGenerator extends AbstractJavaSourceGenerator {
 		b.append("/**\n");
 		b.append(" * Run all post-processing statements\n");
 		b.append(" */\n");
-		b.append("@AfterAll\n");
+		b.append("@AfterEach\n");
 		b.append(getAnnotationForGeneratedElement());
-		b.append("static " + methodSignature + "\n");
+		b.append(methodSignature + "\n");
 		b.append("{\n");
 		b.append("if(statementProcessor != null)\n");
 		b.append("statementProcessor.executeStatements(testData.getPostProcessingStatements());\n");
@@ -1085,7 +1089,7 @@ public class IntegrationTestCaseGenerator extends AbstractJavaSourceGenerator {
 	 * @param operator the assertion operator
 	 * @return the method name
 	 */
-	private String convertOperatorToMethod(AssertionOperator operator) {
+	public static String convertOperatorToMethod(AssertionOperator operator) {
 		final String methodName;
 
 		switch (operator) {
@@ -1111,7 +1115,7 @@ public class IntegrationTestCaseGenerator extends AbstractJavaSourceGenerator {
 	 * @param operator the assertion operator
 	 * @return the method name
 	 */
-	private String convertOperatorToSizeMethod(AssertionOperator operator) {
+	private static String convertOperatorToSizeMethod(AssertionOperator operator) {
 		final String methodName;
 
 		switch (operator) {
