@@ -24,6 +24,7 @@ package net.codecadenza.eclipse.ui.dialog.testing.integration;
 import static net.codecadenza.eclipse.shared.Constants.MIN_FILTER_LENGTH;
 
 import java.util.Collection;
+import java.util.Optional;
 import java.util.stream.Stream;
 import net.codecadenza.eclipse.model.integration.AbstractIntegrationBean;
 import net.codecadenza.eclipse.model.integration.AbstractIntegrationMethod;
@@ -630,6 +631,17 @@ public class EditIntegrationTestCaseDialog extends CodeCadenzaTitleAreaDialog {
 	private void initFields() {
 		if (!editMode) {
 			txtName.setText(defaultName);
+
+			// Find the last test case that contains valid credentials
+			final Optional<IntegrationTestCase> previousTestCase = testModule.getTestCases().stream()
+					.map(IntegrationTestCase.class::cast).filter(t -> t.getUserName() != null && !t.getUserName().isEmpty())
+					.filter(t -> t.getPassword() != null && !t.getPassword().isEmpty()).reduce((first, second) -> second);
+
+			if (previousTestCase.isPresent()) {
+				txtUserName.setText(previousTestCase.get().getUserName());
+				txtPassword.setText(previousTestCase.get().getPassword());
+			}
+
 			return;
 		}
 
