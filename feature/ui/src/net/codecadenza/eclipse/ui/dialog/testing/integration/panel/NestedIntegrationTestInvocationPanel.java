@@ -21,6 +21,7 @@
  */
 package net.codecadenza.eclipse.ui.dialog.testing.integration.panel;
 
+import net.codecadenza.eclipse.model.boundary.BoundaryMethodTypeEnumeration;
 import net.codecadenza.eclipse.model.testing.IntegrationMethodTestInvocation;
 import net.codecadenza.eclipse.model.testing.IntegrationTestCase;
 import net.codecadenza.eclipse.model.testing.IntegrationTestModule;
@@ -51,8 +52,10 @@ public class NestedIntegrationTestInvocationPanel extends TestInvocationPanel {
 	private final IntegrationTestCase testCase;
 	private final IntegrationMethodTestInvocation parentInvocation;
 	private final IntegrationMethodTestInvocation nestedInvocation;
+	private final BoundaryMethodTypeEnumeration methodType;
 	private ReturnValuePanel panReturnValue;
 	private ParametersPanel panParameters;
+	private ExpectedSizePanel panExpectedSize;
 	private boolean editMode;
 
 	/**
@@ -71,6 +74,7 @@ public class NestedIntegrationTestInvocationPanel extends TestInvocationPanel {
 		this.parentInvocation = parentInvocation;
 		this.nestedInvocation = new IntegrationTestCaseService(testModule).initMethodInvocation(testCase,
 				parentInvocation.getIntegrationMethod(), parentInvocation);
+		this.methodType = parentInvocation.getIntegrationMethod().getBoundaryMethod().getMethodType();
 
 		initPanel();
 	}
@@ -91,6 +95,7 @@ public class NestedIntegrationTestInvocationPanel extends TestInvocationPanel {
 		this.testCase = testCase;
 		this.parentInvocation = parentInvocation;
 		this.nestedInvocation = nestedInvocation;
+		this.methodType = parentInvocation.getIntegrationMethod().getBoundaryMethod().getMethodType();
 		this.editMode = true;
 
 		initPanel();
@@ -142,6 +147,12 @@ public class NestedIntegrationTestInvocationPanel extends TestInvocationPanel {
 		if (parentInvocation.getTimeout() != null)
 			txtTimeout.setText(parentInvocation.getTimeout().toString());
 
+		if (!parentInvocation.isExpectToFail() && (methodType == BoundaryMethodTypeEnumeration.DOWNLOAD
+				|| methodType == BoundaryMethodTypeEnumeration.DOWNLOAD_EXPORT)) {
+			panExpectedSize = new ExpectedSizePanel(panParentGroup, nestedInvocation, "Expected file size:", false);
+			panExpectedSize.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 2, 1));
+		}
+
 		final boolean addReturnValuePanel = !parentInvocation.isDownloadFile() && !parentInvocation.isReturnVoid()
 				&& !parentInvocation.isExpectToFail() && !parentInvocation.isExpectedReturnNull();
 
@@ -174,6 +185,9 @@ public class NestedIntegrationTestInvocationPanel extends TestInvocationPanel {
 	@Override
 	public String validateAndApplyInput() {
 		try {
+			if (panExpectedSize != null)
+				panExpectedSize.validateAndApplyInput();
+
 			if (panParameters != null)
 				panParameters.validateAndApplyInput();
 

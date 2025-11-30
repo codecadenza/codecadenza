@@ -71,6 +71,7 @@ public class IntegrationTestInvocationPanel extends TestInvocationPanel {
 	private Button chkExpectToFail;
 	private Button chkExpectReturnNull;
 	private Text txtTimeout;
+	private ExpectedSizePanel panExpectedSize;
 
 	/**
 	 * Create the panel for creating a new integration test case
@@ -172,6 +173,9 @@ public class IntegrationTestInvocationPanel extends TestInvocationPanel {
 					chkExpectReturnNull.setSelection(false);
 				}
 
+				if (panExpectedSize != null)
+					panExpectedSize.setEnabled(!chkExpectToFail.getSelection());
+
 				toggleReturnValuePanel();
 			}
 		});
@@ -195,6 +199,12 @@ public class IntegrationTestInvocationPanel extends TestInvocationPanel {
 					toggleReturnValuePanel();
 				}
 			});
+		}
+
+		if (methodType == BoundaryMethodTypeEnumeration.DOWNLOAD || methodType == BoundaryMethodTypeEnumeration.DOWNLOAD_EXPORT) {
+			panExpectedSize = new ExpectedSizePanel(panBasic, methodInvocation, "Expected file size:", true);
+			panExpectedSize.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 4, 1));
+			panExpectedSize.setEnabled(!methodInvocation.isExpectToFail());
 		}
 
 		tabItemBasicData.setControl(panBasic);
@@ -299,6 +309,9 @@ public class IntegrationTestInvocationPanel extends TestInvocationPanel {
 			}
 
 		try {
+			if (panExpectedSize != null)
+				panExpectedSize.validateAndApplyInput();
+
 			if (txtStatement != null)
 				validateAndSetPostProcessingStatement();
 

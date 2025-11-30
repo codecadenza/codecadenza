@@ -24,7 +24,6 @@ package net.codecadenza.eclipse.ui.dialog.testing.integration.panel;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 import net.codecadenza.eclipse.model.domain.DomainObject;
 import net.codecadenza.eclipse.model.dto.DTOBean;
 import net.codecadenza.eclipse.model.dto.DTOBeanAttribute;
@@ -32,7 +31,6 @@ import net.codecadenza.eclipse.model.exchange.ExchangeMappingAttribute;
 import net.codecadenza.eclipse.model.exchange.ExchangeMappingObject;
 import net.codecadenza.eclipse.model.mapping.MappingAttribute;
 import net.codecadenza.eclipse.model.mapping.MappingObject;
-import net.codecadenza.eclipse.model.testing.AssertionOperator;
 import net.codecadenza.eclipse.model.testing.IntegrationMethodTestInvocation;
 import net.codecadenza.eclipse.model.testing.IntegrationTestCase;
 import net.codecadenza.eclipse.model.testing.IntegrationTestModule;
@@ -52,11 +50,8 @@ import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
-import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.MenuItem;
-import org.eclipse.swt.widgets.Text;
 
 /**
  * <p>
@@ -76,10 +71,8 @@ public class TestDataObjectGridPanel extends Composite {
 	private final Map<Integer, MappingAttribute> columnMap = new HashMap<>();
 	private final IntegrationMethodTestInvocation methodInvocation;
 	private final boolean validationMode;
-	private TestDataAttribute testDataAttribute;
-	private Combo cboOperator;
-	private Text txtExpectedSize;
 	private DataGridComposite<TestDataObject> dataGrid;
+	private ExpectedSizePanel panExpectedSize;
 
 	/**
 	 * Constructor for handling either parameters or return values of a method invocation
@@ -96,8 +89,10 @@ public class TestDataObjectGridPanel extends Composite {
 			boolean enableExpectedListSize) {
 		this(parent, testModule, testCase, methodInvocation, mappingObject, validationMode);
 
-		if (enableExpectedListSize)
-			initExpectedSizePanel();
+		if (enableExpectedListSize) {
+			panExpectedSize = new ExpectedSizePanel(this, methodInvocation, "Expected number of returned objects:", true);
+			panExpectedSize.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
+		}
 
 		initDataGrid();
 	}
@@ -118,10 +113,10 @@ public class TestDataObjectGridPanel extends Composite {
 			boolean validationMode, boolean enableExpectedListSize) {
 		this(parent, testModule, testCase, methodInvocation, mappingObject, validationMode);
 
-		this.testDataAttribute = testDataAttribute;
-
-		if (enableExpectedListSize)
-			initExpectedSizePanel();
+		if (enableExpectedListSize) {
+			panExpectedSize = new ExpectedSizePanel(this, testDataAttribute, "Expected number of returned objects:");
+			panExpectedSize.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
+		}
 
 		initDataGrid();
 
@@ -149,84 +144,11 @@ public class TestDataObjectGridPanel extends Composite {
 	}
 
 	/**
-	 * Initialize the panel for the expected size
-	 */
-	private void initExpectedSizePanel() {
-		final var panExpectedSize = new Composite(this, SWT.NONE);
-		panExpectedSize.setLayout(new GridLayout(3, false));
-		panExpectedSize.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
-
-		final var lblLabel = new Label(panExpectedSize, SWT.NONE);
-		lblLabel.setText("Expected number of returned objects");
-
-		final var gdOperator = new GridData(SWT.LEFT, SWT.CENTER, false, false);
-		gdOperator.widthHint = 150;
-
-		cboOperator = new Combo(panExpectedSize, SWT.READ_ONLY);
-		cboOperator.setLayoutData(gdOperator);
-		cboOperator.add(AssertionOperator.NONE.name());
-		cboOperator.add(AssertionOperator.EQUAL.name());
-		cboOperator.add(AssertionOperator.GREATER.name());
-		cboOperator.add(AssertionOperator.GREATER_OR_EQUAL.name());
-		cboOperator.add(AssertionOperator.SMALLER.name());
-		cboOperator.add(AssertionOperator.SMALLER_OR_EQUAL.name());
-		cboOperator.select(0);
-
-		if (testDataAttribute != null)
-			cboOperator.select(cboOperator.indexOf(testDataAttribute.getExpectedSizeOperator().name()));
-		else
-			cboOperator.select(cboOperator.indexOf(methodInvocation.getExpectedSizeOperator().name()));
-
-		txtExpectedSize = new Text(panExpectedSize, SWT.BORDER);
-		txtExpectedSize.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, false));
-
-		if (testDataAttribute != null && testDataAttribute.getExpectedSize() != null)
-			txtExpectedSize.setText(Integer.toString(testDataAttribute.getExpectedSize()));
-		else if (methodInvocation.getExpectedSize() != null)
-			txtExpectedSize.setText(Integer.toString(methodInvocation.getExpectedSize()));
-	}
-
-	/**
 	 * Validate the input and apply it
 	 */
 	public void validateAndApplyInput() {
-		if (txtExpectedSize == null)
-			return;
-
-		final String selectedOperatorName = cboOperator.getItem(cboOperator.getSelectionIndex());
-
-		if (!txtExpectedSize.getText().isEmpty()) {
-			try {
-				final int expectedSize = Integer.parseInt(txtExpectedSize.getText());
-
-				if (expectedSize < 0)
-					throw new IllegalStateException("The expected size must not be negative!");
-
-				if (testDataAttribute != null) {
-					testDataAttribute.setExpectedSize(expectedSize);
-
-					if (testDataAttribute.getId() == null)
-						testDataAttribute.setId(UUID.randomUUID().toString());
-				}
-				else
-					methodInvocation.setExpectedSize(expectedSize);
-			}
-			catch (final Exception e) {
-				txtExpectedSize.setFocus();
-				throw e;
-			}
-		}
-		else if (testDataAttribute != null) {
-			testDataAttribute.setExpectedSize(null);
-			testDataAttribute.setId(null);
-		}
-		else
-			methodInvocation.setExpectedSize(null);
-
-		if (testDataAttribute != null)
-			testDataAttribute.setExpectedSizeOperator(AssertionOperator.valueOf(selectedOperatorName));
-		else
-			methodInvocation.setExpectedSizeOperator(AssertionOperator.valueOf(selectedOperatorName));
+		if (panExpectedSize != null)
+			panExpectedSize.validateAndApplyInput();
 	}
 
 	/**

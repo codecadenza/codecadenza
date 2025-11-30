@@ -22,9 +22,11 @@
 package net.codecadenza.eclipse.generator.testing.integration.util;
 
 import net.codecadenza.eclipse.generator.common.AbstractJavaSourceGenerator;
+import net.codecadenza.eclipse.generator.testing.integration.IntegrationTestCaseGenerator;
 import net.codecadenza.eclipse.model.boundary.BoundaryMethodTypeEnumeration;
 import net.codecadenza.eclipse.model.integration.AbstractIntegrationBean;
 import net.codecadenza.eclipse.model.project.IntegrationTechnology;
+import net.codecadenza.eclipse.model.testing.AssertionOperator;
 import net.codecadenza.eclipse.model.testing.IntegrationMethodTestInvocation;
 import net.codecadenza.eclipse.model.testing.TestDataAttribute;
 
@@ -123,7 +125,16 @@ public class FileHandlingGenerator {
 		}
 
 		b.append("assertThat(tempFilePath).exists();\n");
-		b.append("assertThat(Files.size(tempFilePath)).isNotZero();\n");
+
+		if (methodInvocation.getExpectedSize() != null) {
+			final AssertionOperator sizeOperator = methodInvocation.getExpectedSizeOperator();
+			final String sizeMethod = IntegrationTestCaseGenerator.convertOperatorToMethod(sizeOperator);
+
+			b.append("assertThat(Files.size(tempFilePath))." + sizeMethod + "(testDataProvider.getExpectedSize());\n");
+		}
+		else
+			b.append("assertThat(Files.size(tempFilePath)).isNotZero();\n");
+
 		b.append("}\n");
 		b.append("catch (IOException e)\n");
 		b.append("{\n");
