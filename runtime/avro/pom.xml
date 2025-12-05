@@ -3,6 +3,7 @@
 
 	<modelVersion>4.0.0</modelVersion>
 	<artifactId>codecadenza-avro</artifactId>
+	<name>CodeCadenza Avro module</name>
 
 	<parent>
 		<groupId>net.codecadenza.runtime</groupId>
