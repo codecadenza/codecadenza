@@ -556,7 +556,7 @@ public class KafkaIntegrationProjectFilesGenerator extends AbstractIntegrationPr
 		final var b = new StringBuilder();
 		b.append("broker.url=localhost:9092\n");
 		b.append("group.id=" + project.getCode().toLowerCase() + "-group\n");
-		b.append("response.timeout=4000\n");
+		b.append("response.timeout=6000\n");
 		b.append("response.offset.timeout=2000\n");
 		b.append("response.offset.lookback=10\n");
 
