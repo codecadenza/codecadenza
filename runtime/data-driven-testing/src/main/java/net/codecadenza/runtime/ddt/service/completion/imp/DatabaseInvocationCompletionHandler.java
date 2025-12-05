@@ -227,10 +227,12 @@ public class DatabaseInvocationCompletionHandler implements IInvocationCompletio
 			for (final Object filter : filterCriteria) {
 				if (filter instanceof final String stringValue)
 					preparedStatement.setString(parameterIndex++, stringValue);
+				else if (filter instanceof final Enum<?> enumValue)
+					preparedStatement.setString(parameterIndex++, enumValue.name());
 				else if (filter instanceof final Character charValue)
-					preparedStatement.setString(parameterIndex, new String(new char[] { charValue }));
+					preparedStatement.setString(parameterIndex++, new String(new char[] { charValue }));
 				else if (filter instanceof final Boolean booleanValue)
-					preparedStatement.setBoolean(parameterIndex, booleanValue);
+					preparedStatement.setBoolean(parameterIndex++, booleanValue);
 				else if (filter instanceof final Integer integerValue)
 					preparedStatement.setInt(parameterIndex++, integerValue);
 				else if (filter instanceof final Long longValue)
