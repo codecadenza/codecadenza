@@ -49,7 +49,7 @@ public class CreateIntegrationTestCaseDialog extends AbstractDialog {
 	private static final String DEFAULT_USER = "test-user";
 	private static final String DEFAULT_PASSWORD = "123456";
 	private static final String ITEM_VALUE_PREFIX = "ITEM_";
-	private static final String LBL_EXPECTED_SIZE = "Expected number of returned objects";
+	private static final String LBL_EXPECTED_SIZE = "Expected number of returned objects:";
 	private static final String LBL_INTEGRATION_BEAN = "Integration bean:";
 	private static final String LBL_INTEGRATION_METHOD = "Integration method:";
 	private static final String LBL_NEW_ITEM_VALUE = "Value for a new element";
