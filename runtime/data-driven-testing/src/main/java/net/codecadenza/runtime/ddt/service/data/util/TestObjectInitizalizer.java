@@ -79,7 +79,7 @@ public class TestObjectInitizalizer {
 
 		try {
 			if (testObject.getValue() != null) {
-				logger.debug("Create value of type '{}'", objectType.getName());
+				logger.trace("Create value of type '{}'", objectType.getName());
 				return getValueConverter(objectType).convertToValue(testObject.getValue());
 			}
 
@@ -92,7 +92,7 @@ public class TestObjectInitizalizer {
 			for (final TestField testField : testObject.getFields()) {
 				final String fieldName = testField.getName();
 
-				logger.debug("Initialize field '{}'", fieldName);
+				logger.trace("Initialize field '{}'", fieldName);
 
 				if (testField.getValue() != null && testField.getTestObjects() != null && !testField.getTestObjects().isEmpty())
 					throw new IllegalStateException("Invalid configuration for field '" + fieldName + "' detected!");
@@ -124,7 +124,7 @@ public class TestObjectInitizalizer {
 			final Field field = object.getClass().getDeclaredField(testField.getName());
 
 			if (testField.useDefaultValue()) {
-				logger.debug("Set default value for field '{}'", field.getName());
+				logger.trace("Set default value for field '{}'", field.getName());
 				setFieldValue(field, object, getDefaultValue(field.getType()));
 			}
 			else {
@@ -179,11 +179,11 @@ public class TestObjectInitizalizer {
 					Object itemValue;
 
 					if (testObject.getValue() != null && !testObject.getValue().isEmpty()) {
-						logger.debug("Add item '{}' of type '{}' to list", testObject.getValue(), targetType.getSimpleName());
+						logger.trace("Add item '{}' of type '{}' to list", testObject.getValue(), targetType.getSimpleName());
 						itemValue = getValueConverter(targetType).convertToValue(testObject.getValue());
 					}
 					else {
-						logger.debug("Add item of type '{}' to list", targetType.getSimpleName());
+						logger.trace("Add item of type '{}' to list", targetType.getSimpleName());
 						itemValue = initObject(testObject, targetType);
 					}
 
@@ -212,18 +212,18 @@ public class TestObjectInitizalizer {
 		if (testField.getTestObjects() != null && !testField.getTestObjects().isEmpty()) {
 			for (final TestObject testObject : testField.getTestObjects())
 				if (testObject.useDefaultValue()) {
-					logger.debug("Set default value at array index {}", index);
+					logger.trace("Set default value at array index {}", index);
 					Array.set(itemArray, index, getDefaultValue(itemType));
 				}
 				else {
 					Object itemValue;
 
 					if (testObject.getValue() != null && !testObject.getValue().isEmpty()) {
-						logger.debug("Add item '{}' of type '{}' to array", testObject.getValue(), itemType.getSimpleName());
+						logger.trace("Add item '{}' of type '{}' to array", testObject.getValue(), itemType.getSimpleName());
 						itemValue = getValueConverter(itemType).convertToValue(testObject.getValue());
 					}
 					else {
-						logger.debug("Add item of type '{}' to array", itemType.getSimpleName());
+						logger.trace("Add item of type '{}' to array", itemType.getSimpleName());
 						itemValue = initObject(testObject, itemType);
 					}
 
@@ -242,7 +242,7 @@ public class TestObjectInitizalizer {
 	 */
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	private Object initSimpleField(TestField testField, Field field) {
-		logger.debug("Set value '{}' for field '{}'", testField.getValue(), testField.getName());
+		logger.trace("Set value '{}' for field '{}'", testField.getValue(), testField.getName());
 
 		if (field.getType().isEnum())
 			return Enum.valueOf((Class<Enum>) field.getType(), testField.getValue());

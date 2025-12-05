@@ -201,7 +201,6 @@ public class FileHandlingGenerator {
 		final var b = new StringBuilder();
 		final String fileParameterName = methodInvocation.getParameters().getLast().getName();
 
-		b.append("\n");
 		b.append("final File fileToUpload = new File(" + fileParameterName + ");\n");
 		b.append("final String " + UPLOAD_FILE_PATH + ";\n\n");
 		b.append("try\n");

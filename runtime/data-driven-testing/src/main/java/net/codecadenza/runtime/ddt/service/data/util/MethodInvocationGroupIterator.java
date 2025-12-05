@@ -21,7 +21,9 @@
  */
 package net.codecadenza.runtime.ddt.service.data.util;
 
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.UUID;
 import net.codecadenza.runtime.ddt.model.MethodInvocation;
@@ -40,7 +42,9 @@ import net.codecadenza.runtime.ddt.service.data.ITestDataProvider;
 public class MethodInvocationGroupIterator implements Iterator<MethodInvocation> {
 	private final ITestDataProvider testDataProvider;
 	private final UUID originalGroupId;
+	private final List<MethodInvocation> allInvocations = new ArrayList<>();
 	private MethodInvocation next;
+	private MethodInvocation currentInvocation;
 
 	/**
 	 * Constructor
@@ -51,6 +55,7 @@ public class MethodInvocationGroupIterator implements Iterator<MethodInvocation>
 
 		// Pre‑fetch the first element – if it is null we are already at the end
 		this.next = testDataProvider.getNextInvocation();
+		this.currentInvocation = this.next;
 
 		if (this.next == null) {
 			this.originalGroupId = null;
@@ -58,6 +63,7 @@ public class MethodInvocationGroupIterator implements Iterator<MethodInvocation>
 		}
 
 		this.originalGroupId = this.next.getGroupId();
+		this.allInvocations.add(this.next);
 
 		if (this.originalGroupId == null)
 			this.next = null;
@@ -69,7 +75,13 @@ public class MethodInvocationGroupIterator implements Iterator<MethodInvocation>
 	 */
 	@Override
 	public boolean hasNext() {
-		return next != null;
+		if (next == null) {
+			// Put all invocations back so that they can be consumed again in subsequent operations!
+			allInvocations.reversed().stream().forEach(testDataProvider::pushBackInvocation);
+			return false;
+		}
+
+		return true;
 	}
 
 	/*
@@ -81,17 +93,26 @@ public class MethodInvocationGroupIterator implements Iterator<MethodInvocation>
 		if (next == null)
 			throw new NoSuchElementException("No more method invocations in this group!");
 
-		final MethodInvocation current = next;
-
 		// Fetch the next invocation – stop when crossing the group boundary
 		next = testDataProvider.getNextInvocation();
 
-		if (next != null && !originalGroupId.equals(next.getGroupId())) {
-			// Put the invocation back to the internal queue so that subsequent invocations get the correct test data!
-			testDataProvider.pushBackInvocation(next);
-			next = null;
+		currentInvocation = next;
+
+		if (next != null) {
+			allInvocations.add(next);
+
+			if (!originalGroupId.equals(next.getGroupId()))
+				next = null;
 		}
 
-		return current;
+		return currentInvocation;
 	}
+
+	/**
+	 * @return the current invocation
+	 */
+	public MethodInvocation getCurrentInvocation() {
+		return currentInvocation;
+	}
+
 }

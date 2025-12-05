@@ -29,6 +29,7 @@ import net.codecadenza.runtime.ddt.model.TestData;
 import net.codecadenza.runtime.ddt.service.completion.IInvocationCompletionHandler;
 import net.codecadenza.runtime.ddt.service.completion.InvocationCompletionHandlerFactory;
 import net.codecadenza.runtime.ddt.service.completion.InvocationCompletionHandlerProperties;
+import net.codecadenza.runtime.ddt.service.data.FileBasedTestDataSource;
 import net.codecadenza.runtime.ddt.service.data.ITestDataProvider;
 import net.codecadenza.runtime.ddt.service.data.TestDataProviderFactory;
 import net.codecadenza.runtime.ddt.service.data.TestDataProviderProperties;
@@ -37,7 +38,12 @@ import net.codecadenza.runtime.ddt.service.preparation.StatementProcessorFactory
 import net.codecadenza.runtime.ddt.service.preparation.StatementProcessorProperties;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.MethodOrderer;
+import org.junit.jupiter.api.Order;
+import org.junit.jupiter.api.TestInstance;
+import org.junit.jupiter.api.TestInstance.Lifecycle;
+import org.junit.jupiter.api.TestMethodOrder;
+import org.junit.jupiter.params.ParameterizedTest;
 
 /**
  * <p>
@@ -49,10 +55,11 @@ import org.junit.jupiter.api.Test;
  * @author Martin Ganserer
  * @version 1.0.0
  */
+@TestInstance(Lifecycle.PER_CLASS)
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class CountryServiceTest {
 	private static final String XML_FILE_PATH = "src/test/resources/data/country_testdata.xml";
 
-	private static ITestDataProvider testDataProvider;
 	private static IInvocationCompletionHandler completionHandler;
 	private static IStatementProcessor statementProcessor;
 	private static CountryService countryService;
@@ -66,7 +73,7 @@ class CountryServiceTest {
 		final var testDataProviderProperties = new TestDataProviderProperties();
 		testDataProviderProperties.load();
 
-		testDataProvider = TestDataProviderFactory.getTestDataProvider(new File(XML_FILE_PATH), testDataProviderProperties);
+		final var testDataProvider = TestDataProviderFactory.getTestDataProvider(new File(XML_FILE_PATH), testDataProviderProperties);
 		testData = testDataProvider.loadTestData();
 
 		final var invocationHandlerProperties = new InvocationCompletionHandlerProperties();
@@ -94,59 +101,47 @@ class CountryServiceTest {
 	}
 
 	/**
-	 * Test the functionality of the {@link CountryService}
-	 */
-	@Test
-	void testBasicWorkflow() {
-		final var iterator = testDataProvider.getMethodInvocationGroupIterator();
-
-		while (iterator.hasNext()) {
-			createCountry();
-
-			iterator.next();
-		}
-
-		updateCountry();
-
-		deleteCountry();
-	}
-
-	/**
 	 * Test creating a new country
+	 * @param country
+	 * @param testDataProvider
 	 */
-	private void createCountry() {
-		final var paramCountry = testDataProvider.getNextParameter(CountryDTO.class);
+	@Order(1)
+	@ParameterizedTest
+	@FileBasedTestDataSource(XML_FILE_PATH)
+	void testCreateCountry(CountryDTO country, ITestDataProvider testDataProvider) {
+		countryService.createCountry(country);
 
-		countryService.createCountry(paramCountry);
-
-		completionHandler.waitForFinish(testDataProvider.getPostProcessingStatement(), paramCountry.getName());
+		completionHandler.waitForFinish(testDataProvider.getPostProcessingStatement(), country.getName());
 	}
 
 	/**
 	 * Test updating a country
+	 * @param country
+	 * @param testDataProvider
 	 */
-	private void updateCountry() {
-		testDataProvider.getNextInvocation();
+	@Order(2)
+	@ParameterizedTest
+	@FileBasedTestDataSource(XML_FILE_PATH)
+	void testUpdateCountry(CountryDTO country, ITestDataProvider testDataProvider) {
+		countryService.updateCountry(country);
 
-		final var paramCountry = testDataProvider.getNextParameter(CountryDTO.class);
-
-		countryService.updateCountry(paramCountry);
-
-		completionHandler.waitForFinish(testDataProvider.getPostProcessingStatement(), paramCountry.getName());
+		completionHandler.waitForFinish(testDataProvider.getPostProcessingStatement(), country.getName());
 	}
 
 	/**
 	 * Test deleting a country
+	 * @param code
+	 * @param testDataProvider
 	 */
-	private void deleteCountry() {
-		testDataProvider.getNextInvocation();
-
+	@Order(3)
+	@ParameterizedTest
+	@FileBasedTestDataSource(XML_FILE_PATH)
+	void testDeleteCountry(String code, ITestDataProvider testDataProvider) {
 		final Duration completionTimeout = testDataProvider.getTimeout();
-		final var paramCode = testDataProvider.getNextParameter(String.class);
 
-		countryService.deleteCountry(paramCode);
+		countryService.deleteCountry(code);
 
-		completionHandler.waitForFinish(testDataProvider.getPostProcessingStatement(), completionTimeout, paramCode);
+		completionHandler.waitForFinish(testDataProvider.getPostProcessingStatement(), completionTimeout, code);
 	}
 
 }

@@ -74,6 +74,8 @@ import net.codecadenza.eclipse.tools.ide.EclipseIDEService;
  * @version 1.0.0
  */
 public class IntegrationTestCaseService {
+	private static final String TEST_METHOD_PREFIX = "test";
+
 	private final IntegrationTestModule testModule;
 	private final Project project;
 
@@ -154,12 +156,13 @@ public class IntegrationTestCaseService {
 			AbstractIntegrationMethod integrationMethod, IntegrationMethodTestInvocation parentInvocation) {
 		final BoundaryMethod boundaryMethod = integrationMethod.getBoundaryMethod();
 		final BoundaryMethodTypeEnumeration methodType = boundaryMethod.getMethodType();
+		final String methodName = integrationMethod.getName();
 		TestDataAttribute trackedAttribute = null;
 		boolean searchTrackingAttribute = true;
 
 		final IntegrationMethodTestInvocation invocation = TestingFactory.eINSTANCE.createIntegrationMethodTestInvocation();
 		invocation.setIntegrationMethod(integrationMethod);
-		invocation.setTestMethodName(integrationMethod.getName());
+		invocation.setTestMethodName(TEST_METHOD_PREFIX + methodName.substring(0, 1).toUpperCase() + methodName.substring(1));
 
 		for (final IntegrationMethodParameter parameter : integrationMethod.getIntegrationParameters()) {
 			JavaType paramType = null;

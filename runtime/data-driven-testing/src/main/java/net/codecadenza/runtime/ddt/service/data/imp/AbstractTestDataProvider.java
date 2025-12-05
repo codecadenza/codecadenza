@@ -111,6 +111,8 @@ public abstract class AbstractTestDataProvider<I> implements ITestDataProvider {
 	 */
 	@Override
 	public void pushBackInvocation(MethodInvocation methodInvocation) {
+		logger.trace("Push back invocation of method '{}'", methodInvocation.getMethodName());
+
 		methodInvocations.addFirst(methodInvocation);
 	}
 
@@ -125,7 +127,7 @@ public abstract class AbstractTestDataProvider<I> implements ITestDataProvider {
 		if (parameter == null)
 			throw new IllegalStateException("The next parameter could not be found!");
 
-		logger.debug("Found next parameter '{}'", parameter.getName());
+		logger.trace("Found next parameter '{}'", parameter.getName());
 
 		if (parameter.getTestObjects().isEmpty())
 			return TestObjectInitizalizer.getDefaultValue(type);
@@ -146,7 +148,7 @@ public abstract class AbstractTestDataProvider<I> implements ITestDataProvider {
 		if (parameter == null)
 			throw new IllegalStateException("The next parameter could not be found!");
 
-		logger.debug("Found next list parameter '{}'", parameter.getName());
+		logger.trace("Found next list parameter '{}'", parameter.getName());
 		return convertTestDataToList(parameter.getTestObjects(), type);
 	}
 
@@ -199,13 +201,13 @@ public abstract class AbstractTestDataProvider<I> implements ITestDataProvider {
 
 		if (testField != null) {
 			final String fieldValue = valueConverter.convertToString(value);
-			logger.debug("Set value '{}' of field with ID '{}'", fieldValue, id);
+			logger.trace("Set value '{}' of field with ID '{}'", fieldValue, id);
 
 			testField.setValue(fieldValue);
 
 			if (referencedFieldsMap.containsKey(id))
 				for (final TestField referencedField : referencedFieldsMap.get(id)) {
-					logger.debug("Set value '{}' of referenced field with ID '{}'", fieldValue, id);
+					logger.trace("Set value '{}' of referenced field with ID '{}'", fieldValue, id);
 					referencedField.setValue(fieldValue);
 				}
 		}
@@ -213,7 +215,7 @@ public abstract class AbstractTestDataProvider<I> implements ITestDataProvider {
 		for (final TestObject testObject : objectValueReferences)
 			if (id.equals(testObject.getReferencedFieldId())) {
 				final String fieldValue = valueConverter.convertToString(value);
-				logger.debug("Set value of object '{}' to '{}' using field with ID '{}'", testObject.getId(), fieldValue, id);
+				logger.trace("Set value of object '{}' to '{}' using field with ID '{}'", testObject.getId(), fieldValue, id);
 
 				testObject.setValue(fieldValue);
 			}
