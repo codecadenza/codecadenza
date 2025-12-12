@@ -83,7 +83,7 @@ public class ManyToManyTestDataAttributePanel extends AbstractTestDataAttributeP
 		panAdd.setLayout(new GridLayout(3, false));
 
 		final var lblAdd = new Label(panAdd, SWT.NONE);
-		lblAdd.setText("ID of new object");
+		lblAdd.setText("ID of new object:");
 
 		txtValue = new Text(panAdd, SWT.BORDER);
 		txtValue.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));

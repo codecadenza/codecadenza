@@ -80,7 +80,7 @@ public class ElementCollectionTestDataAttributePanel extends AbstractTestDataAtt
 		panAdd.setLayout(new GridLayout(3, false));
 
 		final var lblAdd = new Label(panAdd, SWT.NONE);
-		lblAdd.setText("Value for a new element");
+		lblAdd.setText("Value for a new element:");
 
 		txtNewElement = new Text(panAdd, SWT.BORDER);
 		txtNewElement.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));

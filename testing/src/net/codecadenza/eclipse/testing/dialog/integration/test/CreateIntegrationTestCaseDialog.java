@@ -52,8 +52,8 @@ public class CreateIntegrationTestCaseDialog extends AbstractDialog {
 	private static final String LBL_EXPECTED_SIZE = "Expected number of returned objects:";
 	private static final String LBL_INTEGRATION_BEAN = "Integration bean:";
 	private static final String LBL_INTEGRATION_METHOD = "Integration method:";
-	private static final String LBL_NEW_ITEM_VALUE = "Value for a new element";
-	private static final String LBL_OBJECT_ID_VALUE = "ID of new object";
+	private static final String LBL_NEW_ITEM_VALUE = "Value for a new element:";
+	private static final String LBL_OBJECT_ID_VALUE = "ID of new object:";
 	private static final String LBL_USER_NAME = "User name:";
 	private static final String LBL_PASSWORD = "Password:";
 	private static final String LBL_TIMEOUT = "Timeout:";
