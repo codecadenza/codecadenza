@@ -23,6 +23,7 @@ package net.codecadenza.eclipse.generator.testing.integration;
 
 import static net.codecadenza.eclipse.model.testing.IntegrationMethodTestInvocation.PLACEHOLDER_PATTERN;
 import static net.codecadenza.eclipse.model.testing.TestDataAttribute.ATTRIBUTE_NAME_FILTER_CRITERIA;
+import static net.codecadenza.eclipse.model.testing.TestDataAttribute.ATTRIBUTE_NAME_FILTER_OPERATOR;
 import static net.codecadenza.eclipse.model.testing.TestDataAttribute.ATTRIBUTE_NAME_SEARCH_FIELDS;
 import static net.codecadenza.eclipse.model.testing.TestDataAttribute.ATTRIBUTE_NAME_SORT_ORDER;
 
@@ -56,6 +57,8 @@ import org.apache.commons.text.StringEscapeUtils;
  */
 public class IntegrationTestDataGenerator {
 	private static final int INITAL_INDENT = 3;
+	private static final String OPERATOR_IS_NULL = "IS_NULL";
+	private static final String OPERATOR_IS_NOT_NULL = "IS_NOT_NULL";
 
 	private final Map<TestDataObject, UUID> objectIdRegistry = new HashMap<>();
 	private final IntegrationTestCase testCase;
@@ -377,6 +380,11 @@ public class IntegrationTestDataGenerator {
 	private boolean skipSearchInputField(TestDataObject testDataObject) {
 		final TestDataAttribute filterAttribute = testDataObject.getAttributeByName(ATTRIBUTE_NAME_FILTER_CRITERIA);
 		final TestDataAttribute sortOrderAttribute = testDataObject.getAttributeByName(ATTRIBUTE_NAME_SORT_ORDER);
+		final TestDataAttribute operatorAttribute = testDataObject.getAttributeByName(ATTRIBUTE_NAME_FILTER_OPERATOR);
+
+		if (operatorAttribute != null
+				&& (OPERATOR_IS_NULL.equals(operatorAttribute.getValue()) || OPERATOR_IS_NOT_NULL.equals(operatorAttribute.getValue())))
+			return false;
 
 		return filterAttribute != null && sortOrderAttribute != null && filterAttribute.getValue() == null
 				&& sortOrderAttribute.getValue() == null && filterAttribute.getReferencedAttribute() == null;
