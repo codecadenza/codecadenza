@@ -1143,6 +1143,10 @@ public class IntegrationTestCaseGenerator extends AbstractJavaSourceGenerator {
 			case AssertionOperator.GREATER_OR_EQUAL -> methodName = "isGreaterThanOrEqualTo";
 			case AssertionOperator.SMALLER -> methodName = "isLessThan";
 			case AssertionOperator.SMALLER_OR_EQUAL -> methodName = "isLessThanOrEqualTo";
+			case AssertionOperator.IS_AFTER -> methodName = "isAfter";
+			case AssertionOperator.IS_AFTER_OR_EQUAL -> methodName = "isAfterOrEqualTo";
+			case AssertionOperator.IS_BEFORE -> methodName = "isBefore";
+			case AssertionOperator.IS_BEFORE_OR_EQUAL -> methodName = "isBeforeOrEqualTo";
 			case AssertionOperator.IS_NULL -> methodName = "isNull";
 			case AssertionOperator.IS_NOT_NULL -> methodName = "isNotNull";
 			case AssertionOperator.IS_EMPTY -> methodName = "isEmpty";

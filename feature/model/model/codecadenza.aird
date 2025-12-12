@@ -65,7 +65,7 @@
         <description xmi:type="description_1:DiagramDescription" href="platform:/plugin/org.eclipse.emf.ecoretools.design/description/ecore.odesign#//@ownedViewpoints[name='Design']/@ownedRepresentations[name='Entities']"/>
         <target xmi:type="ecore:EPackage" href="integration.ecore#/"/>
       </ownedRepresentationDescriptors>
-      <ownedRepresentationDescriptors xmi:type="viewpoint:DRepresentationDescriptor" uid="_i-kfYKEbEei_DovGwMC79w" name="Testing class diagram" repPath="#_zq7lgAiUEeen59JB4TPsqA" changeId="1763123931432">
+      <ownedRepresentationDescriptors xmi:type="viewpoint:DRepresentationDescriptor" uid="_i-kfYKEbEei_DovGwMC79w" name="Testing class diagram" repPath="#_zq7lgAiUEeen59JB4TPsqA" changeId="1765522352746">
         <description xmi:type="description_1:DiagramDescription" href="platform:/plugin/org.eclipse.emf.ecoretools.design/description/ecore.odesign#//@ownedViewpoints[name='Design']/@ownedRepresentations[name='Entities']"/>
         <target xmi:type="ecore:EPackage" href="testing.ecore#/"/>
       </ownedRepresentationDescriptors>
@@ -24348,6 +24348,22 @@
               <styles xmi:type="notation:FontStyle" xmi:id="_Rp-TUZuZEfCZh66tTp41wg" fontName="Helvetica Neue" fontHeight="8"/>
               <layoutConstraint xmi:type="notation:Location" xmi:id="_Rp-TUpuZEfCZh66tTp41wg"/>
             </children>
+            <children xmi:type="notation:Node" xmi:id="_9ZKZwNcmEfCccvi8FPZCEA" type="3010" element="_9YQa0NcmEfCccvi8FPZCEA">
+              <styles xmi:type="notation:FontStyle" xmi:id="_9ZKZwdcmEfCccvi8FPZCEA" fontName="Helvetica Neue" fontHeight="8"/>
+              <layoutConstraint xmi:type="notation:Location" xmi:id="_9ZKZwtcmEfCccvi8FPZCEA"/>
+            </children>
+            <children xmi:type="notation:Node" xmi:id="_97SPYNcmEfCccvi8FPZCEA" type="3010" element="_96kdsNcmEfCccvi8FPZCEA">
+              <styles xmi:type="notation:FontStyle" xmi:id="_97SPYdcmEfCccvi8FPZCEA" fontName="Helvetica Neue" fontHeight="8"/>
+              <layoutConstraint xmi:type="notation:Location" xmi:id="_97SPYtcmEfCccvi8FPZCEA"/>
+            </children>
+            <children xmi:type="notation:Node" xmi:id="_-ScLINcmEfCccvi8FPZCEA" type="3010" element="_-R1uMNcmEfCccvi8FPZCEA">
+              <styles xmi:type="notation:FontStyle" xmi:id="_-ScLIdcmEfCccvi8FPZCEA" fontName="Helvetica Neue" fontHeight="8"/>
+              <layoutConstraint xmi:type="notation:Location" xmi:id="_-ScLItcmEfCccvi8FPZCEA"/>
+            </children>
+            <children xmi:type="notation:Node" xmi:id="_-lxW0NcmEfCccvi8FPZCEA" type="3010" element="_-lMIANcmEfCccvi8FPZCEA">
+              <styles xmi:type="notation:FontStyle" xmi:id="_-lxW0dcmEfCccvi8FPZCEA" fontName="Helvetica Neue" fontHeight="8"/>
+              <layoutConstraint xmi:type="notation:Location" xmi:id="_-lxW0tcmEfCccvi8FPZCEA"/>
+            </children>
             <styles xmi:type="notation:SortingStyle" xmi:id="_J90y8m7WEfCyu_UhODeENA"/>
             <styles xmi:type="notation:FilteringStyle" xmi:id="_J90y827WEfCyu_UhODeENA"/>
           </children>
@@ -27175,6 +27191,38 @@
         <target xmi:type="ecore:EEnumLiteral" href="testing.ecore#//AssertionOperator/IS_EMPTY"/>
         <semanticElements xmi:type="ecore:EEnumLiteral" href="testing.ecore#//AssertionOperator/IS_EMPTY"/>
         <ownedStyle xmi:type="diagram:BundledImage" uid="_Rpt0oJuZEfCZh66tTp41wg" labelAlignment="LEFT">
+          <description xmi:type="style:BundledImageDescription" href="platform:/plugin/org.eclipse.emf.ecoretools.design/description/ecore.odesign#//@ownedViewpoints[name='Design']/@ownedRepresentations[name='Entities']/@defaultLayer/@containerMappings[name='EC%20EEnum']/@subNodeMappings[name='EC%20EEnumLiteral']/@style"/>
+        </ownedStyle>
+        <actualMapping xmi:type="description_1:NodeMapping" href="platform:/plugin/org.eclipse.emf.ecoretools.design/description/ecore.odesign#//@ownedViewpoints[name='Design']/@ownedRepresentations[name='Entities']/@defaultLayer/@containerMappings[name='EC%20EEnum']/@subNodeMappings[name='EC%20EEnumLiteral']"/>
+      </ownedElements>
+      <ownedElements xmi:type="diagram:DNodeListElement" uid="_9YQa0NcmEfCccvi8FPZCEA" name="IS_AFTER_OR_EQUAL" tooltipText="">
+        <target xmi:type="ecore:EEnumLiteral" href="testing.ecore#//AssertionOperator/IS_AFTER_OR_EQUAL"/>
+        <semanticElements xmi:type="ecore:EEnumLiteral" href="testing.ecore#//AssertionOperator/IS_AFTER_OR_EQUAL"/>
+        <ownedStyle xmi:type="diagram:BundledImage" uid="_9YRB4NcmEfCccvi8FPZCEA" labelAlignment="LEFT">
+          <description xmi:type="style:BundledImageDescription" href="platform:/plugin/org.eclipse.emf.ecoretools.design/description/ecore.odesign#//@ownedViewpoints[name='Design']/@ownedRepresentations[name='Entities']/@defaultLayer/@containerMappings[name='EC%20EEnum']/@subNodeMappings[name='EC%20EEnumLiteral']/@style"/>
+        </ownedStyle>
+        <actualMapping xmi:type="description_1:NodeMapping" href="platform:/plugin/org.eclipse.emf.ecoretools.design/description/ecore.odesign#//@ownedViewpoints[name='Design']/@ownedRepresentations[name='Entities']/@defaultLayer/@containerMappings[name='EC%20EEnum']/@subNodeMappings[name='EC%20EEnumLiteral']"/>
+      </ownedElements>
+      <ownedElements xmi:type="diagram:DNodeListElement" uid="_96kdsNcmEfCccvi8FPZCEA" name="IS_AFTER" tooltipText="">
+        <target xmi:type="ecore:EEnumLiteral" href="testing.ecore#//AssertionOperator/IS_AFTER"/>
+        <semanticElements xmi:type="ecore:EEnumLiteral" href="testing.ecore#//AssertionOperator/IS_AFTER"/>
+        <ownedStyle xmi:type="diagram:BundledImage" uid="_96kdsdcmEfCccvi8FPZCEA" labelAlignment="LEFT">
+          <description xmi:type="style:BundledImageDescription" href="platform:/plugin/org.eclipse.emf.ecoretools.design/description/ecore.odesign#//@ownedViewpoints[name='Design']/@ownedRepresentations[name='Entities']/@defaultLayer/@containerMappings[name='EC%20EEnum']/@subNodeMappings[name='EC%20EEnumLiteral']/@style"/>
+        </ownedStyle>
+        <actualMapping xmi:type="description_1:NodeMapping" href="platform:/plugin/org.eclipse.emf.ecoretools.design/description/ecore.odesign#//@ownedViewpoints[name='Design']/@ownedRepresentations[name='Entities']/@defaultLayer/@containerMappings[name='EC%20EEnum']/@subNodeMappings[name='EC%20EEnumLiteral']"/>
+      </ownedElements>
+      <ownedElements xmi:type="diagram:DNodeListElement" uid="_-R1uMNcmEfCccvi8FPZCEA" name="IS_BEFORE_OR_EQUAL" tooltipText="">
+        <target xmi:type="ecore:EEnumLiteral" href="testing.ecore#//AssertionOperator/IS_BEFORE_OR_EQUAL"/>
+        <semanticElements xmi:type="ecore:EEnumLiteral" href="testing.ecore#//AssertionOperator/IS_BEFORE_OR_EQUAL"/>
+        <ownedStyle xmi:type="diagram:BundledImage" uid="_-R1uMdcmEfCccvi8FPZCEA" labelAlignment="LEFT">
+          <description xmi:type="style:BundledImageDescription" href="platform:/plugin/org.eclipse.emf.ecoretools.design/description/ecore.odesign#//@ownedViewpoints[name='Design']/@ownedRepresentations[name='Entities']/@defaultLayer/@containerMappings[name='EC%20EEnum']/@subNodeMappings[name='EC%20EEnumLiteral']/@style"/>
+        </ownedStyle>
+        <actualMapping xmi:type="description_1:NodeMapping" href="platform:/plugin/org.eclipse.emf.ecoretools.design/description/ecore.odesign#//@ownedViewpoints[name='Design']/@ownedRepresentations[name='Entities']/@defaultLayer/@containerMappings[name='EC%20EEnum']/@subNodeMappings[name='EC%20EEnumLiteral']"/>
+      </ownedElements>
+      <ownedElements xmi:type="diagram:DNodeListElement" uid="_-lMIANcmEfCccvi8FPZCEA" name="IS_BEFORE" tooltipText="">
+        <target xmi:type="ecore:EEnumLiteral" href="testing.ecore#//AssertionOperator/IS_BEFORE"/>
+        <semanticElements xmi:type="ecore:EEnumLiteral" href="testing.ecore#//AssertionOperator/IS_BEFORE"/>
+        <ownedStyle xmi:type="diagram:BundledImage" uid="_-lMvENcmEfCccvi8FPZCEA" labelAlignment="LEFT">
           <description xmi:type="style:BundledImageDescription" href="platform:/plugin/org.eclipse.emf.ecoretools.design/description/ecore.odesign#//@ownedViewpoints[name='Design']/@ownedRepresentations[name='Entities']/@defaultLayer/@containerMappings[name='EC%20EEnum']/@subNodeMappings[name='EC%20EEnumLiteral']/@style"/>
         </ownedStyle>
         <actualMapping xmi:type="description_1:NodeMapping" href="platform:/plugin/org.eclipse.emf.ecoretools.design/description/ecore.odesign#//@ownedViewpoints[name='Design']/@ownedRepresentations[name='Entities']/@defaultLayer/@containerMappings[name='EC%20EEnum']/@subNodeMappings[name='EC%20EEnumLiteral']"/>

@@ -1114,6 +1114,10 @@
       <genEnumLiterals ecoreEnumLiteral="testing.ecore#//AssertionOperator/ENDS_WITH"/>
       <genEnumLiterals ecoreEnumLiteral="testing.ecore#//AssertionOperator/CONTAINS"/>
       <genEnumLiterals ecoreEnumLiteral="testing.ecore#//AssertionOperator/IS_EMPTY"/>
+      <genEnumLiterals ecoreEnumLiteral="testing.ecore#//AssertionOperator/IS_AFTER_OR_EQUAL"/>
+      <genEnumLiterals ecoreEnumLiteral="testing.ecore#//AssertionOperator/IS_AFTER"/>
+      <genEnumLiterals ecoreEnumLiteral="testing.ecore#//AssertionOperator/IS_BEFORE_OR_EQUAL"/>
+      <genEnumLiterals ecoreEnumLiteral="testing.ecore#//AssertionOperator/IS_BEFORE"/>
     </genEnums>
     <genClasses image="false" ecoreClass="testing.ecore#//AbstractTestModule">
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference testing.ecore#//AbstractTestModule/namespace"/>

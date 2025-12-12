@@ -1744,6 +1744,10 @@ public class TestingPackageImpl extends EPackageImpl implements TestingPackage {
 		addEEnumLiteral(assertionOperatorEEnum, AssertionOperator.ENDS_WITH);
 		addEEnumLiteral(assertionOperatorEEnum, AssertionOperator.CONTAINS);
 		addEEnumLiteral(assertionOperatorEEnum, AssertionOperator.IS_EMPTY);
+		addEEnumLiteral(assertionOperatorEEnum, AssertionOperator.IS_AFTER_OR_EQUAL);
+		addEEnumLiteral(assertionOperatorEEnum, AssertionOperator.IS_AFTER);
+		addEEnumLiteral(assertionOperatorEEnum, AssertionOperator.IS_BEFORE_OR_EQUAL);
+		addEEnumLiteral(assertionOperatorEEnum, AssertionOperator.IS_BEFORE);
 
 		// Create resource
 		createResource(eNS_URI);

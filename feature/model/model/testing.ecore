@@ -132,6 +132,10 @@
     <eLiterals name="ENDS_WITH" value="9"/>
     <eLiterals name="CONTAINS" value="10"/>
     <eLiterals name="IS_EMPTY" value="11"/>
+    <eLiterals name="IS_AFTER_OR_EQUAL" value="12"/>
+    <eLiterals name="IS_AFTER" value="13"/>
+    <eLiterals name="IS_BEFORE_OR_EQUAL" value="14"/>
+    <eLiterals name="IS_BEFORE" value="15"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="IntegrationTestCase" eSuperTypes="#//AbstractTestCase">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="userName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>

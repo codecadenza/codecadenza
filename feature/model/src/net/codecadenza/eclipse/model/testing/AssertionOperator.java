@@ -128,7 +128,39 @@ public enum AssertionOperator implements Enumerator {
 	 * @generated
 	 * @ordered
 	 */
-	IS_EMPTY(11, "IS_EMPTY", "IS_EMPTY");
+	IS_EMPTY(11, "IS_EMPTY", "IS_EMPTY"),
+
+	/**
+	 * The '<em><b>IS AFTER OR EQUAL</b></em>' literal object
+	 * @see #IS_AFTER_OR_EQUAL_VALUE
+	 * @generated
+	 * @ordered
+	 */
+	IS_AFTER_OR_EQUAL(12, "IS_AFTER_OR_EQUAL", "IS_AFTER_OR_EQUAL"),
+
+	/**
+	 * The '<em><b>IS AFTER</b></em>' literal object
+	 * @see #IS_AFTER_VALUE
+	 * @generated
+	 * @ordered
+	 */
+	IS_AFTER(13, "IS_AFTER", "IS_AFTER"),
+
+	/**
+	 * The '<em><b>IS BEFORE OR EQUAL</b></em>' literal object
+	 * @see #IS_BEFORE_OR_EQUAL_VALUE
+	 * @generated
+	 * @ordered
+	 */
+	IS_BEFORE_OR_EQUAL(14, "IS_BEFORE_OR_EQUAL", "IS_BEFORE_OR_EQUAL"),
+
+	/**
+	 * The '<em><b>IS BEFORE</b></em>' literal object
+	 * @see #IS_BEFORE_VALUE
+	 * @generated
+	 * @ordered
+	 */
+	IS_BEFORE(15, "IS_BEFORE", "IS_BEFORE");
 
 	/**
 	 * The '<em><b>NONE</b></em>' literal value
@@ -239,11 +271,48 @@ public enum AssertionOperator implements Enumerator {
 	public static final int IS_EMPTY_VALUE = 11;
 
 	/**
+	 * The '<em><b>IS AFTER OR EQUAL</b></em>' literal value
+	 * @see #IS_AFTER_OR_EQUAL
+	 * @model
+	 * @generated
+	 * @ordered
+	 */
+	public static final int IS_AFTER_OR_EQUAL_VALUE = 12;
+
+	/**
+	 * The '<em><b>IS AFTER</b></em>' literal value
+	 * @see #IS_AFTER
+	 * @model
+	 * @generated
+	 * @ordered
+	 */
+	public static final int IS_AFTER_VALUE = 13;
+
+	/**
+	 * The '<em><b>IS BEFORE OR EQUAL</b></em>' literal value
+	 * @see #IS_BEFORE_OR_EQUAL
+	 * @model
+	 * @generated
+	 * @ordered
+	 */
+	public static final int IS_BEFORE_OR_EQUAL_VALUE = 14;
+
+	/**
+	 * The '<em><b>IS BEFORE</b></em>' literal value
+	 * @see #IS_BEFORE
+	 * @model
+	 * @generated
+	 * @ordered
+	 */
+	public static final int IS_BEFORE_VALUE = 15;
+
+	/**
 	 * An array of all the '<em><b>Assertion Operator</b></em>' enumerators
 	 * @generated
 	 */
 	private static final AssertionOperator[] VALUES_ARRAY = { NONE, EQUAL, IS_NULL, IS_NOT_NULL, GREATER_OR_EQUAL, GREATER,
-			SMALLER_OR_EQUAL, SMALLER, STARTS_WITH, ENDS_WITH, CONTAINS, IS_EMPTY };
+			SMALLER_OR_EQUAL, SMALLER, STARTS_WITH, ENDS_WITH, CONTAINS, IS_EMPTY, IS_AFTER_OR_EQUAL, IS_AFTER, IS_BEFORE_OR_EQUAL,
+			IS_BEFORE };
 
 	/**
 	 * A public read-only list of all the '<em><b>Assertion Operator</b></em>' enumerators
@@ -311,6 +380,14 @@ public enum AssertionOperator implements Enumerator {
 				return CONTAINS;
 			case IS_EMPTY_VALUE:
 				return IS_EMPTY;
+			case IS_AFTER_OR_EQUAL_VALUE:
+				return IS_AFTER_OR_EQUAL;
+			case IS_AFTER_VALUE:
+				return IS_AFTER;
+			case IS_BEFORE_OR_EQUAL_VALUE:
+				return IS_BEFORE_OR_EQUAL;
+			case IS_BEFORE_VALUE:
+				return IS_BEFORE;
 		}
 
 		return null;

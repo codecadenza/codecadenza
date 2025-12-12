@@ -222,11 +222,17 @@ public abstract class AbstractTestDataAttributePanel extends Composite {
 		operators.add(AssertionOperator.NONE);
 		operators.add(AssertionOperator.EQUAL);
 
-		if (type.isNumber() || type.isTemporalType()) {
+		if (type.isNumber()) {
 			operators.add(AssertionOperator.GREATER);
 			operators.add(AssertionOperator.GREATER_OR_EQUAL);
 			operators.add(AssertionOperator.SMALLER);
 			operators.add(AssertionOperator.SMALLER_OR_EQUAL);
+		}
+		else if (type.isTemporalType()) {
+			operators.add(AssertionOperator.IS_AFTER);
+			operators.add(AssertionOperator.IS_AFTER_OR_EQUAL);
+			operators.add(AssertionOperator.IS_BEFORE);
+			operators.add(AssertionOperator.IS_BEFORE_OR_EQUAL);
 		}
 		else if (type.isString()) {
 			operators.add(AssertionOperator.CONTAINS);
