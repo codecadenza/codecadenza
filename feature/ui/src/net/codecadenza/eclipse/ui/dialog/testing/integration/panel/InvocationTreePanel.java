@@ -46,6 +46,8 @@ import org.eclipse.swt.dnd.DragSourceAdapter;
 import org.eclipse.swt.dnd.DragSourceEvent;
 import org.eclipse.swt.dnd.TextTransfer;
 import org.eclipse.swt.dnd.Transfer;
+import org.eclipse.swt.events.KeyAdapter;
+import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -81,6 +83,8 @@ public class InvocationTreePanel extends Composite {
 	private static final String KEY_DOMAIN_OBJECT = "DomainObjectName";
 	private static final String KEY_PARENT_INVOCATION_INDEX = "ParentInvocationIndex";
 	private static final String KEY_NESTED_INVOCATION_INDEX = "NestedInvocationIndex";
+	private static final char MOVE_UP = '+';
+	private static final char MOVE_DOWN = '-';
 
 	private final IntegrationTestCase testCase;
 	private Tree treeInvocations;
@@ -354,13 +358,13 @@ public class InvocationTreePanel extends Composite {
 				else if (value != null) {
 					if (operator == AssertionOperator.NONE || operator == AssertionOperator.EQUAL)
 						assertionLabel = " = '" + value + "'";
-					if (operator == AssertionOperator.GREATER)
+					if (operator == AssertionOperator.GREATER || operator == AssertionOperator.IS_AFTER)
 						assertionLabel = " > '" + value + "'";
-					else if (operator == AssertionOperator.GREATER_OR_EQUAL)
+					else if (operator == AssertionOperator.GREATER_OR_EQUAL || operator == AssertionOperator.IS_AFTER_OR_EQUAL)
 						assertionLabel = " >= '" + value + "'";
-					else if (operator == AssertionOperator.SMALLER)
+					else if (operator == AssertionOperator.SMALLER || operator == AssertionOperator.IS_BEFORE)
 						assertionLabel = " < '" + value + "'";
-					else if (operator == AssertionOperator.SMALLER_OR_EQUAL)
+					else if (operator == AssertionOperator.SMALLER_OR_EQUAL || operator == AssertionOperator.IS_BEFORE_OR_EQUAL)
 						assertionLabel = " <= '" + value + "'";
 					else if (operator == AssertionOperator.ENDS_WITH)
 						assertionLabel = " ends with '" + value + "'";
@@ -537,6 +541,20 @@ public class InvocationTreePanel extends Composite {
 
 		mnuTree = new Menu(treeInvocations);
 
+		treeInvocations.addKeyListener(new KeyAdapter() {
+			/*
+			 * (non-Javadoc)
+			 * @see org.eclipse.swt.events.KeyAdapter#keyPressed(org.eclipse.swt.events.KeyEvent)
+			 */
+			@Override
+			public void keyPressed(KeyEvent e) {
+				if (e.character == MOVE_UP)
+					moveInvocation(true);
+				else if (e.character == MOVE_DOWN)
+					moveInvocation(false);
+			}
+		});
+
 		final var mniAddNestedInvocation = new MenuItem(mnuTree, SWT.NONE);
 		mniAddNestedInvocation.setText("Add");
 
@@ -581,6 +599,33 @@ public class InvocationTreePanel extends Composite {
 			}
 		});
 
+		final var mniMoveUp = new MenuItem(mnuTree, SWT.NONE);
+		mniMoveUp.setText("Move up");
+		mniMoveUp.addSelectionListener(new SelectionAdapter() {
+			/*
+			 * (non-Javadoc)
+			 * @see org.eclipse.swt.events.SelectionListener#widgetSelected(org.eclipse.swt.events.SelectionEvent)
+			 */
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				moveInvocation(true);
+			}
+		});
+
+		final var mniMoveDown = new MenuItem(mnuTree, SWT.NONE);
+		mniMoveDown.setText("Move down");
+
+		mniMoveDown.addSelectionListener(new SelectionAdapter() {
+			/*
+			 * (non-Javadoc)
+			 * @see org.eclipse.swt.events.SelectionListener#widgetSelected(org.eclipse.swt.events.SelectionEvent)
+			 */
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				moveInvocation(false);
+			}
+		});
+
 		mniDeleteInvocation = new MenuItem(mnuTree, SWT.NONE);
 		mniDeleteInvocation.setText("Delete");
 		mniDeleteInvocation.setImage(PlatformUI.getWorkbench().getSharedImages().getImage(IMG_TOOL_DELETE));
@@ -620,6 +665,96 @@ public class InvocationTreePanel extends Composite {
 				refreshTree();
 			}
 		});
+	}
+
+	/**
+	 * Move the selected invocation up or down
+	 * @param moveUp true to move up, false to move down
+	 */
+	private void moveInvocation(boolean moveUp) {
+		final IntegrationMethodTestInvocation invocationToMove = getSelectedInvocation();
+
+		if (invocationToMove == null)
+			return;
+
+		final List<IntegrationMethodTestInvocation> methodInvocations;
+		final IntegrationMethodTestInvocation parentInvocation = invocationToMove.getParentInvocation();
+
+		if (parentInvocation == null)
+			methodInvocations = testCase.getMethodInvocations();
+		else
+			methodInvocations = parentInvocation.getNestedInvocations();
+
+		final int invocationIndex = methodInvocations.indexOf(invocationToMove);
+
+		if (invocationIndex == -1)
+			return;
+
+		final int newIndex = moveUp ? invocationIndex - 1 : invocationIndex + 1;
+
+		if (newIndex < 0 || newIndex >= methodInvocations.size())
+			return;
+
+		if (!isMoveAllowed(methodInvocations, invocationToMove, newIndex, moveUp)) {
+			MessageDialog.openInformation(Display.getCurrent().getActiveShell(), moveUp ? "Move up" : "Move down",
+					"Cannot move the selected method invocation due to tracked attribute dependencies. "
+							+ "Tracked attributes must be initialized before they are referenced in another invocation.");
+			return;
+		}
+
+		// Perform the move
+		methodInvocations.remove(invocationIndex);
+		methodInvocations.add(newIndex, invocationToMove);
+
+		refreshTree();
+
+		// Restore the selection
+		for (final TreeItem treeItem : treeInvocations.getItems()) {
+			if (parentInvocation != null) {
+				final TreeItem[] subItems = treeItem.getItems();
+
+				for (final TreeItem subItem : subItems) {
+					if (invocationToMove.equals(subItem.getData())) {
+						treeItem.setExpanded(true);
+						treeInvocations.setSelection(subItem);
+						break;
+					}
+				}
+			}
+			else if (invocationToMove.equals(treeItem.getData())) {
+				treeInvocations.setSelection(treeItem);
+				break;
+			}
+		}
+	}
+
+	/**
+	 * Check if moving the invocation up or down is allowed
+	 * @param invocations the list of invocations the invocation to move is contained
+	 * @param invocationToMove the invocation to move
+	 * @param newIndex the new index in the list after performing the move
+	 * @param moveUp true if moving up, false if moving down
+	 * @return true if moving is allowed
+	 */
+	private boolean isMoveAllowed(List<IntegrationMethodTestInvocation> invocations,
+			IntegrationMethodTestInvocation invocationToMove, int newIndex, boolean moveUp) {
+		final IntegrationMethodTestInvocation adjacentInvocation = invocations.get(newIndex);
+		final TestDataAttribute trackedAttribute;
+		final List<TestDataAttribute> allAttributes;
+
+		if (moveUp) {
+			trackedAttribute = adjacentInvocation.getTrackedAttribute();
+			allAttributes = invocationToMove.getAllAttributes();
+		}
+		else {
+			trackedAttribute = invocationToMove.getTrackedAttribute();
+			allAttributes = adjacentInvocation.getAllAttributes();
+		}
+
+		if (trackedAttribute == null)
+			return true;
+
+		return allAttributes.stream().noneMatch(attr -> trackedAttribute.equals(attr.getReferencedAttribute()));
 	}
 
 	/**
