@@ -305,7 +305,7 @@ public abstract class AbstractImportMethodGenerator extends AbstractExchangeMeth
 			if (ia instanceof final OneToOneAssociation oto)
 				optional = oto.isOptional() && updateMode;
 
-			if (!getterFragment.toString().isEmpty())
+			if (!getterFragment.isEmpty())
 				getterFragment.append(".");
 
 			getterFragment.append(ia.getGetterName());

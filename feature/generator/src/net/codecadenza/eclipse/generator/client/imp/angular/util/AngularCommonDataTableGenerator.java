@@ -442,7 +442,7 @@ public class AngularCommonDataTableGenerator {
 			else
 				itemFormatter.addLine(itemContent.toString());
 
-			if (!itemContent.toString().isEmpty()) {
+			if (!itemContent.isEmpty()) {
 				formatter.addBlankLine();
 
 				securityHelper.wrapSecurityCode(formatter, action.getRoles(), itemFormatter.getContent());

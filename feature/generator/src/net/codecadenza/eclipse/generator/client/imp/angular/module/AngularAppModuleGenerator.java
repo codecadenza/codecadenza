@@ -146,7 +146,7 @@ public class AngularAppModuleGenerator extends AbstractTypeScriptSourceGenerator
 			}
 		}
 
-		if (!modules.toString().isEmpty())
+		if (!modules.isEmpty())
 			formatter.addLine(modules.toString().trim());
 
 		formatter.addLine("RouterModule.forRoot(appRoutes)");

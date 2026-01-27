@@ -132,7 +132,7 @@ public class AngularSecurityHelper {
 			}
 		}
 
-		if (clientAccessor.toString().isEmpty()) {
+		if (clientAccessor.isEmpty()) {
 			var comment = "ATTENTION: The generator was not able to add a client security check! ";
 			comment += "Please consider to add it manually.";
 

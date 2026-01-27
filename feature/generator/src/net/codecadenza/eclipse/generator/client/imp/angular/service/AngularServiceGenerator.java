@@ -259,7 +259,7 @@ public class AngularServiceGenerator extends AbstractTypeScriptSourceGenerator {
 			queryParams.append(")");
 		}
 
-		if (!queryParams.toString().isEmpty()) {
+		if (!queryParams.isEmpty()) {
 			queryParams.append(";");
 
 			formatter.addLine(queryParams.toString());
@@ -275,17 +275,17 @@ public class AngularServiceGenerator extends AbstractTypeScriptSourceGenerator {
 			else
 				invocation.append("(URL");
 
-			if (!returnType.equals(VOID) || !queryParams.toString().isEmpty()) {
+			if (!returnType.equals(VOID) || !queryParams.isEmpty()) {
 				invocation.append(", { ");
 
 				if (!returnType.equals(VOID)) {
 					invocation.append("responseType: 'text'");
 
-					if (!queryParams.toString().isEmpty())
+					if (!queryParams.isEmpty())
 						invocation.append(", ");
 				}
 
-				if (!queryParams.toString().isEmpty())
+				if (!queryParams.isEmpty())
 					invocation.append("params: params");
 
 				invocation.append(" }");
@@ -303,10 +303,10 @@ public class AngularServiceGenerator extends AbstractTypeScriptSourceGenerator {
 					|| restMethod.getHttpMethod() == HttpMethodEnumeration.PUT)
 				invocation.append(", null");
 
-			if (!queryParams.toString().isEmpty() || returnType.equals(STRING)) {
+			if (!queryParams.isEmpty() || returnType.equals(STRING)) {
 				invocation.append(", { ");
 
-				if (!queryParams.toString().isEmpty()) {
+				if (!queryParams.isEmpty()) {
 					invocation.append("params: params");
 
 					if (returnType.equals(STRING))

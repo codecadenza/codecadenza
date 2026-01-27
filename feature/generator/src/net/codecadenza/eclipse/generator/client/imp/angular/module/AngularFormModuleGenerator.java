@@ -222,7 +222,7 @@ public class AngularFormModuleGenerator extends AbstractTypeScriptSourceGenerato
 				}
 			}
 
-		if (!appModules.toString().isEmpty())
+		if (!appModules.isEmpty())
 			formatter.addLine(appModules.toString().trim());
 
 		formatter.addLine("RouterModule.forChild(formRoutes)");

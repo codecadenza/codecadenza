@@ -348,7 +348,7 @@ public abstract class AbstractAngularFieldGenerator {
 			final Optional<Integer> maxLength = domainAttr.getMaxFieldLenght();
 
 			if (minLength.isPresent()) {
-				if (!validation.toString().isEmpty())
+				if (!validation.isEmpty())
 					validation.append(", ");
 
 				validation.append("Validators.minLength(");
@@ -357,7 +357,7 @@ public abstract class AbstractAngularFieldGenerator {
 			}
 
 			if (maxLength.isPresent()) {
-				if (!validation.toString().isEmpty())
+				if (!validation.isEmpty())
 					validation.append(", ");
 
 				validation.append("Validators.maxLength(");
@@ -366,7 +366,7 @@ public abstract class AbstractAngularFieldGenerator {
 			}
 
 			if (!domainAttr.getDomainAttributeValidator().getRegularExpression().isEmpty()) {
-				if (!validation.toString().isEmpty())
+				if (!validation.isEmpty())
 					validation.append(", ");
 
 				validation.append("Validators.pattern('");
@@ -376,7 +376,7 @@ public abstract class AbstractAngularFieldGenerator {
 		}
 		else if (type.isNumber()) {
 			if (!domainAttr.getDomainAttributeValidator().getMinValue().isEmpty()) {
-				if (!validation.toString().isEmpty())
+				if (!validation.isEmpty())
 					validation.append(", ");
 
 				validation.append("Validators.min(");
@@ -385,7 +385,7 @@ public abstract class AbstractAngularFieldGenerator {
 			}
 
 			if (!domainAttr.getDomainAttributeValidator().getMaxValue().isEmpty()) {
-				if (!validation.toString().isEmpty())
+				if (!validation.isEmpty())
 					validation.append(", ");
 
 				validation.append("Validators.max(");
@@ -394,20 +394,20 @@ public abstract class AbstractAngularFieldGenerator {
 			}
 
 			if (type.isIntegerOrLong()) {
-				if (!validation.toString().isEmpty())
+				if (!validation.isEmpty())
 					validation.append(", ");
 
 				validation.append("NumberValidator.integer");
 			}
 			else {
-				if (!validation.toString().isEmpty())
+				if (!validation.isEmpty())
 					validation.append(", ");
 
 				validation.append("NumberValidator.decimal(this.numberConverter)");
 			}
 		}
 		else if (type.isUUID()) {
-			if (!validation.toString().isEmpty())
+			if (!validation.isEmpty())
 				validation.append(", ");
 
 			if (field.isMandatory())

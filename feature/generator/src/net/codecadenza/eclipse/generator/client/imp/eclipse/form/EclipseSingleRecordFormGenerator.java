@@ -981,7 +981,7 @@ public class EclipseSingleRecordFormGenerator extends AbstractSingleRecordFormGe
 		form.getAllFormFields().forEach(field -> val
 				.append(EclipseFieldGeneratorFactory.getFieldGenerator(this, field, i18n).getValidationFragment(form.isTitleArea())));
 
-		if (!val.toString().isEmpty()) {
+		if (!val.isEmpty()) {
 			for (final FormField field : form.getAllFormFields()) {
 				final FormFieldTypeEnumeration fieldType = field.getFieldType();
 
@@ -1006,7 +1006,7 @@ public class EclipseSingleRecordFormGenerator extends AbstractSingleRecordFormGe
 		}
 
 		if (!form.isTitleArea()) {
-			if (!val.toString().isEmpty())
+			if (!val.isEmpty())
 				b.append("return fieldErrors;\n");
 			else
 				b.append("return new ArrayList<>();\n");

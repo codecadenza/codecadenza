@@ -207,7 +207,7 @@ public class JavaFieldGenerator {
 		if (generator != null && generator.hasCustomizedField(declaration))
 			return;
 
-		if (!annotations.toString().isEmpty())
+		if (!annotations.isEmpty())
 			output.append(annotations);
 
 		if (protectManualChanges)
