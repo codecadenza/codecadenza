@@ -367,7 +367,7 @@ public class EditTreeViewDialog extends CodeCadenzaTitleAreaDialog {
 			}
 		});
 
-		treeStructure.addMenuDetectListener(e -> {
+		treeStructure.addMenuDetectListener(_ -> {
 			treeStructure.setMenu(null);
 
 			final TreeItem selItem = getSelectedItem();
@@ -1056,7 +1056,7 @@ public class EditTreeViewDialog extends CodeCadenzaTitleAreaDialog {
 		try {
 			subTreeItem = treeViewService.addSubTreeItem(parentItem, parentDomainObject, selAssoc);
 		}
-		catch (final IllegalStateException e) {
+		catch (final IllegalStateException _) {
 			MessageDialog.openInformation(getShell(), title, "The creation of the item is disallowed for this location!");
 			return;
 		}

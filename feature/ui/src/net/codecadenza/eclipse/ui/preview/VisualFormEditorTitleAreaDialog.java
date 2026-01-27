@@ -121,7 +121,7 @@ public class VisualFormEditorTitleAreaDialog extends TitleAreaDialog implements 
 		if (formType == FormTypeEnumeration.LOV)
 			return;
 
-		newShell.addListener(SWT.Resize, e -> {
+		newShell.addListener(SWT.Resize, _ -> {
 			form.setHeight(newShell.getSize().y);
 			form.setWidth(newShell.getSize().x);
 		});

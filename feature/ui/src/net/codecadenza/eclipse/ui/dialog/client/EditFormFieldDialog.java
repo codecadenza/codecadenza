@@ -461,7 +461,7 @@ public class EditFormFieldDialog extends CodeCadenzaDialog {
 			try {
 				width = Integer.parseInt(txtWidth.getText());
 			}
-			catch (final NumberFormatException e) {
+			catch (final NumberFormatException _) {
 				MessageDialog.openInformation(getShell(), DLG_TITLE, "The width requires an integer value!");
 				txtWidth.setFocus();
 				return;
@@ -472,7 +472,7 @@ public class EditFormFieldDialog extends CodeCadenzaDialog {
 			try {
 				rowIndex = Integer.parseInt(txtRowIndex.getText());
 			}
-			catch (final NumberFormatException e) {
+			catch (final NumberFormatException _) {
 				MessageDialog.openInformation(getShell(), DLG_TITLE, "The row index requires an integer value!");
 				txtRowIndex.setFocus();
 				return;

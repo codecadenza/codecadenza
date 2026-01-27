@@ -498,7 +498,7 @@ public class SQLEditor extends EditorPart {
 		try {
 			connection.setAutoCommit(autoCommit);
 		}
-		catch (final Exception e) {
+		catch (final Exception _) {
 			// This exception will be ignored!
 		}
 
@@ -619,7 +619,7 @@ public class SQLEditor extends EditorPart {
 			try {
 				dbManager.close();
 			}
-			catch (final Exception e) {
+			catch (final Exception _) {
 				// This exception will be ignored!
 			}
 
@@ -697,7 +697,7 @@ public class SQLEditor extends EditorPart {
 
 				// Initialize the dialog to save the export file
 				final var dlg = new FileDialog(shell, SWT.SAVE);
-				dlg.setFilterExtensions(new String[] { "*.csv" });
+				dlg.setFilterExtensions("*.csv");
 				dlg.setFileName("export.csv");
 				dlg.setText("Save export result in csv-format");
 

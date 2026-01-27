@@ -119,7 +119,7 @@ public class DateField extends InputField {
 			try {
 				format.parse(dateText);
 			}
-			catch (final ParseException e) {
+			catch (final ParseException _) {
 				getSearchInputDialog().setErrorMessage(getTranslation(DATE_FIELD_MSG_INVALID_DATE));
 				return;
 			}

@@ -283,7 +283,7 @@ public class SwingTreeViewGenerator extends AbstractTreeViewGenerator {
 		b.append("setLayout(new BorderLayout(0, 0));\n\n");
 
 		// Add an action listener to close the view if the user presses ESC
-		b.append("final ActionListener actionListener = actionEvent ->\n");
+		b.append("final ActionListener actionListener = _ ->\n");
 		b.append("{\n");
 		b.append(tree.getName() + ".this.getDesktopPane().getDesktopManager().closeFrame(" + tree.getName() + ".this);\n");
 		b.append("dispose();\n");
@@ -1011,7 +1011,7 @@ public class SwingTreeViewGenerator extends AbstractTreeViewGenerator {
 			b.append("// Add menu item to refresh sub-items\n");
 			b.append("final var itemRefresh = new JMenuItem(" + i18n.getI18NMessage("action_name_refresh", "Refresh"));
 			b.append(", ImageLoader.getImage(ImageLoader.REFRESH));\n");
-			b.append("itemRefresh.addActionListener(actionEvent ->\n");
+			b.append("itemRefresh.addActionListener(_ ->\n");
 			b.append("{\n");
 			b.append("final DataTreeNode selItem = tree.getSelectedTreeNode();\n\n");
 			b.append("if(selItem == null)\n");
@@ -1030,7 +1030,7 @@ public class SwingTreeViewGenerator extends AbstractTreeViewGenerator {
 					fb.append("// Add menu item to add " + item.getItemDTO().getDomainObject().getLabel() + "\n");
 					fb.append("final var itemAdd = new JMenuItem(" + i18n.getI18NMessage("action_name_add", "Add"));
 					fb.append(", ImageLoader.getImage(ImageLoader.NEW_DATA));\n");
-					fb.append("itemAdd.addActionListener(actionEvent ->\n");
+					fb.append("itemAdd.addActionListener(_ ->\n");
 					fb.append("{\n");
 					fb.append("final DataTreeNode selItem = tree.getSelectedTreeNode();\n\n");
 					fb.append("if(selItem == null)\n");
@@ -1377,7 +1377,7 @@ public class SwingTreeViewGenerator extends AbstractTreeViewGenerator {
 			s.append("// Add menu item to add a new item\n");
 			s.append("final var itemAdd = new JMenuItem(" + i18n.getI18NMessage("action_name_add", "Add item"));
 			s.append(", ImageLoader.getImage(ImageLoader.NEW_DATA));\n\n");
-			s.append("itemAdd.addActionListener(actionEvent ->\n");
+			s.append("itemAdd.addActionListener(_ ->\n");
 			s.append("{\n");
 			s.append("final DataTreeNode selItem = " + FIELD_NAME_TREE + ".getSelectedTreeNode();\n\n");
 			s.append("if(selItem == null || selItem.getUserObject() == null)\n");
@@ -1407,7 +1407,7 @@ public class SwingTreeViewGenerator extends AbstractTreeViewGenerator {
 			s.append("// Add menu item to edit item\n");
 			s.append("final var itemEdit = new JMenuItem(" + i18n.getI18NMessage("action_name_edit", "Edit"));
 			s.append(", ImageLoader.getImage(ImageLoader.EDIT_DATA));\n\n");
-			s.append("itemEdit.addActionListener(actionEvent ->\n");
+			s.append("itemEdit.addActionListener(_ ->\n");
 			s.append("{\n");
 			s.append("final DataTreeNode selItem = " + FIELD_NAME_TREE + ".getSelectedTreeNode();\n\n");
 			s.append("if(selItem == null || selItem.getUserObject() == null)\n");
@@ -1429,7 +1429,7 @@ public class SwingTreeViewGenerator extends AbstractTreeViewGenerator {
 			s.append("// Add menu item to view item\n");
 			s.append("final var itemView = new JMenuItem(" + i18n.getI18NMessage("action_name_view", "View"));
 			s.append(", ImageLoader.getImage(ImageLoader.VIEW_DATA));\n\n");
-			s.append("itemView.addActionListener(actionEvent ->\n");
+			s.append("itemView.addActionListener(_ ->\n");
 			s.append("{\n");
 			s.append("final DataTreeNode selItem = " + FIELD_NAME_TREE + ".getSelectedTreeNode();\n\n");
 			s.append("if(selItem == null || selItem.getUserObject() == null)\n");
@@ -1462,7 +1462,7 @@ public class SwingTreeViewGenerator extends AbstractTreeViewGenerator {
 			fb.append("// Add menu item to download " + attr.getLabel() + "\n");
 			fb.append("final var " + menuItemName + " = new JMenuItem(" + i18n.getI18NMessage("action_name_download", "Download"));
 			fb.append(", ImageLoader.getImage(ImageLoader.DOWNLOAD));\n\n");
-			fb.append(menuItemName + ".addActionListener(actionEvent ->\n");
+			fb.append(menuItemName + ".addActionListener(_ ->\n");
 			fb.append("{\n");
 			fb.append("final DataTreeNode selItem = " + FIELD_NAME_TREE + ".getSelectedTreeNode();\n\n");
 			fb.append("if(selItem == null || selItem.getUserObject() == null)\n");
@@ -1494,7 +1494,7 @@ public class SwingTreeViewGenerator extends AbstractTreeViewGenerator {
 			s.append("// Add menu item to remove item\n");
 			s.append("final var itemRemove = new JMenuItem(" + i18n.getI18NMessage("action_name_delete", "Delete"));
 			s.append(", ImageLoader.getImage(ImageLoader.DELETE));\n\n");
-			s.append("itemRemove.addActionListener(actionEvent ->\n");
+			s.append("itemRemove.addActionListener(_ ->\n");
 			s.append("{\n");
 			s.append("final DataTreeNode selItem = " + FIELD_NAME_TREE + ".getSelectedTreeNode();\n\n");
 			s.append("if(selItem == null || selItem.getUserObject() == null)\n");
@@ -1522,7 +1522,7 @@ public class SwingTreeViewGenerator extends AbstractTreeViewGenerator {
 			s.append("// Add menu item to remove item from collection\n");
 			s.append("final var itemRemove = new JMenuItem(" + i18n.getI18NMessage("action_name_remove_item", "Remove item"));
 			s.append(", ImageLoader.getImage(ImageLoader.DELETE));\n\n");
-			s.append("itemRemove.addActionListener(actionEvent ->\n");
+			s.append("itemRemove.addActionListener(_ ->\n");
 			s.append("{\n");
 			s.append("final DataTreeNode selItem = " + FIELD_NAME_TREE + ".getSelectedTreeNode();\n\n");
 			s.append("if(selItem == null || selItem.getUserObject() == null)\n");

@@ -195,7 +195,7 @@ public class EditFormPanelDialog extends CodeCadenzaDialog {
 			try {
 				colIndex = Integer.parseInt(txtColIndex.getText());
 			}
-			catch (final NumberFormatException e) {
+			catch (final NumberFormatException _) {
 				MessageDialog.openInformation(getShell(), title, "The column index requires an integer value!");
 				txtColIndex.setFocus();
 				return;

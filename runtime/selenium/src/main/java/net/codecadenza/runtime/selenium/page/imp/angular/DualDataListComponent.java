@@ -168,7 +168,7 @@ public class DualDataListComponent extends AbstractAngularPageComponent {
 		waitForEmptyTargetList.withTimeout(Duration.ofSeconds(ITEM_WAIT_TIMEOUT_SECONDS));
 		waitForEmptyTargetList.pollingEvery(Duration.ofMillis(ITEM_POLLING_MILLISECONDS));
 
-		waitForEmptyTargetList.until(driver -> {
+		waitForEmptyTargetList.until(_ -> {
 			final List<WebElement> selectedItems = findWebElementsByXPath(getTargetItemsExpression());
 
 			if (selectedItems.isEmpty())

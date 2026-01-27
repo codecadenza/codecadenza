@@ -432,7 +432,7 @@ public class AngularTreeViewGenerator extends AbstractTypeScriptSourceGenerator 
 			itemContent.append("() => this." + methodName + "(this.selectedNode));");
 		}
 
-		if (itemContent.toString().isEmpty())
+		if (itemContent.isEmpty())
 			return;
 
 		formatter.addBlankLine();
@@ -1361,11 +1361,11 @@ public class AngularTreeViewGenerator extends AbstractTypeScriptSourceGenerator 
 		treeItemsWithActions.add(treeItem);
 
 		if (addToParent) {
-			formActionsOfParent.computeIfAbsent(treeItem, key -> new HashSet<>());
+			formActionsOfParent.computeIfAbsent(treeItem, _ -> new HashSet<>());
 			formActionsOfParent.get(treeItem).add(form);
 		}
 		else {
-			formActionsOfItem.computeIfAbsent(treeItem, key -> new HashSet<>());
+			formActionsOfItem.computeIfAbsent(treeItem, _ -> new HashSet<>());
 			formActionsOfItem.get(treeItem).add(form);
 		}
 	}
@@ -1389,11 +1389,11 @@ public class AngularTreeViewGenerator extends AbstractTypeScriptSourceGenerator 
 			addFileService = true;
 
 		if (addToParent) {
-			methodActionsOfParent.computeIfAbsent(treeItem, key -> new HashSet<>());
+			methodActionsOfParent.computeIfAbsent(treeItem, _ -> new HashSet<>());
 			methodActionsOfParent.get(treeItem).add(method);
 		}
 		else {
-			methodActionsOfItem.computeIfAbsent(treeItem, key -> new HashSet<>());
+			methodActionsOfItem.computeIfAbsent(treeItem, _ -> new HashSet<>());
 			methodActionsOfItem.get(treeItem).add(method);
 		}
 	}

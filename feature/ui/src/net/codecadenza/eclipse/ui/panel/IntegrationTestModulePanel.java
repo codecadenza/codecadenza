@@ -104,7 +104,7 @@ public class IntegrationTestModulePanel extends Composite {
 		txtTimeout.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
 		txtTimeout.setEnabled(false);
 		txtTimeout.setText("1000");
-		txtTimeout.addModifyListener(e -> validateTimeout(txtTimeout.getText()));
+		txtTimeout.addModifyListener(_ -> validateTimeout(txtTimeout.getText()));
 
 		final var lblTestSuffix = new Label(panMain, SWT.NONE);
 		lblTestSuffix.setText("Test case suffix:");
@@ -113,7 +113,7 @@ public class IntegrationTestModulePanel extends Composite {
 		txtTestSuffix.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
 		txtTestSuffix.setEnabled(false);
 		txtTestSuffix.setText("Test");
-		txtTestSuffix.addModifyListener(e -> validateTestCaseSuffix(txtTestSuffix.getText()));
+		txtTestSuffix.addModifyListener(_ -> validateTestCaseSuffix(txtTestSuffix.getText()));
 
 		final var lblDateTimeFormat = new Label(panMain, SWT.NONE);
 		lblDateTimeFormat.setText("Date time format:");
@@ -122,7 +122,7 @@ public class IntegrationTestModulePanel extends Composite {
 		txtDateTimeFormat.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
 		txtDateTimeFormat.setEnabled(false);
 		txtDateTimeFormat.setText(store.getString(PREF_DATE_FORMAT) + " " + store.getString(PREF_TIME_FORMAT));
-		txtDateTimeFormat.addModifyListener(e -> validateDateFormat(txtDateTimeFormat.getText()));
+		txtDateTimeFormat.addModifyListener(_ -> validateDateFormat(txtDateTimeFormat.getText()));
 
 		final var lblDateFormat = new Label(panMain, SWT.NONE);
 		lblDateFormat.setText("Date format:");
@@ -131,7 +131,7 @@ public class IntegrationTestModulePanel extends Composite {
 		txtDateFormat.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
 		txtDateFormat.setEnabled(false);
 		txtDateFormat.setText(store.getString(PREF_DATE_FORMAT));
-		txtDateFormat.addModifyListener(e -> validateDateFormat(txtDateFormat.getText()));
+		txtDateFormat.addModifyListener(_ -> validateDateFormat(txtDateFormat.getText()));
 
 		final var lblDecimalFormat = new Label(panMain, SWT.NONE);
 		lblDecimalFormat.setText("Decimal format:");
@@ -140,7 +140,7 @@ public class IntegrationTestModulePanel extends Composite {
 		txtDecimalFormat.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
 		txtDecimalFormat.setEnabled(false);
 		txtDecimalFormat.setText(store.getString(PREF_NUMBER_FORMAT));
-		txtDecimalFormat.addModifyListener(e -> validateDecimalFormat(txtDecimalFormat.getText()));
+		txtDecimalFormat.addModifyListener(_ -> validateDecimalFormat(txtDecimalFormat.getText()));
 
 		new Label(panMain, SWT.NONE);
 		new Label(panMain, SWT.NONE);
@@ -152,7 +152,7 @@ public class IntegrationTestModulePanel extends Composite {
 		txtDecimalSeparator.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
 		txtDecimalSeparator.setEnabled(false);
 		txtDecimalSeparator.setText(Character.toString(symbols.getDecimalSeparator()));
-		txtDecimalSeparator.addModifyListener(e -> validateDecimalFormat(txtDecimalFormat.getText()));
+		txtDecimalSeparator.addModifyListener(_ -> validateDecimalFormat(txtDecimalFormat.getText()));
 
 		final var lblGroupingSeparator = new Label(panMain, SWT.NONE);
 		lblGroupingSeparator.setText("Grouping separator:");
@@ -161,7 +161,7 @@ public class IntegrationTestModulePanel extends Composite {
 		txtGroupingSeparator.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
 		txtGroupingSeparator.setEnabled(false);
 		txtGroupingSeparator.setText(Character.toString(symbols.getGroupingSeparator()));
-		txtGroupingSeparator.addModifyListener(e -> validateDecimalFormat(txtDecimalFormat.getText()));
+		txtGroupingSeparator.addModifyListener(_ -> validateDecimalFormat(txtDecimalFormat.getText()));
 	}
 
 	/**

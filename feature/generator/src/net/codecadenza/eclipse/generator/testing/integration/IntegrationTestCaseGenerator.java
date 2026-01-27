@@ -261,7 +261,7 @@ public class IntegrationTestCaseGenerator extends AbstractJavaSourceGenerator {
 
 					constantNames.add(newConstantName);
 
-					invocationAttributes.computeIfAbsent(invocation, key -> new HashMap<>());
+					invocationAttributes.computeIfAbsent(invocation, _ -> new HashMap<>());
 					invocationAttributes.get(invocation).put(trackedAttribute, newConstantName);
 					break;
 				}

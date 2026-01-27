@@ -83,9 +83,9 @@ public abstract class AbstractProposalTextField<T> extends TextField {
 		this.autoCompleteDelay = autoCompleteDelay;
 
 		listView = new ListView<>();
-		listView.setOnMouseReleased(e -> selectItem());
+		listView.setOnMouseReleased(_ -> selectItem());
 
-		listView.itemsProperty().addListener((ChangeListener<ObservableList<T>>) (value, oldValue, newValue) -> {
+		listView.itemsProperty().addListener((ChangeListener<ObservableList<T>>) (_, _, _) -> {
 			if (listView.getItems() != null && !listView.getItems().isEmpty())
 				showPopup();
 			else
@@ -97,7 +97,7 @@ public abstract class AbstractProposalTextField<T> extends TextField {
 				selectItem();
 		});
 
-		listView.setCellFactory(p -> new ListCell<>() {
+		listView.setCellFactory(_ -> new ListCell<>() {
 			/*
 			 * (non-Javadoc)
 			 * @see javafx.scene.control.Cell#updateItem(java.lang.Object, boolean)

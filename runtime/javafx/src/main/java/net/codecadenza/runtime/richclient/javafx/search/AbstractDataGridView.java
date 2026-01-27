@@ -426,7 +426,7 @@ public abstract class AbstractDataGridView<T> extends Tab implements View {
 
 		refreshView();
 
-		getTableView().getColumns().addListener((ListChangeListener<TableColumn<?, ?>>) change -> changeColumnOrder());
+		getTableView().getColumns().addListener((ListChangeListener<TableColumn<?, ?>>) _ -> changeColumnOrder());
 
 		getLogger().debug("View initialization finished");
 	}

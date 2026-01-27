@@ -132,7 +132,7 @@ public abstract class __AbstractElementCollectionEditor<T> extends Composite {
 			final var txtNewElementName = new Text(panAdd, SWT.BORDER);
 			txtNewElementName.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
 			txtNewElementName.setText(valueConverter.getInitialDefaultValue());
-			txtNewElementName.addModifyListener(event -> refreshListView(txtNewElementName.getText()));
+			txtNewElementName.addModifyListener(_ -> refreshListView(txtNewElementName.getText()));
 
 			final var cmdAdd = new Button(panAdd, SWT.NONE);
 			cmdAdd.setText(getTranslation(CMD_ADD));

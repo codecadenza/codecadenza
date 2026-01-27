@@ -538,7 +538,7 @@ public class SearchInputDialog extends TitleAreaDialog {
 			}
 
 			// Add a listener for disabling filter input controls if the operator doesn't expect a filter criterion!
-			cboOp.valueProperty().addListener((ov, oldValue, newValue) -> {
+			cboOp.valueProperty().addListener((_, _, newValue) -> {
 				filterMap1.get(key).setDisable(false);
 
 				if (filterMap2.get(key) != null)
@@ -800,11 +800,11 @@ public class SearchInputDialog extends TitleAreaDialog {
 						else
 							decimalFormat.parse(value);
 					}
-					catch (final NumberFormatException | ParseException e) {
+					catch (final NumberFormatException | ParseException _) {
 						setErrorMessage(getTranslation(SEARCH_INPUT_DIALOG_MSG_ERR_NO_NUMBER, searchField.getColLabel().toLowerCase()));
 						return false;
 					}
-					catch (final IllegalArgumentException e) {
+					catch (final IllegalArgumentException _) {
 						setErrorMessage(getTranslation(SEARCH_INPUT_DIALOG_MSG_ERR_NO_UUID, searchField.getColLabel().toLowerCase()));
 						return false;
 					}
@@ -856,7 +856,7 @@ public class SearchInputDialog extends TitleAreaDialog {
 		final String title = getTranslation(SEARCH_INPUT_DIALOG_MSG_COUNT_RES_TITLE);
 
 		final Button cmdCount = addButton(DialogButtonType.COUNT, getTranslation(CMD_COUNT));
-		cmdCount.setOnAction(e -> {
+		cmdCount.setOnAction(_ -> {
 			try {
 				if (!validateInput())
 					return;
@@ -878,7 +878,7 @@ public class SearchInputDialog extends TitleAreaDialog {
 		});
 
 		final Button cmdReset = addButton(DialogButtonType.RESET, getTranslation(CMD_RESET));
-		cmdReset.setOnAction(e -> reset());
+		cmdReset.setOnAction(_ -> reset());
 
 		return parent;
 	}

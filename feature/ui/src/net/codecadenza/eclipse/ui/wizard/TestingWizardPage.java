@@ -160,7 +160,7 @@ public class TestingWizardPage extends WizardPage {
 
 		txtSeleniumNamespace = new Text(panSelenium, SWT.BORDER);
 		txtSeleniumNamespace.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
-		txtSeleniumNamespace.addModifyListener(e -> applySeleniumNamespace(txtSeleniumNamespace.getText()));
+		txtSeleniumNamespace.addModifyListener(_ -> applySeleniumNamespace(txtSeleniumNamespace.getText()));
 
 		final var lblDriver = new Label(panSelenium, SWT.NONE);
 		lblDriver.setText("Driver:");
@@ -230,14 +230,14 @@ public class TestingWizardPage extends WizardPage {
 
 		txtImplicitWaitTime = new Text(panSelenium, SWT.BORDER);
 		txtImplicitWaitTime.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
-		txtImplicitWaitTime.addModifyListener(e -> applyImplicitWaitTime(txtImplicitWaitTime.getText()));
+		txtImplicitWaitTime.addModifyListener(_ -> applyImplicitWaitTime(txtImplicitWaitTime.getText()));
 
 		final var lblPageLoadTimeout = new Label(panSelenium, SWT.NONE);
 		lblPageLoadTimeout.setText("Page load timeout (in seconds):");
 
 		txtPageLoadTimeout = new Text(panSelenium, SWT.BORDER);
 		txtPageLoadTimeout.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
-		txtPageLoadTimeout.addModifyListener(e -> applyPageLoadTimeout(txtPageLoadTimeout.getText()));
+		txtPageLoadTimeout.addModifyListener(_ -> applyPageLoadTimeout(txtPageLoadTimeout.getText()));
 
 		final var lblMaximizeWindow = new Label(panSelenium, SWT.NONE);
 		lblMaximizeWindow.setText("Maximize window:");
@@ -260,7 +260,7 @@ public class TestingWizardPage extends WizardPage {
 
 		txtTestCaseSuffix = new Text(panSelenium, SWT.BORDER);
 		txtTestCaseSuffix.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
-		txtTestCaseSuffix.addModifyListener(e -> applyTestCaseSuffix(txtTestCaseSuffix.getText()));
+		txtTestCaseSuffix.addModifyListener(_ -> applyTestCaseSuffix(txtTestCaseSuffix.getText()));
 
 		tabItemSelenium.setControl(panSelenium);
 
@@ -534,7 +534,7 @@ public class TestingWizardPage extends WizardPage {
 				if (implicitWaitTime < 0)
 					status = createStatus(IStatus.ERROR, "The implicit wait time requires a positive integer value!");
 			}
-			catch (final NumberFormatException e) {
+			catch (final NumberFormatException _) {
 				status = createStatus(IStatus.ERROR, "The implicit wait time requires an integer value!");
 			}
 
@@ -557,7 +557,7 @@ public class TestingWizardPage extends WizardPage {
 			try {
 				pageLoadTimeout = Integer.parseInt(text);
 			}
-			catch (final NumberFormatException e) {
+			catch (final NumberFormatException _) {
 				status = createStatus(IStatus.ERROR, "The page load timeout requires an integer value!");
 			}
 

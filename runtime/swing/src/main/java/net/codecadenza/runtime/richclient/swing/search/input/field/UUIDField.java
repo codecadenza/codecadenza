@@ -89,7 +89,7 @@ public class UUIDField extends InputField {
 
 			return null;
 		}
-		catch (final IllegalArgumentException ex) {
+		catch (final IllegalArgumentException _) {
 			return getTranslation(UUID_FIELD_MSG_INVALID_UUID);
 		}
 	}

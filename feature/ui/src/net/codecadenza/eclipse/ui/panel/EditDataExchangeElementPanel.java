@@ -1459,7 +1459,7 @@ public class EditDataExchangeElementPanel extends Composite {
 		treeMapping = new Tree(panMappingElements, SWT.BORDER);
 		treeMapping.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 
-		treeMapping.addMenuDetectListener(e -> {
+		treeMapping.addMenuDetectListener(_ -> {
 			treeMapping.setMenu(null);
 
 			final TreeItem selItem = getSelectedMappingItem();
@@ -1681,7 +1681,7 @@ public class EditDataExchangeElementPanel extends Composite {
 		treeAssocController = new Tree(panAssocControllers, SWT.BORDER);
 		treeAssocController.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 
-		treeAssocController.addMenuDetectListener(e -> {
+		treeAssocController.addMenuDetectListener(_ -> {
 			treeAssocController.setMenu(null);
 
 			final TreeItem selItem = getSelectedControllerItem();

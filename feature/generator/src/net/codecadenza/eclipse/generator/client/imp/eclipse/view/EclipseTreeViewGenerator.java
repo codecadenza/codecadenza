@@ -2772,7 +2772,7 @@ public class EclipseTreeViewGenerator extends AbstractTreeViewGenerator {
 		b.append(getAnnotationForGeneratedElement());
 		b.append("private " + methodSignature + "\n");
 		b.append("{\n");
-		b.append("tree.addMenuDetectListener(event ->\n");
+		b.append("tree.addMenuDetectListener(_ ->\n");
 		b.append("{\n");
 		b.append("final TreeItem selItem = getSelectedItem();\n");
 		b.append("tree.setMenu(null);\n\n");

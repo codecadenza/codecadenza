@@ -294,7 +294,7 @@ public class EditDataExchangeElementDialog extends CodeCadenzaDialog {
 			try {
 				minOccurrences = Integer.parseInt(txtMinOccurrences.getText());
 			}
-			catch (final NumberFormatException e) {
+			catch (final NumberFormatException _) {
 				MessageDialog.openInformation(getShell(), DLG_TITLE, "The lower bound requires an integer value!");
 				txtMinOccurrences.setFocus();
 				return false;
@@ -311,7 +311,7 @@ public class EditDataExchangeElementDialog extends CodeCadenzaDialog {
 			try {
 				maxOccurrences = Integer.parseInt(txtMaxOccurrences.getText());
 			}
-			catch (final NumberFormatException e) {
+			catch (final NumberFormatException _) {
 				MessageDialog.openInformation(getShell(), DLG_TITLE, "The upper bound requires an integer value!");
 				txtMaxOccurrences.setFocus();
 				return false;
@@ -342,7 +342,7 @@ public class EditDataExchangeElementDialog extends CodeCadenzaDialog {
 			try {
 				Integer.parseInt(txtElementOrder.getText());
 			}
-			catch (final NumberFormatException e) {
+			catch (final NumberFormatException _) {
 				MessageDialog.openInformation(getShell(), DLG_TITLE, "The element order requires an integer value!");
 				txtElementOrder.setFocus();
 				return false;
@@ -391,7 +391,7 @@ public class EditDataExchangeElementDialog extends CodeCadenzaDialog {
 				else if (type.isBigDecimal())
 					new BigDecimal(txtDefault.getText());
 			}
-			catch (final NumberFormatException e) {
+			catch (final NumberFormatException _) {
 				MessageDialog.openInformation(getShell(), DLG_TITLE, "The default value is not valid!");
 				txtDefault.setFocus();
 				return false;

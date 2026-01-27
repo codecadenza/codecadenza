@@ -276,7 +276,7 @@ public class AdvancedSettingsTab implements Serializable {
 		selectionPanel.getTargetList().setDragEnabled(true);
 
 		// Allow items to be dropped from the target
-		selectionPanel.getSourceList().setTransferHandler(new ListTransferHandler(info -> {
+		selectionPanel.getSourceList().setTransferHandler(new ListTransferHandler(_ -> {
 			selectionPanel.moveFromSource();
 			return true;
 		}, selectionPanel.getTargetList()));
@@ -348,7 +348,7 @@ public class AdvancedSettingsTab implements Serializable {
 		});
 
 		// If the items are removed from the list of selected items, remove them also from the sorting list
-		selectionPanel.getTargetList().addPropertyChangeListener("model", event -> {
+		selectionPanel.getTargetList().addPropertyChangeListener("model", _ -> {
 			final var model = (DefaultListModel<SearchFieldDTO>) lstSorting.getModel();
 
 			for (int i = model.size() - 1; i >= 0; --i)

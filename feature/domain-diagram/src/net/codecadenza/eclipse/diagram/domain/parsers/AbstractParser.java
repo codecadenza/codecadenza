@@ -276,7 +276,7 @@ public abstract class AbstractParser implements IParser {
 						try {
 							value = Byte.valueOf(stringValue);
 						}
-						catch (final NumberFormatException nfe) {
+						catch (final NumberFormatException _) {
 							value = new InvalidValue(NLS.bind(Messages.AbstractParser_WrongStringConversionMessage, iClass.getName()));
 						}
 					}
@@ -297,7 +297,7 @@ public abstract class AbstractParser implements IParser {
 						try {
 							value = Short.valueOf(stringValue);
 						}
-						catch (final NumberFormatException nfe) {
+						catch (final NumberFormatException _) {
 							value = new InvalidValue(NLS.bind(Messages.AbstractParser_WrongStringConversionMessage, iClass.getName()));
 						}
 					}
@@ -318,7 +318,7 @@ public abstract class AbstractParser implements IParser {
 						try {
 							value = Integer.valueOf(stringValue);
 						}
-						catch (final NumberFormatException nfe) {
+						catch (final NumberFormatException _) {
 							value = new InvalidValue(NLS.bind(Messages.AbstractParser_WrongStringConversionMessage, iClass.getName()));
 						}
 					}
@@ -339,7 +339,7 @@ public abstract class AbstractParser implements IParser {
 						try {
 							value = Long.valueOf(stringValue);
 						}
-						catch (final NumberFormatException nfe) {
+						catch (final NumberFormatException _) {
 							value = new InvalidValue(NLS.bind(Messages.AbstractParser_WrongStringConversionMessage, iClass.getName()));
 						}
 					}
@@ -360,7 +360,7 @@ public abstract class AbstractParser implements IParser {
 						try {
 							value = Float.valueOf(stringValue);
 						}
-						catch (final NumberFormatException nfe) {
+						catch (final NumberFormatException _) {
 							value = new InvalidValue(NLS.bind(Messages.AbstractParser_WrongStringConversionMessage, iClass.getName()));
 						}
 					}
@@ -381,7 +381,7 @@ public abstract class AbstractParser implements IParser {
 						try {
 							value = Double.valueOf(stringValue);
 						}
-						catch (final NumberFormatException nfe) {
+						catch (final NumberFormatException _) {
 							value = new InvalidValue(NLS.bind(Messages.AbstractParser_WrongStringConversionMessage, iClass.getName()));
 						}
 					}

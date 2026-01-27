@@ -392,7 +392,7 @@ public abstract class AbstractExportXLSXAction extends Action {
 		try {
 			cell.setCellValue(Long.parseLong(value));
 		}
-		catch (final NumberFormatException e) {
+		catch (final NumberFormatException _) {
 			cell.setCellValue(value);
 		}
 	}
@@ -409,7 +409,7 @@ public abstract class AbstractExportXLSXAction extends Action {
 			cell.setCellValue(decimalFormat.parse(value).doubleValue());
 			cell.setCellStyle(cellStyleDouble);
 		}
-		catch (final ParseException e) {
+		catch (final ParseException _) {
 			cell.setCellValue(value);
 		}
 	}
@@ -426,7 +426,7 @@ public abstract class AbstractExportXLSXAction extends Action {
 			cell.setCellValue(dateFormat.parse(value));
 			cell.setCellStyle(cellStyleDateTime);
 		}
-		catch (final ParseException e) {
+		catch (final ParseException _) {
 			cell.setCellValue(value);
 		}
 	}

@@ -219,7 +219,7 @@ public abstract class AbstractJavaFXFieldGenerator extends AbstractRichClientFie
 
 			b.append("final var " + linkName + " = new Hyperlink();\n");
 			b.append(linkName + ".setText(" + i18n.getI18N(field, true) + ");\n");
-			b.append(linkName + ".setOnAction(event ->\n");
+			b.append(linkName + ".setOnAction(_ ->\n");
 			b.append("{\n");
 
 			final DTOBeanAttribute pkAttr = field.getDTOAttribute().getReferencedDTOBean().getPKAttribute();

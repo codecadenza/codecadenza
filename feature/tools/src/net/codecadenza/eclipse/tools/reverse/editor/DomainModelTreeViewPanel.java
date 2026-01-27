@@ -392,7 +392,7 @@ public class DomainModelTreeViewPanel extends Composite {
 			}
 		});
 
-		treeDomainModel.addMenuDetectListener(event -> {
+		treeDomainModel.addMenuDetectListener(_ -> {
 			treeDomainModel.setMenu(null);
 
 			final TreeItem treeItem = getSelectedTreeItem();

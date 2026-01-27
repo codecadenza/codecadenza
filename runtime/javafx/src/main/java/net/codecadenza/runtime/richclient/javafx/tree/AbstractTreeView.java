@@ -374,7 +374,7 @@ public abstract class AbstractTreeView<T> extends Tab implements View, Countable
 
 		treeView = new TreeView<>();
 		treeView.setShowRoot(false);
-		treeView.setCellFactory(param -> new DragAndDropCell());
+		treeView.setCellFactory(_ -> new DragAndDropCell());
 
 		panRoot.getChildren().add(toolBar);
 

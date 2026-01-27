@@ -285,7 +285,7 @@ public class EditTableColumnFieldDialog extends CodeCadenzaDialog {
 			try {
 				width = Integer.parseInt(txtWidth.getText());
 			}
-			catch (final NumberFormatException e) {
+			catch (final NumberFormatException _) {
 				MessageDialog.openInformation(getShell(), DLG_TITLE, "The column width requires an integer value!");
 				txtWidth.setFocus();
 				return;

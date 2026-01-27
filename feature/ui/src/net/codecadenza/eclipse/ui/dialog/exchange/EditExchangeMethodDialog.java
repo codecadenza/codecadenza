@@ -331,7 +331,7 @@ public class EditExchangeMethodDialog extends CodeCadenzaTitleAreaDialog {
 				if (delay < 0)
 					throw new NumberFormatException();
 			}
-			catch (final NumberFormatException e) {
+			catch (final NumberFormatException _) {
 				setErrorMessage("The invocation delay requires a positive integer value!");
 				txtInvocationDelay.setFocus();
 				return false;
@@ -341,7 +341,7 @@ public class EditExchangeMethodDialog extends CodeCadenzaTitleAreaDialog {
 			try {
 				Integer.parseInt(txtMaxNoOfObjects.getText());
 			}
-			catch (final NumberFormatException e) {
+			catch (final NumberFormatException _) {
 				setErrorMessage("The maximum no. of objects requires an integer value!");
 				txtMaxNoOfObjects.setFocus();
 				return false;
@@ -366,7 +366,7 @@ public class EditExchangeMethodDialog extends CodeCadenzaTitleAreaDialog {
 				try {
 					Integer.parseInt(txtBlockSize.getText());
 				}
-				catch (final NumberFormatException e) {
+				catch (final NumberFormatException _) {
 					setErrorMessage("The file block size requires an integer value!");
 					txtBlockSize.setFocus();
 					return false;
@@ -420,7 +420,7 @@ public class EditExchangeMethodDialog extends CodeCadenzaTitleAreaDialog {
 			try {
 				new SimpleDateFormat().applyPattern(txtDefaultDateFormat.getText());
 			}
-			catch (final Exception e) {
+			catch (final Exception _) {
 				setErrorMessage("The default date format is not valid!");
 				txtDefaultDateFormat.setFocus();
 				return false;
@@ -435,7 +435,7 @@ public class EditExchangeMethodDialog extends CodeCadenzaTitleAreaDialog {
 			try {
 				new SimpleDateFormat().applyPattern(txtDefaultDateTimeFormat.getText());
 			}
-			catch (final Exception e) {
+			catch (final Exception _) {
 				setErrorMessage("The default date time format is not valid!");
 				txtDefaultDateTimeFormat.setFocus();
 				return false;
@@ -450,7 +450,7 @@ public class EditExchangeMethodDialog extends CodeCadenzaTitleAreaDialog {
 			try {
 				new DecimalFormat().applyPattern(txtDefaultNumberFormat.getText());
 			}
-			catch (final Exception e) {
+			catch (final Exception _) {
 				setErrorMessage("The default number format is not valid!");
 				txtDefaultNumberFormat.setFocus();
 				return false;

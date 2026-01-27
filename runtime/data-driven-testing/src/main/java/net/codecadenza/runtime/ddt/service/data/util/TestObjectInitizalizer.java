@@ -259,7 +259,7 @@ public class TestObjectInitizalizer {
 	@SuppressWarnings({ "unchecked" })
 	public <T> ValueConverter<T> getValueConverter(Class<T> fieldType) {
 		return (ValueConverter<T>) converters.computeIfAbsent(fieldType,
-				type -> new ValueConverter<>(properties.getDecimalFormat(), properties.getDecimalSeparator(),
+				_ -> new ValueConverter<>(properties.getDecimalFormat(), properties.getDecimalSeparator(),
 						properties.getGroupingSeparator(), properties.getDateTimeFormat(), properties.getDateFormat(), fieldType));
 	}
 

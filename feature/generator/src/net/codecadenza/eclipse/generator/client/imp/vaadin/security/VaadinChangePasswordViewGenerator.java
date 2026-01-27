@@ -171,9 +171,9 @@ public class VaadinChangePasswordViewGenerator extends AbstractJavaSourceGenerat
 		b.append("txtConfPassword.setId(\"txtConfPassword\");\n");
 		b.append("txtConfPassword.setWidth(FIELD_WIDTH, Unit.PIXELS);\n\n");
 		b.append("final var cmdOK = new Button(" + i18n.getI18NMessage("cmd_save", "Save") + ");\n");
-		b.append("cmdOK.addClickListener(clickEvent -> changePassword());\n\n");
+		b.append("cmdOK.addClickListener(_ -> changePassword());\n\n");
 		b.append("final var cmdCancel = new Button(" + i18n.getI18NMessage("cmd_cancel", "Cancel") + ");\n");
-		b.append("cmdCancel.addClickListener(clickEvent -> navigator.navigateBack());\n\n");
+		b.append("cmdCancel.addClickListener(_ -> navigator.navigateBack());\n\n");
 		b.append("final var hlButtons = new HorizontalLayout();\n");
 		b.append("hlButtons.add(cmdOK, cmdCancel);\n\n");
 		b.append("add(txtOldPassword, txtNewPassword, txtConfPassword, hlButtons);\n\n");

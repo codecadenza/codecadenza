@@ -89,7 +89,7 @@ public class LOVField extends InputField {
 
 		grid.add(btnOpenDialog, baseConstraints);
 
-		btnOpenDialog.addActionListener(e -> openLOVDialog());
+		btnOpenDialog.addActionListener(_ -> openLOVDialog());
 	}
 
 	/**

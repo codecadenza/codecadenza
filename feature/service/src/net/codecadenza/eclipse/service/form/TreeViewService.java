@@ -775,7 +775,7 @@ public class TreeViewService {
 				try {
 					treeCounter = Integer.parseInt(counter) + 1;
 				}
-				catch (final NumberFormatException e) {
+				catch (final NumberFormatException _) {
 					// This exception will be ignored!
 				}
 

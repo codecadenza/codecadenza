@@ -1026,7 +1026,7 @@ public class ProjectView extends ViewPart implements GraphicalEditorEventListene
 
 		tree = new Tree(panViewArea, SWT.NONE);
 
-		tree.addMenuDetectListener(e -> {
+		tree.addMenuDetectListener(_ -> {
 			TreeItem selItem = null;
 
 			if (tree.getMenu() != null)
@@ -1625,7 +1625,7 @@ public class ProjectView extends ViewPart implements GraphicalEditorEventListene
 			final IEditorPart editor = EclipseIDEService.openInEditor(domainNamespace.getDiagramFile());
 
 			if (editor != null)
-				editor.addPropertyListener((source, propId) -> refreshTree());
+				editor.addPropertyListener((_, _) -> refreshTree());
 		}
 		catch (final Exception ex) {
 			CodeCadenzaUserInterfacePlugin.getInstance().handleInternalError(ex);
@@ -1888,7 +1888,7 @@ public class ProjectView extends ViewPart implements GraphicalEditorEventListene
 				return false;
 			});
 		}
-		catch (final Exception e) {
+		catch (final Exception _) {
 			// Ignore all kinds of exceptions here!
 		}
 	}

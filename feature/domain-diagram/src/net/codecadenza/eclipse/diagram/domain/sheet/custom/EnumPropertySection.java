@@ -86,7 +86,7 @@ public class EnumPropertySection extends AbstractPropertySection {
 		final CLabel lblComment = getWidgetFactory().createCLabel(panPropertySection, "Comment:");
 		lblComment.setLayoutData(data);
 
-		textChangeListener = e -> updateMetaModel();
+		textChangeListener = _ -> updateMetaModel();
 	}
 
 	/*

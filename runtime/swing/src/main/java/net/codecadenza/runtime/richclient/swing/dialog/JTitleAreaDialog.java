@@ -181,7 +181,7 @@ public abstract class JTitleAreaDialog extends JDialog {
 	 */
 	@Override
 	protected JRootPane createRootPane() {
-		final ActionListener actionListener = action -> dispose();
+		final ActionListener actionListener = _ -> dispose();
 		final var rootPane = new JRootPane();
 		final KeyStroke stroke = KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0);
 
@@ -232,7 +232,7 @@ public abstract class JTitleAreaDialog extends JDialog {
 	 */
 	protected void createButtons(JPanel buttonPane) {
 		okButton = new JButton(getTranslation(J_TITLE_AREA_DIALOG_OK_BUTTON));
-		okButton.addActionListener(action -> onOKClicked());
+		okButton.addActionListener(_ -> onOKClicked());
 		okButton.setActionCommand(getTranslation(J_TITLE_AREA_DIALOG_OK_BUTTON));
 
 		buttonPane.add(okButton);
@@ -240,7 +240,7 @@ public abstract class JTitleAreaDialog extends JDialog {
 		getRootPane().setDefaultButton(okButton);
 
 		final var cancelButton = new JButton(getTranslation(J_TITLE_AREA_DIALOG_CANCEL_BUTTON));
-		cancelButton.addActionListener(action -> onCancelClicked());
+		cancelButton.addActionListener(_ -> onCancelClicked());
 		cancelButton.setActionCommand(getTranslation(J_TITLE_AREA_DIALOG_CANCEL_BUTTON));
 
 		buttonPane.add(cancelButton);

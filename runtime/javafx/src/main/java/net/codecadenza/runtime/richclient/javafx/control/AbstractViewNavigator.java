@@ -171,7 +171,7 @@ public abstract class AbstractViewNavigator extends TreeView<View> implements Se
 		final var mnuTree = new ContextMenu();
 
 		final var mniDelete = new MenuItem(getTranslation(ACTION_DELETE_TITLE));
-		mniDelete.setOnAction(e -> deleteSavedQuery());
+		mniDelete.setOnAction(_ -> deleteSavedQuery());
 
 		mnuTree.getItems().add(mniDelete);
 

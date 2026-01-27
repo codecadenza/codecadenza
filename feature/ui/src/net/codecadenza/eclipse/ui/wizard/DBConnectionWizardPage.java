@@ -169,7 +169,7 @@ public class DBConnectionWizardPage extends WizardPage {
 
 		txtURL = new Text(panPageArea, SWT.BORDER);
 		txtURL.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
-		txtURL.addModifyListener(e -> validateConnectionURL(txtURL.getText()));
+		txtURL.addModifyListener(_ -> validateConnectionURL(txtURL.getText()));
 
 		final var lblDataSource = new Label(panPageArea, SWT.NONE);
 		lblDataSource.setText("Data source name:");
@@ -177,7 +177,7 @@ public class DBConnectionWizardPage extends WizardPage {
 		final var txtDataSource = new Text(panPageArea, SWT.BORDER);
 		txtDataSource.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
 		txtDataSource.setText(DEFAULT_DS);
-		txtDataSource.addModifyListener(e -> validateDSName(txtDataSource.getText()));
+		txtDataSource.addModifyListener(_ -> validateDSName(txtDataSource.getText()));
 
 		final var lblUsername = new Label(panPageArea, SWT.LEFT);
 		lblUsername.setText("User name:");
@@ -185,7 +185,7 @@ public class DBConnectionWizardPage extends WizardPage {
 		txtUserName = new Text(panPageArea, SWT.SINGLE | SWT.BORDER);
 		txtUserName.setText("sa");
 		txtUserName.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
-		txtUserName.addModifyListener(e -> validateUserName(txtUserName.getText()));
+		txtUserName.addModifyListener(_ -> validateUserName(txtUserName.getText()));
 
 		final var lblPassword = new Label(panPageArea, SWT.LEFT);
 		lblPassword.setText("Password:");
@@ -193,21 +193,21 @@ public class DBConnectionWizardPage extends WizardPage {
 		txtPassword = new Text(panPageArea, SWT.SINGLE | SWT.BORDER | SWT.PASSWORD);
 		txtPassword.setText("sa");
 		txtPassword.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
-		txtPassword.addModifyListener(e -> validatePassword(txtPassword.getText()));
+		txtPassword.addModifyListener(_ -> validatePassword(txtPassword.getText()));
 
 		final var lblCatalog = new Label(panPageArea, SWT.LEFT);
 		lblCatalog.setText("Database catalog:");
 
 		final var txtCatalogName = new Text(panPageArea, SWT.BORDER);
 		txtCatalogName.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
-		txtCatalogName.addModifyListener(e -> catalogName = txtCatalogName.getText());
+		txtCatalogName.addModifyListener(_ -> catalogName = txtCatalogName.getText());
 
 		final var lblSchemaName = new Label(panPageArea, SWT.LEFT);
 		lblSchemaName.setText("Database schema:");
 
 		txtSchemaName = new Text(panPageArea, SWT.BORDER);
 		txtSchemaName.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
-		txtSchemaName.addModifyListener(e -> schemaName = txtSchemaName.getText());
+		txtSchemaName.addModifyListener(_ -> schemaName = txtSchemaName.getText());
 
 		final var lblDrivers = new Label(panPageArea, SWT.NONE);
 		lblDrivers.setText("JDBC drivers:");

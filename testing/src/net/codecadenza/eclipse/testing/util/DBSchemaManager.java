@@ -259,7 +259,7 @@ public class DBSchemaManager {
 			try {
 				classLoader.close();
 			}
-			catch (final IOException e) {
+			catch (final IOException _) {
 				// Ignored!
 			}
 	}

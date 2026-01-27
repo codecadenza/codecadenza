@@ -295,7 +295,7 @@ public class JavaEnumNameEditPart extends CompartmentEditPart implements ITextAw
 
 					return valid.getCode() == ParserEditStatus.EDITABLE ? null : valid.getMessage();
 				}
-				catch (final InterruptedException ie) {
+				catch (final InterruptedException _) {
 					Thread.currentThread().interrupt();
 
 					CodeCadenzaDiagramEditorPlugin.getInstance().logInfo("Operation has been interrupted!");
@@ -411,7 +411,7 @@ public class JavaEnumNameEditPart extends CompartmentEditPart implements ITextAw
 				}
 			});
 		}
-		catch (final InterruptedException e) {
+		catch (final InterruptedException _) {
 			Thread.currentThread().interrupt();
 
 			CodeCadenzaDiagramEditorPlugin.getInstance().logInfo("Operation has been interrupted!");

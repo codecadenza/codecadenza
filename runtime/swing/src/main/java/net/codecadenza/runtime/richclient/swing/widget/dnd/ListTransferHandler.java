@@ -128,10 +128,10 @@ public class ListTransferHandler extends TransferHandler {
 			final var t = (ListItemTransferable) support.getTransferable().getTransferData(LIST_ITEM_FLAVOR);
 			return acceptedSources.contains(t.source);
 		}
-		catch (final UnsupportedFlavorException e) {
+		catch (final UnsupportedFlavorException _) {
 			throw new AssertionError();
 		}
-		catch (final IOException e) {
+		catch (final IOException _) {
 			return false;
 		}
 	}

@@ -165,7 +165,7 @@ public class ProjectWizardPage extends WizardPage {
 		txtProjectName.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
 		txtProjectName.setFocus();
 
-		txtProjectName.addModifyListener(e -> {
+		txtProjectName.addModifyListener(_ -> {
 			if (!txtProjectName.isDisposed())
 				validateProject(txtProjectName.getText());
 		});
@@ -177,7 +177,7 @@ public class ProjectWizardPage extends WizardPage {
 		txtProjectCode.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
 		txtProjectCode.setText(DEFAULT_PROJECT_CODE);
 
-		txtProjectCode.addModifyListener(e -> {
+		txtProjectCode.addModifyListener(_ -> {
 			if (!txtProjectCode.isDisposed())
 				validateProjectCode(txtProjectCode.getText());
 		});
@@ -244,7 +244,7 @@ public class ProjectWizardPage extends WizardPage {
 		final var txtRootNamespace = new Text(groupNamespaceConf, SWT.BORDER);
 		txtRootNamespace.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
 		txtRootNamespace.setText(store.getString(PREF_ROOT_CONTEXT));
-		txtRootNamespace.addModifyListener(e -> validateRootNamespaceName(txtRootNamespace.getText()));
+		txtRootNamespace.addModifyListener(_ -> validateRootNamespaceName(txtRootNamespace.getText()));
 
 		rootNamespaceName = txtRootNamespace.getText();
 
@@ -254,7 +254,7 @@ public class ProjectWizardPage extends WizardPage {
 		final var txtDomainNamespace = new Text(groupNamespaceConf, SWT.BORDER);
 		txtDomainNamespace.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
 		txtDomainNamespace.setText(store.getString(PREF_DOMAIN_CONTEXT));
-		txtDomainNamespace.addModifyListener(e -> validateDomainNamespace(txtDomainNamespace.getText()));
+		txtDomainNamespace.addModifyListener(_ -> validateDomainNamespace(txtDomainNamespace.getText()));
 
 		domainNamespaceName = txtDomainNamespace.getText();
 
@@ -264,7 +264,7 @@ public class ProjectWizardPage extends WizardPage {
 		final var txtDTONamespace = new Text(groupNamespaceConf, SWT.BORDER);
 		txtDTONamespace.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
 		txtDTONamespace.setText(store.getString(PREF_DTO_CONTEXT));
-		txtDTONamespace.addModifyListener(e -> validateDTONamespaceName(txtDTONamespace.getText()));
+		txtDTONamespace.addModifyListener(_ -> validateDTONamespaceName(txtDTONamespace.getText()));
 
 		dtoNamespaceName = txtDTONamespace.getText();
 
@@ -274,7 +274,7 @@ public class ProjectWizardPage extends WizardPage {
 		final var txtExchangeNamespace = new Text(groupNamespaceConf, SWT.BORDER);
 		txtExchangeNamespace.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
 		txtExchangeNamespace.setText(store.getString(PREF_EXCHANGE_CONTEXT));
-		txtExchangeNamespace.addModifyListener(e -> validateExchangeNamespaceName(txtExchangeNamespace.getText()));
+		txtExchangeNamespace.addModifyListener(_ -> validateExchangeNamespaceName(txtExchangeNamespace.getText()));
 
 		exchangeNamespaceName = txtExchangeNamespace.getText();
 
@@ -284,7 +284,7 @@ public class ProjectWizardPage extends WizardPage {
 		txtBoundaryNamespace = new Text(groupNamespaceConf, SWT.BORDER);
 		txtBoundaryNamespace.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
 		txtBoundaryNamespace.setText(store.getString(PREF_BOUNDARY_CONTEXT));
-		txtBoundaryNamespace.addModifyListener(e -> validateBoundaryNamespaceName(txtBoundaryNamespace.getText()));
+		txtBoundaryNamespace.addModifyListener(_ -> validateBoundaryNamespaceName(txtBoundaryNamespace.getText()));
 
 		boundaryNamespaceName = txtBoundaryNamespace.getText();
 
@@ -294,7 +294,7 @@ public class ProjectWizardPage extends WizardPage {
 		txtRepositoryNamespace = new Text(groupNamespaceConf, SWT.BORDER);
 		txtRepositoryNamespace.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
 		txtRepositoryNamespace.setText(store.getString(PREF_REPOSITORY_CONTEXT));
-		txtRepositoryNamespace.addModifyListener(e -> validateRepositoryNamespaceName(txtRepositoryNamespace.getText()));
+		txtRepositoryNamespace.addModifyListener(_ -> validateRepositoryNamespaceName(txtRepositoryNamespace.getText()));
 
 		repositoryNamespaceName = txtRepositoryNamespace.getText();
 

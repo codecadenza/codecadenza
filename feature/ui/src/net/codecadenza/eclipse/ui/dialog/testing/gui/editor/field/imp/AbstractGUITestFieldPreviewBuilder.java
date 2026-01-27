@@ -126,7 +126,7 @@ public abstract class AbstractGUITestFieldPreviewBuilder extends AbstractFieldPr
 	@Override
 	protected void addFieldListeners(Control label, Control field) {
 		// Dispose internally used colors
-		field.addDisposeListener(e -> {
+		field.addDisposeListener(_ -> {
 			colorInputCleared.dispose();
 			colorInputEntered.dispose();
 			colorValidateField.dispose();

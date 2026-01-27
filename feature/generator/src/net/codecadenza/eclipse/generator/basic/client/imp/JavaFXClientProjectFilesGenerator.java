@@ -131,10 +131,7 @@ public class JavaFXClientProjectFilesGenerator extends AbstractClientProjectFile
 		final var b = new StringBuilder();
 		final String exitConf = i18n.getI18NMessage("application_exit", "Do you really want to exit?");
 		final String appTitle = i18n.getI18NMessage("application_name", "Application name");
-		boolean usesEmbeddedDerby = false;
-
-		if (project.getDatabase().getVendorGroup() == DBVendorGroupEnumeration.DERBY_EMBEDDED)
-			usesEmbeddedDerby = true;
+		final boolean usesEmbeddedDerby = project.getDatabase().getVendorGroup() == DBVendorGroupEnumeration.DERBY_EMBEDDED;
 
 		b.append("import static " + project.getClientNamespace().toString() + "." + APP_I18N_PROVIDER_CLASS + ".*;\n");
 		b.append("import java.util.*;\n");
@@ -400,7 +397,7 @@ public class JavaFXClientProjectFilesGenerator extends AbstractClientProjectFile
 		b.append("navigator.initialize();\n\n");
 		b.append("stage.setScene(scene);\n");
 		b.append("stage.show();\n");
-		b.append("stage.setOnCloseRequest(e -> shutdown());\n");
+		b.append("stage.setOnCloseRequest(_ -> shutdown());\n");
 		b.append("}\n\n");
 		b.append("}\n");
 

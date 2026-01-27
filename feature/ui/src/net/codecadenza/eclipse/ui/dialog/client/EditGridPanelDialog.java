@@ -444,7 +444,7 @@ public class EditGridPanelDialog extends CodeCadenzaTitleAreaDialog implements P
 			setMessage("Select a domain object and an association");
 		}
 
-		txtTitle.addModifyListener(e -> {
+		txtTitle.addModifyListener(_ -> {
 			if (panPreview == null)
 				return;
 

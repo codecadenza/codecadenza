@@ -402,11 +402,11 @@ public class VaadinTreeViewGenerator extends AbstractTreeViewGenerator {
 		treeItemsWithActions.add(treeItem);
 
 		if (addToParent) {
-			formActionsOfParent.computeIfAbsent(treeItem, key -> new HashSet<>());
+			formActionsOfParent.computeIfAbsent(treeItem, _ -> new HashSet<>());
 			formActionsOfParent.get(treeItem).add(form);
 		}
 		else {
-			formActionsOfItem.computeIfAbsent(treeItem, key -> new HashSet<>());
+			formActionsOfItem.computeIfAbsent(treeItem, _ -> new HashSet<>());
 			formActionsOfItem.get(treeItem).add(form);
 		}
 	}
@@ -425,11 +425,11 @@ public class VaadinTreeViewGenerator extends AbstractTreeViewGenerator {
 		actionMethods.add(method);
 
 		if (addToParent) {
-			methodActionsOfParent.computeIfAbsent(treeItem, key -> new HashSet<>());
+			methodActionsOfParent.computeIfAbsent(treeItem, _ -> new HashSet<>());
 			methodActionsOfParent.get(treeItem).add(method);
 		}
 		else {
-			methodActionsOfItem.computeIfAbsent(treeItem, key -> new HashSet<>());
+			methodActionsOfItem.computeIfAbsent(treeItem, _ -> new HashSet<>());
 			methodActionsOfItem.get(treeItem).add(method);
 		}
 	}
@@ -565,7 +565,7 @@ public class VaadinTreeViewGenerator extends AbstractTreeViewGenerator {
 		b.append("final var cmdSearch = new Button(" + i18n.getI18NMessage("cmd_search", "Search") + ");\n");
 		b.append("cmdSearch.setIcon(new Icon(VaadinIcon.SEARCH));\n");
 		b.append("cmdSearch.setId(\"cmdSearch\");\n\n");
-		b.append("cmdSearch.addClickListener(event ->\n");
+		b.append("cmdSearch.addClickListener(_ ->\n");
 		b.append("{\n");
 		b.append("// Initialize search object\n");
 		b.append("searchInput = new SearchDTO();\n");
@@ -624,7 +624,7 @@ public class VaadinTreeViewGenerator extends AbstractTreeViewGenerator {
 		b.append("final var cmdSearch = new Button(" + i18n.getI18NMessage("cmd_search", "Search") + ");\n");
 		b.append("cmdSearch.setId(\"cmdOpenSearchDialog\");\n");
 		b.append("cmdSearch.setIcon(new Icon(VaadinIcon.SEARCH));\n\n");
-		b.append("cmdSearch.addClickListener(event ->\n");
+		b.append("cmdSearch.addClickListener(_ ->\n");
 		b.append("{\n");
 		b.append("searchInput = new SearchDTO();\n");
 		b.append("var fieldLabel = \"\";\n\n");
@@ -1158,19 +1158,19 @@ public class VaadinTreeViewGenerator extends AbstractTreeViewGenerator {
 
 		if (form.getFormType() == FormTypeEnumeration.CREATE) {
 			b.append("contextMenu.addItem(" + i18n.getI18NMessage("action_name_create", "Create") + ", ");
-			b.append("event -> " + methodName + "());\n");
+			b.append("_ -> " + methodName + "());\n");
 		}
 		else if (form.getFormType() == FormTypeEnumeration.ADD) {
 			b.append("contextMenu.addItem(" + i18n.getI18NMessage("action_name_add", "Add") + ", ");
-			b.append("event -> " + methodName + "());\n");
+			b.append("_ -> " + methodName + "());\n");
 		}
 		else if (form.getFormType() == FormTypeEnumeration.READONLY) {
 			b.append("contextMenu.addItem(" + i18n.getI18NMessage("action_name_view", "View") + ", ");
-			b.append("event -> " + methodName + "());\n");
+			b.append("_ -> " + methodName + "());\n");
 		}
 		else if (form.getFormType() == FormTypeEnumeration.UPDATE) {
 			b.append("contextMenu.addItem(" + i18n.getI18NMessage("action_name_edit", "Edit") + ", ");
-			b.append("event -> " + methodName + "());\n");
+			b.append("_ -> " + methodName + "());\n");
 		}
 
 		final String content = securityHelper.wrapSecurityCode(form.getRoles(), b.toString());
@@ -1192,15 +1192,15 @@ public class VaadinTreeViewGenerator extends AbstractTreeViewGenerator {
 
 		if (method.getMethodType() == BoundaryMethodTypeEnumeration.DELETE) {
 			b.append("contextMenu.addItem(" + i18n.getI18NMessage("action_name_delete", "Delete") + ", ");
-			b.append("event -> " + methodName + "());\n");
+			b.append("_ -> " + methodName + "());\n");
 		}
 		else if (method.getMethodType() == BoundaryMethodTypeEnumeration.REMOVE_FROM_ASSOCIATION) {
 			b.append("contextMenu.addItem(" + i18n.getI18NMessage("action_name_remove", "Remove") + ", ");
-			b.append("event -> " + methodName + "());\n");
+			b.append("_ -> " + methodName + "());\n");
 		}
 		else if (method.getMethodType() == BoundaryMethodTypeEnumeration.FIND_BY_PARENT) {
 			b.append("contextMenu.addItem(" + i18n.getI18NMessage("action_name_refresh", "Refresh") + ", ");
-			b.append("event -> " + methodName + "(selectedItem));\n");
+			b.append("_ -> " + methodName + "(selectedItem));\n");
 		}
 
 		if (addSecurity && method.getMethodType() != BoundaryMethodTypeEnumeration.FIND_BY_PARENT

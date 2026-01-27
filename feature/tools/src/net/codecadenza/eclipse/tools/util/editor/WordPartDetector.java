@@ -54,7 +54,7 @@ public class WordPartDetector {
 			docOffset++;
 			wordPart = viewer.getDocument().get(docOffset, documentOffset - docOffset);
 		}
-		catch (final BadLocationException e) {
+		catch (final BadLocationException _) {
 			// This exception will be ignored!
 		}
 	}

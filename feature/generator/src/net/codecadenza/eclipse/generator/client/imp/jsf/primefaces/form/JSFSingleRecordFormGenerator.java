@@ -840,7 +840,7 @@ public class JSFSingleRecordFormGenerator extends AbstractSingleRecordFormGenera
 
 		// If the tab-view has at least one panel that contains regular form fields (e.g. input fields, comboboxes etc.) the tab-view
 		// must not be dynamic as respective fields may not be initialized correctly!
-		return panelList.stream().filter(panel -> panel.getBasePanel() == null).findFirst().map(panel -> "false").orElse("true");
+		return panelList.stream().filter(panel -> panel.getBasePanel() == null).findFirst().map(_ -> "false").orElse("true");
 	}
 
 }

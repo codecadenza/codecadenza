@@ -627,7 +627,7 @@ public class JPAQueryEditor extends EditorPart {
 				doQuery(monitor, jpaStatement, limitRows);
 			});
 		}
-		catch (final InterruptedException ex) {
+		catch (final InterruptedException _) {
 			Thread.currentThread().interrupt();
 
 			shell.getDisplay().syncExec(() -> {
@@ -938,7 +938,7 @@ public class JPAQueryEditor extends EditorPart {
 			if (engine != null)
 				engine.close();
 		}
-		catch (final Exception e) {
+		catch (final Exception _) {
 			// This exception will be ignored!
 		}
 	}

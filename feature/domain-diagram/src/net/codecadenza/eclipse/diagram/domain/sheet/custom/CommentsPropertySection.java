@@ -90,7 +90,7 @@ public class CommentsPropertySection extends AbstractPropertySection {
 		txtInternalComment = getWidgetFactory().createText(panPropertySection, "", SWT.MULTI);
 		txtInternalComment.setLayoutData(gdInternalComment);
 
-		textChangeListener = e -> updateMetaModel();
+		textChangeListener = _ -> updateMetaModel();
 	}
 
 	/*

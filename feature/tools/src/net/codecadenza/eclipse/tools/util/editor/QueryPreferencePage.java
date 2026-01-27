@@ -96,7 +96,7 @@ public class QueryPreferencePage extends PreferencePage implements IWorkbenchPre
 		try {
 			maxRowCount = Integer.parseInt(txtMaxRowCount.getText());
 		}
-		catch (final NumberFormatException e) {
+		catch (final NumberFormatException _) {
 			MessageDialog.openInformation(shell, DLG_TITLE, "The max. row count requires an integer value!");
 			txtMaxRowCount.setFocus();
 			return;
@@ -106,7 +106,7 @@ public class QueryPreferencePage extends PreferencePage implements IWorkbenchPre
 		try {
 			new SimpleDateFormat(txtDateFormat.getText());
 		}
-		catch (final IllegalArgumentException e) {
+		catch (final IllegalArgumentException _) {
 			MessageDialog.openInformation(shell, DLG_TITLE, "The date format is not valid!");
 			txtDateFormat.setFocus();
 			return;
@@ -116,7 +116,7 @@ public class QueryPreferencePage extends PreferencePage implements IWorkbenchPre
 		try {
 			new SimpleDateFormat(txtTimeFormat.getText());
 		}
-		catch (final IllegalArgumentException e) {
+		catch (final IllegalArgumentException _) {
 			MessageDialog.openInformation(shell, DLG_TITLE, "The time format is not valid!");
 			txtTimeFormat.setFocus();
 			return;
@@ -126,7 +126,7 @@ public class QueryPreferencePage extends PreferencePage implements IWorkbenchPre
 		try {
 			new DecimalFormat(txtNumberFormat.getText());
 		}
-		catch (final IllegalArgumentException e) {
+		catch (final IllegalArgumentException _) {
 			MessageDialog.openInformation(shell, DLG_TITLE, "The number format is not valid!");
 			txtTimeFormat.setFocus();
 			return;

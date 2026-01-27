@@ -162,7 +162,7 @@ public class ApplicationWizardPage extends WizardPage {
 
 		clientNamespace = txtNamespace.getText();
 
-		txtNamespace.addModifyListener(e -> validateNamespace(txtNamespace.getText()));
+		txtNamespace.addModifyListener(_ -> validateNamespace(txtNamespace.getText()));
 
 		final var groupServer = new Group(panPageArea, SWT.NONE);
 		groupServer.setText("Server");

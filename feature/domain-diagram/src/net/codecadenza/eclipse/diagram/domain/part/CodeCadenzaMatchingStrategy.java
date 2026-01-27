@@ -49,7 +49,7 @@ public class CodeCadenzaMatchingStrategy implements IEditorMatchingStrategy {
 		try {
 			editorInput = editorRef.getEditorInput();
 		}
-		catch (final PartInitException e) {
+		catch (final PartInitException _) {
 			return false;
 		}
 

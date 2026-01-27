@@ -297,7 +297,7 @@ public abstract class AbstractSearchableView {
 					try {
 						UUID.fromString(value);
 					}
-					catch (final IllegalArgumentException e) {
+					catch (final IllegalArgumentException _) {
 						throw new SearchInputFieldValidationException(searchField, "Error while converting field value to UUID!");
 					}
 			}
@@ -337,7 +337,7 @@ public abstract class AbstractSearchableView {
 				values[0] = searchField.getFilterCriteria();
 			}
 		}
-		catch (final IllegalArgumentException e) {
+		catch (final IllegalArgumentException _) {
 			throw new SearchInputFieldValidationException(searchField,
 					"Error while converting value of field '" + searchField.getColLabel() + "'!");
 		}

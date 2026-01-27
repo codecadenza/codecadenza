@@ -54,7 +54,7 @@ public class TabSheet extends Composite<Tabs> {
 	public TabSheet(HasComponents container) {
 		this.tabs.setWidthFull();
 
-		this.tabs.addSelectedChangeListener(event -> {
+		this.tabs.addSelectedChangeListener(_ -> {
 			// Hide all pages
 			this.pageMap.values().forEach(page -> page.setVisible(false));
 

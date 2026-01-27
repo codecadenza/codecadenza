@@ -313,7 +313,7 @@ public class EclipseGridPanelGenerator extends AbstractJavaSourceGenerator {
 
 		if (defaultReadonlyAction != null || defaultUpdateAction != null) {
 			b.append("// Add double-click listener\n");
-			b.append("super.getTableViewer().addDoubleClickListener(event ->\n");
+			b.append("super.getTableViewer().addDoubleClickListener(_ ->\n");
 			b.append("{\n");
 
 			if (defaultUpdateAction != null) {

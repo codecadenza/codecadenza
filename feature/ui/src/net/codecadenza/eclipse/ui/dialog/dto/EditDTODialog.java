@@ -362,7 +362,7 @@ public class EditDTODialog extends CodeCadenzaDialog {
 				return status.getMessage();
 
 			return dto.getAttributes().stream().filter(attr -> !attr.equals(dtoAttribute) && attr.getName().equals(newName)).findFirst()
-					.map(attr -> "A DTO attribute with the same name already exists!").orElse(null);
+					.map(_ -> "A DTO attribute with the same name already exists!").orElse(null);
 		});
 
 		if (dlg.open() != Window.OK)
@@ -509,7 +509,7 @@ public class EditDTODialog extends CodeCadenzaDialog {
 		treeDTOAttributes = new Tree(panAttributeSelection, SWT.BORDER);
 		treeDTOAttributes.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 
-		treeDTOAttributes.addMenuDetectListener(e -> {
+		treeDTOAttributes.addMenuDetectListener(_ -> {
 			treeDTOAttributes.setMenu(null);
 
 			final TreeItem selItem = getSelectedItem();

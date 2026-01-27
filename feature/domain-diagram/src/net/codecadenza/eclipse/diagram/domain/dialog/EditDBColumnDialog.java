@@ -190,7 +190,7 @@ public class EditDBColumnDialog extends CodeCadenzaDialog {
 			if (txtLength.isEnabled() && !txtLength.getText().isEmpty() && Integer.parseInt(txtLength.getText()) < 0)
 				throw new IllegalArgumentException();
 		}
-		catch (final RuntimeException e) {
+		catch (final RuntimeException _) {
 			MessageDialog.openInformation(getShell(), title, "The column length requires a positive integer value!");
 			txtLength.setFocus();
 			return false;
@@ -213,7 +213,7 @@ public class EditDBColumnDialog extends CodeCadenzaDialog {
 				if (precision < 1)
 					throw new IllegalArgumentException();
 			}
-			catch (final RuntimeException e) {
+			catch (final RuntimeException _) {
 				MessageDialog.openInformation(getShell(), title, "The precision requires a positive integer value!");
 				txtPrecision.setFocus();
 				return false;
@@ -229,7 +229,7 @@ public class EditDBColumnDialog extends CodeCadenzaDialog {
 
 					column.setScale(scale);
 				}
-				catch (final RuntimeException e) {
+				catch (final RuntimeException _) {
 					MessageDialog.openInformation(getShell(), title, "The scale requires a positive integer value!");
 					txtScale.setFocus();
 					return false;

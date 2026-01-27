@@ -175,7 +175,7 @@ public class SeleniumTestProperties extends Properties {
 			try {
 				return Long.parseLong(propertyValue);
 			}
-			catch (final NumberFormatException e) {
+			catch (final NumberFormatException _) {
 				logger.warn("Value '{}' for property '{}' could not be converted to long!", propertyValue, propertyName);
 			}
 

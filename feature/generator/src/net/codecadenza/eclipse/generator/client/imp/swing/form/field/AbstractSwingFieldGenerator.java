@@ -266,7 +266,7 @@ public abstract class AbstractSwingFieldGenerator extends AbstractRichClientFiel
 		}
 
 		b.append("\n");
-		b.append(fieldName + ".addActionListener(actionEvent ->\n");
+		b.append(fieldName + ".addActionListener(_ ->\n");
 		b.append("{\n");
 
 		if (readonlyForm != null) {

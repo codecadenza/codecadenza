@@ -137,11 +137,11 @@ public class ElementCollectionEditor<T> extends VBox {
 
 			final var txtAdd = new TextField();
 			txtAdd.setText(valueConverter.getInitialDefaultValue());
-			txtAdd.textProperty().addListener((observable, oldValue, newValue) -> refreshListView(newValue));
+			txtAdd.textProperty().addListener((_, _, newValue) -> refreshListView(newValue));
 
 			final var cmdAdd = new Button(getTranslation(CMD_ADD));
 
-			cmdAdd.setOnAction(e -> {
+			cmdAdd.setOnAction(_ -> {
 				if (txtAdd.getText().isEmpty())
 					return;
 
@@ -177,10 +177,10 @@ public class ElementCollectionEditor<T> extends VBox {
 			});
 
 			final var mniDelete = new MenuItem(getTranslation(ACTION_DELETE_TITLE));
-			mniDelete.setOnAction(action -> deleteSelectedItem());
+			mniDelete.setOnAction(_ -> deleteSelectedItem());
 
 			final var mniDeleteAll = new MenuItem(getTranslation(ACTION_DELETE_ALL_TITLE));
-			mniDeleteAll.setOnAction(action -> {
+			mniDeleteAll.setOnAction(_ -> {
 				elements.clear();
 				refreshListView(null);
 			});

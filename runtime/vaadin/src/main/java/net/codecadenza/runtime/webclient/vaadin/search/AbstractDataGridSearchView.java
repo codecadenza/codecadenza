@@ -79,7 +79,7 @@ public abstract class AbstractDataGridSearchView<T> extends AbstractDataGridView
 		final var cmdSearch = new Button(internalI18n.getTranslation(CMD_SEARCH));
 		cmdSearch.setIcon(new Icon(VaadinIcon.SEARCH));
 		cmdSearch.setId("cmdSearch");
-		cmdSearch.addClickListener(event -> openSearchInputDialog());
+		cmdSearch.addClickListener(_ -> openSearchInputDialog());
 
 		hlButtonBar.add(cmdSearch);
 	}

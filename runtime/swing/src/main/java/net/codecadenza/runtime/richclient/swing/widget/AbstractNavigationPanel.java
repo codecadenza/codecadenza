@@ -199,7 +199,7 @@ public abstract class AbstractNavigationPanel extends JPanel implements SearchDT
 
 		final var mniDelete = new JMenuItem(getTranslation(ABSTRACT_NAVIGATION_PANEL_MNI_DELETE));
 
-		mniDelete.addActionListener(e -> {
+		mniDelete.addActionListener(_ -> {
 			final var listDTO = (SearchListDTO) tree.getSelectedUserObject();
 			final String dialogTitle = getTranslation(ABSTRACT_NAVIGATION_PANEL_MSG_DELETE_QUERY_TITLE);
 

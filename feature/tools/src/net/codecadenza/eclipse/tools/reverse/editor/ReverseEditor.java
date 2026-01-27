@@ -259,7 +259,7 @@ public class ReverseEditor extends EditorPart implements ModelChangeListener {
 		// Add a special column sorter for the status column
 		final TableColumn colStatus = tabLogEntries.getTableViewer().getTable().getColumn(STATUS_COL_INDEX);
 
-		colStatus.addListener(SWT.Selection, event -> {
+		colStatus.addListener(SWT.Selection, _ -> {
 			final Table table = colStatus.getParent();
 			final TableColumn sortColumn = table.getSortColumn();
 			int sortDirection = table.getSortDirection();
@@ -303,7 +303,7 @@ public class ReverseEditor extends EditorPart implements ModelChangeListener {
 
 		final boolean valid = validationLog.stream()
 				.filter(log -> log.getSource() == Source.VALIDATION && log.getStatus() != ReverseEngineeringLogEntry.Status.INFO)
-				.findFirst().map(log -> false).orElse(true);
+				.findFirst().map(_ -> false).orElse(true);
 
 		// Disable the save action if the model contains errors or warnings!
 		itemValidateAndSave.setEnabled(valid);

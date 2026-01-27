@@ -57,7 +57,7 @@ public class WebApplicationLaunchStatus extends CountDownLatch {
 		try {
 			await();
 		}
-		catch (final InterruptedException e) {
+		catch (final InterruptedException _) {
 			Thread.currentThread().interrupt();
 			return false;
 		}

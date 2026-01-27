@@ -112,7 +112,7 @@ public abstract class AbstractJavaSourceGenerator {
 		if (protectManualChanges)
 			declarationMap.values().forEach(declaration -> fieldContent.append(declaration + "\n"));
 
-		if (!fieldContent.toString().isEmpty()) {
+		if (!fieldContent.isEmpty()) {
 			classBody.append(fieldContent);
 			classBody.append("\n");
 		}
@@ -139,7 +139,7 @@ public abstract class AbstractJavaSourceGenerator {
 			protectedSubClasses.forEach(subClass -> classBody.append(subClass + "\n\n"));
 
 			// Automatically import the package that contains internal generator annotations
-			if (!classBody.toString().isEmpty())
+			if (!classBody.isEmpty())
 				importClass(GENERATED_ELEMENT_ANNOTATION);
 		}
 
@@ -700,8 +700,8 @@ public abstract class AbstractJavaSourceGenerator {
 
 		if (!injectedFieldsOfSuperClass.isEmpty()) {
 			b.append("super(");
-			b.append(injectedFieldsOfSuperClass.stream().map(field -> "null").reduce((field1, field2) -> field1 + ", " + field2)
-					.orElseThrow());
+			b.append(
+					injectedFieldsOfSuperClass.stream().map(_ -> "null").reduce((field1, field2) -> field1 + ", " + field2).orElseThrow());
 			b.append(");\n");
 		}
 

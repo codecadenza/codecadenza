@@ -76,7 +76,7 @@ public class Navigator implements Serializable {
 			try {
 				encodedValue = URLEncoder.encode(id, StandardCharsets.UTF_8.toString());
 			}
-			catch (final UnsupportedEncodingException e) {
+			catch (final UnsupportedEncodingException _) {
 				// Ignored!
 			}
 

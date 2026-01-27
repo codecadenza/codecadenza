@@ -415,7 +415,7 @@ public abstract class AbstractProposalTextField<T> extends JTextField {
 		try {
 			initializePopup();
 		}
-		catch (final IllegalComponentStateException e) {
+		catch (final IllegalComponentStateException _) {
 			// The pop-up cannot be initialized at the moment as it isn't in an appropriate state (e.g. not visible on screen)!
 		}
 	}
@@ -447,7 +447,7 @@ public abstract class AbstractProposalTextField<T> extends JTextField {
 			try {
 				initializePopup();
 			}
-			catch (final IllegalComponentStateException e) {
+			catch (final IllegalComponentStateException _) {
 				// If we get an exception here we don't show the pop-up!
 				return;
 			}

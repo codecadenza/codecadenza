@@ -336,7 +336,7 @@ public abstract class AbstractLOVDialog<T> extends JTitleAreaDialog {
 		txtFilter.setColumns(10);
 
 		final var cmdFilter = new JButton(getTranslation(ABSTRACT_LOV_DIALOG_CMD_FILTER));
-		cmdFilter.addActionListener(action -> dataPanel.performFetch());
+		cmdFilter.addActionListener(_ -> dataPanel.performFetch());
 
 		getRootPane().setDefaultButton(cmdFilter);
 
@@ -496,7 +496,7 @@ public abstract class AbstractLOVDialog<T> extends JTitleAreaDialog {
 		if (allowDeselection) {
 			final var deselectButton = new JButton(getTranslation(ABSTRACT_LOV_DIALOG_CMD_DESELECT));
 
-			deselectButton.addActionListener(action -> {
+			deselectButton.addActionListener(_ -> {
 				idValue = null;
 				displayValue = null;
 				setReturnCode(RETURN_CODE_OK);

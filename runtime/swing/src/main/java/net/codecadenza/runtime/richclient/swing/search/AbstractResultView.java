@@ -316,7 +316,7 @@ public abstract class AbstractResultView<T> extends JInternalFrame implements St
 		getLogger().debug("Initialize view");
 
 		// Add an action listener to close the view if a user presses ESC
-		final ActionListener actionListener = actionEvent -> {
+		final ActionListener actionListener = _ -> {
 			AbstractResultView.this.getDesktopPane().getDesktopManager().closeFrame(AbstractResultView.this);
 			dispose();
 		};

@@ -108,7 +108,7 @@ public abstract class AbstractBaseDialog extends Stage {
 		final var button = new Button(label);
 		button.setDefaultButton(defaultButton);
 		button.setCancelButton(cancelButton);
-		button.setOnAction(e -> buttonPressed(type));
+		button.setOnAction(_ -> buttonPressed(type));
 
 		panButtons.getChildren().add(button);
 
@@ -201,7 +201,7 @@ public abstract class AbstractBaseDialog extends Stage {
 		panRoot.getChildren().add(new Separator());
 		panRoot.getChildren().add(createButtonBar());
 
-		setOnCloseRequest(e -> onClose());
+		setOnCloseRequest(_ -> onClose());
 
 		return panRoot;
 	}

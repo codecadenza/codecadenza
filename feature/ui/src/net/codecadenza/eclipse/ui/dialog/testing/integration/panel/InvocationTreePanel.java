@@ -479,7 +479,7 @@ public class InvocationTreePanel extends Composite {
 			}
 		});
 
-		treeInvocations.addMenuDetectListener(e -> {
+		treeInvocations.addMenuDetectListener(_ -> {
 			treeInvocations.setMenu(null);
 
 			if (getSelectedInvocation() != null)

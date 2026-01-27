@@ -159,7 +159,7 @@ public class IntegrationWizardPage extends WizardPage {
 
 		final var txtXmlNamespaceName = new Text(groupXMLBinding, SWT.BORDER);
 		txtXmlNamespaceName.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
-		txtXmlNamespaceName.addModifyListener(e -> applyXMLNamespace(txtXmlNamespaceName.getText()));
+		txtXmlNamespaceName.addModifyListener(_ -> applyXMLNamespace(txtXmlNamespaceName.getText()));
 		txtXmlNamespaceName.setText(DEFAULT_XML_NS);
 
 		final var lblXmlNamespacePrefix = new Label(groupXMLBinding, SWT.NONE);
@@ -167,7 +167,7 @@ public class IntegrationWizardPage extends WizardPage {
 
 		final var txtXmlNamespacePrefix = new Text(groupXMLBinding, SWT.BORDER);
 		txtXmlNamespacePrefix.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
-		txtXmlNamespacePrefix.addModifyListener(e -> xmlNamespacePrefix = txtXmlNamespacePrefix.getText());
+		txtXmlNamespacePrefix.addModifyListener(_ -> xmlNamespacePrefix = txtXmlNamespacePrefix.getText());
 		txtXmlNamespacePrefix.setText(DEFAULT_XML_PREFIX);
 
 		final var lblMappingStrategy = new Label(groupXMLBinding, SWT.NONE);
@@ -318,7 +318,7 @@ public class IntegrationWizardPage extends WizardPage {
 
 		txtSOAPNamespace = new Text(panSOAP, SWT.BORDER);
 		txtSOAPNamespace.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
-		txtSOAPNamespace.addModifyListener(e -> validateSOAPNamespace(txtSOAPNamespace.getText()));
+		txtSOAPNamespace.addModifyListener(_ -> validateSOAPNamespace(txtSOAPNamespace.getText()));
 
 		final var lblSOAPHandler = new Label(panSOAP, SWT.NONE);
 		lblSOAPHandler.setText("Add security handler:");
@@ -384,7 +384,7 @@ public class IntegrationWizardPage extends WizardPage {
 
 		txtRESTNamespace = new Text(panREST, SWT.BORDER);
 		txtRESTNamespace.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
-		txtRESTNamespace.addModifyListener(e -> validateRESTNamespace(txtRESTNamespace.getText()));
+		txtRESTNamespace.addModifyListener(_ -> validateRESTNamespace(txtRESTNamespace.getText()));
 
 		final var lblRESTHandler = new Label(panREST, SWT.NONE);
 		lblRESTHandler.setText("Add security handler:");
@@ -450,7 +450,7 @@ public class IntegrationWizardPage extends WizardPage {
 
 		txtRMINamespace = new Text(panRMI, SWT.BORDER);
 		txtRMINamespace.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
-		txtRMINamespace.addModifyListener(e -> validateRMINamespace(txtRMINamespace.getText()));
+		txtRMINamespace.addModifyListener(_ -> validateRMINamespace(txtRMINamespace.getText()));
 
 		final var lblRMIClient = new Label(panRMI, SWT.NONE);
 		lblRMIClient.setText("Add client:");
@@ -499,7 +499,7 @@ public class IntegrationWizardPage extends WizardPage {
 
 		txtKafkaNamespace = new Text(panKafka, SWT.BORDER);
 		txtKafkaNamespace.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
-		txtKafkaNamespace.addModifyListener(e -> validateKafkaNamespace(txtKafkaNamespace.getText()));
+		txtKafkaNamespace.addModifyListener(_ -> validateKafkaNamespace(txtKafkaNamespace.getText()));
 
 		final var lblKafkaClient = new Label(panKafka, SWT.NONE);
 		lblKafkaClient.setText("Add client:");
@@ -548,7 +548,7 @@ public class IntegrationWizardPage extends WizardPage {
 
 		txtJMSNamespace = new Text(panJMS, SWT.BORDER);
 		txtJMSNamespace.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
-		txtJMSNamespace.addModifyListener(e -> validateJMSNamespace(txtJMSNamespace.getText()));
+		txtJMSNamespace.addModifyListener(_ -> validateJMSNamespace(txtJMSNamespace.getText()));
 
 		final var lblJMSClient = new Label(panJMS, SWT.NONE);
 		lblJMSClient.setText("Add client:");

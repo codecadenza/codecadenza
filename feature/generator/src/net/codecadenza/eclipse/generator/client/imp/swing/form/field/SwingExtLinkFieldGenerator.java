@@ -108,7 +108,7 @@ public class SwingExtLinkFieldGenerator extends AbstractSwingFieldGenerator {
 		final var notSupportedMsg = "This operating system doesn't support opening links in external applications!";
 
 		b.append(super.getFieldDefinitionFragment(hasOneColumn));
-		b.append(field.getName() + ".addActionListener(actionEvent ->\n");
+		b.append(field.getName() + ".addActionListener(_ ->\n");
 		b.append("{\n");
 		b.append("try\n");
 		b.append("{\n");

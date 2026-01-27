@@ -160,7 +160,7 @@ public class DatabaseInvocationCompletionHandler implements IInvocationCompletio
 
 			throw new ServiceProcessingException("Error while processing SQL statement!", e);
 		}
-		catch (final TimeoutException e) {
+		catch (final TimeoutException _) {
 			throw new InvocationCompletionTimeoutException("Waiting for invocation completion took to long!");
 		}
 		finally {

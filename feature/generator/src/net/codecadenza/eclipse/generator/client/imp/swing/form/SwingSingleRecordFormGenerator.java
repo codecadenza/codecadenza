@@ -919,7 +919,7 @@ public class SwingSingleRecordFormGenerator extends AbstractSingleRecordFormGene
 		form.getAllFormFields().forEach(
 				field -> val.append(SwingFieldGeneratorFactory.getFieldGenerator(this, field, i18n).getValidationFragment(true)));
 
-		if (!val.toString().isEmpty()) {
+		if (!val.isEmpty()) {
 			for (final FormField field : form.getAllFormFields()) {
 				final FormFieldTypeEnumeration fieldType = field.getFieldType();
 
@@ -967,7 +967,7 @@ public class SwingSingleRecordFormGenerator extends AbstractSingleRecordFormGene
 				b.append("final var " + toolItemName + " = new JButton();\n");
 				b.append(toolItemName + ".setText(" + i18n.getI18NMessage("action_name_download", "Download") + ");\n");
 				b.append(toolItemName + ".setIcon(ImageLoader.getImage(ImageLoader.DOWNLOAD));\n\n");
-				b.append(toolItemName + ".addActionListener(actionEvent ->\n");
+				b.append(toolItemName + ".addActionListener(_ ->\n");
 				b.append("{\n");
 				b.append(new SwingFileHandlingGenerator(this, a, i18n).createDownloadMethodBody(true, form.getName()));
 				b.append("});\n\n");
@@ -984,7 +984,7 @@ public class SwingSingleRecordFormGenerator extends AbstractSingleRecordFormGene
 				b.append("final var " + toolItemName + " = new JButton();\n");
 				b.append(toolItemName + ".setText(" + i18n.getI18NMessage("action_name_upload", "Upload") + ");\n");
 				b.append(toolItemName + ".setIcon(ImageLoader.getImage(ImageLoader.UPLOAD));\n\n");
-				b.append(toolItemName + ".addActionListener(actionEvent ->\n");
+				b.append(toolItemName + ".addActionListener(_ ->\n");
 				b.append("{\n");
 				b.append("final var fc = new JFileChooser();\n");
 				b.append("fc.setFileSelectionMode(JFileChooser.FILES_ONLY);\n");
@@ -1080,7 +1080,7 @@ public class SwingSingleRecordFormGenerator extends AbstractSingleRecordFormGene
 				b.append("final var " + toolItemName + " = new JButton();\n");
 				b.append(toolItemName + ".setText(" + i18n.getI18NMessage("action_name_browse", "Browse") + ");\n");
 				b.append(toolItemName + ".setIcon(ImageLoader.getImage(ImageLoader.UPLOAD));\n\n");
-				b.append(toolItemName + ".addActionListener(actionEvent ->\n");
+				b.append(toolItemName + ".addActionListener(_ ->\n");
 				b.append("{\n");
 				b.append("final var fc = new JFileChooser();\n");
 				b.append("fc.setFileSelectionMode(JFileChooser.FILES_ONLY);\n");

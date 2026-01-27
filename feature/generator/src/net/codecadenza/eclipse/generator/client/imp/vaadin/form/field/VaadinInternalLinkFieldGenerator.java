@@ -106,7 +106,7 @@ public class VaadinInternalLinkFieldGenerator extends AbstractVaadinFieldGenerat
 			}
 		}
 
-		b.append(field.getName() + " = new InternalDialogLinkField<>(event ->\n");
+		b.append(field.getName() + " = new InternalDialogLinkField<>(_ ->\n");
 		b.append("{\n");
 		b.append("final " + listDTO.getModelClassName() + " item = " + field.getName() + ".getValue();\n\n");
 		b.append("if(item == null)\n");

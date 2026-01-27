@@ -128,7 +128,7 @@ public class WebApplicationMonitor {
 
 			return connection.getResponseCode() == HttpURLConnection.HTTP_OK;
 		}
-		catch (final Exception e) {
+		catch (final Exception _) {
 			// Ignore all exceptions here!
 		}
 

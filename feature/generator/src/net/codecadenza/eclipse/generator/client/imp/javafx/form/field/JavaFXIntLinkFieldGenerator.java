@@ -137,7 +137,7 @@ public class JavaFXIntLinkFieldGenerator extends AbstractJavaFXFieldGenerator {
 			return "";
 
 		b.append(field.getName() + " = new Hyperlink();\n");
-		b.append(field.getName() + ".setOnAction(event ->\n");
+		b.append(field.getName() + ".setOnAction(_ ->\n");
 		b.append("{\n");
 
 		if (readonlyForm != null) {

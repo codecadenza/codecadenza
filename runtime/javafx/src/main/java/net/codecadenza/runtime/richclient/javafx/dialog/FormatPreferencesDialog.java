@@ -120,7 +120,7 @@ public class FormatPreferencesDialog extends AbstractBaseDialog {
 		try {
 			dateFormat.applyPattern(txtDateFormat.getText());
 		}
-		catch (final Exception e) {
+		catch (final Exception _) {
 			DialogUtil.openInformationDialog(this, title, getTranslation(FORMAT_PREFERENCES_DIALOG_MSG_INVALID_DATE));
 
 			txtDateFormat.requestFocus();
@@ -137,7 +137,7 @@ public class FormatPreferencesDialog extends AbstractBaseDialog {
 		try {
 			dateFormat.applyPattern(txtDateTimeFormat.getText());
 		}
-		catch (final Exception e) {
+		catch (final Exception _) {
 			DialogUtil.openInformationDialog(this, title, getTranslation(FORMAT_PREFERENCES_DIALOG_MSG_INVALID_DATE_TIME));
 
 			txtDateTimeFormat.requestFocus();
@@ -155,7 +155,7 @@ public class FormatPreferencesDialog extends AbstractBaseDialog {
 			decimalFormat.applyPattern(txtDecimalFormat.getText());
 			decimalFormat.format(1.00);
 		}
-		catch (final Exception e) {
+		catch (final Exception _) {
 			DialogUtil.openInformationDialog(this, title, getTranslation(FORMAT_PREFERENCES_DIALOG_MSG_INVALID_NUMBER));
 
 			txtDecimalFormat.requestFocus();

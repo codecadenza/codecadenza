@@ -186,7 +186,7 @@ public class EditDatabasePropertiesDialog extends CodeCadenzaDialog {
 				return false;
 			}
 		}
-		catch (final NumberFormatException p) {
+		catch (final NumberFormatException _) {
 			MessageDialog.openInformation(getShell(), DLG_TITLE, "The max. identifier length requires an integer value!");
 			txtMaxIdentifierLength.setFocus();
 			return false;
@@ -211,7 +211,7 @@ public class EditDatabasePropertiesDialog extends CodeCadenzaDialog {
 		try {
 			Pattern.compile(inputToCheck);
 		}
-		catch (final PatternSyntaxException e) {
+		catch (final PatternSyntaxException _) {
 			MessageDialog.openInformation(getShell(), DLG_TITLE, "The regular expression for database identifiers is not valid!");
 			txtIdentifierRegEx.setFocus();
 			return false;

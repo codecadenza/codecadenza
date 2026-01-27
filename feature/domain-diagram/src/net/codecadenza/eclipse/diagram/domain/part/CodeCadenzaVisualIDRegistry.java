@@ -112,7 +112,7 @@ public class CodeCadenzaVisualIDRegistry {
 		try {
 			return Integer.parseInt(type);
 		}
-		catch (final NumberFormatException e) {
+		catch (final NumberFormatException _) {
 			if (Boolean.TRUE.toString().equalsIgnoreCase(Platform.getDebugOption(DEBUG_KEY)))
 				CodeCadenzaDiagramEditorPlugin.getInstance().logError("Unable to parse view type as a visualID number: " + type, null);
 		}

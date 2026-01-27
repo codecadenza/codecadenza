@@ -546,7 +546,7 @@ public class EditUpdateFormDialog extends CodeCadenzaTitleAreaDialog {
 			setMessage("Insert form data");
 		}
 
-		txtTitle.addModifyListener(e -> {
+		txtTitle.addModifyListener(_ -> {
 			if (panPreview == null)
 				return;
 
@@ -589,7 +589,7 @@ public class EditUpdateFormDialog extends CodeCadenzaTitleAreaDialog {
 		chkResizable = new Button(groupBasicData, SWT.CHECK);
 
 		// Resize the form in the visual editor if the user changes the width or the height
-		txtHeight.addModifyListener(e -> {
+		txtHeight.addModifyListener(_ -> {
 			if (panPreview == null)
 				return;
 
@@ -599,12 +599,12 @@ public class EditUpdateFormDialog extends CodeCadenzaTitleAreaDialog {
 				if (newHeight > 0)
 					panPreview.setFormHeight(newHeight);
 			}
-			catch (final NumberFormatException e1) {
+			catch (final NumberFormatException _) {
 				// Ignored!
 			}
 		});
 
-		txtWidth.addModifyListener(e -> {
+		txtWidth.addModifyListener(_ -> {
 			if (panPreview == null)
 				return;
 
@@ -614,7 +614,7 @@ public class EditUpdateFormDialog extends CodeCadenzaTitleAreaDialog {
 				if (newWidth > 0)
 					panPreview.setFormWidth(newWidth);
 			}
-			catch (final NumberFormatException e1) {
+			catch (final NumberFormatException _) {
 				// Ignored!
 			}
 		});
@@ -784,7 +784,7 @@ public class EditUpdateFormDialog extends CodeCadenzaTitleAreaDialog {
 			try {
 				Integer.parseInt(txtWidth.getText());
 			}
-			catch (final NumberFormatException e) {
+			catch (final NumberFormatException _) {
 				MessageDialog.openInformation(getShell(), title, "The form width requires an integer value!");
 				txtWidth.setFocus();
 				return false;
@@ -793,7 +793,7 @@ public class EditUpdateFormDialog extends CodeCadenzaTitleAreaDialog {
 			try {
 				Integer.parseInt(txtHeight.getText());
 			}
-			catch (final NumberFormatException e) {
+			catch (final NumberFormatException _) {
 				MessageDialog.openInformation(getShell(), title, "The form height requires an integer value!");
 				txtHeight.setFocus();
 				return false;

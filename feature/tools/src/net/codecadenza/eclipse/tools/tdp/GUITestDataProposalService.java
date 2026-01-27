@@ -191,12 +191,12 @@ public class GUITestDataProposalService {
 				// Don't wait too long in order to avoid freezing the GUI!
 				return result.get(CONNECTION_TIMEOUT, TimeUnit.SECONDS);
 			}
-			catch (final InterruptedException e) {
+			catch (final InterruptedException _) {
 				Thread.currentThread().interrupt();
 
 				CodeCadenzaToolsPlugin.getInstance().logInfo("Operation has been interrupted!");
 			}
-			catch (ExecutionException | TimeoutException e) {
+			catch (ExecutionException | TimeoutException _) {
 				CodeCadenzaToolsPlugin.getInstance().logInfo("Database connection test timed out!");
 			}
 
@@ -254,12 +254,12 @@ public class GUITestDataProposalService {
 				// Don't wait too long in order to avoid freezing the GUI!
 				return result.get(LOOKUP_TIMEOUT, TimeUnit.SECONDS);
 			}
-			catch (final InterruptedException e) {
+			catch (final InterruptedException _) {
 				Thread.currentThread().interrupt();
 
 				CodeCadenzaToolsPlugin.getInstance().logInfo("Operation was interrupted!");
 			}
-			catch (ExecutionException | TimeoutException e) {
+			catch (ExecutionException | TimeoutException _) {
 				CodeCadenzaToolsPlugin.getInstance().logInfo("Database lookup operation timed out!");
 			}
 

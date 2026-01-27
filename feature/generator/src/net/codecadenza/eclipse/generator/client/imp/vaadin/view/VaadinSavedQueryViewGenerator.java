@@ -162,11 +162,11 @@ public class VaadinSavedQueryViewGenerator extends AbstractJavaSourceGenerator {
 		b.append("final var panList = new BorderPanel(null);\n");
 		b.append("panList.add(listSavedQueries);\n\n");
 		b.append("final var cmdRun = new Button(" + i18n.getI18NMessage("cmd_run", "Run") + ");\n");
-		b.append("cmdRun.addClickListener(clickEvent -> openSavedQuery());\n\n");
+		b.append("cmdRun.addClickListener(_ -> openSavedQuery());\n\n");
 		b.append("final var cmdDelete = new Button(" + i18n.getI18NMessage("cmd_delete", "Delete") + ");\n");
-		b.append("cmdDelete.addClickListener(clickEvent -> deleteSavedQuery());\n\n");
+		b.append("cmdDelete.addClickListener(_ -> deleteSavedQuery());\n\n");
 		b.append("final var cmdCancel = new Button(" + i18n.getI18NMessage("cmd_cancel", "Cancel") + ");\n");
-		b.append("cmdCancel.addClickListener(clickEvent -> navigator.navigateBack());\n\n");
+		b.append("cmdCancel.addClickListener(_ -> navigator.navigateBack());\n\n");
 		b.append("final var hlButtons = new HorizontalLayout();\n");
 		b.append("hlButtons.add(cmdRun, cmdDelete, cmdCancel);\n\n");
 		b.append("add(lblList, panList, hlButtons);\n\n");

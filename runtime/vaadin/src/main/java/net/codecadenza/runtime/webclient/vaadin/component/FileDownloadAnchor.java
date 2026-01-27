@@ -58,7 +58,7 @@ public class FileDownloadAnchor extends Anchor {
 
 		getElement().setAttribute("download", true);
 
-		getElement().getNode().runWhenAttached(ui -> ui.beforeClientResponse(this, execution -> {
+		getElement().getNode().runWhenAttached(ui -> ui.beforeClientResponse(this, _ -> {
 			ui.getSession().addRequestHandler(this.requestHandler);
 
 			setHref("./" + handlerId);

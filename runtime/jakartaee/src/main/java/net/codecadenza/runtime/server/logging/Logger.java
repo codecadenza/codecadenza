@@ -61,7 +61,7 @@ public class Logger {
 		try {
 			loggingLevelValue = new PropertyService().getIntProperty(PropertyService.PROP_LOGGING_LEVEL);
 		}
-		catch (final IllegalPropertyValueException e) {
+		catch (final IllegalPropertyValueException _) {
 			// It might be the case that the configuration file does not contain the respective property!
 			loggingLevelValue = DISABLED;
 		}

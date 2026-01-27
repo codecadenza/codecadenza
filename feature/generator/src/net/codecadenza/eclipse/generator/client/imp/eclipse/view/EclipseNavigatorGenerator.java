@@ -234,7 +234,7 @@ public class EclipseNavigatorGenerator extends AbstractNavigatorGenerator {
 		b.append("item.setImage(ImageCache.getImage(IMG_FOLDER_OPEN));\n");
 		b.append("}\n");
 		b.append("});\n\n");
-		b.append("tree.addMenuDetectListener(event ->\n");
+		b.append("tree.addMenuDetectListener(_ ->\n");
 		b.append("{\n");
 		b.append("tree.setMenu(null);\n\n");
 		b.append("TreeItem selItem = null;\n\n");

@@ -190,7 +190,7 @@ public abstract class AbstractSearchGridView<T> extends AbstractDataGridView<T> 
 
 				getStatusBar().setText(getTranslation(ACTION_SAVE_QUERY_MSG_QUERY_SAVED));
 			}
-			catch (final DuplicateSearchNameException ex) {
+			catch (final DuplicateSearchNameException _) {
 				final String message = getTranslation(ACTION_SAVE_QUERY_MSG_QUERY_DUPLICATE, queryName);
 
 				DialogUtil.openWarningDialog(null, dialogTitle, message);
@@ -331,7 +331,7 @@ public abstract class AbstractSearchGridView<T> extends AbstractDataGridView<T> 
 
 		super.initialize();
 
-		setOnClosed(e -> saveSearch());
+		setOnClosed(_ -> saveSearch());
 	}
 
 	/*

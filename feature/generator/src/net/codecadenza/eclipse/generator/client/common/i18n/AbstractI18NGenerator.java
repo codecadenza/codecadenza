@@ -297,8 +297,8 @@ public abstract class AbstractI18NGenerator {
 
 		key += panel.getName() + TITLE_SUFFIX;
 
-		propertiesEN.computeIfAbsent(ADMIN_PANEL_KEY, translationKey -> ADMIN_PANEL_TITLE);
-		propertiesEN.computeIfAbsent(BASIC_PANEL_KEY, translationKey -> BASIC_PANEL_TITLE);
+		propertiesEN.computeIfAbsent(ADMIN_PANEL_KEY, _ -> ADMIN_PANEL_TITLE);
+		propertiesEN.computeIfAbsent(BASIC_PANEL_KEY, _ -> BASIC_PANEL_TITLE);
 
 		// Don't create a separate translation entry if the panel has a default title!
 		if (propertiesEN.get(ADMIN_PANEL_KEY).equals(panel.getLabel()))

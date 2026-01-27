@@ -117,7 +117,7 @@ public class ElementCollectionTestDataAttributePanel extends AbstractTestDataAtt
 					// Check if the entered value string can be converted to the target type
 					valueConverter.convertToValue(txtNewElement.getText());
 				}
-				catch (final Exception ex) {
+				catch (final Exception _) {
 					MessageDialog.openInformation(getShell(), "Add new element", "The value could not be converted to " + className + "!");
 					return;
 				}

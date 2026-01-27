@@ -1635,7 +1635,7 @@ public class DomainObjectImpl extends JavaTypeImpl implements DomainObject {
 		final var allAttributes = new ArrayList<>(getAllAttributes());
 		allAttributes.addAll(otoAttributes);
 
-		return allAttributes.stream().filter(DomainAttribute::isLob).findFirst().map(attr -> false).orElse(true);
+		return allAttributes.stream().filter(DomainAttribute::isLob).findFirst().map(_ -> false).orElse(true);
 	}
 
 	/*

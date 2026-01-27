@@ -305,7 +305,7 @@ public class EditDataExchangeAttributeDialog extends CodeCadenzaDialog {
 			try {
 				Integer.parseInt(txtOrder.getText());
 			}
-			catch (final NumberFormatException e) {
+			catch (final NumberFormatException _) {
 				MessageDialog.openInformation(getShell(), title, "The attribute order requires an integer value!");
 				txtOrder.setFocus();
 				return false;
@@ -375,7 +375,7 @@ public class EditDataExchangeAttributeDialog extends CodeCadenzaDialog {
 					else if (type.isBigDecimal())
 						new BigDecimal(txtDefault.getText());
 				}
-				catch (final NumberFormatException e) {
+				catch (final NumberFormatException _) {
 					MessageDialog.openInformation(getShell(), title, "The default value is not valid!");
 					txtDefault.setFocus();
 					return false;

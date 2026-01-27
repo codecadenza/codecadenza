@@ -530,40 +530,40 @@ public class VaadinCommonDataTableGenerator {
 			if (action.getTargetForm() != null) {
 				if (action.getTargetForm().getFormType() == FormTypeEnumeration.CREATE) {
 					itemContent.append("contextMenu.addItem(" + i18n.getI18NMessage("action_name_create", "Create") + ", ");
-					itemContent.append("event -> " + methodName + "())");
+					itemContent.append("_ -> " + methodName + "())");
 					itemContent.append(".setId(getId().orElseThrow() + \"_mniCreate\");\n");
 				}
 				else if (action.getTargetForm().getFormType() == FormTypeEnumeration.ADD) {
 					itemContent.append("contextMenu.addItem(" + i18n.getI18NMessage("action_name_add", "Add") + ", ");
-					itemContent.append("event -> " + methodName + "())");
+					itemContent.append("_ -> " + methodName + "())");
 					itemContent.append(".setId(getId().orElseThrow() + \"_mniAdd\");\n");
 				}
 				else if (action.getTargetForm().getFormType() == FormTypeEnumeration.READONLY) {
 					addReadOnlyTest = false;
 
 					itemContent.append("contextMenu.addItem(" + i18n.getI18NMessage("action_name_view", "View") + ", ");
-					itemContent.append("event -> " + methodName + "())");
+					itemContent.append("_ -> " + methodName + "())");
 					itemContent.append(".setId(getId().orElseThrow() + \"_mniView\");\n");
 				}
 				else if (action.getTargetForm().getFormType() == FormTypeEnumeration.UPDATE) {
 					itemContent.append("contextMenu.addItem(" + i18n.getI18NMessage("action_name_edit", "Edit") + ", ");
-					itemContent.append("event -> " + methodName + "())");
+					itemContent.append("_ -> " + methodName + "())");
 					itemContent.append(".setId(getId().orElseThrow() + \"_mniEdit\");\n");
 				}
 			}
 			else if (action.getType() == ActionType.DELETE) {
 				itemContent.append("contextMenu.addItem(" + i18n.getI18NMessage("action_name_delete", "Delete") + ", ");
-				itemContent.append("event -> " + methodName + "())");
+				itemContent.append("_ -> " + methodName + "())");
 				itemContent.append(".setId(getId().orElseThrow() + \"_mniDelete\");\n");
 			}
 			else if (action.getType() == ActionType.COPY) {
 				itemContent.append("contextMenu.addItem(" + i18n.getI18NMessage("action_name_copy", "Create copy") + ", ");
-				itemContent.append("event -> " + methodName + "())");
+				itemContent.append("_ -> " + methodName + "())");
 				itemContent.append(".setId(getId().orElseThrow() + \"_mniCopy\");\n");
 			}
 			else if (action.getType() == ActionType.UPLOAD_IMPORT) {
 				itemContent.append("contextMenu.addItem(" + i18n.getI18NMessage("action_name_import", "Import data") + ", ");
-				itemContent.append("event -> " + methodName + "())");
+				itemContent.append("_ -> " + methodName + "())");
 				itemContent.append(".setId(getId().orElseThrow() + \"_mniImport\");\n");
 			}
 			else if (action.getType() == ActionType.DOWNLOAD) {
@@ -585,7 +585,7 @@ public class VaadinCommonDataTableGenerator {
 				if (exchangeMethod.isProcessSingleObject() || exchangeMethod.returnsContent() || exchangeMethod.returnsPath())
 					itemContent.append("null");
 				else
-					itemContent.append("event -> " + methodName + "()");
+					itemContent.append("_ -> " + methodName + "()");
 
 				itemContent.append(").setId(getId().orElseThrow() + \"_mniExport\");\n");
 			}
@@ -623,7 +623,7 @@ public class VaadinCommonDataTableGenerator {
 				sb.append("final var cmdCreateNew = new Button(" + i18n.getI18NMessage("cmd_create", "Create new") + ");\n");
 				sb.append("cmdCreateNew.setIcon(new Icon(VaadinIcon.FILE_ADD));\n");
 				sb.append("cmdCreateNew.setId(getId().orElseThrow() + \"_cmdCreate\");\n");
-				sb.append("cmdCreateNew.addClickListener(event -> open" + action.getTargetForm().getName() + "());\n\n");
+				sb.append("cmdCreateNew.addClickListener(_ -> open" + action.getTargetForm().getName() + "());\n\n");
 				sb.append("hlButtonBar.add(cmdCreateNew);\n");
 
 				methodBody.append("\n");
@@ -667,7 +667,7 @@ public class VaadinCommonDataTableGenerator {
 			methodBody.append("\nfinal var cmdCreateSavedQuery = new Button(");
 			methodBody.append(i18n.getI18NMessage("cmd_save_query", "Save query") + ");\n");
 			methodBody.append("cmdCreateSavedQuery.setIcon(new Icon(VaadinIcon.PLUS_CIRCLE));\n\n");
-			methodBody.append("cmdCreateSavedQuery.addClickListener(clickEvent ->\n");
+			methodBody.append("cmdCreateSavedQuery.addClickListener(_ ->\n");
 			methodBody.append("{\n");
 			methodBody.append("final String dialogTitle = ");
 			methodBody.append(i18n.getI18NMessage("msg_title_create_saved_query", "Save query") + ";\n");
@@ -702,7 +702,7 @@ public class VaadinCommonDataTableGenerator {
 			methodBody.append("final var cmdSavedQueries = new Button(");
 			methodBody.append(i18n.getI18NMessage("cmd_open_saved_queries", "Saved queries") + ");\n");
 			methodBody.append("cmdSavedQueries.setIcon(new Icon(VaadinIcon.PLUS_CIRCLE));\n\n");
-			methodBody.append("cmdSavedQueries.addClickListener(event ->\n");
+			methodBody.append("cmdSavedQueries.addClickListener(_ ->\n");
 			methodBody.append("{\n");
 			methodBody.append("try\n");
 			methodBody.append("{\n");
@@ -718,7 +718,7 @@ public class VaadinCommonDataTableGenerator {
 			methodBody.append("hlButtonBar.add(cmdSavedQueries);\n");
 		}
 
-		if (methodBody.toString().isEmpty())
+		if (methodBody.isEmpty())
 			return;
 
 		final var b = new StringBuilder();
@@ -799,7 +799,7 @@ public class VaadinCommonDataTableGenerator {
 
 		if (method.getMethodParameters().size() == 1) {
 			b.append("final var dlg = new FileUploadDialog(" + locale + ");\n\n");
-			b.append("dlg.setUploadFinishedListener((File uploadFile, String originalFileName) ->\n");
+			b.append("dlg.setUploadFinishedListener((File uploadFile, String _) ->\n");
 			b.append("{\n");
 			b.append("final String dialogTitle = " + i18n.getI18NMessage("msg_title_data_import", "Data import") + ";\n\n");
 

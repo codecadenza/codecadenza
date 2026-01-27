@@ -516,7 +516,7 @@ public class JavaFXSingleRecordFormGenerator extends AbstractSingleRecordFormGen
 				b.append("VBox.setVgrow(tabFolder1, Priority.ALWAYS);\n\n");
 
 			if (!lazyLoadMap1.isEmpty()) {
-				b.append("tabFolder1.setOnMouseClicked(e ->\n");
+				b.append("tabFolder1.setOnMouseClicked(_ ->\n");
 				b.append("{\n");
 				b.append("if(tableLoadMap1.get(tabFolder1.getSelectionModel().getSelectedIndex()) == null)\n");
 				b.append("return;\n\n");
@@ -556,7 +556,7 @@ public class JavaFXSingleRecordFormGenerator extends AbstractSingleRecordFormGen
 			b.append("VBox.setVgrow(tabFolder2, Priority.ALWAYS);\n\n");
 
 			if (!lazyLoadMap2.isEmpty()) {
-				b.append("tabFolder2.setOnMouseClicked(e ->\n");
+				b.append("tabFolder2.setOnMouseClicked(_ ->\n");
 				b.append("{\n");
 				b.append("if(tableLoadMap2.get(tabFolder2.getSelectionModel().getSelectedIndex()) == null)\n");
 				b.append("return;\n\n");
@@ -806,7 +806,7 @@ public class JavaFXSingleRecordFormGenerator extends AbstractSingleRecordFormGen
 		form.getAllFormFields().forEach(field -> val
 				.append(JavaFXFieldGeneratorFactory.getFieldGenerator(this, field, i18n).getValidationFragment(form.isTitleArea())));
 
-		if (!val.toString().isEmpty()) {
+		if (!val.isEmpty()) {
 			for (final FormField field : form.getAllFormFields()) {
 				final FormFieldTypeEnumeration fieldType = field.getFieldType();
 
@@ -859,7 +859,7 @@ public class JavaFXSingleRecordFormGenerator extends AbstractSingleRecordFormGen
 			if (a.getType() == ActionType.DOWNLOAD) {
 				b.append("final Button " + buttonName + " = addButton(DialogButtonType.DOWNLOAD, ");
 				b.append(i18n.getI18NMessage("action_name_download", "Download") + ", false, false);\n\n");
-				b.append(buttonName + ".setOnAction(event ->\n{\n");
+				b.append(buttonName + ".setOnAction(_ ->\n{\n");
 				b.append(new JavaFXFileHandlingGenerator(this, a, i18n).createDownloadMethodBody(true, "this"));
 				b.append("});\n\n");
 			}
@@ -871,7 +871,7 @@ public class JavaFXSingleRecordFormGenerator extends AbstractSingleRecordFormGen
 
 				b.append("final Button " + buttonName + " = addButton(DialogButtonType.UPLOAD, ");
 				b.append(i18n.getI18NMessage("action_name_upload", "Upload") + ", false, false);\n\n");
-				b.append(buttonName + ".setOnAction(event ->\n{\n");
+				b.append(buttonName + ".setOnAction(_ ->\n{\n");
 				b.append("final var fc = new FileChooser();\n");
 				b.append("fc.setTitle(" + i18n.getI18NMessage("file_upload_dialog", "Select file to upload") + ");\n\n");
 				b.append("final File sourceFile = fc.showOpenDialog(this);\n\n");
@@ -945,7 +945,7 @@ public class JavaFXSingleRecordFormGenerator extends AbstractSingleRecordFormGen
 
 				b.append("final Button " + buttonName + " = addButton(DialogButtonType.UPLOAD, ");
 				b.append(i18n.getI18NMessage("action_name_browse", "Browse") + ", false, false);\n\n");
-				b.append(buttonName + ".setOnAction(event ->\n{\n");
+				b.append(buttonName + ".setOnAction(_ ->\n{\n");
 				b.append("final var fc = new FileChooser();\n");
 				b.append("fc.setTitle(" + i18n.getI18NMessage("file_upload_dialog", "Select file to upload") + ");\n\n");
 				b.append("final File sourceFile = fc.showOpenDialog(this);\n\n");

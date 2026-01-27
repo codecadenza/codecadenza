@@ -385,7 +385,7 @@ public class NewDomainAttributeDialog extends CodeCadenzaDialog {
 				if (!txtValidatorMaxLength.getText().isEmpty())
 					enteredMaxLength = Integer.parseInt(txtValidatorMaxLength.getText());
 			}
-			catch (final NumberFormatException e) {
+			catch (final NumberFormatException _) {
 				// Ignored!
 			}
 
@@ -1234,7 +1234,7 @@ public class NewDomainAttributeDialog extends CodeCadenzaDialog {
 					domainAttribute.getDomainAttributeValidator().setMinLength(minLength);
 				}
 			}
-			catch (final RuntimeException e) {
+			catch (final RuntimeException _) {
 				MessageDialog.openInformation(getShell(), DLG_TITLE, "The min. length requires a positive integer value!");
 				return false;
 			}
@@ -1263,7 +1263,7 @@ public class NewDomainAttributeDialog extends CodeCadenzaDialog {
 				else if (domainAttribute.getJavaType().isUUID() && requiresLength)
 					column.setLength(Integer.parseInt(txtValidatorMaxLength.getText()));
 			}
-			catch (final RuntimeException e) {
+			catch (final RuntimeException _) {
 				MessageDialog.openInformation(getShell(), DLG_TITLE, "The max. length requires a positive integer value!");
 				return false;
 			}
@@ -1287,7 +1287,7 @@ public class NewDomainAttributeDialog extends CodeCadenzaDialog {
 
 					column.setPrecision(precision);
 				}
-				catch (final RuntimeException e) {
+				catch (final RuntimeException _) {
 					MessageDialog.openInformation(getShell(), DLG_TITLE, "The precision requires a positive integer value!");
 					return false;
 				}
@@ -1302,7 +1302,7 @@ public class NewDomainAttributeDialog extends CodeCadenzaDialog {
 
 						column.setScale(scale);
 					}
-					catch (final RuntimeException e) {
+					catch (final RuntimeException _) {
 						MessageDialog.openInformation(getShell(), DLG_TITLE, "The scale requires a positive integer value!");
 						return false;
 					}

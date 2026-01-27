@@ -265,7 +265,7 @@ public class EditBoundaryBeanDialog extends CodeCadenzaDialog {
 				.createFont(this.getShell().getDisplay());
 
 		sashForm.setWeights(1, 1);
-		sashForm.addDisposeListener(e -> virtualMethodFont.dispose());
+		sashForm.addDisposeListener(_ -> virtualMethodFont.dispose());
 
 		return panDialogArea;
 	}

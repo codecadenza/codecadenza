@@ -77,7 +77,7 @@ public class ZipFileUtil {
 			zipFiles.add(entry.getName());
 		}
 
-		new ImportOperation(destPath, structureProvider.getRoot(), structureProvider, file -> IOverwriteQuery.YES).run(monitor);
+		new ImportOperation(destPath, structureProvider.getRoot(), structureProvider, _ -> IOverwriteQuery.YES).run(monitor);
 
 		return zipFiles;
 	}

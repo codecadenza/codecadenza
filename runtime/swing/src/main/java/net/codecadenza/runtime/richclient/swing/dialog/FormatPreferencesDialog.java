@@ -178,7 +178,7 @@ public class FormatPreferencesDialog extends JTitleAreaDialog {
 		try {
 			dateFormat.applyPattern(txtDateFormat.getText());
 		}
-		catch (final Exception e) {
+		catch (final Exception _) {
 			this.setErrorMessage(getTranslation(FORMAT_PREFERENCES_DIALOG_MSG_INVALID_DATE));
 			txtDateFormat.requestFocusInWindow();
 			return;
@@ -193,7 +193,7 @@ public class FormatPreferencesDialog extends JTitleAreaDialog {
 		try {
 			dateFormat.applyPattern(txtDateTimeFormat.getText());
 		}
-		catch (final Exception e) {
+		catch (final Exception _) {
 			this.setErrorMessage(getTranslation(FORMAT_PREFERENCES_DIALOG_MSG_INVALID_DATE_TIME));
 			txtDateTimeFormat.requestFocusInWindow();
 			return;
@@ -209,7 +209,7 @@ public class FormatPreferencesDialog extends JTitleAreaDialog {
 			decimalFormat.applyPattern(txtNumberFormat.getText());
 			decimalFormat.format(1.00);
 		}
-		catch (final Exception e) {
+		catch (final Exception _) {
 			this.setErrorMessage(getTranslation(FORMAT_PREFERENCES_DIALOG_MSG_INVALID_NUMBER));
 			txtNumberFormat.requestFocusInWindow();
 			return;

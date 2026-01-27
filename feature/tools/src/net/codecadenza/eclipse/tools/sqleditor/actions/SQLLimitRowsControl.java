@@ -115,7 +115,7 @@ public class SQLLimitRowsControl extends ControlContribution {
 		try {
 			return Integer.parseInt(txtMaxResult.getText());
 		}
-		catch (final NumberFormatException e) {
+		catch (final NumberFormatException _) {
 			// This exception will be ignored!
 		}
 

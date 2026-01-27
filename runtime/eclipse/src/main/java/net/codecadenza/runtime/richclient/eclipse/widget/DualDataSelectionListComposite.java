@@ -147,7 +147,7 @@ public class DualDataSelectionListComposite<T> extends Composite {
 		lblSelItems.setText(getTranslationForFieldLabel(DUAL_DATA_SELECTION_LIST_COMP_LBL_SEL_ITEMS));
 
 		listAllItems = new ListViewer(this, SWT.V_SCROLL | SWT.MULTI | SWT.H_SCROLL | SWT.BORDER);
-		listAllItems.addDoubleClickListener(event -> doSelect());
+		listAllItems.addDoubleClickListener(_ -> doSelect());
 		listAllItems.setLabelProvider(new ListLabelProvider());
 		listAllItems.setContentProvider(new ListContentProvider());
 		listAllItems.setComparator(new ItemComparator());
@@ -215,7 +215,7 @@ public class DualDataSelectionListComposite<T> extends Composite {
 		});
 
 		listSelectedItems = new ListViewer(this, SWT.V_SCROLL | SWT.MULTI | SWT.H_SCROLL | SWT.BORDER);
-		listSelectedItems.addDoubleClickListener(event -> doDeselect());
+		listSelectedItems.addDoubleClickListener(_ -> doDeselect());
 		listSelectedItems.setLabelProvider(new ListLabelProvider());
 		listSelectedItems.setContentProvider(new ListContentProvider());
 

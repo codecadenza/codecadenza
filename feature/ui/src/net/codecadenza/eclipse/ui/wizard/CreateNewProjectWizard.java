@@ -105,7 +105,7 @@ public class CreateNewProjectWizard extends Wizard implements INewWizard {
 				CodeCadenzaUserInterfacePlugin.getInstance().logError(e);
 				return false;
 			}
-			catch (final InterruptedException e) {
+			catch (final InterruptedException _) {
 				Thread.currentThread().interrupt();
 
 				CodeCadenzaUserInterfacePlugin.getInstance().logInfo("Operation has been interrupted!");

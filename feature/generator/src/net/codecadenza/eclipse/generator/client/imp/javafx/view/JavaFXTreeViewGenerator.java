@@ -402,7 +402,7 @@ public class JavaFXTreeViewGenerator extends AbstractTreeViewGenerator {
 		b.append("panFilter.setHgap(5);\n");
 		b.append("panFilter.setVgap(5);\n\n");
 		b.append("final var cmdSearch = new Button(" + i18n.getI18NMessage("cmd_ok", "OK") + ");\n");
-		b.append("cmdSearch.setOnAction(event ->\n");
+		b.append("cmdSearch.setOnAction(_ ->\n");
 		b.append("{\n");
 		b.append("searchObj = new SearchDTO();\n");
 		b.append("searchObj.setDateFormat(userFormat.getDateFormat());\n");
@@ -747,7 +747,7 @@ public class JavaFXTreeViewGenerator extends AbstractTreeViewGenerator {
 			b.append("// Add menu item to refresh sub-items\n");
 			b.append("final var itemRefresh = new MenuItem(" + i18n.getI18NMessage("action_name_refresh", "Refresh") + ");\n");
 			b.append("itemRefresh.setGraphic(new ImageView(ImageLoader.getImage(ImageLoader.IMG_REFRESH)));\n");
-			b.append("itemRefresh.setOnAction(event -> \n");
+			b.append("itemRefresh.setOnAction(_ -> \n");
 			b.append("{\n");
 			b.append("if(treeView.getSelectionModel().getSelectedItem() == null)\n");
 			b.append("return;\n\n");
@@ -769,7 +769,7 @@ public class JavaFXTreeViewGenerator extends AbstractTreeViewGenerator {
 					s.append("// Add menu item to add " + item.getItemDTO().getDomainObject().getLabel() + "\n");
 					s.append("final var itemAdd = new MenuItem(" + i18n.getI18NMessage("action_name_add", "Add") + ");\n");
 					s.append("itemAdd.setGraphic(new ImageView(ImageLoader.getImage(ImageLoader.IMG_NEW_DATA)));\n");
-					s.append("itemAdd.setOnAction(event -> \n");
+					s.append("itemAdd.setOnAction(_ -> \n");
 					s.append("{\n");
 					s.append("if(treeView.getSelectionModel().getSelectedItem() == null)\n");
 					s.append("return;\n\n");
@@ -859,7 +859,7 @@ public class JavaFXTreeViewGenerator extends AbstractTreeViewGenerator {
 			if (item.getNodes().isEmpty() && item.getChildren().isEmpty())
 				b.append(itemName + ".getChildren().add(new TreeDataItem(null, null));\n");
 
-			b.append(itemName + ".expandedProperty().addListener((a, b, c) ->\n");
+			b.append(itemName + ".expandedProperty().addListener(_ ->\n");
 			b.append("{\n");
 			b.append("if(" + itemName + ".isDataLoaded())\n");
 			b.append("return;\n\n");
@@ -947,7 +947,7 @@ public class JavaFXTreeViewGenerator extends AbstractTreeViewGenerator {
 			b.append("ImageLoader.getImage(ImageLoader.IMG_FOLDER));\n");
 			b.append(subParentItemName + ".setGroupName(" + groupName + ");\n");
 			b.append(subParentItemName + ".getChildren().add(new TreeDataItem(null, null));\n");
-			b.append(subParentItemName + ".expandedProperty().addListener((a, b, c) ->\n");
+			b.append(subParentItemName + ".expandedProperty().addListener(_ ->\n");
 			b.append("{\n");
 			b.append("if(" + subParentItemName + ".isDataLoaded())\n");
 			b.append("return;\n\n");
@@ -1112,7 +1112,7 @@ public class JavaFXTreeViewGenerator extends AbstractTreeViewGenerator {
 			s.append("// Add menu item to add a new item\n");
 			s.append("final var itemAdd = new MenuItem(" + i18n.getI18NMessage("action_name_add", "Add") + ");\n");
 			s.append("itemAdd.setGraphic(new ImageView(ImageLoader.getImage(ImageLoader.IMG_NEW_DATA)));\n");
-			s.append("itemAdd.setOnAction(event -> \n");
+			s.append("itemAdd.setOnAction(_ -> \n");
 			s.append("{\n");
 			s.append("if(treeView.getSelectionModel().getSelectedItem() == null)\n");
 			s.append("return;\n\n");
@@ -1153,7 +1153,7 @@ public class JavaFXTreeViewGenerator extends AbstractTreeViewGenerator {
 			s.append("// Add menu item to edit item\n");
 			s.append("final var itemEdit = new MenuItem(" + i18n.getI18NMessage("action_name_edit", "Edit") + ");\n");
 			s.append("itemEdit.setGraphic(new ImageView(ImageLoader.getImage(ImageLoader.IMG_EDIT_DATA)));\n");
-			s.append("itemEdit.setOnAction(event -> \n");
+			s.append("itemEdit.setOnAction(_ -> \n");
 			s.append("{\n");
 			s.append("if(treeView.getSelectionModel().getSelectedItem() == null)\n");
 			s.append("return;\n\n");
@@ -1179,7 +1179,7 @@ public class JavaFXTreeViewGenerator extends AbstractTreeViewGenerator {
 			s.append("// Add menu item to view item\n");
 			s.append("final var itemView = new MenuItem(" + i18n.getI18NMessage("action_name_view", "View") + ");\n");
 			s.append("itemView.setGraphic(new ImageView(ImageLoader.getImage(ImageLoader.IMG_VIEW_DATA)));\n");
-			s.append("itemView.setOnAction(event -> \n");
+			s.append("itemView.setOnAction(_ -> \n");
 			s.append("{\n");
 			s.append("if(treeView.getSelectionModel().getSelectedItem() == null)\n");
 			s.append("return;\n\n");
@@ -1216,7 +1216,7 @@ public class JavaFXTreeViewGenerator extends AbstractTreeViewGenerator {
 			s.append("final var " + menuItemName + " = new MenuItem(");
 			s.append(i18n.getI18NMessage("action_name_download", "Download") + ");\n");
 			s.append(menuItemName + ".setGraphic(new ImageView(ImageLoader.getImage(ImageLoader.IMG_DOWNLOAD)));\n");
-			s.append(menuItemName + ".setOnAction(event -> \n");
+			s.append(menuItemName + ".setOnAction(_ -> \n");
 			s.append("{\n");
 			s.append("if(treeView.getSelectionModel().getSelectedItem() == null)\n");
 			s.append("return;\n\n");
@@ -1251,7 +1251,7 @@ public class JavaFXTreeViewGenerator extends AbstractTreeViewGenerator {
 			s.append("// Add menu item to delete an item\n");
 			s.append("final var itemDelete = new MenuItem(" + i18n.getI18NMessage("action_name_delete", "Delete") + ");\n");
 			s.append("itemDelete.setGraphic(new ImageView(ImageLoader.getImage(ImageLoader.IMG_DELETE)));\n");
-			s.append("itemDelete.setOnAction(event -> \n");
+			s.append("itemDelete.setOnAction(_ -> \n");
 			s.append("{\n");
 			s.append("if(treeView.getSelectionModel().getSelectedItem() == null)\n");
 			s.append("return;\n\n");
@@ -1281,7 +1281,7 @@ public class JavaFXTreeViewGenerator extends AbstractTreeViewGenerator {
 			s.append("// Add menu item to remove item from collection\n");
 			s.append("final var itemRemove = new MenuItem(" + i18n.getI18NMessage("action_name_remove_item", "Remove item") + ");\n");
 			s.append("itemRemove.setGraphic(new ImageView(ImageLoader.getImage(ImageLoader.IMG_DELETE)));\n");
-			s.append("itemRemove.setOnAction(event -> \n");
+			s.append("itemRemove.setOnAction(_ -> \n");
 			s.append("{\n");
 			s.append("if(treeView.getSelectionModel().getSelectedItem() == null)\n");
 			s.append("return;\n\n");

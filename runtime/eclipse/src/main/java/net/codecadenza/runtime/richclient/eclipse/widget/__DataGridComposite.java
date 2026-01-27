@@ -50,7 +50,7 @@ public class __DataGridComposite<T> extends __AbstractDataGridComposite<T> {
 		this.setLayout(new FillLayout());
 
 		tableViewer = new TableViewer(this, style);
-		tableViewer.addDoubleClickListener(event -> onDoubleClick(getSelection()));
+		tableViewer.addDoubleClickListener(_ -> onDoubleClick(getSelection()));
 		tableViewer.setLabelProvider(new TableLabelProvider());
 		tableViewer.setContentProvider(new ContentProvider());
 

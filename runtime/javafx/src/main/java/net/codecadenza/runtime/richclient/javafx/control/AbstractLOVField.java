@@ -135,11 +135,11 @@ public abstract class AbstractLOVField<T, X> extends GridPane {
 
 		txtValue = new TextField();
 		txtValue.setEditable(false);
-		txtValue.setOnMouseClicked(e -> openLOV());
+		txtValue.setOnMouseClicked(_ -> openLOV());
 
 		cmdOpen = new Button();
 		cmdOpen.setGraphic(new ImageView(ImageLoader.getImage(ImageLoader.IMG_LOV)));
-		cmdOpen.setOnAction(e -> openLOV());
+		cmdOpen.setOnAction(_ -> openLOV());
 		cmdOpen.setTooltip(new Tooltip(getTranslation(ABSTRACT_LOV_FIELD_CMD_OPEN)));
 
 		add(txtValue, 0, 0);

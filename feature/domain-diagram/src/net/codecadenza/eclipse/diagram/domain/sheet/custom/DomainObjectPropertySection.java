@@ -197,7 +197,7 @@ public class DomainObjectPropertySection extends AbstractPropertySection {
 		final CLabel lblPropertyAccess = getWidgetFactory().createCLabel(panPropertySection, "Property access:");
 		lblPropertyAccess.setLayoutData(data);
 
-		textChangeListener = e -> updateMetaModel();
+		textChangeListener = _ -> updateMetaModel();
 	}
 
 	/*

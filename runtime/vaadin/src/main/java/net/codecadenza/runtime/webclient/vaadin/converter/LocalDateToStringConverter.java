@@ -76,7 +76,7 @@ public class LocalDateToStringConverter implements Converter<LocalDate, String> 
 		try {
 			return LocalDate.parse(value, dateFormatter);
 		}
-		catch (final DateTimeParseException e) {
+		catch (final DateTimeParseException _) {
 			return null;
 		}
 	}

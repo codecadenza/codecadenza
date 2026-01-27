@@ -148,7 +148,7 @@ public abstract class AbstractTreeView extends VerticalLayout {
 			onNodeExpand(selectedItem);
 		});
 
-		tree.addSelectionListener(e -> {
+		tree.addSelectionListener(_ -> {
 			contextMenu.removeAll();
 
 			final var selectedItem = getSelectedItem();
@@ -279,7 +279,7 @@ public abstract class AbstractTreeView extends VerticalLayout {
 		final var cmdRefresh = new Button(internalI18n.getTranslation(CMD_REFRESH));
 		cmdRefresh.setIcon(new Icon(VaadinIcon.REFRESH));
 		cmdRefresh.setId("cmdRefresh");
-		cmdRefresh.addClickListener(event -> addRootTreeItems());
+		cmdRefresh.addClickListener(_ -> addRootTreeItems());
 
 		hlButtons.add(cmdRefresh);
 	}

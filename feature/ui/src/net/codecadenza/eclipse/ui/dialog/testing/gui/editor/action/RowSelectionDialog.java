@@ -366,7 +366,7 @@ public class RowSelectionDialog extends CodeCadenzaDialog {
 				try {
 					Integer.parseInt(txtValue.getControl().getText());
 				}
-				catch (final NumberFormatException e) {
+				catch (final NumberFormatException _) {
 					MessageDialog.openInformation(getShell(), title, "The row index requires an integer value!");
 					txtValue.getControl().setFocus();
 					return;

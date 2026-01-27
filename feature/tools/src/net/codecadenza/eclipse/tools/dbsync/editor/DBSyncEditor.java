@@ -368,7 +368,7 @@ public class DBSyncEditor extends EditorPart {
 		catch (final InvocationTargetException ex) {
 			CodeCadenzaToolsPlugin.getInstance().logError(ex);
 		}
-		catch (final InterruptedException ex) {
+		catch (final InterruptedException _) {
 			Thread.currentThread().interrupt();
 
 			CodeCadenzaToolsPlugin.getInstance().logInfo("Operation has been interrupted!");
@@ -428,7 +428,7 @@ public class DBSyncEditor extends EditorPart {
 		tableViewer.setLabelProvider(new TableLabelProvider());
 		tableViewer.setCellModifier(new CellModifier());
 
-		tableViewer.addDoubleClickListener(event -> {
+		tableViewer.addDoubleClickListener(_ -> {
 			boolean readonly = true;
 
 			final var sel = (IStructuredSelection) tableViewer.getSelection();

@@ -77,7 +77,7 @@ public class SQLTextViewer extends SourceViewer {
 
 		sqlTextTools = new SQLTextTools(syntax);
 
-		this.getControl().addDisposeListener(event -> {
+		this.getControl().addDisposeListener(_ -> {
 			sqlTextTools.dispose();
 			presentationReconciler.uninstall();
 		});
@@ -89,12 +89,12 @@ public class SQLTextViewer extends SourceViewer {
 		presentationReconciler.install(this);
 		partitioner = configuration.getDocumentPartitioner();
 
-		parent.addDisposeListener(event -> {
+		parent.addDisposeListener(_ -> {
 			if (contentAssistant != null) {
 				try {
 					contentAssistant.uninstall();
 				}
-				catch (final Exception e) {
+				catch (final Exception _) {
 					// This exception will be ignored!
 				}
 			}

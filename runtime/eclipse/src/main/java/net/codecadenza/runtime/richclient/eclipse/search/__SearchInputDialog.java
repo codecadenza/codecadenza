@@ -1017,7 +1017,7 @@ public abstract class __SearchInputDialog extends TitleAreaDialog {
 			tableAllFields.setHeaderVisible(false);
 			tableAllFields.setLinesVisible(false);
 
-			tableViewerAllFields.addDoubleClickListener(event -> selectField());
+			tableViewerAllFields.addDoubleClickListener(_ -> selectField());
 			tableViewerAllFields.setComparator(new ColLabelComparator());
 			tableViewerAllFields.setLabelProvider(new FieldLabelProvider());
 			tableViewerAllFields.setContentProvider(new AllFieldsContentProvider());
@@ -1064,7 +1064,7 @@ public abstract class __SearchInputDialog extends TitleAreaDialog {
 			cmdDeSelectField.setImage(ImageCache.getImage(ImageCache.IMG_DESELECT));
 
 			tableViewerSelFields = new TableViewer(panFields, SWT.V_SCROLL | SWT.H_SCROLL | SWT.BORDER);
-			tableViewerSelFields.addDoubleClickListener(event -> deSelectField());
+			tableViewerSelFields.addDoubleClickListener(_ -> deSelectField());
 			tableViewerSelFields.setLabelProvider(new FieldLabelProvider());
 			tableViewerSelFields.setContentProvider(new SelectedFieldsContentProvider());
 			tableViewerSelFields.setComparator(new ColOrderComparator());
@@ -1969,11 +1969,11 @@ public abstract class __SearchInputDialog extends TitleAreaDialog {
 						else
 							decimalFormat.parse(value);
 					}
-					catch (final NumberFormatException | ParseException e) {
+					catch (final NumberFormatException | ParseException _) {
 						setErrorMessage(getTranslation(SEARCH_INPUT_DIALOG_MSG_ERR_NO_NUMBER, field.getColLabel().toLowerCase()));
 						return false;
 					}
-					catch (final IllegalArgumentException e) {
+					catch (final IllegalArgumentException _) {
 						setErrorMessage(getTranslation(SEARCH_INPUT_DIALOG_MSG_ERR_NO_UUID, field.getColLabel().toLowerCase()));
 						return false;
 					}
@@ -2074,7 +2074,7 @@ public abstract class __SearchInputDialog extends TitleAreaDialog {
 
 			return dateFormat.parse(dateString);
 		}
-		catch (final ParseException e) {
+		catch (final ParseException _) {
 			MessageDialog.openInformation(getParentShell(), DIALOG_TITLE,
 					getTranslation(SEARCH_INPUT_DIALOG_MSG_ERR_DATE_FORMAT, fieldLabel, pattern));
 			return null;

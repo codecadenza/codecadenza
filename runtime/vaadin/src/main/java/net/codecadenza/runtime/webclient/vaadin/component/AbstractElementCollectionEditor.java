@@ -103,7 +103,7 @@ public abstract class AbstractElementCollectionEditor<T> extends VerticalLayout 
 
 			final var cmdAdd = new Button(internalI18n.getTranslation(CMD_ADD));
 
-			cmdAdd.addClickListener(e -> {
+			cmdAdd.addClickListener(_ -> {
 				try {
 					final T newElement = valueConverter.convertToValue(txtInput.getValue());
 
@@ -135,7 +135,7 @@ public abstract class AbstractElementCollectionEditor<T> extends VerticalLayout 
 			final var mniDelete = contextMenu.addItem(internalI18n.getTranslation(CMD_DELETE));
 			mniDelete.setId("mniDelete");
 
-			mniDelete.addClickListener(e -> {
+			mniDelete.addClickListener(_ -> {
 				final String selectedItem = grid.getSelectedItems().stream().findFirst().orElse(null);
 
 				if (selectedItem != null) {
@@ -147,7 +147,7 @@ public abstract class AbstractElementCollectionEditor<T> extends VerticalLayout 
 			final var mniDeleteAllItems = contextMenu.addItem(internalI18n.getTranslation(CMD_DELETE_ALL));
 			mniDeleteAllItems.setId("mniDeleteAll");
 
-			mniDeleteAllItems.addClickListener(e -> {
+			mniDeleteAllItems.addClickListener(_ -> {
 				elements.clear();
 				refreshGrid(null);
 			});

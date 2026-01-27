@@ -152,7 +152,7 @@ public abstract class AbstractTestDataArgumentsProvider<I> implements ArgumentsP
 		final ExtensionContext.Store store = context.getRoot().getStore(NAMESPACE);
 
 		// Create and store the instance only if it doesn't exist
-		return store.getOrComputeIfAbsent(identifierString, key -> {
+		return store.getOrComputeIfAbsent(identifierString, _ -> {
 			final var properties = new TestDataProviderProperties();
 			properties.load();
 

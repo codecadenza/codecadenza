@@ -396,7 +396,7 @@ public class EditDomainObjectDialog extends CodeCadenzaDialog {
 				if (blockSize < 1)
 					throw new NumberFormatException();
 			}
-			catch (final NumberFormatException ex) {
+			catch (final NumberFormatException _) {
 				MessageDialog.openInformation(getShell(), DLG_TITLE_INPUT_VAL, "The block size requires a positive integer value");
 				return false;
 			}
@@ -409,7 +409,7 @@ public class EditDomainObjectDialog extends CodeCadenzaDialog {
 				if (initialValue < 1)
 					throw new NumberFormatException();
 			}
-			catch (final NumberFormatException ex) {
+			catch (final NumberFormatException _) {
 				MessageDialog.openInformation(getShell(), DLG_TITLE_INPUT_VAL, "The initial value requires a positive integer value");
 				return false;
 			}

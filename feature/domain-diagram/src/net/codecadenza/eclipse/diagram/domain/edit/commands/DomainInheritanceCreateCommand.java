@@ -318,7 +318,7 @@ public class DomainInheritanceCreateCommand extends CreateElementCommand {
 				try {
 					Integer.parseInt(value);
 				}
-				catch (final NumberFormatException e) {
+				catch (final NumberFormatException _) {
 					MessageDialog.openInformation(shell, msgTitle, "The discriminator value requires an integer value!");
 
 					throw new IllegalStateException("The discriminator value requires an integer value!");

@@ -137,7 +137,7 @@ public class ElementCollectionEditor<T> extends JPanel {
 
 			final var cmdAdd = new JButton(getTranslation(ELEMENT_COLLECTION_EDITOR_CMD_ADD));
 
-			cmdAdd.addActionListener(e -> {
+			cmdAdd.addActionListener(_ -> {
 				if (txtAdd.getText().isEmpty())
 					return;
 
@@ -181,11 +181,11 @@ public class ElementCollectionEditor<T> extends JPanel {
 			});
 
 			final var mniDelete = new JMenuItem(getTranslation(ELEMENT_COLLECTION_EDITOR_ACTION_DELETE));
-			mniDelete.addActionListener(e -> deleteSelectedItem());
+			mniDelete.addActionListener(_ -> deleteSelectedItem());
 
 			final var mniDeleteAll = new JMenuItem(getTranslation(ELEMENT_COLLECTION_EDITOR_ACTION_DELETE_ALL));
 
-			mniDeleteAll.addActionListener(e -> {
+			mniDeleteAll.addActionListener(_ -> {
 				elements.clear();
 				refreshList(null);
 			});

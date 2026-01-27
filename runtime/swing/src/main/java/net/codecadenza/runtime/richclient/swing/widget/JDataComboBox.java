@@ -49,7 +49,7 @@ public class JDataComboBox<T> extends JComboBox<String> {
 	 * Constructor
 	 */
 	public JDataComboBox() {
-		this.addActionListener(action -> {
+		this.addActionListener(_ -> {
 			final T selObject = JDataComboBox.this.getSelectedModelObject();
 			onSelectionChanged(selObject);
 		});

@@ -166,7 +166,7 @@ public class EditJavaEnumDialog extends CodeCadenzaDialog {
 							return status.getMessage();
 
 						return javaEnum.getEnumerationValues().stream().filter(literal -> literal.getName().equals(newText)).findFirst()
-								.map(literal -> "A literial with the same name already exists!").orElse(null);
+								.map(_ -> "A literial with the same name already exists!").orElse(null);
 					});
 
 					if (dlg.open() != Window.OK)

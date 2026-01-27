@@ -102,7 +102,7 @@ public class SaveQueryAction extends AbstractAction {
 				SearchManager.saveSearch(panel.getViewID(), panel.getSearchObj(), resp);
 				panel.setStatusInfoMessage(getTranslation(SAVE_QUERY_ACTION_MSG_QUERY_SAVED));
 			}
-			catch (final DuplicateSearchNameException ex) {
+			catch (final DuplicateSearchNameException _) {
 				panel.setStatusErrorMessage(getTranslation(SAVE_QUERY_ACTION_MSG_QUERY_DUPLICATE, resp));
 			}
 			catch (final Exception ex) {

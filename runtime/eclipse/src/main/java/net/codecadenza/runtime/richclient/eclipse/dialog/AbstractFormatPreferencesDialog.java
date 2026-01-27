@@ -175,7 +175,7 @@ public abstract class AbstractFormatPreferencesDialog extends TitleAreaDialog {
 			try {
 				dateFormat.applyPattern(txtDateFormat.getText());
 			}
-			catch (final Exception e) {
+			catch (final Exception _) {
 				this.setErrorMessage(getTranslation(FORMAT_PREFERENCES_DIALOG_MSG_INVALID_DATE));
 				txtDateFormat.setFocus();
 				return;
@@ -190,7 +190,7 @@ public abstract class AbstractFormatPreferencesDialog extends TitleAreaDialog {
 			try {
 				dateFormat.applyPattern(txtDateTimeFormat.getText());
 			}
-			catch (final Exception e) {
+			catch (final Exception _) {
 				this.setErrorMessage(getTranslation(FORMAT_PREFERENCES_DIALOG_MSG_INVALID_DATE_TIME));
 				txtDateTimeFormat.setFocus();
 				return;
@@ -206,7 +206,7 @@ public abstract class AbstractFormatPreferencesDialog extends TitleAreaDialog {
 				decimalFormat.applyPattern(txtNumberFormat.getText());
 				decimalFormat.format(1.00);
 			}
-			catch (final Exception e) {
+			catch (final Exception _) {
 				this.setErrorMessage(getTranslation(FORMAT_PREFERENCES_DIALOG_MSG_INVALID_NUMBER));
 				txtNumberFormat.setFocus();
 				return;

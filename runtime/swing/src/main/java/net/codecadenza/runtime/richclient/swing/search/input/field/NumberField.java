@@ -102,7 +102,7 @@ public class NumberField extends InputField {
 
 			return null;
 		}
-		catch (final Exception ex) {
+		catch (final Exception _) {
 			return errmsg;
 		}
 	}

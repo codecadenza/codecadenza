@@ -77,7 +77,7 @@ public class JPATextViewer extends SourceViewer {
 
 		jpaTextTools = new JPATextTools(syntax);
 
-		this.getControl().addDisposeListener(event -> {
+		this.getControl().addDisposeListener(_ -> {
 			jpaTextTools.dispose();
 			presentationReconciler.uninstall();
 		});
@@ -89,12 +89,12 @@ public class JPATextViewer extends SourceViewer {
 		presentationReconciler.install(this);
 		partitioner = configuration.getDocumentPartitioner();
 
-		parent.addDisposeListener(event -> {
+		parent.addDisposeListener(_ -> {
 			if (contentAssistant != null) {
 				try {
 					contentAssistant.uninstall();
 				}
-				catch (final Exception e) {
+				catch (final Exception _) {
 					// This exception will be ignored!
 				}
 			}

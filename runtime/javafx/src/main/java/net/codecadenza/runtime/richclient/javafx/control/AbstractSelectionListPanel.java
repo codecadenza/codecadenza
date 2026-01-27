@@ -339,7 +339,7 @@ public abstract class AbstractSelectionListPanel<T> extends VBox {
 			panFilter.add(txtFilter = new TextField(), 1, 0);
 			panFilter.setPadding(new Insets(5, 0, 10, 0));
 
-			txtFilter.textProperty().addListener((observable, oldValue, newValue) -> refresh());
+			txtFilter.textProperty().addListener((_, _, _) -> refresh());
 		}
 
 		final var panLists = new GridPane();
@@ -378,16 +378,16 @@ public abstract class AbstractSelectionListPanel<T> extends VBox {
 		panButtons.setFillWidth(true);
 
 		final var cmdSelectItem = new Button("", new ImageView(getImage(IMG_SELECT_ITEM)));
-		cmdSelectItem.setOnAction(e -> moveToTarget());
+		cmdSelectItem.setOnAction(_ -> moveToTarget());
 
 		final var cmdSelectAllItems = new Button("", new ImageView(getImage(IMG_SELECT_ALL)));
-		cmdSelectAllItems.setOnAction(e -> moveAllToTarget());
+		cmdSelectAllItems.setOnAction(_ -> moveAllToTarget());
 
 		final var cmdDeselectItem = new Button("", new ImageView(getImage(IMG_DESELECT_ITEM)));
-		cmdDeselectItem.setOnAction(e -> moveToSource());
+		cmdDeselectItem.setOnAction(_ -> moveToSource());
 
 		final var cmdDeselectAllItems = new Button("", new ImageView(getImage(IMG_DESELECT_ALL)));
-		cmdDeselectAllItems.setOnAction(e -> moveAllToSource());
+		cmdDeselectAllItems.setOnAction(_ -> moveAllToSource());
 
 		panButtons.getChildren().addAll(cmdSelectItem, cmdSelectAllItems, cmdDeselectItem, cmdDeselectAllItems);
 

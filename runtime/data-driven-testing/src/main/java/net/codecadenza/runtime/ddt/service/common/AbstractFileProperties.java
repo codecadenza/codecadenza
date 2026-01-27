@@ -74,7 +74,7 @@ public abstract class AbstractFileProperties extends Properties {
 			try {
 				return Long.parseLong(propertyValue);
 			}
-			catch (final NumberFormatException ex) {
+			catch (final NumberFormatException _) {
 				throw new IllegalStateException(
 						"The value '" + propertyValue + "' for property '" + propertyName + "' could not be converted to long!");
 			}

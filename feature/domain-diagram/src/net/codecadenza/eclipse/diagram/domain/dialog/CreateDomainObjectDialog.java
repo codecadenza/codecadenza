@@ -525,9 +525,7 @@ public class CreateDomainObjectDialog extends CodeCadenzaTitleAreaDialog {
 	 * @return true if the validation was successful
 	 */
 	protected boolean validateAllInputs() {
-		boolean ok = false;
-
-		ok = validateDomainObjectName(txtDomainObjectName.getText());
+		boolean ok = validateDomainObjectName(txtDomainObjectName.getText());
 
 		if (ok)
 			ok = validateDomainObjectName(txtNamePlural.getText());
@@ -616,7 +614,7 @@ public class CreateDomainObjectDialog extends CodeCadenzaTitleAreaDialog {
 			try {
 				Integer.parseInt(text);
 			}
-			catch (final Exception e) {
+			catch (final Exception _) {
 				setErrorMessage("The initial value requires an integer value!");
 				return false;
 			}
@@ -654,7 +652,7 @@ public class CreateDomainObjectDialog extends CodeCadenzaTitleAreaDialog {
 			try {
 				Integer.parseInt(text);
 			}
-			catch (final Exception e) {
+			catch (final Exception _) {
 				setErrorMessage("The block size requires an integer value!");
 				return false;
 			}
@@ -709,7 +707,7 @@ public class CreateDomainObjectDialog extends CodeCadenzaTitleAreaDialog {
 				try {
 					Integer.parseInt(text);
 				}
-				catch (final NumberFormatException e) {
+				catch (final NumberFormatException _) {
 					setErrorMessage("The discriminator value requires an integer value!");
 					return false;
 				}

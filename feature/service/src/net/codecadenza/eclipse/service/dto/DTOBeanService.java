@@ -313,7 +313,7 @@ public class DTOBeanService {
 		for (final DTOBean dto : virtualDTOs) {
 			// Check if a form uses this DTO
 			boolean removeDTO = project.getAllFormsOfProject().stream().filter(form -> dto.equals(form.getDTO())).findFirst()
-					.map(form -> false).orElse(true);
+					.map(_ -> false).orElse(true);
 
 			// Check if this DTO is used by a facade method
 			for (final BoundaryBean b : project.getAllBoundariesOfProject()) {
@@ -457,13 +457,13 @@ public class DTOBeanService {
 			TreeViewItem treeViewItem) {
 		// Search for references in all display attributes
 		final List<String> displayAttributes = treeViewItem.getDisplayAttributes().stream().filter(attr -> attr.equals(attribute))
-				.map(attr -> treeView.getName() + " -> Display attribute: " + attribute.getName()).toList();
+				.map(attr -> treeView.getName() + " -> Display attribute: " + attr.getName()).toList();
 
 		final var itemList = new ArrayList<>(displayAttributes);
 
 		// Search for references in all invisible attributes
 		itemList.addAll(treeViewItem.getInvisibleAttributes().stream().filter(attr -> attr.equals(attribute))
-				.map(attr -> treeView.getName() + " -> Invisible attribute: " + attribute.getName()).toList());
+				.map(attr -> treeView.getName() + " -> Invisible attribute: " + attr.getName()).toList());
 
 		// Search for references in all nodes
 		itemList.addAll(treeViewItem.getNodes().stream().filter(node -> node.getDTOAttribute().equals(attribute))

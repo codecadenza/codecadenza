@@ -65,7 +65,7 @@ public class __CheckboxDataGridComposite<T> extends __AbstractDataGridComposite<
 		checkboxViewer = CheckboxTableViewer.newCheckList(this, SWT.HIDE_SELECTION | SWT.BORDER);
 
 		tableViewer = checkboxViewer;
-		tableViewer.addDoubleClickListener(event -> onDoubleClick(getSelection()));
+		tableViewer.addDoubleClickListener(_ -> onDoubleClick(getSelection()));
 		tableViewer.setLabelProvider(new TableLabelProvider());
 		tableViewer.setContentProvider(new ContentProvider());
 

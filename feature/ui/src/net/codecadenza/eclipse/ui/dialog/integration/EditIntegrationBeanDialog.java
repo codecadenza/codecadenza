@@ -474,7 +474,7 @@ public class EditIntegrationBeanDialog extends CodeCadenzaTitleAreaDialog {
 		treeIntegrationMethods = new Tree(panSelectedMethods, SWT.BORDER);
 		treeIntegrationMethods.setLayoutData(gdIntegrationMethods);
 
-		treeIntegrationMethods.addMenuDetectListener(e -> {
+		treeIntegrationMethods.addMenuDetectListener(_ -> {
 			treeIntegrationMethods.setMenu(null);
 
 			if (getSelectedIntegrationMethod() != null)

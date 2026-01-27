@@ -635,7 +635,7 @@ public class EditIntegrationTestCaseDialog extends CodeCadenzaTitleAreaDialog {
 			// Find the last test case that contains valid credentials
 			final Optional<IntegrationTestCase> previousTestCase = testModule.getTestCases().stream()
 					.map(IntegrationTestCase.class::cast).filter(t -> t.getUserName() != null && !t.getUserName().isEmpty())
-					.filter(t -> t.getPassword() != null && !t.getPassword().isEmpty()).reduce((first, second) -> second);
+					.filter(t -> t.getPassword() != null && !t.getPassword().isEmpty()).reduce((_, second) -> second);
 
 			if (previousTestCase.isPresent()) {
 				txtUserName.setText(previousTestCase.get().getUserName());

@@ -356,7 +356,7 @@ public class EditGUITestCaseDialog extends CodeCadenzaTitleAreaDialog {
 			}
 		});
 
-		treeActions.addMenuDetectListener(e -> {
+		treeActions.addMenuDetectListener(_ -> {
 			treeActions.setMenu(null);
 
 			// Show the menu for test actions only!

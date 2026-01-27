@@ -146,7 +146,7 @@ public class VisualFormEditorDialog extends Dialog implements PreviewChangeListe
 		if (formType == FormTypeEnumeration.LOV)
 			return;
 
-		newShell.addListener(SWT.Resize, e -> {
+		newShell.addListener(SWT.Resize, _ -> {
 			form.setHeight(newShell.getSize().y);
 			form.setWidth(newShell.getSize().x);
 		});

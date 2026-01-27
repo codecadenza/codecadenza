@@ -143,7 +143,7 @@ public class DBManager implements AutoCloseable {
 				if (!connection.isClosed())
 					return connection;
 			}
-			catch (final Exception e) {
+			catch (final Exception _) {
 				// This exception will be ignored!
 			}
 		}
@@ -278,7 +278,7 @@ public class DBManager implements AutoCloseable {
 
 			con = embeddedDerbyDriverMap.get(url).connect(shutdownURL, connectionProps);
 		}
-		catch (final Exception e) {
+		catch (final Exception _) {
 			// We ignore all exceptions here! Note that Derby throws an exception even if the shutdown was finished successfully!
 		}
 		finally {
@@ -286,7 +286,7 @@ public class DBManager implements AutoCloseable {
 				try {
 					con.close();
 				}
-				catch (final SQLException e) {
+				catch (final SQLException _) {
 					// This exception will be ignored!
 				}
 		}
@@ -306,7 +306,7 @@ public class DBManager implements AutoCloseable {
 				connection.close();
 				connection = null;
 			}
-			catch (final SQLException x) {
+			catch (final SQLException _) {
 				// This exception will be ignored!
 			}
 

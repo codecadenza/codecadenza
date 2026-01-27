@@ -300,7 +300,7 @@ public class DomainObjectNameEditPart extends CompartmentEditPart implements ITe
 
 					return valid.getCode() == ParserEditStatus.EDITABLE ? null : valid.getMessage();
 				}
-				catch (final InterruptedException ie) {
+				catch (final InterruptedException _) {
 					Thread.currentThread().interrupt();
 
 					CodeCadenzaDiagramEditorPlugin.getInstance().logInfo("Operation has been interrupted!");
@@ -416,7 +416,7 @@ public class DomainObjectNameEditPart extends CompartmentEditPart implements ITe
 				}
 			});
 		}
-		catch (final InterruptedException e) {
+		catch (final InterruptedException _) {
 			Thread.currentThread().interrupt();
 
 			CodeCadenzaDiagramEditorPlugin.getInstance().logInfo("Operation has been interrupted!");

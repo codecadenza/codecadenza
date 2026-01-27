@@ -147,7 +147,7 @@ public class RowCountDialog extends CodeCadenzaDialog {
 			try {
 				Integer.parseInt(txtRowCount.getText());
 			}
-			catch (final NumberFormatException e) {
+			catch (final NumberFormatException _) {
 				MessageDialog.openInformation(getShell(), DLG_TITLE, "The expected row number requires an integer value!");
 				txtRowCount.setFocus();
 				return;

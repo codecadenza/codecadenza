@@ -127,12 +127,12 @@ public class SearchInputDialog extends JTitleAreaDialog {
 		final JButton search = addButton(buttonPane, getTranslation(SEARCH_INPUT_DIALOG_SEARCH));
 		getRootPane().setDefaultButton(search);
 
-		search.addActionListener(e -> onSearchClicked());
+		search.addActionListener(_ -> onSearchClicked());
 
-		addButton(buttonPane, getTranslation(SEARCH_INPUT_DIALOG_COUNT)).addActionListener(e -> onCountClicked());
-		addButton(buttonPane, getTranslation(SEARCH_INPUT_DIALOG_CLEAR)).addActionListener(e -> onClearClicked());
+		addButton(buttonPane, getTranslation(SEARCH_INPUT_DIALOG_COUNT)).addActionListener(_ -> onCountClicked());
+		addButton(buttonPane, getTranslation(SEARCH_INPUT_DIALOG_CLEAR)).addActionListener(_ -> onClearClicked());
 		addButton(buttonPane, getTranslation(SEARCH_INPUT_DIALOG_CANCEL), getTranslation(SEARCH_INPUT_DIALOG_CANCEL))
-				.addActionListener(e -> onCancelClicked());
+				.addActionListener(_ -> onCancelClicked());
 	}
 
 	/**

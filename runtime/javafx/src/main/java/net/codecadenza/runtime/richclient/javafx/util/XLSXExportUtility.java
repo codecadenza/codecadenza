@@ -257,7 +257,7 @@ public class XLSXExportUtility {
 
 							cell.setCellStyle(cellStyleDateTime);
 						}
-						catch (final ParseException e) {
+						catch (final ParseException _) {
 							// If parsing fails we will try again with a different format!
 							cell.setCellValue(dateFormat.parse(value));
 

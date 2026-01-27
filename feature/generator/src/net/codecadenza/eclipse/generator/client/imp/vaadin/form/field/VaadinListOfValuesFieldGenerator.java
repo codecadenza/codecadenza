@@ -123,9 +123,9 @@ public class VaadinListOfValuesFieldGenerator extends AbstractVaadinFieldGenerat
 		b.append(field.getName() + " = new ListOfValuesField<>");
 
 		if (!field.isReadonly()) {
-			b.append("(event ->\n");
+			b.append("(_ ->\n");
 			b.append("{\n");
-			b.append(lovForm.getLowerCaseName() + ".addDetachListener(detachEvent ->\n");
+			b.append(lovForm.getLowerCaseName() + ".addDetachListener(_ ->\n");
 			b.append("{\n");
 			b.append("if(" + lovForm.getLowerCaseName() + ".isApplyValue())\n");
 			b.append(field.getName() + ".setValue(null);\n\n");

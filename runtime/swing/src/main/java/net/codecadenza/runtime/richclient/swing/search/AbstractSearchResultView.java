@@ -75,7 +75,7 @@ public abstract class AbstractSearchResultView<T> extends AbstractResultView<T> 
 		getLogger().debug("Initialize view");
 
 		// Add an action listener to close the view if the user presses ESC
-		final ActionListener actionListener = actionEvent -> {
+		final ActionListener actionListener = _ -> {
 			AbstractSearchResultView.this.getDesktopPane().getDesktopManager().closeFrame(AbstractSearchResultView.this);
 			dispose();
 		};

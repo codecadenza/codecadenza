@@ -180,7 +180,7 @@ public abstract class AbstractPageComponent {
 		try {
 			element = driver.findElement(By.xpath(xpathExpression));
 		}
-		catch (final NoSuchElementException e) {
+		catch (final NoSuchElementException _) {
 			fail("Could not find element using XPath '" + xpathExpression + "'!");
 		}
 

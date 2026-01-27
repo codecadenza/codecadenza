@@ -827,7 +827,7 @@ public class EditDomainAttributeDialog extends CodeCadenzaDialog {
 					throw new IllegalArgumentException();
 			}
 		}
-		catch (final RuntimeException e) {
+		catch (final RuntimeException _) {
 			MessageDialog.openInformation(getShell(), DLG_TITLE, "The min. length requires a positive integer value!");
 			return false;
 		}
@@ -849,7 +849,7 @@ public class EditDomainAttributeDialog extends CodeCadenzaDialog {
 					throw new IllegalArgumentException();
 			}
 		}
-		catch (final RuntimeException e) {
+		catch (final RuntimeException _) {
 			MessageDialog.openInformation(getShell(), DLG_TITLE, "The max. length requires a positive integer value!");
 			return false;
 		}

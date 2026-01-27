@@ -116,7 +116,7 @@ public class Criterion implements Serializable {
 
 		cboOp.setRenderer(new OpRenderer());
 		cboOp.setEditable(false);
-		cboOp.addItemListener(e -> updateInputFields());
+		cboOp.addItemListener(_ -> updateInputFields());
 
 		syncWithSearchField();
 	}

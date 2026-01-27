@@ -89,7 +89,7 @@ public class DomainNamespaceMenuBuilder extends ChildNamespaceMenuBuilder<Domain
 					final IEditorPart editor = EclipseIDEService.openInEditor(namespace.getDiagramFile());
 
 					if (editor != null)
-						editor.addPropertyListener((source, propId) -> view.refreshTree());
+						editor.addPropertyListener((_, _) -> view.refreshTree());
 				}
 				catch (final Exception ex) {
 					CodeCadenzaUserInterfacePlugin.getInstance().handleInternalError(ex);
@@ -119,7 +119,7 @@ public class DomainNamespaceMenuBuilder extends ChildNamespaceMenuBuilder<Domain
 				try {
 					final var editor = (ReverseEditor) workbenchWindow.getActivePage().openEditor(input, ReverseEditor.ID);
 
-					editor.addPropertyListener((source, propId) -> {
+					editor.addPropertyListener((_, propId) -> {
 						if (propId == ReverseEditor.STATE_SUCCESS)
 							buildAllDomainObjects(project);
 

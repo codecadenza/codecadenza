@@ -833,7 +833,7 @@ public class EclipseViewGenerator extends AbstractJavaSourceGenerator {
 
 		if (readonlyAction != null || updateAction != null) {
 			b.append("// Add double-click listener\n");
-			b.append("super.getTableViewer().addDoubleClickListener(event ->");
+			b.append("super.getTableViewer().addDoubleClickListener(_ ->");
 
 			if (securityHelper.isSecurityAdded()) {
 				b.append("\n");

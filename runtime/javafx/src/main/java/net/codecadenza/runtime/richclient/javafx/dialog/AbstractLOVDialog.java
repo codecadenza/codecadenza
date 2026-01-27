@@ -188,7 +188,7 @@ public abstract class AbstractLOVDialog<T> extends TitleAreaDialog {
 
 		if (enableReset) {
 			final Button cmdReset = addButton(DialogButtonType.RESET, getTranslation(CMD_RESET), false, false);
-			cmdReset.setOnAction(e -> onReset());
+			cmdReset.setOnAction(_ -> onReset());
 		}
 	}
 
@@ -274,7 +274,7 @@ public abstract class AbstractLOVDialog<T> extends TitleAreaDialog {
 		tableView = gridPanel.getTableView();
 
 		final var item = new MenuItem(getTranslation(ABSTRACT_LOV_DIALOG_SELECT));
-		item.setOnAction(e -> onSelect());
+		item.setOnAction(_ -> onSelect());
 
 		gridPanel.getContextMenu().getItems().add(item);
 		gridPanel.initActions();
@@ -286,7 +286,7 @@ public abstract class AbstractLOVDialog<T> extends TitleAreaDialog {
 
 		gridPanel.getTableView().getColumns().addAll(initColumns());
 
-		txtFilter.textProperty().addListener((observable, oldValue, newValue) -> {
+		txtFilter.textProperty().addListener((_, _, newValue) -> {
 			filterText = newValue;
 
 			if (filterText.isEmpty()) {

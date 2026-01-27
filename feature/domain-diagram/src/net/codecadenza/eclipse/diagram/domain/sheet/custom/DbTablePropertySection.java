@@ -381,7 +381,7 @@ public class DbTablePropertySection extends AbstractPropertySection {
 
 		tabFolder.setSelection(tabItemGeneral);
 
-		textChangeListener = e -> updateMetaModel();
+		textChangeListener = _ -> updateMetaModel();
 	}
 
 	/*

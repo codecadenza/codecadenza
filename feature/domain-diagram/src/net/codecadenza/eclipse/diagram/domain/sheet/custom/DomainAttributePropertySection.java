@@ -412,7 +412,7 @@ public class DomainAttributePropertySection extends AbstractPropertySection {
 		final CLabel lblConvertToLowerCase = getWidgetFactory().createCLabel(panPropertySection, "Convert to lower-case:");
 		lblConvertToLowerCase.setLayoutData(data);
 
-		textChangeListener = e -> updateMetaModel(true);
+		textChangeListener = _ -> updateMetaModel(true);
 	}
 
 	/*
@@ -534,7 +534,7 @@ public class DomainAttributePropertySection extends AbstractPropertySection {
 					throw new IllegalArgumentException();
 			}
 		}
-		catch (final Exception e) {
+		catch (final Exception _) {
 			showValidationMessage("The min. length requires an integer value!");
 			txtMinLength.setFocus();
 			return;
@@ -550,7 +550,7 @@ public class DomainAttributePropertySection extends AbstractPropertySection {
 					throw new IllegalArgumentException();
 			}
 		}
-		catch (final Exception e) {
+		catch (final Exception _) {
 			showValidationMessage("The max. length requires an integer value!");
 			txtMaxLength.setFocus();
 			return;

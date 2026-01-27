@@ -132,7 +132,7 @@ public abstract class AbstractDualListField<T> extends Component
 
 		cmdAddSelected.setIcon(new Icon(VaadinIcon.ARROW_RIGHT));
 
-		cmdAddSelected.addClickListener(event -> {
+		cmdAddSelected.addClickListener(_ -> {
 			if (readOnly)
 				return;
 
@@ -145,7 +145,7 @@ public abstract class AbstractDualListField<T> extends Component
 
 		cmdRemoveSelected.setIcon(new Icon(VaadinIcon.ARROW_LEFT));
 
-		cmdRemoveSelected.addClickListener(event -> {
+		cmdRemoveSelected.addClickListener(_ -> {
 			if (readOnly)
 				return;
 

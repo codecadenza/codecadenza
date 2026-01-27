@@ -83,7 +83,7 @@ public class XMLTestDataParser {
 		catch (final IOException ex) {
 			throw new UncheckedIOException("Error loading test data from file " + testDataFile.getName(), ex);
 		}
-		catch (final JAXBException ex) {
+		catch (final JAXBException _) {
 			throw new IllegalStateException("Error parsing test data form file " + testDataFile.getName());
 		}
 	}

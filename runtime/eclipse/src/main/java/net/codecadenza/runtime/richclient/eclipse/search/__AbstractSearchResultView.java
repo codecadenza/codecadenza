@@ -871,7 +871,7 @@ public abstract class __AbstractSearchResultView<T> implements Countable {
 					try {
 						saveSearch(getViewId(), searchObj, dlg.getValue());
 					}
-					catch (final DuplicateSearchNameException e) {
+					catch (final DuplicateSearchNameException _) {
 						MessageDialog.openWarning(parentShell, dialogTitle,
 								getTranslation(SAVE_QUERY_ACTION_MSG_QUERY_DUPLICATE, dlg.getValue()));
 					}

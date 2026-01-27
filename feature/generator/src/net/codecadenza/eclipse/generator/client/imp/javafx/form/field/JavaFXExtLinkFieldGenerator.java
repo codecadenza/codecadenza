@@ -111,7 +111,7 @@ public class JavaFXExtLinkFieldGenerator extends AbstractJavaFXFieldGenerator {
 			return "";
 
 		b.append(field.getName() + " = new Hyperlink();\n");
-		b.append(field.getName() + ".setOnAction(event ->\n");
+		b.append(field.getName() + ".setOnAction(_ ->\n");
 		b.append("{\n");
 		b.append("final var task = new Task<Void>()\n");
 		b.append("{\n");

@@ -305,7 +305,7 @@ public abstract class DualDataSelectionListPanel<T> extends JPanel {
 			txtFilter.setColumns(10);
 
 			final var cmdSearch = new JButton(getTranslation(DUAL_DATA_SELECTION_LIST_PANEL_CMD_SEARCH));
-			cmdSearch.addActionListener(action -> refreshSourceList(txtFilter.getText()));
+			cmdSearch.addActionListener(_ -> refreshSourceList(txtFilter.getText()));
 
 			final var gbcButtonSearch = new GridBagConstraints();
 			gbcButtonSearch.gridx = 3;
@@ -381,7 +381,7 @@ public abstract class DualDataSelectionListPanel<T> extends JPanel {
 		cmdSelectAll.setToolTipText(getTranslation(DUAL_DATA_SELECTION_LIST_PANEL_CMD_SELECT_ALL));
 		cmdSelectAll.setIcon(ImageLoader.getImage(ImageLoader.SELECT_ALL));
 		cmdSelectAll.setEnabled(!readonly);
-		cmdSelectAll.addActionListener(action -> moveAllFromSource());
+		cmdSelectAll.addActionListener(_ -> moveAllFromSource());
 
 		final var gbcSelectAll = new GridBagConstraints();
 		gbcSelectAll.insets = new Insets(0, 0, 5, 0);
@@ -394,7 +394,7 @@ public abstract class DualDataSelectionListPanel<T> extends JPanel {
 		cmdSelectItem.setToolTipText(getTranslation(DUAL_DATA_SELECTION_LIST_PANEL_CMD_SELECT_ITEM));
 		cmdSelectItem.setIcon(ImageLoader.getImage(ImageLoader.SELECT_ITEM));
 		cmdSelectItem.setEnabled(!readonly);
-		cmdSelectItem.addActionListener(action -> moveFromSource());
+		cmdSelectItem.addActionListener(_ -> moveFromSource());
 
 		final var gbcSelectItem = new GridBagConstraints();
 		gbcSelectItem.insets = new Insets(0, 0, 5, 0);
@@ -407,7 +407,7 @@ public abstract class DualDataSelectionListPanel<T> extends JPanel {
 		cmdDeselectItem.setToolTipText(getTranslation(DUAL_DATA_SELECTION_LIST_PANEL_CMD_DESELECT_ITEM));
 		cmdDeselectItem.setIcon(ImageLoader.getImage(ImageLoader.DESELECT_ITEM));
 		cmdDeselectItem.setEnabled(!readonly);
-		cmdDeselectItem.addActionListener(action -> moveFromTarget());
+		cmdDeselectItem.addActionListener(_ -> moveFromTarget());
 
 		final var gbcDeselectItem = new GridBagConstraints();
 		gbcDeselectItem.insets = new Insets(0, 0, 5, 0);
@@ -420,7 +420,7 @@ public abstract class DualDataSelectionListPanel<T> extends JPanel {
 		cmdDeselectAll.setToolTipText(getTranslation(DUAL_DATA_SELECTION_LIST_PANEL_CMD_DESELECT_ALL));
 		cmdDeselectAll.setIcon(ImageLoader.getImage(ImageLoader.DESELECT_ALL));
 		cmdDeselectAll.setEnabled(!readonly);
-		cmdDeselectAll.addActionListener(action -> moveAllFromTarget());
+		cmdDeselectAll.addActionListener(_ -> moveAllFromTarget());
 
 		final var gbcDeselectAll = new GridBagConstraints();
 		gbcDeselectAll.insets = new Insets(0, 0, 5, 0);

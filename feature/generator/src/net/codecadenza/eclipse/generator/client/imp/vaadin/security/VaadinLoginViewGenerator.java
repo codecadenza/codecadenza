@@ -152,7 +152,7 @@ public class VaadinLoginViewGenerator extends AbstractJavaSourceGenerator {
 		b.append("final var cmdLogin = new Button(" + i18n.getI18NMessage("loginview_cmdlogin", "Login") + ");\n");
 		b.append("cmdLogin.setId(\"cmdLogin\");\n");
 		b.append("cmdLogin.setWidth(COMPONENT_WIDTH, Unit.PIXELS);\n");
-		b.append("cmdLogin.addClickListener(clickEvent -> logIn());\n\n");
+		b.append("cmdLogin.addClickListener(_ -> logIn());\n\n");
 		b.append("add(new H1(" + i18n.getI18NMessage("application_title", "My generated application"));
 		b.append("), txtUserName, txtPassword, cmdLogin);\n\n");
 		b.append("setAlignItems(Alignment.CENTER);\n");

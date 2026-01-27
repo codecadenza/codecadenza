@@ -55,7 +55,7 @@ public class ModelRepairTool {
 	private static final String PROJECT_FILE_SUFFIX = ".zip";
 
 	// Define a filter to get *.xmi files only
-	private static final FilenameFilter FILTER = (dir, name) -> name.endsWith("." + MODEL_FILE_EXTENSION);
+	private static final FilenameFilter FILTER = (_, name) -> name.endsWith("." + MODEL_FILE_EXTENSION);
 
 	/**
 	 * @param args

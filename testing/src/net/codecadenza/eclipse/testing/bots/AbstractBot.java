@@ -125,7 +125,7 @@ public abstract class AbstractBot {
 				try {
 					rootMenu = bot.menu(rootMenuName);
 				}
-				catch (final WidgetNotFoundException e) {
+				catch (final WidgetNotFoundException _) {
 					log.warn("Could not find menu '{}'", rootMenuName);
 					bot.sleep(SLEEP_TIME_MENU);
 				}

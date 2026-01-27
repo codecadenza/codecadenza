@@ -547,7 +547,7 @@ public class EditViewFormDialog extends CodeCadenzaTitleAreaDialog implements Pr
 			setMessage("Insert form data");
 		}
 
-		txtTitle.addModifyListener(e -> {
+		txtTitle.addModifyListener(_ -> {
 			if (panPreview == null)
 				return;
 
