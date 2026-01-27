@@ -2,10 +2,10 @@
 <classpath>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry exported="true" kind="lib" path="testdata/"/>
-	<classpathentry exported="true" kind="lib" path="lib/log4j-api-2.23.1.jar"/>
-	<classpathentry exported="true" kind="lib" path="lib/log4j-core-2.23.1.jar"/>
-	<classpathentry exported="true" kind="lib" path="lib/log4j-slf4j2-impl-2.23.1.jar"/>
-	<classpathentry exported="true" kind="lib" path="lib/slf4j-api-2.0.16.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/log4j-api-2.25.3.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/log4j-core-2.25.3.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/log4j-slf4j2-impl-2.25.3.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/slf4j-api-2.0.17.jar"/>
 	<classpathentry exported="true" kind="lib" path="config/"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="con" path="org.eclipse.pde.core.requiredPlugins"/>

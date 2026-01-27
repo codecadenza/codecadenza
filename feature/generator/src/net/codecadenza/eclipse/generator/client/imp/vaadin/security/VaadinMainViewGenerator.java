@@ -113,10 +113,12 @@ public class VaadinMainViewGenerator extends AbstractJavaSourceGenerator {
 	 */
 	@Override
 	protected void addClassDeclaration(StringBuilder b) {
-		b.append("public class " + MAIN_VIEW + " extends AppLayout");
+		b.append("public class " + MAIN_VIEW + " extends AppLayout ");
 
 		if (project.isJakartaEEApplication())
-			b.append(" implements BeforeEnterObserver");
+			b.append("implements BeforeEnterObserver, AfterNavigationObserver");
+		else
+			b.append("implements AfterNavigationObserver");
 	}
 
 	/*
@@ -145,7 +147,7 @@ public class VaadinMainViewGenerator extends AbstractJavaSourceGenerator {
 
 		if (project.isJakartaEEApplication()) {
 			b.append("/* (non-Javadoc)\n");
-			b.append(" * @see com.vaadin.flow.router.internal.BeforeEnterHandler#");
+			b.append(" * @see com.vaadin.flow.router.BeforeEnterObserver#");
 			b.append("beforeEnter(com.vaadin.flow.router.BeforeEnterEvent)\n");
 			b.append(" */\n");
 			b.append(getAnnotationForGeneratedElement());
@@ -179,17 +181,17 @@ public class VaadinMainViewGenerator extends AbstractJavaSourceGenerator {
 		b = new StringBuilder();
 		b.append("/*\n");
 		b.append(" * (non-Javadoc)\n");
-		b.append(" * @see com.vaadin.flow.component.applayout.AppLayout#afterNavigation()\n");
+		b.append(" * @see com.vaadin.flow.router.AfterNavigationObserver#");
+		b.append("afterNavigation(com.vaadin.flow.router.AfterNavigationEvent)\n");
 		b.append(" */\n");
 		b.append(getAnnotationForGeneratedElement());
 		b.append("@Override\n");
-		b.append("protected void afterNavigation()\n");
+		b.append("public void afterNavigation(AfterNavigationEvent event)\n");
 		b.append("{\n");
-		b.append("super.afterNavigation();\n\n");
 		b.append("viewTitle.setText(getCurrentPageTitle());\n");
 		b.append("}\n\n");
 
-		addMethod("void void afterNavigation()", b.toString());
+		addMethod("void afterNavigation()", b.toString());
 
 		b = new StringBuilder();
 		b.append("/**\n");
@@ -202,7 +204,7 @@ public class VaadinMainViewGenerator extends AbstractJavaSourceGenerator {
 		b.append("avatar.setName(" + MANAGED_SECURITY_MANAGER + ".getLogOnDTO()." + userNameAttr.getModelGetterName() + ");\n\n");
 		b.append("final var cmdLogout = new Button(" + i18n.getI18NMessage("cmd_logout", "Logout") + ");\n");
 		b.append("cmdLogout.setId(\"cmdLogout\");\n");
-		b.append("cmdLogout.addClickListener(clickEvent -> openLogoutDialog());\n\n");
+		b.append("cmdLogout.addClickListener(_ -> openLogoutDialog());\n\n");
 		b.append("final var hlHeader = new HorizontalLayout();\n");
 		b.append("hlHeader.setClassName(\"sidemenu-header\");\n");
 		b.append("hlHeader.getThemeList().set(\"dark\", true);\n");

@@ -413,7 +413,6 @@ public class JSFTreeViewGenerator extends AbstractTreeViewGenerator {
 			b.append("/**\n");
 			b.append(" * @param event\n");
 			b.append(" */\n");
-			b.append("@SuppressWarnings(\"unchecked\")\n");
 			b.append(getAnnotationForGeneratedElement());
 			b.append("public " + methodSignature + "\n");
 			b.append("{\n");

@@ -26,6 +26,7 @@ import static net.codecadenza.runtime.webclient.vaadin.i18n.InternalI18NService.
 import static net.codecadenza.runtime.webclient.vaadin.i18n.InternalI18NService.ERROR_MESSAGE_DIALOG_OUTPUT_STACK_TRACE;
 
 import com.vaadin.flow.component.AttachEvent;
+import com.vaadin.flow.component.ModalityMode;
 import com.vaadin.flow.component.Unit;
 import com.vaadin.flow.component.html.NativeLabel;
 import com.vaadin.flow.component.icon.Icon;
@@ -72,7 +73,7 @@ public class ErrorMessageDialog extends AbstractTitleDialog {
 	protected void onAttach(AttachEvent attachEvent) {
 		super.onAttach(attachEvent);
 
-		setModal(true);
+		setModality(ModalityMode.STRICT);
 		setResizable(true);
 		setCloseOnOutsideClick(false);
 		setWidth(450, Unit.PIXELS);

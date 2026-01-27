@@ -92,18 +92,10 @@ public class VaadinClientProjectFilesGenerator extends AbstractClientProjectFile
 		final var b = new StringBuilder();
 		b.append("import com.vaadin.flow.component.dependency.*;\n");
 		b.append("import com.vaadin.flow.component.page.*;\n");
-		b.append("import com.vaadin.flow.server.*;\n");
-		b.append("import com.vaadin.flow.theme.*;\n\n");
-		b.append("@PWA(name = \"My generated Application\", shortName=\"My App\")\n");
-		b.append("@Theme(\"codecadenza\")\n");
-		b.append("@CssImport(value=\"./themes/codecadenza/app-layout.css\", themeFor=\"vaadin-app-layout\")\n");
-		b.append("@CssImport(value=\"./themes/codecadenza/check-box.css\", themeFor=\"vaadin-checkbox\")\n");
-		b.append("@CssImport(value=\"./themes/codecadenza/form-item.css\", themeFor=\"vaadin-form-item\")\n");
-		b.append("@CssImport(value=\"./themes/codecadenza/text-area.css\", themeFor=\"vaadin-text-area\")\n");
-		b.append("@CssImport(value=\"./themes/codecadenza/text-field.css\", themeFor=\"vaadin-text-field\")\n");
-		b.append("@CssImport(value=\"./themes/codecadenza/title-area-dialog-shadow.css\", themeFor=\"vaadin-dialog-overlay\")\n");
-		b.append("@CssImport(value=\"./themes/codecadenza/title-area-dialog-dom.css\")\n");
-		b.append("@NpmPackage(value=\"lumo-css-framework\", version=\"3.0.14\")\n");
+		b.append("import com.vaadin.flow.theme.lumo.*;\n\n");
+		b.append("@StyleSheet(Lumo.STYLESHEET)\n");
+		b.append("@StyleSheet(Lumo.COMPACT_STYLESHEET)\n");
+		b.append("@StyleSheet(\"styles.css\")\n");
 		b.append("public class " + DEFAULT_APPLICATION_NAME + " implements AppShellConfigurator\n");
 		b.append("{\n");
 		b.append("private static final long serialVersionUID = 1L;\n");
@@ -274,9 +266,9 @@ public class VaadinClientProjectFilesGenerator extends AbstractClientProjectFile
 		b.append("txtNumberFormat.setLabel(");
 		b.append(i18n.getI18NMessage("field_editpreferencesdialog_txtnumberformat", "Number format", true) + ");\n\n");
 		b.append("final var cmdOK = new Button(" + i18n.getI18NMessage("cmd_save", "Save") + ");\n");
-		b.append("cmdOK.addClickListener(clickEvent -> savePreferences());\n\n");
+		b.append("cmdOK.addClickListener(_ -> savePreferences());\n\n");
 		b.append("final var cmdCancel = new Button(" + i18n.getI18NMessage("cmd_cancel", "Cancel") + ");\n");
-		b.append("cmdCancel.addClickListener(clickEvent -> getUI().ifPresent(ui -> ui.getPage().getHistory().back()));\n\n");
+		b.append("cmdCancel.addClickListener(_ -> getUI().ifPresent(ui -> ui.getPage().getHistory().back()));\n\n");
 		b.append("final var hlButtons = new HorizontalLayout();\n");
 		b.append("hlButtons.add(cmdOK, cmdCancel);\n\n");
 		b.append("add(txtDateFormat, txtDateTimeFormat, txtNumberFormat, hlButtons);\n");
@@ -369,10 +361,10 @@ public class VaadinClientProjectFilesGenerator extends AbstractClientProjectFile
 			b.append("import " + GENERATED_ELEMENT_ANNOTATION + ";\n");
 
 		b.append("\n");
-		b.append("public class " + MAIN_VIEW + " extends AppLayout\n");
+		b.append("public class " + MAIN_VIEW + " extends AppLayout implements AfterNavigationObserver\n");
 		b.append("{\n");
 		b.append(annotationForGeneratedElement);
-		b.append("private static final long serialVersionUID = 1;\n\n");
+		b.append("private static final long serialVersionUID = 1;\n");
 		b.append(annotationForGeneratedElement);
 		b.append("private final H1 viewTitle = new H1();\n\n");
 		b.append(annotationForGeneratedElement);
@@ -419,13 +411,13 @@ public class VaadinClientProjectFilesGenerator extends AbstractClientProjectFile
 		b.append("}\n\n");
 		b.append("/*\n");
 		b.append(" * (non-Javadoc)\n");
-		b.append(" * @see com.vaadin.flow.component.applayout.AppLayout#afterNavigation()\n");
+		b.append(" * @see com.vaadin.flow.router.AfterNavigationObserver#");
+		b.append("afterNavigation(com.vaadin.flow.router.AfterNavigationEvent)\n");
 		b.append(" */\n");
 		b.append(annotationForGeneratedElement);
 		b.append("@Override\n");
-		b.append("protected void afterNavigation()\n");
+		b.append("public void afterNavigation(AfterNavigationEvent event)\n");
 		b.append("{\n");
-		b.append("super.afterNavigation();\n\n");
 		b.append("viewTitle.setText(getCurrentPageTitle());\n");
 		b.append("}\n\n");
 		b.append("/**\n");
@@ -490,8 +482,8 @@ public class VaadinClientProjectFilesGenerator extends AbstractClientProjectFile
 		b.append("<web-app xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\n");
 		b.append("\txmlns=\"https://jakarta.ee/xml/ns/jakartaee\"\n");
 		b.append("\txsi:schemaLocation=\"https://jakarta.ee/xml/ns/jakartaee ");
-		b.append("https://jakarta.ee/xml/ns/jakartaee/web-app_6_0.xsd\"\n");
-		b.append("\tid=\"WebApp_ID\" version=\"6.0\">\n\n");
+		b.append("https://jakarta.ee/xml/ns/jakartaee/web-app_6_1.xsd\"\n");
+		b.append("\tid=\"WebApp_ID\" version=\"6.1\">\n\n");
 
 		if (secure) {
 			project.getRoles().forEach(role -> {
@@ -534,6 +526,61 @@ public class VaadinClientProjectFilesGenerator extends AbstractClientProjectFile
 		b.append("\t<session-timeout>30</session-timeout>\n");
 		b.append("</session-config>\n\n");
 		b.append("</web-app>\n");
+
+		return b.toString();
+	}
+
+	/**
+	 * @return the generated content
+	 */
+	public String createStylesheet() {
+		final StringBuilder b = new StringBuilder();
+		b.append("/* Width of the side-menu */\n");
+		b.append("vaadin-app-layout::part(drawer) {\n");
+		b.append("  width: 350px;\n");
+		b.append("}\n\n");
+		b.append("vaadin-app-layout[dir='rtl'] .sidemenu-header vaadin-avatar {\n");
+		b.append("  margin-left: var(--lumo-space-m);\n");
+		b.append("  margin-right: auto;\n");
+		b.append("  width: 600px;\n");
+		b.append("}\n\n");
+		b.append(".sidemenu-header {\n");
+		b.append("  height: var(--lumo-size-xl);\n");
+		b.append("  box-shadow: var(--lumo-box-shadow-s);\n");
+		b.append("  padding-right: var(--lumo-space-m);\n");
+		b.append("  width: 600px;\n");
+		b.append("}\n\n");
+		b.append(".sidemenu-header vaadin-avatar {\n");
+		b.append("  margin-left: auto;\n");
+		b.append("  margin-right: var(--lumo-space-m);\n");
+		b.append("}\n\n");
+		b.append(".sidemenu-header h1 {\n");
+		b.append("  font-size: var(--lumo-font-size-l);\n");
+		b.append("  margin: 0;\n");
+		b.append("}\n\n");
+		b.append(".sidemenu-menu #logo {\n");
+		b.append("  box-sizing: border-box;\n");
+		b.append("  box-shadow: inset 0 -1px var(--lumo-contrast-10pct);\n");
+		b.append("  padding: var(--lumo-space-s) var(--lumo-space-m);\n");
+		b.append("}\n\n");
+		b.append(".sidemenu-menu #logo img {\n");
+		b.append("  height: calc(var(--lumo-size-l) * 1.5);\n");
+		b.append("}\n\n");
+		b.append(".sidemenu-menu #logo h1 {\n");
+		b.append("  font-size: var(--lumo-font-size-xl);\n");
+		b.append("  font-weight: 600;\n");
+		b.append("  margin: 0 var(--lumo-space-s);\n");
+		b.append("}\n\n");
+		b.append("legend {\n");
+		b.append("  font-size: var(--lumo-font-size-m);\n");
+		b.append("  font-weight: bold;\n");
+		b.append("  margin-inline-start: 10px;\n");
+		b.append("}\n\n");
+		b.append("fieldset {\n");
+		b.append("  padding: 0px;\n");
+		b.append("  margin: 10px 0px 10px 0px;\n");
+		b.append("  border: 1px solid #CDCDCD;\n");
+		b.append("}\n\n");
 
 		return b.toString();
 	}

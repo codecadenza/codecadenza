@@ -102,7 +102,7 @@ public class BeanValidator {
 			}
 		}
 
-		if (b.length() != 0)
+		if (!b.isEmpty())
 			throw new PropertyConstraintViolationException(b.toString());
 	}
 

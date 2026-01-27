@@ -142,8 +142,8 @@ public abstract class AbstractServerProjectFilesGenerator implements IServerProj
 		b.append("<web-app xmlns=\"https://jakarta.ee/xml/ns/jakartaee\"\n");
 		b.append("\txmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\n");
 		b.append("\txsi:schemaLocation=\"https://jakarta.ee/xml/ns/jakartaee ");
-		b.append("https://jakarta.ee/xml/ns/jakartaee/web-app_6_0.xsd\"\n");
-		b.append("\tversion=\"6.0\">\n");
+		b.append("https://jakarta.ee/xml/ns/jakartaee/web-app_6_1.xsd\"\n");
+		b.append("\tversion=\"6.1\">\n");
 		b.append("</web-app>\n");
 
 		return b.toString();

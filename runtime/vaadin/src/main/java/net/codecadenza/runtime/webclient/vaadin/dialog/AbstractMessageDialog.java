@@ -22,6 +22,7 @@
 package net.codecadenza.runtime.webclient.vaadin.dialog;
 
 import com.vaadin.flow.component.AttachEvent;
+import com.vaadin.flow.component.ModalityMode;
 import com.vaadin.flow.component.Unit;
 import com.vaadin.flow.component.html.NativeLabel;
 import com.vaadin.flow.component.icon.Icon;
@@ -63,7 +64,7 @@ public abstract class AbstractMessageDialog extends AbstractTitleDialog {
 	protected void onAttach(AttachEvent attachEvent) {
 		super.onAttach(attachEvent);
 
-		setModal(true);
+		setModality(ModalityMode.STRICT);
 		setCloseOnOutsideClick(false);
 		setWidth(380, Unit.PIXELS);
 		setHeight(180, Unit.PIXELS);

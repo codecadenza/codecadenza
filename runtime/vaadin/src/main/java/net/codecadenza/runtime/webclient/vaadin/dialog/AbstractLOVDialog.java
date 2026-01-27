@@ -29,14 +29,11 @@ import static net.codecadenza.runtime.webclient.vaadin.i18n.InternalI18NService.
 
 import com.vaadin.flow.component.Unit;
 import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.grid.Grid.Column;
-import com.vaadin.flow.component.html.Div;
-import com.vaadin.flow.component.html.Span;
-import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
-import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.value.ValueChangeMode;
@@ -134,21 +131,20 @@ public abstract class AbstractLOVDialog<T, S> extends Dialog {
 
 		internalI18n = new InternalI18NService(i18n.getLocale());
 
-		getElement().setAttribute("theme", "dialog-with-title-bar");
+		setHeaderTitle(getTitle());
+		setCloseOnOutsideClick(false);
 
-		final var closeIcon = new Icon(VaadinIcon.CLOSE);
-		closeIcon.addClickListener(listener -> this.close());
+		final Button closeButton = new Button(VaadinIcon.CLOSE.create(), _ -> close());
+		closeButton.addThemeVariants(ButtonVariant.LUMO_TERTIARY);
 
-		final var divTitleBar = new Div();
-		divTitleBar.addClassNames("titlebar-for-dialog", "draggable");
-		divTitleBar.add(new Span(getTitle()), closeIcon);
+		getHeader().add(closeButton);
 
 		txtInput.setId("txtInput");
 		txtInput.setWidth(200, Unit.PIXELS);
 		txtInput.setValueChangeMode(ValueChangeMode.LAZY);
 		txtInput.addValueChangeListener(event -> onFilterTextChanged(event.getValue()));
 
-		addOpenedChangeListener(event -> txtInput.focus());
+		addOpenedChangeListener(_ -> txtInput.focus());
 
 		final var flInput = new FormLayout();
 		flInput.addFormItem(txtInput, internalI18n.getTranslationForFieldLabel(ABSTRACT_LOV_DIALOG_LBL_INPUT));
@@ -197,9 +193,16 @@ public abstract class AbstractLOVDialog<T, S> extends Dialog {
 		gridPanel.initGridColumns();
 		gridPanel.setId("dataTable");
 
+		final var vlContent = new VerticalLayout();
+		vlContent.add(flInput, gridPanel);
+		vlContent.setMargin(false);
+		vlContent.setSizeFull();
+
+		add(vlContent);
+
 		final var cmdSet = new Button(internalI18n.getTranslation(CMD_SET));
 
-		cmdSet.addClickListener(event -> {
+		cmdSet.addClickListener(_ -> {
 			if (gridPanel.getSelectedItem() == null)
 				return;
 
@@ -212,7 +215,7 @@ public abstract class AbstractLOVDialog<T, S> extends Dialog {
 		final var cmdReset = new Button(internalI18n.getTranslation(CMD_RESET));
 		cmdReset.setId("cmdReset");
 
-		cmdReset.addClickListener(event -> {
+		cmdReset.addClickListener(_ -> {
 			selectedId = null;
 			selectedDisplayValue = null;
 			applyValue = true;
@@ -220,16 +223,7 @@ public abstract class AbstractLOVDialog<T, S> extends Dialog {
 			close();
 		});
 
-		final var hlButtons = new HorizontalLayout();
-		hlButtons.setHeight(100, Unit.PIXELS);
-		hlButtons.add(cmdSet, cmdReset);
-
-		final var vlContent = new VerticalLayout();
-		vlContent.add(flInput, gridPanel, hlButtons);
-		vlContent.setMargin(false);
-		vlContent.setSizeFull();
-
-		add(divTitleBar, vlContent);
+		getFooter().add(cmdSet, cmdReset);
 
 		getDialogLogger().debug("Dialog initialization finished");
 	}

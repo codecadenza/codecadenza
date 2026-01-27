@@ -24,10 +24,8 @@ package net.codecadenza.runtime.webclient.vaadin.util;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.grid.Grid.Column;
 import com.vaadin.flow.function.ValueProvider;
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
+import java.io.OutputStream;
 import java.lang.invoke.MethodHandles;
 import java.math.BigDecimal;
 import java.sql.Timestamp;
@@ -40,7 +38,6 @@ import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
-import net.codecadenza.runtime.exchange.DataExportException;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.CreationHelper;
@@ -71,6 +68,7 @@ public class XLSXExportUtility<T> {
 	private final Grid<T> grid;
 	private final List<T> data;
 	private final Map<String, ValueProvider<T, ?>> columnValueProviders;
+	private final OutputStream outputStream;
 	private SXSSFWorkbook workbook;
 	private Sheet sheet;
 	private CellStyle cellStyleDateTime;
@@ -81,43 +79,28 @@ public class XLSXExportUtility<T> {
 	 * @param grid
 	 * @param data
 	 * @param columnValueProviders
+	 * @param outputStream
 	 */
-	public XLSXExportUtility(Grid<T> grid, List<T> data, Map<String, ValueProvider<T, ?>> columnValueProviders) {
+	public XLSXExportUtility(Grid<T> grid, List<T> data, Map<String, ValueProvider<T, ?>> columnValueProviders,
+			OutputStream outputStream) {
 		this.data = data;
 		this.grid = grid;
 		this.columnValueProviders = columnValueProviders;
+		this.outputStream = outputStream;
 	}
 
 	/**
-	 * @return a stream that contains the generated content
-	 * @throws DataExportException if the data export operation has failed
+	 * Write the grid data to the given {@link OutputStream}
+	 * @throws IOException if the content could not be written to the {@link OutputStream}
 	 */
-	public InputStream createResource() {
-		try {
-			logger.debug("Create resource for grid data export");
-
-			return writeXLSXToStream();
-		}
-		catch (final Exception e) {
-			logger.error("Error while exporting grid data!", e);
-
-			throw new DataExportException(e);
-		}
-	}
-
-	/**
-	 * Write the grid data to an {@link InputStream}
-	 * @return a stream that contains the generated content
-	 * @throws IOException if the content could not be written to the {@link InputStream}
-	 */
-	private InputStream writeXLSXToStream() throws IOException {
+	public void writeToStream() throws IOException {
 		Row row = null;
 		int colIndex = 0;
 		int rowIndex = 1;
 
 		initWorkbook();
 
-		try (final var outputStream = new ByteArrayOutputStream()) {
+		try {
 			createHeader();
 
 			for (final T item : data) {
@@ -141,8 +124,6 @@ public class XLSXExportUtility<T> {
 			logger.debug("Cell generation finished!");
 
 			workbook.write(outputStream);
-
-			return new ByteArrayInputStream(outputStream.toByteArray());
 		}
 		finally {
 			workbook.close();

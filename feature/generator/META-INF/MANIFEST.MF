@@ -18,7 +18,7 @@ Require-Bundle: org.eclipse.ui;bundle-version="3.111.0",
  net.codecadenza.eclipse.tools;bundle-version="1.2.0",
  org.apache.commons.text;bundle-version="1.12.0"
 Bundle-ActivationPolicy: lazy
-Bundle-RequiredExecutionEnvironment: JavaSE-21
+Bundle-RequiredExecutionEnvironment: JavaSE-25
 Export-Package: net.codecadenza.eclipse.generator,
  net.codecadenza.eclipse.generator.basic.client,
  net.codecadenza.eclipse.generator.basic.client.imp,

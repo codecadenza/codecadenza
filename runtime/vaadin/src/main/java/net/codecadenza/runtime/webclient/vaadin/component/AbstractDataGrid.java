@@ -45,8 +45,10 @@ import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.function.ValueProvider;
-import com.vaadin.flow.server.StreamResource;
+import com.vaadin.flow.server.streams.AbstractDownloadHandler;
+import com.vaadin.flow.server.streams.DownloadEvent;
 import jakarta.annotation.PostConstruct;
+import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -86,6 +88,7 @@ public abstract class AbstractDataGrid<T> extends VerticalLayout {
 	private static final long serialVersionUID = 7083412506796323089L;
 	private static final String EXPORT_FILE_NAME = "DataExport.xlsx";
 	private static final String ATTRIBUTE_ROW_COUNT = "row-count";
+	private static final String CONTENT_TYPE_EXCEL = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
 
 	protected final I18NService i18n;
 	protected final PreferencesStore preferences;
@@ -246,15 +249,27 @@ public abstract class AbstractDataGrid<T> extends VerticalLayout {
 	public void addButtonsToButtonBar(HorizontalLayout hlButtons) {
 		final var cmdRefresh = new Button(internalI18n.getTranslation(CMD_REFRESH));
 		cmdRefresh.setIcon(new Icon(VaadinIcon.REFRESH));
-		cmdRefresh.addClickListener(event -> refresh());
+		cmdRefresh.addClickListener(_ -> refresh());
 		cmdRefresh.setId(getId().orElseThrow() + "_cmdRefresh");
 
 		final var cmdExport = new Button(internalI18n.getTranslation(CMD_EXPORT));
 		cmdExport.setIcon(new Icon(VaadinIcon.FILE_TABLE));
 
-		final var anchorDownload = new Anchor(
-				new StreamResource(EXPORT_FILE_NAME, () -> new XLSXExportUtility<>(grid, data, columnValueProviders).createResource()),
-				"");
+		final var downloadHandler = new AbstractDownloadHandler<>() {
+			/*
+			 * (non-Javadoc)
+			 * @see com.vaadin.flow.server.streams.DownloadHandler#handleDownloadRequest(com.vaadin.flow.server.streams.DownloadEvent)
+			 */
+			@Override
+			public void handleDownloadRequest(DownloadEvent event) throws IOException {
+				event.setFileName(EXPORT_FILE_NAME);
+				event.setContentType(CONTENT_TYPE_EXCEL);
+
+				new XLSXExportUtility<>(grid, data, columnValueProviders, event.getOutputStream()).writeToStream();
+			}
+		};
+
+		final var anchorDownload = new Anchor(downloadHandler, "");
 		anchorDownload.getElement().setAttribute("download", true);
 		anchorDownload.add(cmdExport);
 		anchorDownload.setId(getId().orElseThrow() + "_cmdExport");
@@ -303,7 +318,7 @@ public abstract class AbstractDataGrid<T> extends VerticalLayout {
 	 * Add the context menu items
 	 */
 	protected void addContextMenuItems() {
-		contextMenu.addItem(internalI18n.getTranslation(ABSTRACT_DATA_GRID_ACTION_REFRESH), item -> refresh());
+		contextMenu.addItem(internalI18n.getTranslation(ABSTRACT_DATA_GRID_ACTION_REFRESH), _ -> refresh());
 	}
 
 	/**

@@ -56,7 +56,7 @@ public abstract class AbstractPageObject extends AbstractVaadinPageComponent {
 	private static final String ATTR_NAME_VALUE = "value";
 	private static final String DATE_TIME_PICKER_ELEMENT_NAME = "vaadin-date-time-picker";
 	private static final int LOV_ROW_SELECTION_DELAY = 500;
-	private static final String NAVIGATOR_XPATH = "//vaadin-vertical-layout[@class='sidemenu-menu']/vaadin-grid";
+	private static final String NAVIGATOR_XPATH = "//vaadin-vertical-layout[@class='sidemenu-menu']//vaadin-grid";
 	private static final int SCROLL_PAGE_SIZE = 10;
 	private static final String SLASH = "/";
 	private static final String SINGLE_LINE_INPUT = "input";
@@ -266,7 +266,7 @@ public abstract class AbstractPageObject extends AbstractVaadinPageComponent {
 		inputField.sendKeys(testData.getNewValue());
 
 		if (!testData.getNewValue().isEmpty()) {
-			final boolean itemFound = searchAndSelectItem(testData.getNewValue());
+			final boolean itemFound = searchAndSelectItem(inputField, testData.getNewValue());
 
 			if (!itemFound)
 				fail("Could not find selectable item '" + testData.getNewValue() + "' for auto-complete field '" + testData.getElementId()
@@ -310,7 +310,7 @@ public abstract class AbstractPageObject extends AbstractVaadinPageComponent {
 
 		// Reset the selection if the test data contains a single whitespace!
 		if (!" ".equals(testData.getNewValue())) {
-			final boolean itemFound = searchAndSelectItem(testData.getNewValue());
+			final boolean itemFound = searchAndSelectItem(combobox, testData.getNewValue());
 
 			if (!itemFound)
 				fail("Could not find selectable item '" + testData.getNewValue() + "' for combobox '" + testData.getElementId() + "'!");
@@ -615,16 +615,16 @@ public abstract class AbstractPageObject extends AbstractVaadinPageComponent {
 
 	/**
 	 * Search for a given item and select it if it is contained in the respective list
+	 * @param combobox
 	 * @param item
 	 * @return true if an item could be selected
 	 */
-	protected boolean searchAndSelectItem(String item) {
-		final WebElement combobox = findWebElementByXPath("//vaadin-combo-box-overlay");
+	protected boolean searchAndSelectItem(WebElement combobox, String item) {
 		final WebElement scroller = combobox.findElement(By.tagName("vaadin-combo-box-scroller"));
 		final List<String> previousItems = new ArrayList<>();
 
 		while (true) {
-			// The overlay list only contains the items that are really visible!
+			// The list only contains the items that are really visible!
 			final List<WebElement> visibleItems = scroller.findElements(By.tagName("vaadin-combo-box-item"));
 			final Optional<WebElement> itemToSearchFor = visibleItems.stream().filter(i -> i.getText().equals(item)).findFirst();
 			final List<String> actualItems = visibleItems.stream().map(WebElement::getText).toList();

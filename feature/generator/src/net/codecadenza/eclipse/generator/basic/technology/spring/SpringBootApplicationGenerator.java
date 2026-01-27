@@ -76,32 +76,36 @@ public class SpringBootApplicationGenerator extends AbstractJavaSourceGenerator 
 	protected void addImports() {
 		importClass("org.springframework.boot.SpringApplication");
 		importClass("org.springframework.boot.autoconfigure.SpringBootApplication");
-		importClass("org.springframework.boot.autoconfigure.domain.EntityScan");
-		importClass("org.springframework.boot.web.servlet.support.SpringBootServletInitializer");
+		importClass("org.springframework.boot.persistence.autoconfigure.EntityScan");
 		importClass("org.springframework.context.annotation.Bean");
 		importClass("org.springframework.context.annotation.ComponentScan");
 		importClass("org.springframework.scheduling.annotation.EnableScheduling");
 		importClass("org.springframework.security.web.firewall.StrictHttpFirewall");
 
 		if (project.hasEclipseClient() || project.hasJavaFXClient() || project.hasSwingClient())
-			importClass("org.springframework.boot.web.servlet.ServletComponentScan");
+			importClass("org.springframework.boot.web.server.servlet.context.ServletComponentScan");
 
 		if (project.hasVaadinClient()) {
 			importPackage("com.vaadin.flow.component.dependency");
 			importPackage("com.vaadin.flow.component.page");
-			importPackage("com.vaadin.flow.server");
-			importPackage("com.vaadin.flow.theme");
+			importPackage("com.vaadin.flow.theme.lumo");
 			importClass("org.springframework.web.context.annotation.SessionScope");
 			importPackage("net.codecadenza.runtime.webclient.vaadin.util");
 			importPackage("net.codecadenza.runtime.webclient.vaadin.i18n");
 		}
 		else if (project.hasJSFClient()) {
 			importPackage("net.codecadenza.runtime.webclient.primefaces.filter");
-			importPackage("org.springframework.boot.web.server");
+			importPackage("org.springframework.boot.web.error");
 			importPackage("org.springframework.boot.web.servlet");
 			importPackage("org.springframework.core");
 			importPackage("org.springframework.http");
 		}
+
+		if (!project.hasVaadinClient())
+			importClass("org.springframework.boot.web.servlet.support.SpringBootServletInitializer");
+
+		if (project.getIntegrationModuleByArtifact(BuildArtifactType.INTEGRATION_IMP_KAFKA) != null)
+			importPackage("org.springframework.kafka.annotation");
 	}
 
 	/*
@@ -118,8 +122,10 @@ public class SpringBootApplicationGenerator extends AbstractJavaSourceGenerator 
 		if (project.hasJSFClient())
 			b.append("@ComponentScan(\"net.codecadenza.runtime.webclient.primefaces.util\")\n");
 
-		if (project.getIntegrationModuleByArtifact(BuildArtifactType.INTEGRATION_IMP_KAFKA) != null)
+		if (project.getIntegrationModuleByArtifact(BuildArtifactType.INTEGRATION_IMP_KAFKA) != null) {
+			b.append("@EnableKafka\n");
 			b.append("@ComponentScan(\"net.codecadenza.runtime.spring.kafka\")\n");
+		}
 
 		if (project.hasEclipseClient() || project.hasJavaFXClient() || project.hasSwingClient())
 			b.append("@ServletComponentScan(\"net.codecadenza.runtime.server.transport\")\n");
@@ -128,22 +134,17 @@ public class SpringBootApplicationGenerator extends AbstractJavaSourceGenerator 
 		b.append("\"net.codecadenza.runtime.jpa.converter\"})\n");
 
 		if (project.hasVaadinClient()) {
-			b.append("@PWA(name = \"My generated Application\", shortName=\"My App\")\n");
-			b.append("@Theme(\"codecadenza\")\n");
-			b.append("@CssImport(value=\"./themes/codecadenza/app-layout.css\", themeFor=\"vaadin-app-layout\")\n");
-			b.append("@CssImport(value=\"./themes/codecadenza/check-box.css\", themeFor=\"vaadin-checkbox\")\n");
-			b.append("@CssImport(value=\"./themes/codecadenza/form-item.css\", themeFor=\"vaadin-form-item\")\n");
-			b.append("@CssImport(value=\"./themes/codecadenza/text-area.css\", themeFor=\"vaadin-text-area\")\n");
-			b.append("@CssImport(value=\"./themes/codecadenza/text-field.css\", themeFor=\"vaadin-text-field\")\n");
-			b.append("@CssImport(value=\"./themes/codecadenza/title-area-dialog-shadow.css\", themeFor=\"vaadin-dialog-overlay\")\n");
-			b.append("@CssImport(value=\"./themes/codecadenza/title-area-dialog-dom.css\")\n");
-			b.append("@NpmPackage(value=\"lumo-css-framework\", version=\"3.0.14\")\n");
+			b.append("@StyleSheet(Lumo.STYLESHEET)\n");
+			b.append("@StyleSheet(Lumo.COMPACT_STYLESHEET)\n");
+			b.append("@StyleSheet(\"styles.css\")\n");
 		}
 
-		b.append("public class Application extends SpringBootServletInitializer");
+		b.append("public class Application ");
 
 		if (project.hasVaadinClient())
-			b.append(" implements AppShellConfigurator");
+			b.append("implements AppShellConfigurator");
+		else
+			b.append("extends SpringBootServletInitializer");
 	}
 
 	/*

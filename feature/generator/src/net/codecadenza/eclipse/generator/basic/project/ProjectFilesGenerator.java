@@ -61,8 +61,8 @@ public class ProjectFilesGenerator {
 		b.append("<?xml version=\"1.0\" encoding=\"" + UTF_8 + "\"?>\n");
 		b.append("<beans xmlns=\"https://jakarta.ee/xml/ns/jakartaee\"\n");
 		b.append("\txmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\n");
-		b.append("\txsi:schemaLocation=\"https://jakarta.ee/xml/ns/jakartaee https://jakarta.ee/xml/ns/jakartaee/beans_4_0.xsd\"\n");
-		b.append("\tversion=\"4.0\"\n");
+		b.append("\txsi:schemaLocation=\"https://jakarta.ee/xml/ns/jakartaee https://jakarta.ee/xml/ns/jakartaee/beans_4_1.xsd\"\n");
+		b.append("\tversion=\"4.1\"\n");
 		b.append("\tbean-discovery-mode=\"all\">\n");
 		b.append("</beans>\n");
 
@@ -160,13 +160,18 @@ public class ProjectFilesGenerator {
 				if (catalogName != null && !catalogName.isEmpty())
 					b.append("spring.datasource.hikari.catalog=" + catalogName + "\n");
 
-				b.append("spring.jackson.serialization.write-dates-as-timestamps=true\n");
 				b.append("server.servlet.context-path=/" + project.getCode() + "\n");
 
 				if (project.hasAngularClient() || project.hasJSFOrVaadinClient()) {
 					b.append("# Check if the maximum file size must be reduced!\n");
 					b.append("spring.servlet.multipart.max-file-size=" + Integer.MAX_VALUE + "\n");
 					b.append("spring.servlet.multipart.max-request-size=" + Integer.MAX_VALUE + "\n");
+				}
+
+				if (project.hasJSFClient()) {
+					// The default values are too small for performing a file upload in JSF
+					b.append("server.tomcat.max-part-count=100\n");
+					b.append("server.tomcat.max-part-header-size=2048\n");
 				}
 
 				if (addBeanDefinitionOverriding)
@@ -187,8 +192,8 @@ public class ProjectFilesGenerator {
 		b.append("<persistence xmlns=\"https://jakarta.ee/xml/ns/persistence\"\n");
 		b.append("\txmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\n");
 		b.append("\txsi:schemaLocation=\"https://jakarta.ee/xml/ns/persistence ");
-		b.append("https://jakarta.ee/xml/ns/persistence/persistence_3_0.xsd\"\n");
-		b.append("\tversion=\"3.0\">\n");
+		b.append("https://jakarta.ee/xml/ns/persistence/persistence_3_2.xsd\"\n");
+		b.append("\tversion=\"3.2\">\n");
 
 		// Define the default persistence unit name in order to use it in other libraries!
 		b.append("\t<persistence-unit name=\"_default\" ");

@@ -261,12 +261,8 @@ public class EclipseClientProjectFilesGenerator extends AbstractClientProjectFil
 	 */
 	private String createE4LifeCycle() {
 		final var b = new StringBuilder();
-		boolean usesEmbeddedDerby = false;
-
-		if (project.hasRCPClient() && project.getDatabase().getVendorGroup() == DBVendorGroupEnumeration.DERBY_EMBEDDED) {
-			usesEmbeddedDerby = true;
-			b.append("import java.sql.*;\n");
-		}
+		final boolean usesEmbeddedDerby = project.hasRCPClient()
+				&& project.getDatabase().getVendorGroup() == DBVendorGroupEnumeration.DERBY_EMBEDDED;
 
 		b.append("import static " + project.getClientNamespace().toString() + "." + APP_I18N_PROVIDER_CLASS + ".*;\n");
 		b.append("import java.util.*;\n");
@@ -278,6 +274,9 @@ public class EclipseClientProjectFilesGenerator extends AbstractClientProjectFil
 		b.append("import org.eclipse.jface.dialogs.MessageDialog;\n");
 		b.append("import net.codecadenza.runtime.richclient.persistence.PersistenceHelper;\n");
 		b.append("import net.codecadenza.runtime.richclient.transport.*;\n");
+
+		if (usesEmbeddedDerby)
+			b.append("import java.sql.*;\n");
 
 		new LoggingGenerator(false).getImports().forEach(imp -> b.append(imp + "\n"));
 
@@ -342,6 +341,10 @@ public class EclipseClientProjectFilesGenerator extends AbstractClientProjectFil
 		b.append(" * @param workbenchContext\n");
 		b.append(" */\n");
 		b.append("@ProcessAdditions\n");
+
+		if (usesEmbeddedDerby)
+			b.append("@SuppressWarnings(\"unused\")\n");
+
 		b.append("protected void processAdditions(IEclipseContext workbenchContext)\n");
 		b.append("{\n");
 
@@ -523,14 +526,12 @@ public class EclipseClientProjectFilesGenerator extends AbstractClientProjectFil
 	 */
 	private String createActivator() {
 		final var b = new StringBuilder();
-		boolean usesEmbeddedDerby = false;
-
-		if (project.getDatabase().getVendorGroup() == DBVendorGroupEnumeration.DERBY_EMBEDDED) {
-			usesEmbeddedDerby = true;
-			b.append("import java.sql.*;\n");
-		}
+		final boolean usesEmbeddedDerby = project.getDatabase().getVendorGroup() == DBVendorGroupEnumeration.DERBY_EMBEDDED;
 
 		b.append("import org.osgi.framework.*;\n");
+
+		if (usesEmbeddedDerby)
+			b.append("import java.sql.*;\n");
 
 		if (usesEmbeddedDerby)
 			new LoggingGenerator(false).getImports().forEach(imp -> b.append(imp + "\n"));
@@ -562,6 +563,10 @@ public class EclipseClientProjectFilesGenerator extends AbstractClientProjectFil
 		b.append(" * @see org.osgi.framework.BundleActivator#stop(org.osgi.framework.BundleContext)\n");
 		b.append(" */\n");
 		b.append("@Override\n");
+
+		if (usesEmbeddedDerby)
+			b.append("@SuppressWarnings(\"unused\")\n");
+
 		b.append("public void stop(BundleContext bundleContext) throws Exception\n");
 		b.append("{\n");
 
@@ -849,7 +854,7 @@ public class EclipseClientProjectFilesGenerator extends AbstractClientProjectFil
 		b.append("Bundle-SymbolicName: " + DEFAULT_PLUGIN_ID + "; singleton:=true\n");
 		b.append("Bundle-Version: 1.0.0\n");
 		b.append("Bundle-Activator: " + className + "\n");
-		b.append("Bundle-RequiredExecutionEnvironment: JavaSE-21\n");
+		b.append("Bundle-RequiredExecutionEnvironment: JavaSE-25\n");
 		b.append("Bundle-Vendor: Vendor name\n");
 
 		// If the application uses JPA locally the plug-in must not be packed into a single jar file. Otherwise EclipseLink cannot
@@ -880,13 +885,14 @@ public class EclipseClientProjectFilesGenerator extends AbstractClientProjectFil
 			b.append(" org.eclipse.e4.ui.workbench.addons.swt\n");
 		}
 		else {
-			b.append(" org.apache.felix.http.servlet-api,\n");
-			b.append(" org.apache.commons.commons-fileupload,\n");
+			b.append(" jakarta.servlet-api,\n");
+			b.append(" org.apache.commons.commons-fileupload2-core,\n");
+			b.append(" org.apache.commons.commons-fileupload2-jakarta-servlet6,\n");
 			b.append(" org.apache.commons.commons-io,\n");
 			b.append(" org.eclipse.rap.jface,\n");
 			b.append(" org.eclipse.rap.filedialog,\n");
 			b.append(" org.eclipse.rap.fileupload,\n");
-			b.append(" org.eclipse.rap.rwt;bundle-version=\"[3.28.0,4.0.0)\",\n");
+			b.append(" org.eclipse.rap.rwt;bundle-version=\"[4.5.0,5.0.0)\",\n");
 			b.append(" org.eclipse.rap.e4\n");
 		}
 

@@ -54,4 +54,4 @@ Require-Bundle: org.eclipse.core.runtime;bundle-version="3.15.100",
  net.codecadenza.eclipse.shared;bundle-version="1.2.0",
  net.codecadenza.eclipse.tools;bundle-version="1.2.0"
 Bundle-ActivationPolicy: lazy
-Bundle-RequiredExecutionEnvironment: JavaSE-21
+Bundle-RequiredExecutionEnvironment: JavaSE-25

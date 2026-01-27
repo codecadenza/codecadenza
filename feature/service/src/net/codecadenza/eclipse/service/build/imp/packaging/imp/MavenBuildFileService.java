@@ -87,15 +87,15 @@ public class MavenBuildFileService extends AbstractMavenBuildFileService impleme
 
 	// Constants for the Maven WAR plug-in
 	private static final String MAVEN_WAR_PLUGIN_ID = "maven-war-plugin";
-	private static final String MAVEN_WAR_PLUGIN_VERSION = "3.4.0";
+	private static final String MAVEN_WAR_PLUGIN_VERSION = "3.5.1";
 
 	// Constants for JBoss
 	private static final String JB_PLUGIN_GROUP = "org.wildfly.plugins";
-	private static final String JB_PLUGIN_VERSION = "5.0.1.Final";
+	private static final String JB_PLUGIN_VERSION = "5.1.5.Final";
 	private static final String JB_PLUGIN_ID = "wildfly-maven-plugin";
 
 	// Constants for Vaadin
-	private static final String VD_VERSION = "24.5.3";
+	private static final String VD_VERSION = "25.0.2";
 	private static final String VD_PLUGIN_GROUP = "com.vaadin";
 	private static final String VD_PLUGIN_ID = "vaadin-maven-plugin";
 	private static final String VD_ARTIFACT_ID_BOM = "vaadin-bom";
@@ -104,7 +104,7 @@ public class MavenBuildFileService extends AbstractMavenBuildFileService impleme
 	// Constants for Avro
 	private static final String AVRO_PLUGIN_GROUP = "org.apache.avro";
 	private static final String AVRO_PLUGIN_ID = "avro-maven-plugin";
-	private static final String AVRO_PLUGIN_VERSION = "1.12.0";
+	private static final String AVRO_PLUGIN_VERSION = "1.12.1";
 	private static final String AVRO_GOAL_IDL = "idl-protocol";
 	private static final String AVRO_ELEMENT_ST = "stringType";
 	private static final String AVRO_ELEMENT_DT = "enableDecimalLogicalType";
@@ -142,7 +142,7 @@ public class MavenBuildFileService extends AbstractMavenBuildFileService impleme
 
 	// Constants for Spring Boot
 	private static final String SB_GROUP = "org.springframework.boot";
-	private static final String SB_VERSION = "3.3.5";
+	private static final String SB_VERSION = "4.0.1";
 	private static final String SB_MAVEN_PLUGIN_ID = "spring-boot-maven-plugin";
 	private static final String SB_PARENT_ARTIFACT_ID = "spring-boot-starter-parent";
 
@@ -220,8 +220,8 @@ public class MavenBuildFileService extends AbstractMavenBuildFileService impleme
 
 		if (artifact.getType() == BuildArtifactType.MASTER || !isParentRequired) {
 			mavenModel.getProperties().put(PROP_NAME_ENCODING, UTF_8);
-			mavenModel.getProperties().put(PROP_NAME_COMP_SOURCE, JavaCore.VERSION_21);
-			mavenModel.getProperties().put(PROP_NAME_COMP_TARGET, JavaCore.VERSION_21);
+			mavenModel.getProperties().put(PROP_NAME_COMP_SOURCE, JavaCore.VERSION_25);
+			mavenModel.getProperties().put(PROP_NAME_COMP_TARGET, JavaCore.VERSION_25);
 		}
 
 		if (artifact.getType() != BuildArtifactType.MASTER)

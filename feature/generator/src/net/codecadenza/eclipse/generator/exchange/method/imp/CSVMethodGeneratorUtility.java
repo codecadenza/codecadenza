@@ -85,7 +85,7 @@ public class CSVMethodGeneratorUtility {
 
 		b.append(method.getQuoteCharacter() + "')");
 		b.append(".setRecordSeparator(\"" + method.getRecordSeparator() + "\")");
-		b.append(".setNullString(\"[null]\").build();\n\n");
+		b.append(".setNullString(\"[null]\").get();\n\n");
 
 		return b.toString();
 	}

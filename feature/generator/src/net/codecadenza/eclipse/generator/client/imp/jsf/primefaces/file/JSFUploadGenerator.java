@@ -120,7 +120,7 @@ public class JSFUploadGenerator {
 				b.append("header=\"#{" + EL_I18N_VAR + ".dialog_upload_title}\" widgetVar=\"" + widgetVar + "\">\n");
 				b.append("\t\t<p:messages id=\"" + msgVar + "\" showDetail=\"true\" showSummary=\"true\"/>\n");
 				b.append("\t\t<p:fileUpload auto=\"true\" mode=\"advanced\" listener=\"#{");
-				b.append(controller + "}\" sizeLimit=\"" + maxFileSize + "\" update=\"" + msgVar);
+				b.append(controller + "}\" update=\"" + msgVar);
 
 				int panelsOfFirstRow = 0;
 				int panelsOfSecondRow = 0;
@@ -156,7 +156,9 @@ public class JSFUploadGenerator {
 					}
 				}
 
-				b.append("\"/>\n");
+				b.append("\">\n");
+				b.append("\t\t\t<p:validateFile sizeLimit=\"" + maxFileSize + "\"/>\n");
+				b.append("\t\t</p:fileUpload>\n");
 				b.append("\t</p:dialog>\n\n");
 			}
 		}

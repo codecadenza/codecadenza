@@ -2,7 +2,7 @@
 <configuration>
 	<dependency_config buildType="DOMAIN" comment="">
 		<filter clientPlatform="ALL" technology="ALL" serverPlatform="ALL" validationType="ALL" database="ALL" jpaProvider="ALL">
-			<dependency name="jakarta.jakartaee-api" groupName="jakarta.platform" version="10.0.0" scope="provided"/>
+			<dependency name="jakarta.jakartaee-api" groupName="jakarta.platform" version="11.0.0" scope="provided"/>
 			<dependency name="codecadenza-jpa" groupName="net.codecadenza.runtime" version="1.2.0" scope="compile"/>
 		</filter>
 		<filter clientPlatform="ALL" technology="SPRING_BOOT" serverPlatform="ALL" validationType="ALL" database="ALL" jpaProvider="HIBERNATE">
@@ -13,23 +13,23 @@
 				<exclusion name="hibernate-entitymanager" groupName="org.hibernate" scope="compile"></exclusion>
 				<exclusion name="hibernate-core" groupName="org.hibernate" scope="compile"></exclusion>
 			</dependency>
-			<dependency name="org.eclipse.persistence.jpa" groupName="org.eclipse.persistence" version="4.0.4" scope="compile"/>
+			<dependency name="org.eclipse.persistence.jpa" groupName="org.eclipse.persistence" version="5.0.0-B13" scope="compile"/>
 		</filter>
 		<filter clientPlatform="ALL" technology="JAVA_SE" serverPlatform="ALL" validationType="STANDARD" database="ALL" jpaProvider="ALL">
-			<dependency name="hibernate-validator" groupName="org.hibernate.validator" version="8.0.0.Final" scope="compile"/>
+			<dependency name="hibernate-validator" groupName="org.hibernate.validator" version="9.1.0.Final" scope="compile"/>
 		</filter>
 		<filter clientPlatform="ALL" technology="JAVA_SE" serverPlatform="ALL" validationType="ALL" database="ALL" jpaProvider="HIBERNATE">
-			<dependency name="hibernate-core" groupName="org.hibernate" version="6.1.6.Final" scope="compile"/>
+			<dependency name="hibernate-core" groupName="org.hibernate" version="7.2.0.Final" scope="compile"/>
 		</filter>
 		<filter clientPlatform="ALL" technology="JAVA_SE" serverPlatform="ALL" validationType="ALL" database="ALL" jpaProvider="ECLIPSELINK">
-			<dependency name="org.eclipse.persistence.jpa" groupName="org.eclipse.persistence" version="4.0.4" scope="compile"/>
+			<dependency name="org.eclipse.persistence.jpa" groupName="org.eclipse.persistence" version="5.0.0-B13" scope="compile"/>
 		</filter>
 		<!-- Add persistence provider-specific dependencies for fields of type UUID -->
 		<filter clientPlatform="ALL" technology="JAKARTA_EE" serverPlatform="ALL" validationType="ALL" database="ALL" jpaProvider="HIBERNATE">
-			<dependency name="hibernate-core" groupName="org.hibernate" version="6.1.6.Final" scope="provided"/>
+			<dependency name="hibernate-core" groupName="org.hibernate" version="7.2.0.Final" scope="provided"/>
 		</filter>
 		<filter clientPlatform="ALL" technology="JAKARTA_EE" serverPlatform="ALL" validationType="ALL" database="ALL" jpaProvider="ECLIPSELINK">
-			<dependency name="org.eclipse.persistence.core" groupName="org.eclipse.persistence" version="4.0.4" scope="provided"/>
+			<dependency name="org.eclipse.persistence.core" groupName="org.eclipse.persistence" version="5.0.0-B13" scope="provided"/>
 		</filter>
 	</dependency_config>
 
@@ -38,10 +38,10 @@
 			<dependency name="codecadenza-util" groupName="net.codecadenza.runtime" version="1.2.0" scope="compile"/>
 		</filter>
 		<filter clientPlatform="ALL" technology="JAVA_SE" serverPlatform="ALL" validationType="ALL" database="ALL" jpaProvider="ALL">
-			<dependency name="jakarta.json.bind-api" groupName="jakarta.json.bind" version="3.0.0" scope="provided"/>
+			<dependency name="jakarta.json.bind-api" groupName="jakarta.json.bind" version="3.0.1" scope="provided"/>
 		</filter>
 		<filter clientPlatform="ALL" technology="JAKARTA_EE" serverPlatform="ALL" validationType="ALL" database="ALL" jpaProvider="ALL">
-			<dependency name="jakarta.json.bind-api" groupName="jakarta.json.bind" version="3.0.0" scope="provided"/>
+			<dependency name="jakarta.json.bind-api" groupName="jakarta.json.bind" version="3.0.1" scope="provided"/>
 		</filter>
 		<filter clientPlatform="ALL" technology="SPRING_BOOT" serverPlatform="ALL" validationType="ALL" database="ALL" jpaProvider="ALL">
 			<dependency name="jakarta.json.bind-api" groupName="jakarta.json.bind" scope="provided"/>
@@ -50,7 +50,7 @@
 
 	<dependency_config buildType="REPOSITORY" comment="">
 		<filter clientPlatform="ALL" technology="ALL" serverPlatform="ALL" validationType="ALL" database="ALL" jpaProvider="ALL">
-			<dependency name="jakarta.jakartaee-api" groupName="jakarta.platform" version="10.0.0" scope="provided"/>
+			<dependency name="jakarta.jakartaee-api" groupName="jakarta.platform" version="11.0.0" scope="provided"/>
 		</filter>
 		<filter clientPlatform="ALL" technology="JAVA_SE" serverPlatform="ALL" validationType="ALL" database="ALL" jpaProvider="ALL">
 			<dependency name="codecadenza-richclient" groupName="net.codecadenza.runtime" version="1.2.0" scope="compile"/>
@@ -65,7 +65,7 @@
 
 	<dependency_config buildType="BOUNDARY" comment="">
 		<filter clientPlatform="ALL" technology="ALL" serverPlatform="ALL" validationType="ALL" database="ALL" jpaProvider="ALL">
-			<dependency name="jakarta.jakartaee-api" groupName="jakarta.platform" version="10.0.0" scope="provided"/>
+			<dependency name="jakarta.jakartaee-api" groupName="jakarta.platform" version="11.0.0" scope="provided"/>
 		</filter>
 		<filter clientPlatform="ALL" technology="JAVA_SE" serverPlatform="ALL" validationType="ALL" database="ALL" jpaProvider="ALL">
 			<dependency name="codecadenza-richclient" groupName="net.codecadenza.runtime" version="1.2.0" scope="compile"/>
@@ -80,20 +80,20 @@
 
 	<dependency_config buildType="CLIENT_INTERFACE" comment="">
 		<filter clientPlatform="ALL" technology="JAVA_SE" serverPlatform="ALL" validationType="ALL" database="ALL" jpaProvider="ALL" description="ALL">
-			<dependency name="jakarta.validation-api" groupName="jakarta.validation" version="3.0.2" scope="compile"/>
+			<dependency name="jakarta.validation-api" groupName="jakarta.validation" version="3.1.1" scope="compile"/>
 		</filter>
 	</dependency_config>
 
 	<dependency_config buildType="DATA_EXCHANGE" comment="">
 		<filter clientPlatform="ALL" technology="ALL" serverPlatform="ALL" validationType="ALL" database="ALL" jpaProvider="ALL">
-			<dependency name="jakarta.jakartaee-api" groupName="jakarta.platform" version="10.0.0" scope="provided"/>
-			<dependency name="poi-ooxml" groupName="org.apache.poi" version="5.3.0" scope="compile"/>
-			<dependency name="commons-csv" groupName="org.apache.commons" version="1.9.0" scope="compile"/>
+			<dependency name="jakarta.jakartaee-api" groupName="jakarta.platform" version="11.0.0" scope="provided"/>
+			<dependency name="poi-ooxml" groupName="org.apache.poi" version="5.5.1" scope="compile"/>
+			<dependency name="commons-csv" groupName="org.apache.commons" version="1.14.1" scope="compile"/>
 		</filter>
 		<filter clientPlatform="ALL" technology="JAVA_SE" serverPlatform="ALL" validationType="ALL" database="ALL" jpaProvider="ALL">
 			<dependency name="codecadenza-richclient" groupName="net.codecadenza.runtime" version="1.2.0" scope="compile"/>
-			<dependency name="jaxb-runtime" groupName="org.glassfish.jaxb" version="4.0.1" scope="compile"/>
-			<dependency name="yasson" groupName="org.eclipse" version="3.0.2" scope="compile"/>
+			<dependency name="jaxb-runtime" groupName="org.glassfish.jaxb" version="4.0.6" scope="compile"/>
+			<dependency name="yasson" groupName="org.eclipse" version="3.0.4" scope="compile"/>
 		</filter>
 		<filter clientPlatform="ALL" technology="SPRING_BOOT" serverPlatform="ALL" validationType="ALL" database="ALL" jpaProvider="ALL">
 			<dependency name="codecadenza-spring" groupName="net.codecadenza.runtime" version="1.2.0" scope="compile"/>
@@ -107,7 +107,7 @@
 
 	<dependency_config buildType="FACADE" comment="">
 		<filter clientPlatform="ALL" technology="ALL" serverPlatform="ALL" validationType="ALL" database="ALL" jpaProvider="ALL">
-			<dependency name="jakarta.jakartaee-api" groupName="jakarta.platform" version="10.0.0" scope="provided"/>
+			<dependency name="jakarta.jakartaee-api" groupName="jakarta.platform" version="11.0.0" scope="provided"/>
 		</filter>
 		<filter clientPlatform="ALL" technology="JAVA_SE" serverPlatform="ALL" validationType="ALL" database="ALL" jpaProvider="ALL">
 			<dependency name="codecadenza-richclient" groupName="net.codecadenza.runtime" version="1.2.0" scope="compile"/>
@@ -123,7 +123,7 @@
 
 	<dependency_config buildType="SERVICE" comment="">
 		<filter clientPlatform="ALL" technology="ALL" serverPlatform="ALL" validationType="ALL" database="ALL" jpaProvider="ALL">
-			<dependency name="jakarta.jakartaee-api" groupName="jakarta.platform" version="10.0.0" scope="provided"/>
+			<dependency name="jakarta.jakartaee-api" groupName="jakarta.platform" version="11.0.0" scope="provided"/>
 		</filter>
 		<filter clientPlatform="ALL" technology="JAVA_SE" serverPlatform="ALL" validationType="ALL" database="ALL" jpaProvider="ALL">
 			<dependency name="codecadenza-richclient" groupName="net.codecadenza.runtime" version="1.2.0" scope="compile"/>
@@ -139,10 +139,10 @@
 
 	<dependency_config buildType="SERVER" comment="Configuration for rich-client server artifacts (JAVAFX, SWING, RAP, RCP)">
 		<filter clientPlatform="ALL" technology="ALL" serverPlatform="ALL" validationType="ALL" database="ALL" jpaProvider="ALL">
-			<dependency name="jakarta.jakartaee-api" groupName="jakarta.platform" version="10.0.0" scope="provided"/>
+			<dependency name="jakarta.jakartaee-api" groupName="jakarta.platform" version="11.0.0" scope="provided"/>
 		</filter>
 		<filter clientPlatform="ALL" technology="JAKARTA_EE" serverPlatform="ALL" validationType="ALL" database="ALL" jpaProvider="ALL">
-			<dependency name="log4j-slf4j2-impl" groupName="org.apache.logging.log4j" version="2.23.1" scope="compile"/>
+			<dependency name="log4j-slf4j2-impl" groupName="org.apache.logging.log4j" version="2.25.3" scope="compile"/>
 			<dependency name="junit-jupiter" groupName="org.junit.jupiter" version="5.11.3" scope="test"/>
 		</filter>
 		<filter clientPlatform="JAVAFX" technology="JAKARTA_EE" serverPlatform="ALL" validationType="ALL" database="ALL" jpaProvider="ALL">
@@ -202,45 +202,47 @@
 
 	<dependency_config buildType="GUI" comment="">
 		<filter clientPlatform="ALL" technology="ALL" serverPlatform="ALL" validationType="ALL" database="ALL" jpaProvider="ALL">
-			<dependency name="poi-ooxml" groupName="org.apache.poi" version="5.3.0" scope="compile"/>
+			<dependency name="poi-ooxml" groupName="org.apache.poi" version="5.5.1" scope="compile"/>
 		</filter>
 		<filter clientPlatform="JAVAFX" technology="ALL" serverPlatform="ALL" validationType="ALL" database="ALL" jpaProvider="ALL">
 			<dependency name="codecadenza-javafx" groupName="net.codecadenza.runtime" version="1.2.0" scope="compile"/>
-			<dependency name="log4j-slf4j2-impl" groupName="org.apache.logging.log4j" version="2.23.1" scope="compile"/>
+			<dependency name="log4j-slf4j2-impl" groupName="org.apache.logging.log4j" version="2.25.3" scope="compile"/>
 			<dependency name="junit-jupiter" groupName="org.junit.jupiter" version="5.11.3" scope="test"/>
 		</filter>
 		<filter clientPlatform="SWING" technology="ALL" serverPlatform="ALL" validationType="ALL" database="ALL" jpaProvider="ALL">
 			<dependency name="codecadenza-swing" groupName="net.codecadenza.runtime" version="1.2.0" scope="compile"/>
-			<dependency name="log4j-slf4j2-impl" groupName="org.apache.logging.log4j" version="2.23.1" scope="compile"/>
-			<dependency name="swingx-all" groupName="org.swinglabs.swingx" version="1.6.4" scope="compile"/>
-			<dependency name="swingx-beaninfo" groupName="org.swinglabs.swingx" version="1.6.4" scope="compile"/>
+			<dependency name="log4j-slf4j2-impl" groupName="org.apache.logging.log4j" version="2.25.3" scope="compile"/>
+			<dependency name="swingx-all" groupName="org.swinglabs.swingx" version="1.6.5-1" scope="compile"/>
+			<dependency name="swingx-beaninfo" groupName="org.swinglabs.swingx" version="1.6.5-1" scope="compile"/>
 			<dependency name="junit-jupiter" groupName="org.junit.jupiter" version="5.11.3" scope="test"/>
 		</filter>
 		<filter clientPlatform="RCP" technology="ALL" serverPlatform="ALL" validationType="ALL" database="ALL" jpaProvider="ALL">
 			<dependency name="codecadenza-rcp" groupName="net.codecadenza.runtime" version="1.2.0" scope="compile"/>
-			<dependency name="log4j-slf4j2-impl" groupName="org.apache.logging.log4j" version="2.23.1" scope="compile"/>
+			<dependency name="log4j-slf4j2-impl" groupName="org.apache.logging.log4j" version="2.25.3" scope="compile"/>
 			<dependency name="junit-jupiter" groupName="org.junit.jupiter" version="5.11.3" scope="test"/>
 		</filter>
 		<filter clientPlatform="RAP" technology="ALL" serverPlatform="ALL" validationType="ALL" database="ALL" jpaProvider="ALL">
 			<dependency name="codecadenza-rap" groupName="net.codecadenza.runtime" version="1.2.0" scope="compile"/>
-			<dependency name="log4j-slf4j2-impl" groupName="org.apache.logging.log4j" version="2.23.1" scope="compile"/>
+			<dependency name="log4j-slf4j2-impl" groupName="org.apache.logging.log4j" version="2.25.3" scope="compile"/>
 			<dependency name="junit-jupiter" groupName="org.junit.jupiter" version="5.11.3" scope="test"/>
 		</filter>
 		<filter clientPlatform="JSF_PRIMEFACES" technology="ALL" serverPlatform="ALL" validationType="ALL" database="ALL" jpaProvider="ALL">
-			<dependency name="jakarta.jakartaee-api" groupName="jakarta.platform" version="10.0.0" scope="provided"/>
+			<dependency name="primefaces-themes" groupName="org.primefaces" version="15.0.11" scope="compile"/>
 			<dependency name="openpdf" groupName="com.github.librepdf" version="2.0.2" scope="compile"/>
 			<dependency name="codecadenza-jsf-primefaces" groupName="net.codecadenza.runtime" version="1.2.0" scope="compile"/>
 		</filter>
 		<filter clientPlatform="JSF_PRIMEFACES" technology="JAKARTA_EE" serverPlatform="ALL" validationType="ALL" database="ALL" jpaProvider="ALL">
-			<dependency name="log4j-slf4j2-impl" groupName="org.apache.logging.log4j" version="2.23.1" scope="compile"/>
+			<dependency name="jakarta.jakartaee-api" groupName="jakarta.platform" version="11.0.0" scope="provided"/>
+			<dependency name="log4j-slf4j2-impl" groupName="org.apache.logging.log4j" version="2.25.3" scope="compile"/>
 			<dependency name="junit-jupiter" groupName="org.junit.jupiter" version="5.11.3" scope="test"/>
 		</filter>
 		<filter clientPlatform="JSF_PRIMEFACES" technology="SPRING_BOOT" serverPlatform="ALL" validationType="ALL" database="ALL" jpaProvider="ALL">
+			<dependency name="jakarta.jakartaee-api" groupName="jakarta.platform" version="11.0.0" scope="compile"/>
 			<dependency name="spring-boot-starter" groupName="org.springframework.boot" scope="compile">
 				<exclusion name="spring-boot-starter-logging" groupName="org.springframework.boot" scope="compile"/>
 			</dependency>
-			<dependency name="expressly" groupName="org.glassfish.expressly" version="5.0.0" scope="compile"/>
-			<dependency name="mojarra4-spring-boot-starter" groupName="org.joinfaces" version="5.3.5" scope="compile"/>
+			<dependency name="expressly" groupName="org.glassfish.expressly" version="6.0.0" scope="compile"/>
+			<dependency name="mojarra4-spring-boot-starter" groupName="org.joinfaces" version="6.0.1" scope="compile"/>
 			<dependency name="spring-boot-starter-log4j2" groupName="org.springframework.boot" scope="compile"/>
 			<dependency name="spring-boot-starter-web" groupName="org.springframework.boot" scope="compile"/>
 			<dependency name="spring-boot-starter-security" groupName="org.springframework.boot" scope="compile"/>
@@ -252,12 +254,13 @@
 		</filter>
 		<filter clientPlatform="VAADIN" technology="ALL" serverPlatform="ALL" validationType="ALL" database="ALL" jpaProvider="ALL">
 			<dependency name="vaadin" groupName="com.vaadin" scope="compile"/>
-			<dependency name="jakarta.jakartaee-api" groupName="jakarta.platform" version="10.0.0" scope="provided"/>
+			<dependency name="vaadin-dev" groupName="com.vaadin" scope="compile"/>
+			<dependency name="jakarta.jakartaee-api" groupName="jakarta.platform" version="11.0.0" scope="provided"/>
 			<dependency name="codecadenza-vaadin" groupName="net.codecadenza.runtime" version="1.2.0" scope="compile"/>
 		</filter>
 		<filter clientPlatform="VAADIN" technology="JAKARTA_EE" serverPlatform="ALL" validationType="ALL" database="ALL" jpaProvider="ALL">
 			<dependency name="vaadin-cdi" groupName="com.vaadin" scope="compile"/>
-			<dependency name="log4j-slf4j2-impl" groupName="org.apache.logging.log4j" version="2.23.1" scope="compile"/>
+			<dependency name="log4j-slf4j2-impl" groupName="org.apache.logging.log4j" version="2.25.3" scope="compile"/>
 			<dependency name="junit-jupiter" groupName="org.junit.jupiter" version="5.11.3" scope="test"/>
 		</filter>
 		<filter clientPlatform="VAADIN" technology="SPRING_BOOT" serverPlatform="ALL" validationType="ALL" database="ALL" jpaProvider="ALL">
@@ -297,38 +300,38 @@
 			<dependency name="derbytools" groupName="org.apache.derby" version="10.16.1.1" scope="compile"/>
 		</filter>
 		<filter clientPlatform="ALL" technology="JAVA_SE" serverPlatform="ALL" validationType="ALL" database="MYSQL" jpaProvider="ALL">
-			<dependency name="mysql-connector-j" groupName="com.mysql" version="8.0.31" scope="compile"/>
+			<dependency name="mysql-connector-j" groupName="com.mysql" version="9.5.0" scope="compile"/>
 		</filter>
 		<filter clientPlatform="ALL" technology="JAVA_SE" serverPlatform="ALL" validationType="ALL" database="POSTGRESQL" jpaProvider="ALL">
-			<dependency name="postgresql" groupName="org.postgresql" version="42.5.1" scope="compile"/>
+			<dependency name="postgresql" groupName="org.postgresql" version="42.7.8" scope="compile"/>
 		</filter>
 	</dependency_config>
 
 	<dependency_config buildType="INTEGRATION_CLIENT_SOAP" comment="">
 		<filter clientPlatform="ALL" technology="ALL" serverPlatform="ALL" validationType="ALL" database="ALL" jpaProvider="ALL">
-			<dependency name="jakarta.jakartaee-api" groupName="jakarta.platform" version="10.0.0" scope="provided"/>
+			<dependency name="jakarta.jakartaee-api" groupName="jakarta.platform" version="11.0.0" scope="provided"/>
 		</filter>
 		<filter clientPlatform="ALL" technology="JAKARTA_EE" serverPlatform="ALL" validationType="ALL" database="ALL" jpaProvider="ALL">
-			<dependency name="jaxws-rt" groupName="com.sun.xml.ws" version="4.0.0" scope="compile"/>
+			<dependency name="jaxws-rt" groupName="com.sun.xml.ws" version="4.0.3" scope="compile"/>
 			<dependency name="junit-jupiter" groupName="org.junit.jupiter" version="5.11.3" scope="test"/>
-			<dependency name="log4j-slf4j2-impl" groupName="org.apache.logging.log4j" version="2.23.1" scope="test"/>
+			<dependency name="log4j-slf4j2-impl" groupName="org.apache.logging.log4j" version="2.25.3" scope="test"/>
 		</filter>
 		<filter clientPlatform="ALL" technology="SPRING_BOOT" serverPlatform="ALL" validationType="ALL" database="ALL" jpaProvider="ALL">
 			<dependency name="junit-jupiter" groupName="org.junit.jupiter" scope="test"/>
-			<dependency name="cxf-spring-boot-starter-jaxws" groupName="org.apache.cxf" version="4.0.5" scope="compile"/>
+			<dependency name="cxf-spring-boot-starter-jaxws" groupName="org.apache.cxf" version="4.1.4" scope="compile"/>
 		</filter>
 	</dependency_config>
 
 	<dependency_config buildType="INTEGRATION_CLIENT_REST" comment="">
 		<filter clientPlatform="ALL" technology="ALL" serverPlatform="ALL" validationType="ALL" database="ALL" jpaProvider="ALL">
-			<dependency name="jakarta.jakartaee-api" groupName="jakarta.platform" version="10.0.0" scope="provided"/>
-			<dependency name="resteasy-client" groupName="org.jboss.resteasy" version="6.2.2.Final" scope="compile"/>
-			<dependency name="resteasy-jackson2-provider" groupName="org.jboss.resteasy" version="6.2.2.Final" scope="compile"/>
-			<dependency name="resteasy-jaxb-provider" groupName="org.jboss.resteasy" version="6.2.2.Final" scope="compile"/>
+			<dependency name="jakarta.jakartaee-api" groupName="jakarta.platform" version="11.0.0" scope="provided"/>
+			<dependency name="resteasy-client" groupName="org.jboss.resteasy" version="7.0.1.Final" scope="compile"/>
+			<dependency name="resteasy-jackson2-provider" groupName="org.jboss.resteasy" version="7.0.1.Final" scope="compile"/>
+			<dependency name="resteasy-jaxb-provider" groupName="org.jboss.resteasy" version="7.0.1.Final" scope="compile"/>
 		</filter>
 		<filter clientPlatform="ALL" technology="JAKARTA_EE" serverPlatform="ALL" validationType="ALL" database="ALL" jpaProvider="ALL">
-			<dependency name="jackson-datatype-jsr310" groupName="com.fasterxml.jackson.datatype" version="2.20.1" scope="compile"/>
-			<dependency name="log4j-slf4j2-impl" groupName="org.apache.logging.log4j" version="2.23.1" scope="test"/>
+			<dependency name="jackson-datatype-jsr310" groupName="com.fasterxml.jackson.datatype" version="2.21.0" scope="compile"/>
+			<dependency name="log4j-slf4j2-impl" groupName="org.apache.logging.log4j" version="2.25.3" scope="test"/>
 			<dependency name="junit-jupiter" groupName="org.junit.jupiter" version="5.11.3" scope="test"/>
 		</filter>
 		<filter clientPlatform="ALL" technology="SPRING_BOOT" serverPlatform="ALL" validationType="ALL" database="ALL" jpaProvider="ALL">
@@ -342,21 +345,21 @@
 
 	<dependency_config buildType="INTEGRATION_CLIENT_RMI" comment="">
 		<filter clientPlatform="ALL" technology="ALL" serverPlatform="ALL" validationType="ALL" database="ALL" jpaProvider="ALL">
-			<dependency name="jakarta.jakartaee-api" groupName="jakarta.platform" version="10.0.0" scope="provided"/>
+			<dependency name="jakarta.jakartaee-api" groupName="jakarta.platform" version="11.0.0" scope="provided"/>
 			<dependency name="junit-jupiter" groupName="org.junit.jupiter" version="5.11.3" scope="test"/>
-			<dependency name="log4j-slf4j2-impl" groupName="org.apache.logging.log4j" version="2.23.1" scope="test"/>
+			<dependency name="log4j-slf4j2-impl" groupName="org.apache.logging.log4j" version="2.25.3" scope="test"/>
 		</filter>
 		<filter clientPlatform="ALL" technology="ALL" serverPlatform="JBOSS" validationType="ALL" database="ALL" jpaProvider="ALL">
-			<dependency name="wildfly-ejb-client-bom" groupName="org.wildfly" version="34.0.0.Final" scope="compile" type="pom"/>
+			<dependency name="wildfly-ejb-client-bom" groupName="org.wildfly" version="39.0.0.Final" scope="compile" type="pom"/>
 		</filter>
 		<filter clientPlatform="ALL" technology="ALL" serverPlatform="GLASSFISH" validationType="ALL" database="ALL" jpaProvider="ALL">
-			<dependency name="gf-client" groupName="org.glassfish.main.appclient" version="7.0.19" scope="compile" type="pom"/>
+			<dependency name="gf-client" groupName="org.glassfish.main.appclient" version="7.1.0" scope="compile" type="pom"/>
 		</filter>
 	</dependency_config>
 
 	<dependency_config buildType="INTEGRATION_CLIENT_KAFKA" comment="">
 		<filter clientPlatform="ALL" technology="SPRING_BOOT" serverPlatform="ALL" validationType="ALL" database="ALL" jpaProvider="ALL">
-			<dependency name="jakarta.jakartaee-api" groupName="jakarta.platform" version="10.0.0" scope="provided"/>
+			<dependency name="jakarta.jakartaee-api" groupName="jakarta.platform" version="11.0.0" scope="provided"/>
 			<dependency name="kafka-clients" groupName="org.apache.kafka" scope="compile"/>
 			<dependency name="spring-context" groupName="org.springframework" scope="provided"/>
 			<dependency name="spring-web" groupName="org.springframework" scope="provided"/>
@@ -367,18 +370,19 @@
 	
 	<dependency_config buildType="INTEGRATION_CLIENT_JMS" comment="">
 		<filter clientPlatform="ALL" technology="ALL" serverPlatform="ALL" validationType="ALL" database="ALL" jpaProvider="ALL">
-			<dependency name="jakarta.jakartaee-api" groupName="jakarta.platform" version="10.0.0" scope="provided"/>
+			<dependency name="jakarta.jakartaee-api" groupName="jakarta.platform" version="11.0.0" scope="provided"/>
 		</filter>
 		<filter clientPlatform="ALL" technology="JAKARTA_EE" serverPlatform="ALL" validationType="ALL" database="ALL" jpaProvider="ALL">
-			<dependency name="log4j-slf4j2-impl" groupName="org.apache.logging.log4j" version="2.23.1" scope="test"/>
+			<dependency name="jakarta.jms-api" groupName="jakarta.jms" version="3.1.0" scope="provided"/>
+			<dependency name="log4j-slf4j2-impl" groupName="org.apache.logging.log4j" version="2.25.3" scope="test"/>
 			<dependency name="junit-jupiter" groupName="org.junit.jupiter" version="5.11.3" scope="test"/>
 		</filter>
 		<filter clientPlatform="ALL" technology="JAKARTA_EE" serverPlatform="JBOSS" validationType="ALL" database="ALL" jpaProvider="ALL">
-			<dependency name="wildfly-ejb-client-bom" groupName="org.wildfly" version="34.0.0.Final" scope="compile" type="pom"/>
-			<dependency name="wildfly-jms-client-bom" groupName="org.wildfly" version="34.0.0.Final" scope="compile" type="pom"/>
+			<dependency name="wildfly-ejb-client-bom" groupName="org.wildfly" version="39.0.0.Final" scope="compile" type="pom"/>
+			<dependency name="wildfly-jms-client-bom" groupName="org.wildfly" version="39.0.0.Final" scope="compile" type="pom"/>
 		</filter>
 		<filter clientPlatform="ALL" technology="JAKARTA_EE" serverPlatform="GLASSFISH" validationType="ALL" database="ALL" jpaProvider="ALL">
-			<dependency name="gf-client" groupName="org.glassfish.main.appclient" version="7.0.0" scope="compile" type="pom"/>
+			<dependency name="gf-client" groupName="org.glassfish.main.appclient" version="7.1.0" scope="compile" type="pom"/>
 		</filter>
 		<filter clientPlatform="ALL" technology="SPRING_BOOT" serverPlatform="ALL" validationType="ALL" database="ALL" jpaProvider="ALL">
 			<dependency name="artemis-jms-client-all" groupName="org.apache.activemq" scope="compile"/>
@@ -404,13 +408,13 @@
 
 	<dependency_config buildType="INTEGRATION_IMP_SOAP" comment="">
 		<filter clientPlatform="ALL" technology="ALL" serverPlatform="ALL" validationType="ALL" database="ALL" jpaProvider="ALL">
-			<dependency name="jakarta.jakartaee-api" groupName="jakarta.platform" version="10.0.0" scope="provided"/>
+			<dependency name="jakarta.jakartaee-api" groupName="jakarta.platform" version="11.0.0" scope="provided"/>
 		</filter>
 		<filter clientPlatform="ALL" technology="JAKARTA_EE" serverPlatform="ALL" validationType="ALL" database="ALL" jpaProvider="ALL">
-			<dependency name="jakarta.xml.ws-api" groupName="jakarta.xml.ws" version="3.0.0" scope="provided"/>
+			<dependency name="jakarta.xml.ws-api" groupName="jakarta.xml.ws" version="4.0.1" scope="provided"/>
 		</filter>
 		<filter clientPlatform="ALL" technology="SPRING_BOOT" serverPlatform="ALL" validationType="ALL" database="ALL" jpaProvider="ALL">
-			<dependency name="cxf-spring-boot-starter-jaxws" groupName="org.apache.cxf" version="4.0.5" scope="compile"/>
+			<dependency name="cxf-spring-boot-starter-jaxws" groupName="org.apache.cxf" version="4.1.4" scope="compile"/>
 			<dependency name="saaj-impl" groupName="com.sun.xml.messaging.saaj" scope="compile"/>
 		</filter>
 	</dependency_config>
@@ -420,10 +424,10 @@
 			<dependency name="codecadenza-rest" groupName="net.codecadenza.runtime" version="1.2.0" scope="compile"/>
 		</filter>
 		<filter clientPlatform="ALL" technology="JAKARTA_EE" serverPlatform="ALL" validationType="ALL" database="ALL" jpaProvider="ALL">
-			<dependency name="jakarta.jakartaee-api" groupName="jakarta.platform" version="10.0.0" scope="provided"/>
+			<dependency name="jakarta.jakartaee-api" groupName="jakarta.platform" version="11.0.0" scope="provided"/>
 		</filter>
 		<filter clientPlatform="ALL" technology="SPRING_BOOT" serverPlatform="ALL" validationType="ALL" database="ALL" jpaProvider="ALL">
-			<dependency name="expressly" groupName="org.glassfish.expressly" version="5.0.0" scope="compile"/>
+			<dependency name="expressly" groupName="org.glassfish.expressly" version="6.0.0" scope="compile"/>
 			<dependency name="spring-boot-starter-jersey" groupName="org.springframework.boot" scope="compile"/>
 			<!-- Required for media type XML -->
 			<dependency name="jersey-media-jaxb" groupName="org.glassfish.jersey.media" scope="compile"/>
@@ -432,20 +436,20 @@
 
 	<dependency_config buildType="INTEGRATION_IMP_RMI" comment="">
 		<filter clientPlatform="ALL" technology="JAKARTA_EE" serverPlatform="ALL" validationType="ALL" database="ALL" jpaProvider="ALL">
-			<dependency name="jakarta.jakartaee-api" groupName="jakarta.platform" version="10.0.0" scope="provided"/>
+			<dependency name="jakarta.jakartaee-api" groupName="jakarta.platform" version="11.0.0" scope="provided"/>
 		</filter>
 	</dependency_config>
 
 	<dependency_config buildType="INTEGRATION_IMP_KAFKA" comment="">
 		<filter clientPlatform="ALL" technology="SPRING_BOOT" serverPlatform="ALL" validationType="ALL" database="ALL" jpaProvider="ALL">
-			<dependency name="jakarta.jakartaee-api" groupName="jakarta.platform" version="10.0.0" scope="provided"/>
+			<dependency name="jakarta.jakartaee-api" groupName="jakarta.platform" version="11.0.0" scope="provided"/>
 			<dependency name="codecadenza-spring-kafka" groupName="net.codecadenza.runtime" version="1.2.0" scope="compile"/>
 		</filter>
 	</dependency_config>
 	
 	<dependency_config buildType="INTEGRATION_IMP_JMS" comment="">
 		<filter clientPlatform="ALL" technology="ALL" serverPlatform="ALL" validationType="ALL" database="ALL" jpaProvider="ALL">
-			<dependency name="jakarta.jakartaee-api" groupName="jakarta.platform" version="10.0.0" scope="provided"/>
+			<dependency name="jakarta.jakartaee-api" groupName="jakarta.platform" version="11.0.0" scope="provided"/>
 		</filter>
 		<filter clientPlatform="ALL" technology="SPRING_BOOT" serverPlatform="ALL" validationType="ALL" database="ALL" jpaProvider="ALL">
 			<dependency name="spring-boot-starter-artemis" groupName="org.springframework.boot" scope="compile"/>
@@ -456,9 +460,9 @@
 		<filter clientPlatform="ALL" technology="ALL" serverPlatform="ALL" validationType="ALL" database="ALL" jpaProvider="ALL">
 			<dependency name="codecadenza-util" groupName="net.codecadenza.runtime" version="1.2.0" scope="compile"/>
 			<dependency name="codecadenza-selenium" groupName="net.codecadenza.runtime" version="1.2.0" scope="compile"/>
-			<dependency name="jaxb-runtime" groupName="org.glassfish.jaxb" version="4.0.1" scope="compile"/>
+			<dependency name="jaxb-runtime" groupName="org.glassfish.jaxb" version="4.0.6" scope="compile"/>
 			<dependency name="junit-platform-suite-engine" groupName="org.junit.platform" version="1.11.3" scope="compile"/>
-			<dependency name="log4j-slf4j2-impl" groupName="org.apache.logging.log4j" version="2.23.1" scope="compile"/>
+			<dependency name="log4j-slf4j2-impl" groupName="org.apache.logging.log4j" version="2.25.3" scope="compile"/>
 		</filter>
 	</dependency_config>
 
@@ -469,17 +473,17 @@
 		<filter clientPlatform="ALL" technology="JAKARTA_EE" serverPlatform="ALL" validationType="ALL" database="ALL" jpaProvider="ALL">
 			<dependency name="junit-jupiter-engine" groupName="org.junit.jupiter" version="5.14.0" scope="test"/>
 			<dependency name="assertj-core" groupName="org.assertj" version="3.27.3" scope="test"/>
-			<dependency name="log4j-slf4j2-impl" groupName="org.apache.logging.log4j" version="2.23.1" scope="test"/>
+			<dependency name="log4j-slf4j2-impl" groupName="org.apache.logging.log4j" version="2.25.3" scope="test"/>
 		</filter>
 		<filter clientPlatform="ALL" technology="JAKARTA_EE" serverPlatform="ALL" validationType="ALL" database="MYSQL" jpaProvider="ALL">
-			<dependency name="mysql-connector-j" groupName="com.mysql" version="8.0.31" scope="test"/>
+			<dependency name="mysql-connector-j" groupName="com.mysql" version="9.5.0" scope="test"/>
 		</filter>
 		<filter clientPlatform="ALL" technology="JAKARTA_EE" serverPlatform="ALL" validationType="ALL" database="DERBY" jpaProvider="ALL">
 			<dependency name="derbyclient" groupName="org.apache.derby" version="10.16.1.1" scope="test"/>
 			<dependency name="derbytools" groupName="org.apache.derby" version="10.16.1.1" scope="test"/>
 		</filter>
 		<filter clientPlatform="ALL" technology="JAKARTA_EE" serverPlatform="ALL" validationType="ALL" database="POSTGRESQL" jpaProvider="ALL">
-			<dependency name="postgresql" groupName="org.postgresql" version="42.5.1" scope="test"/>
+			<dependency name="postgresql" groupName="org.postgresql" version="42.7.8" scope="test"/>
 		</filter>
 		<filter clientPlatform="ALL" technology="SPRING_BOOT" serverPlatform="ALL" validationType="ALL" database="ALL" jpaProvider="ALL">
 			<dependency name="junit-jupiter-engine" groupName="org.junit.jupiter" scope="test"/>
@@ -508,17 +512,17 @@
 		<filter clientPlatform="ALL" technology="JAKARTA_EE" serverPlatform="ALL" validationType="ALL" database="ALL" jpaProvider="ALL">
 			<dependency name="junit-jupiter-engine" groupName="org.junit.jupiter" version="5.14.0" scope="test"/>
 			<dependency name="assertj-core" groupName="org.assertj" version="3.27.3" scope="test"/>
-			<dependency name="log4j-slf4j2-impl" groupName="org.apache.logging.log4j" version="2.23.1" scope="test"/>
+			<dependency name="log4j-slf4j2-impl" groupName="org.apache.logging.log4j" version="2.25.3" scope="test"/>
 		</filter>
 		<filter clientPlatform="ALL" technology="JAKARTA_EE" serverPlatform="ALL" validationType="ALL" database="MYSQL" jpaProvider="ALL">
-			<dependency name="mysql-connector-j" groupName="com.mysql" version="8.0.31" scope="test"/>
+			<dependency name="mysql-connector-j" groupName="com.mysql" version="9.5.0" scope="test"/>
 		</filter>
 		<filter clientPlatform="ALL" technology="JAKARTA_EE" serverPlatform="ALL" validationType="ALL" database="DERBY" jpaProvider="ALL">
 			<dependency name="derbyclient" groupName="org.apache.derby" version="10.16.1.1" scope="test"/>
 			<dependency name="derbytools" groupName="org.apache.derby" version="10.16.1.1" scope="test"/>
 		</filter>
 		<filter clientPlatform="ALL" technology="JAKARTA_EE" serverPlatform="ALL" validationType="ALL" database="POSTGRESQL" jpaProvider="ALL">
-			<dependency name="postgresql" groupName="org.postgresql" version="42.5.1" scope="test"/>
+			<dependency name="postgresql" groupName="org.postgresql" version="42.7.8" scope="test"/>
 		</filter>
 		<filter clientPlatform="ALL" technology="SPRING_BOOT" serverPlatform="ALL" validationType="ALL" database="ALL" jpaProvider="ALL">
 			<dependency name="junit-jupiter-engine" groupName="org.junit.jupiter" scope="test"/>
@@ -545,17 +549,17 @@
 			<dependency name="codecadenza-ddt" groupName="net.codecadenza.runtime" version="1.2.0" scope="test"/>
 			<dependency name="junit-jupiter-engine" groupName="org.junit.jupiter" version="5.14.0" scope="test"/>
 			<dependency name="assertj-core" groupName="org.assertj" version="3.27.3" scope="test"/>
-			<dependency name="log4j-slf4j2-impl" groupName="org.apache.logging.log4j" version="2.23.1" scope="test"/>
+			<dependency name="log4j-slf4j2-impl" groupName="org.apache.logging.log4j" version="2.25.3" scope="test"/>
 		</filter>
 		<filter clientPlatform="ALL" technology="ALL" serverPlatform="ALL" validationType="ALL" database="MYSQL" jpaProvider="ALL">
-			<dependency name="mysql-connector-j" groupName="com.mysql" version="8.0.31" scope="test"/>
+			<dependency name="mysql-connector-j" groupName="com.mysql" version="9.5.0" scope="test"/>
 		</filter>
 		<filter clientPlatform="ALL" technology="ALL" serverPlatform="ALL" validationType="ALL" database="DERBY" jpaProvider="ALL">
 			<dependency name="derbyclient" groupName="org.apache.derby" version="10.16.1.1" scope="test"/>
 			<dependency name="derbytools" groupName="org.apache.derby" version="10.16.1.1" scope="test"/>
 		</filter>
 		<filter clientPlatform="ALL" technology="ALL" serverPlatform="ALL" validationType="ALL" database="POSTGRESQL" jpaProvider="ALL">
-			<dependency name="postgresql" groupName="org.postgresql" version="42.5.1" scope="test"/>
+			<dependency name="postgresql" groupName="org.postgresql" version="42.7.8" scope="test"/>
 		</filter>
 	</dependency_config>
 
@@ -588,17 +592,17 @@
 		<filter clientPlatform="ALL" technology="JAKARTA_EE" serverPlatform="ALL" validationType="ALL" database="ALL" jpaProvider="ALL">
 			<dependency name="junit-jupiter-engine" groupName="org.junit.jupiter" version="5.14.0" scope="test"/>
 			<dependency name="assertj-core" groupName="org.assertj" version="3.27.3" scope="test"/>
-			<dependency name="log4j-slf4j2-impl" groupName="org.apache.logging.log4j" version="2.23.1" scope="test"/>
+			<dependency name="log4j-slf4j2-impl" groupName="org.apache.logging.log4j" version="2.25.3" scope="test"/>
 		</filter>
 		<filter clientPlatform="ALL" technology="JAKARTA_EE" serverPlatform="ALL" validationType="ALL" database="MYSQL" jpaProvider="ALL">
-			<dependency name="mysql-connector-j" groupName="com.mysql" version="8.0.31" scope="test"/>
+			<dependency name="mysql-connector-j" groupName="com.mysql" version="9.5.0" scope="test"/>
 		</filter>
 		<filter clientPlatform="ALL" technology="JAKARTA_EE" serverPlatform="ALL" validationType="ALL" database="DERBY" jpaProvider="ALL">
 			<dependency name="derbyclient" groupName="org.apache.derby" version="10.16.1.1" scope="test"/>
 			<dependency name="derbytools" groupName="org.apache.derby" version="10.16.1.1" scope="test"/>
 		</filter>
 		<filter clientPlatform="ALL" technology="JAKARTA_EE" serverPlatform="ALL" validationType="ALL" database="POSTGRESQL" jpaProvider="ALL">
-			<dependency name="postgresql" groupName="org.postgresql" version="42.5.1" scope="test"/>
+			<dependency name="postgresql" groupName="org.postgresql" version="42.7.8" scope="test"/>
 		</filter>
 		<filter clientPlatform="ALL" technology="SPRING_BOOT" serverPlatform="ALL" validationType="ALL" database="ALL" jpaProvider="ALL">
 			<dependency name="junit-jupiter-engine" groupName="org.junit.jupiter" scope="test"/>

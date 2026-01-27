@@ -3,8 +3,8 @@ are made available under different license conditions.
 
 *************************************************************************************************************************************************************************************************************************************
 Libraries:
-poi-5.3.0.jar
-poi-ooxml-5.3.0.jar
+poi-5.5.1.jar
+poi-ooxml-5.5.1.jar
 sqlparser-5.3.jar
 
 License:
@@ -214,13 +214,13 @@ License:
 
 *************************************************************************************************************************************************************************************************************************************
 Libraries:
-angus-activation-1.0.0.jar
-istack-commons-runtime-4.1.1.jar
-jakarta.activation-api-2.1.0.jar,
-jakarta.xml.bind-api-4.0.0.jar,
-jaxb-core-4.0.1.jar,
-jaxb-runtime-4.0.1.jar
-txw2-4.0.1.jar
+angus-activation-2.0.3.jar
+istack-commons-runtime-4.1.2.jar
+jakarta.activation-api-2.1.4.jar,
+jakarta.xml.bind-api-4.0.4.jar,
+jaxb-core-4.0.6.jar,
+jaxb-runtime-4.0.6.jar
+txw2-4.0.6.jar
 
 License:
 
@@ -256,12 +256,12 @@ License:
 
 *************************************************************************************************************************************************************************************************************************************
 Libraries:
-slf4j-api-2.0.16.jar
-slf4j-nop-2.0.16.jar
+slf4j-api-2.0.17.jar
+slf4j-nop-2.0.17.jar
 
 License:
 
-Copyright (c) 2004-2017 QOS.ch
+Copyright (c) 2004-2022 QOS.ch Sarl (Switzerland)
  All rights reserved.
 
  Permission is hereby granted, free  of charge, to any person obtaining

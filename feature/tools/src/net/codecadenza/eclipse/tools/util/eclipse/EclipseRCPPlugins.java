@@ -70,6 +70,7 @@ public class EclipseRCPPlugins {
 			osExtension += "_64";
 
 		// Add IDs to the set
+		plugins.add(new PluginRecord("com.github.weisj.jsvg"));
 		plugins.add(new PluginRecord("com.ibm.icu"));
 		plugins.add(new PluginRecord("com.sun.jna.platform"));
 		plugins.add(new PluginRecord("com.sun.jna"));
@@ -80,7 +81,7 @@ public class EclipseRCPPlugins {
 		plugins.add(new PluginRecord("org.apache.batik.i18n"));
 		plugins.add(new PluginRecord("org.apache.batik.util"));
 		plugins.add(new PluginRecord("org.apache.commons.commons-io"));
-		plugins.add(new PluginRecord("org.apache.commons.jxpath"));
+		plugins.add(new PluginRecord("org.apache.commons.commons-logging"));
 		plugins.add(new PluginRecord("org.apache.commons.logging"));
 		plugins.add(new PluginRecord("org.apache.felix.scr", "1:true"));
 		plugins.add(new PluginRecord("org.apache.xmlgraphics"));
@@ -140,6 +141,7 @@ public class EclipseRCPPlugins {
 		plugins.add(new PluginRecord("org.eclipse.osgi", "1:true"));
 		plugins.add(new PluginRecord("org.eclipse.swt." + osExtension, "default:false"));
 		plugins.add(new PluginRecord("org.eclipse.swt"));
+		plugins.add(new PluginRecord("org.eclipse.swt.svg"));
 		plugins.add(new PluginRecord("org.eclipse.text"));
 		plugins.add(new PluginRecord("org.eclipse.ui.workbench"));
 		plugins.add(new PluginRecord("org.eclipse.ui"));

@@ -10,7 +10,7 @@ Require-Bundle: org.eclipse.ui;bundle-version="3.111.0",
  net.codecadenza.eclipse.model;bundle-version="1.2.0",
  net.codecadenza.eclipse.shared;bundle-version="1.2.0"
 Bundle-ActivationPolicy: lazy
-Bundle-RequiredExecutionEnvironment: JavaSE-21
+Bundle-RequiredExecutionEnvironment: JavaSE-25
 Bundle-ClassPath: .,
  icons/,
  config/,

@@ -23,8 +23,10 @@ package net.codecadenza.runtime.webclient.vaadin.tree;
 
 import com.vaadin.flow.component.AttachEvent;
 import com.vaadin.flow.component.Component;
+import com.vaadin.flow.component.grid.Grid.SelectionMode;
 import com.vaadin.flow.component.grid.GridVariant;
 import com.vaadin.flow.component.icon.VaadinIcon;
+import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.treegrid.TreeGrid;
 import com.vaadin.flow.data.provider.hierarchy.TreeData;
 import com.vaadin.flow.data.provider.hierarchy.TreeDataProvider;
@@ -42,13 +44,14 @@ import net.codecadenza.runtime.webclient.vaadin.util.Navigator;
  * @author Martin Ganserer
  * @version 1.0.0
  */
-public abstract class AbstractTreeNavigator extends TreeGrid<TreeItem> {
+public abstract class AbstractTreeNavigator extends VerticalLayout {
 	private static final long serialVersionUID = 5510069502493103761L;
 	private static final String FOLDER_TYPE = "folder";
 	private static final String VIEW_TYPE = "view";
 
 	private final Navigator navigator = new Navigator(this);
 	protected final I18NService i18n;
+	protected final TreeGrid<TreeItem> tree = new TreeGrid<>();
 	protected TreeData<TreeItem> treeData = new TreeData<>();
 
 	/**
@@ -71,12 +74,17 @@ public abstract class AbstractTreeNavigator extends TreeGrid<TreeItem> {
 	@Override
 	protected void onAttach(AttachEvent attachEvent) {
 		setSizeFull();
-		setSelectionMode(SelectionMode.SINGLE);
-		addThemeVariants(GridVariant.LUMO_NO_ROW_BORDERS);
-		setDataProvider(new TreeDataProvider<>(treeData));
-		getStyle().set("border", "0px");
+		setPadding(false);
+		setSpacing(false);
 
-		addItemClickListener(event -> {
+		add(tree);
+
+		tree.setSelectionMode(SelectionMode.SINGLE);
+		tree.addThemeVariants(GridVariant.LUMO_NO_ROW_BORDERS);
+		tree.setDataProvider(new TreeDataProvider<>(treeData));
+		tree.getStyle().set("border", "0px");
+
+		tree.addItemClickListener(event -> {
 			if (event.getItem() == null)
 				return;
 
@@ -87,7 +95,7 @@ public abstract class AbstractTreeNavigator extends TreeGrid<TreeItem> {
 		});
 
 		// Just add one column with the default renderer to the tree view
-		TreeGridColumnUtil.addColumn(this);
+		TreeGridColumnUtil.addColumn(tree);
 	}
 
 	/**
@@ -96,7 +104,7 @@ public abstract class AbstractTreeNavigator extends TreeGrid<TreeItem> {
 	public void buildTree() {
 		addTreeItems();
 
-		expandRecursively(treeData.getRootItems(), 2);
+		tree.expandRecursively(treeData.getRootItems(), 2);
 	}
 
 	/**

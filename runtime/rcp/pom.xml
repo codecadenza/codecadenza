@@ -15,19 +15,19 @@
 		<dependency>
 			<groupId>org.eclipse.platform</groupId>
 			<artifactId>org.eclipse.core.runtime</artifactId>
-			<version>3.31.100</version>
+			<version>3.34.100</version>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.eclipse.platform</groupId>
 			<artifactId>org.eclipse.swt.gtk.linux.x86_64</artifactId>
-			<version>3.127.0</version>
+			<version>3.132.0</version>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.eclipse.platform</groupId>
 			<artifactId>org.eclipse.jface</artifactId>
-			<version>3.35.0</version>
+			<version>3.38.100</version>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>

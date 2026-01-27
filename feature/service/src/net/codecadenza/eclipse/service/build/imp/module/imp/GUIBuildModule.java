@@ -284,13 +284,23 @@ public class GUIBuildModule extends AbstractBuildModule {
 				configFiles.add(new WorkspaceFile(project, BuildArtifactType.GUI, path, content));
 			}
 		}
-		else if (project.hasVaadinClient() && project.isJakartaEEApplication()) {
+		else if (project.hasVaadinClient()) {
 			final var vaadinGenerator = new VaadinClientProjectFilesGenerator(project);
+			final String stylePath;
 
-			path = project.getWebInfFolder() + "/web.xml";
-			content = vaadinGenerator.createWebXML();
+			if (project.isJakartaEEApplication()) {
+				stylePath = project.getWebAppFolder() + "/styles.css";
+				path = project.getWebInfFolder() + "/web.xml";
+				content = vaadinGenerator.createWebXML();
 
-			configFiles.add(new WorkspaceFile(project, BuildArtifactType.GUI, path, content));
+				configFiles.add(new WorkspaceFile(project, BuildArtifactType.GUI, path, content));
+			}
+			else
+				stylePath = project.getMetaInfFolder() + "/resources/styles.css";
+
+			content = vaadinGenerator.createStylesheet();
+
+			configFiles.add(new WorkspaceFile(project, BuildArtifactType.GUI, stylePath, content));
 		}
 		else if (project.hasEclipseClient()) {
 			final var eclipseGenerator = new EclipseClientProjectFilesGenerator(project);

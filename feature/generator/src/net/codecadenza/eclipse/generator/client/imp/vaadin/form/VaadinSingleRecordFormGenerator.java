@@ -561,7 +561,7 @@ public class VaadinSingleRecordFormGenerator extends AbstractSingleRecordFormGen
 			defaultValueInitFragments.append(fb.getDefaultValueInitialization());
 		});
 
-		if (!defaultValueInitFragments.toString().isEmpty()) {
+		if (!defaultValueInitFragments.isEmpty()) {
 			b.append("// Preset domain object fields\n");
 			b.append(defaultValueInitFragments.toString());
 			b.append("\n");
@@ -739,13 +739,13 @@ public class VaadinSingleRecordFormGenerator extends AbstractSingleRecordFormGen
 		if (formType != FormTypeEnumeration.READONLY) {
 			b.append("final var cmdSave = new Button(" + i18n.getI18NMessage("cmd_save", "Save") + ");\n");
 			b.append("cmdSave.setId(\"cmdSave\");\n");
-			b.append("cmdSave.addClickListener(event -> saveData());\n\n");
+			b.append("cmdSave.addClickListener(_ -> saveData());\n\n");
 			b.append("hlButtons.add(cmdSave);\n\n");
 		}
 
 		b.append("final var cmdCancel = new Button(" + i18n.getI18NMessage("cmd_cancel", "Cancel") + ");\n");
 		b.append("cmdCancel.setId(\"cmdCancel\");\n");
-		b.append("cmdCancel.addClickListener(event -> navigator.navigateBack());\n\n");
+		b.append("cmdCancel.addClickListener(_ -> navigator.navigateBack());\n\n");
 		b.append("hlButtons.add(cmdCancel);\n\n");
 		b.append("add(hlButtons);\n");
 
@@ -796,45 +796,8 @@ public class VaadinSingleRecordFormGenerator extends AbstractSingleRecordFormGen
 		final DomainAttribute uploadAttr = action.getBoundaryMethod().getDomainAttribute();
 		final var buttonName = BUTTON_PREFIX + uploadAttr.getUpperCaseName() + "Upload";
 		final String maxFileSize = uploadAttr.getMaxFileSize();
-
-		b.append("\n");
-		b.append("final var " + buttonName + " = new Button(" + i18n.getI18NMessage("cmd_upload", "Upload") + ");\n");
-		b.append(buttonName + ".setId(\"" + buttonName + "\");\n\n");
-		b.append(buttonName + ".addClickListener(event ->\n");
-		b.append("{\n");
-		b.append("final var dlg = new FileUploadDialog(" + locale + ");\n");
-		b.append("dlg.setMaxFileSize(" + maxFileSize + ");\n\n");
-		b.append("dlg.setUploadFinishedListener((File uploadFile, String originalFileName) ->\n");
-		b.append("{\n");
-
-		if (action.getType() == ActionType.DIRECT_UPLOAD) {
-			var setter = "";
-
-			for (final DTOBeanAttribute dtoAttr : dto.getAttributes()) {
-				if (dtoAttr.getDomainAttribute() == null)
-					continue;
-
-				if (dtoAttr.getDomainAttribute().equals(action.getBoundaryMethod().getDomainAttribute())) {
-					setter = dtoAttr.getModelSetterName();
-					break;
-				}
-			}
-
-			b.append(modelObjectName + "." + setter + "(");
-
-			if (project.isBoundaryMode() || !uploadAttr.isLob())
-				b.append("uploadFile.getAbsolutePath()");
-			else if (uploadAttr.getJavaType().isType(JavaType.BYTE_ARRAY))
-				b.append("FileUtil.getBytesFromFile(uploadFile)");
-			else
-				b.append("FileUtil.convertToByteArray(FileUtil.getBytesFromFile(uploadFile))");
-
-			b.append(");\n");
-		}
-		else
-			new ServiceInvocationGenerator(action.getBoundaryMethod(), b).addInvocation("id", "uploadFile.getAbsolutePath()");
-
-		boolean updateBinding = false;
+		final var bindingFragment = new StringBuilder();
+		String originalFileNameParam = "_";
 
 		// Check if fields with appropriate tagging exist that should be filled automatically!
 		for (final FormField field : form.getAllFormFields()) {
@@ -864,21 +827,59 @@ public class VaadinSingleRecordFormGenerator extends AbstractSingleRecordFormGen
 
 			final DomainAttribute attr = dtoAttr.getDomainAttribute();
 
-			if (attr.getTag() == AttributeTagEnumeration.DOCUMENT_NAME || attr.getTag() == AttributeTagEnumeration.DOCUMENT_SIZE)
-				updateBinding = true;
-
-			if (attr.getTag() == AttributeTagEnumeration.DOCUMENT_NAME)
-				b.append(modelObjectName + "." + dtoAttr.getModelSetterName() + "(originalFileName);\n");
+			if (attr.getTag() == AttributeTagEnumeration.DOCUMENT_NAME) {
+				originalFileNameParam = "originalFileName";
+				bindingFragment.append(modelObjectName + "." + dtoAttr.getModelSetterName() + "(originalFileName);\n");
+			}
 
 			if (attr.getTag() == AttributeTagEnumeration.DOCUMENT_SIZE)
 				if (attr.getJavaType().isInteger())
-					b.append(modelObjectName + "." + dtoAttr.getModelSetterName() + "((int) uploadFile.length());\n");
+					bindingFragment.append(modelObjectName + "." + dtoAttr.getModelSetterName() + "((int) uploadFile.length());\n");
 				else
-					b.append(modelObjectName + "." + dtoAttr.getModelSetterName() + "(uploadFile.length());\n");
+					bindingFragment.append(modelObjectName + "." + dtoAttr.getModelSetterName() + "(uploadFile.length());\n");
 		}
 
-		if (updateBinding)
+		b.append("\n");
+		b.append("final var " + buttonName + " = new Button(" + i18n.getI18NMessage("cmd_upload", "Upload") + ");\n");
+		b.append(buttonName + ".setId(\"" + buttonName + "\");\n\n");
+		b.append(buttonName + ".addClickListener(_ ->\n");
+		b.append("{\n");
+		b.append("final var dlg = new FileUploadDialog(" + locale + ");\n");
+		b.append("dlg.setMaxFileSize(" + maxFileSize + ");\n\n");
+		b.append("dlg.setUploadFinishedListener((File uploadFile, String " + originalFileNameParam + ") ->\n");
+		b.append("{\n");
+
+		if (action.getType() == ActionType.DIRECT_UPLOAD) {
+			var setter = "";
+
+			for (final DTOBeanAttribute dtoAttr : dto.getAttributes()) {
+				if (dtoAttr.getDomainAttribute() == null)
+					continue;
+
+				if (dtoAttr.getDomainAttribute().equals(action.getBoundaryMethod().getDomainAttribute())) {
+					setter = dtoAttr.getModelSetterName();
+					break;
+				}
+			}
+
+			b.append(modelObjectName + "." + setter + "(");
+
+			if (project.isBoundaryMode() || !uploadAttr.isLob())
+				b.append("uploadFile.getAbsolutePath()");
+			else if (uploadAttr.getJavaType().isType(JavaType.BYTE_ARRAY))
+				b.append("FileUtil.getBytesFromFile(uploadFile)");
+			else
+				b.append("FileUtil.convertToByteArray(FileUtil.getBytesFromFile(uploadFile))");
+
+			b.append(");\n");
+		}
+		else
+			new ServiceInvocationGenerator(action.getBoundaryMethod(), b).addInvocation("id", "uploadFile.getAbsolutePath()");
+
+		if (!bindingFragment.isEmpty()) {
+			b.append(bindingFragment);
 			b.append("\nbinder.readBean(" + modelObjectName + ");\n");
+		}
 
 		b.append("});\n\n");
 		b.append("dlg.open();\n");

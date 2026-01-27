@@ -111,6 +111,7 @@ public class SecurityConfigurationGenerator extends AbstractJavaSourceGenerator 
 					importPackage(project.getClientNamespace().toString() + SUB_PACKAGE_UTIL);
 
 				if (project.hasJSFOrVaadinClient()) {
+					importPackage("org.springframework.security.web.servlet.util.matcher");
 					importPackage("org.springframework.security.web.util.matcher");
 					importPackage("java.util.stream");
 				}
@@ -160,7 +161,7 @@ public class SecurityConfigurationGenerator extends AbstractJavaSourceGenerator 
 
 		if (project.hasVaadinClient()) {
 			unprotectedResources.append("{\"/VAADIN/**\", \"/favicon.ico\", \"/manifest.webmanifest\", \"/sw.js\"");
-			unprotectedResources.append(", \"/offline.html\", \"/images/**\"");
+			unprotectedResources.append(", \"/offline.html\", \"/images/**\", \"/lumo/**\", \"/styles.css\"");
 		}
 		else if (project.hasJSFClient())
 			unprotectedResources.append("{\"/jakarta.faces.resource/**\", \"/css/default.css\"");
@@ -212,7 +213,7 @@ public class SecurityConfigurationGenerator extends AbstractJavaSourceGenerator 
 
 		if (securityEnabled && project.hasJSFOrVaadinClient()) {
 			if (project.hasVaadinClient())
-				b.append("http.requestCache(cacheConfig -> new ApplicationRequestCache());\n\n");
+				b.append("http.requestCache(_ -> new ApplicationRequestCache());\n\n");
 
 			b.append("// Require all requests to be authenticated except for the resources\n");
 			b.append("http.authorizeHttpRequests(matcherRegistry -> {\n");
@@ -245,17 +246,17 @@ public class SecurityConfigurationGenerator extends AbstractJavaSourceGenerator 
 
 		if (securityEnabled) {
 			if (project.isSpringBootApplication() && project.hasJSFOrVaadinClient()) {
-				methodSignature = "AntPathRequestMatcher[] getRequestMatchersForUnprotectedResources()";
+				methodSignature = "RequestMatcher[] getRequestMatchersForUnprotectedResources()";
 
 				b = new StringBuilder();
 				b.append("/**\n");
-				b.append(" * @return an array of {@link AntPathRequestMatcher} for all unprotected resources\n");
+				b.append(" * @return an array of {@link RequestMatcher} for all unprotected resources\n");
 				b.append(" */\n");
 				b.append(getAnnotationForGeneratedElement());
-				b.append("private AntPathRequestMatcher[] getRequestMatchersForUnprotectedResources()\n");
+				b.append("private RequestMatcher[] getRequestMatchersForUnprotectedResources()\n");
 				b.append("{\n");
-				b.append("return Stream.of(UNPROTECTED_RESOURCES).map(AntPathRequestMatcher::new)");
-				b.append(".toArray(size -> new AntPathRequestMatcher[size]);\n");
+				b.append("return Stream.of(UNPROTECTED_RESOURCES).map(path -> PathPatternRequestMatcher.withDefaults().matcher(path))");
+				b.append(".toArray(size -> new RequestMatcher[size]);\n");
 				b.append("}\n\n");
 
 				addMethod(methodSignature, b.toString());

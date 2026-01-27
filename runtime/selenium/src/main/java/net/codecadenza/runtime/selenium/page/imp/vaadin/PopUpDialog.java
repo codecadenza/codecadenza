@@ -35,7 +35,7 @@ import org.openqa.selenium.WebElement;
  * @version 1.0.0
  */
 public class PopUpDialog extends AbstractVaadinPageComponent {
-	public static final String DIALOG_XPATH = "//vaadin-dialog-overlay//";
+	public static final String DIALOG_XPATH = "//vaadin-dialog//";
 	public static final String DIALOG_BUTTON_CANCEL_XPATH = DIALOG_XPATH + "vaadin-button[@id='cmdCancel']";
 	public static final String DIALOG_BUTTON_COUNT_XPATH = DIALOG_XPATH + "vaadin-button[@id='cmdCount']";
 	public static final String DIALOG_BUTTON_OK_XPATH = DIALOG_XPATH + "vaadin-button[@id='cmdOK']";

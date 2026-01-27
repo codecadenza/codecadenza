@@ -255,7 +255,7 @@ public class JMSIntegrationProjectFilesGenerator extends AbstractIntegrationProj
 		b.append("import jakarta.jms.ConnectionFactory;\n");
 		b.append("import jakarta.jms.JMSException;\n");
 		b.append("import org.apache.activemq.artemis.jms.client.ActiveMQConnectionFactory;\n");
-		b.append("import org.springframework.boot.autoconfigure.jms.DefaultJmsListenerContainerFactoryConfigurer;\n");
+		b.append("import org.springframework.boot.jms.autoconfigure.DefaultJmsListenerContainerFactoryConfigurer;\n");
 		b.append("import org.springframework.boot.context.properties.ConfigurationProperties;\n");
 		b.append("import org.springframework.context.annotation.Bean;\n");
 		b.append("import org.springframework.context.annotation.Configuration;\n");

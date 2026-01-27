@@ -134,6 +134,8 @@ public class IntegrationSEIBuildModule extends AbstractBuildModule {
 			options.put(JavaCore.COMPILER_PB_UNUSED_IMPORT, JavaCore.IGNORE);
 			options.put(JavaCore.COMPILER_PB_UNUSED_WARNING_TOKEN, JavaCore.IGNORE);
 			options.put(JavaCore.COMPILER_PB_DEAD_CODE, JavaCore.IGNORE);
+			options.put(JavaCore.COMPILER_PB_UNUSED_LOCAL, JavaCore.IGNORE);
+			options.put(JavaCore.COMPILER_PB_RAW_TYPE_REFERENCE, JavaCore.IGNORE);
 		}
 
 		return options;

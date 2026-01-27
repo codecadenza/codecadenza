@@ -98,7 +98,7 @@ import org.eclipse.ui.ide.IDE;
  */
 @SuppressWarnings("restriction")
 public class EclipseIDEService {
-	private static final String JAVA_VERSION = JavaCore.VERSION_21;
+	private static final String JAVA_VERSION = JavaCore.VERSION_25;
 	private static final String TEMPLATE_ID_NEW_TYPE = "org.eclipse.jdt.ui.text.codetemplates.newtype";
 	private static final Pattern LINE_PATTERN = Pattern.compile("\\s*\\*.*");
 	private static final Pattern COMMENT_PATTERN = Pattern.compile("\\s*//.*");

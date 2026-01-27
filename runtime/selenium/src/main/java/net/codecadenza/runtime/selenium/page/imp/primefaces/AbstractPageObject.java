@@ -58,7 +58,7 @@ public abstract class AbstractPageObject extends AbstractPrimefacesPageComponent
 	private static final String PANEL_SUFFIX = "_panel";
 	private static final String INPUT_SUFFIX = "_input";
 	private static final String CLASS_CHECKBOX_SELECTED = "ui-icon-check";
-	private static final String XPATH_TREE_ITEM_LABEL = "//span[@class='ui-treenode-label ui-corner-all']";
+	private static final String XPATH_TREE_ITEM_LABEL = "//span[@class='ui-treenode-label']";
 	private static final String FIELD_ID_LOV_INPUT = FORM_ID_PREFIX + "txtInput";
 	private static final String BUTTON_ID_LOG_OUT = "form_header:cmdLogout";
 	private static final String BUTTON_ID_SELECT = FORM_ID_PREFIX + "cmdSelect";

@@ -26,9 +26,9 @@ import static net.codecadenza.runtime.webclient.vaadin.i18n.InternalI18NService.
 import static net.codecadenza.runtime.webclient.vaadin.i18n.InternalI18NService.INPUT_DIALOG_MSG_ERROR_NO_VALUE;
 
 import com.vaadin.flow.component.AttachEvent;
+import com.vaadin.flow.component.ModalityMode;
 import com.vaadin.flow.component.Unit;
 import com.vaadin.flow.component.button.Button;
-import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.textfield.TextField;
 import java.util.Locale;
 
@@ -68,7 +68,7 @@ public class InputDialog extends AbstractTitleDialog {
 	protected void onAttach(AttachEvent attachEvent) {
 		super.onAttach(attachEvent);
 
-		setModal(true);
+		setModality(ModalityMode.STRICT);
 		setCloseOnOutsideClick(false);
 		setWidth(450, Unit.PIXELS);
 		setHeight(200, Unit.PIXELS);
@@ -89,14 +89,14 @@ public class InputDialog extends AbstractTitleDialog {
 
 	/*
 	 * (non-Javadoc)
-	 * @see net.codecadenza.runtime.webclient.vaadin.dialog.AbstractTitleDialog#addButtons(com.vaadin.flow.component.
-	 * orderedlayout.HorizontalLayout)
+	 * @see net.codecadenza.runtime.webclient.vaadin.dialog.AbstractTitleDialog#
+	 * addButtons(com.vaadin.flow.component.dialog.Dialog.DialogFooter)
 	 */
 	@Override
-	protected void addButtons(HorizontalLayout hlButtons) {
+	protected void addButtons(DialogFooter dialogFooter) {
 		final var cmdOK = new Button(i18n.getTranslation(CMD_OK));
 
-		cmdOK.addClickListener(event -> {
+		cmdOK.addClickListener(_ -> {
 			final String value = txtInput.getValue();
 
 			if (value == null || value.isEmpty()) {
@@ -108,9 +108,9 @@ public class InputDialog extends AbstractTitleDialog {
 		});
 
 		final var cmdCancel = new Button(i18n.getTranslation(CMD_CANCEL));
-		cmdCancel.addClickListener(event -> fireButtonClickEvent(ButtonType.CANCEL));
+		cmdCancel.addClickListener(_ -> fireButtonClickEvent(ButtonType.CANCEL));
 
-		hlButtons.add(cmdOK, cmdCancel);
+		dialogFooter.add(cmdOK, cmdCancel);
 	}
 
 }

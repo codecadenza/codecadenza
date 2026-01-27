@@ -43,7 +43,7 @@ public class WorkspaceManagerBot extends AbstractBot {
 	private static final String KEYBOARD_LAYOUT_DE = "DE_DE";
 	private static final String MNU_ECLIPSE = "Eclipse";
 	private static final String MNU_OTHER = "Other...";
-	private static final String MNU_PREFERENCES = "Preferences";
+	private static final String MNU_PREFERENCES = "Preferences...";
 	private static final String MNU_SHOW_VIEW = "Show View";
 	private static final String MNU_WINDOW = "Window";
 	private static final String SHELL_SHOW_VIEW = "Show View";

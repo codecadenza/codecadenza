@@ -33,28 +33,28 @@
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<maven.compiler.source>21</maven.compiler.source>
-		<maven.compiler.target>21</maven.compiler.target>
-		<version_aspectj>1.9.22</version_aspectj>
-		<version_avro>1.12.0</version_avro>
-		<version_jakarta_ee>10.0.0</version_jakarta_ee>
-		<version_jakarta_xml_bind>4.0.0</version_jakarta_xml_bind>
+		<maven.compiler.source>25</maven.compiler.source>
+		<maven.compiler.target>25</maven.compiler.target>
+		<version_aspectj>1.9.25.1</version_aspectj>
+		<version_avro>1.12.1</version_avro>
+		<version_jakarta_ee>11.0.0</version_jakarta_ee>
+		<version_jakarta_xml_bind>4.0.4</version_jakarta_xml_bind>
 		<version_jaxb_runtime>4.0.6</version_jaxb_runtime>
-		<version_javafx_controls>22.0.2</version_javafx_controls>
-		<version_poi>5.3.0</version_poi>
-		<version_primefaces>14.0.6</version_primefaces>
-		<version_selenium>4.25.0</version_selenium>
-		<version_slf4j>2.0.16</version_slf4j>
-		<version_spring>6.1.14</version_spring>
-		<version_swingx_all>1.6.4</version_swingx_all>
-		<version_spring_boot>3.3.5</version_spring_boot>
-		<version_spring_security>6.3.4</version_spring_security>
-		<version_vaadin>24.5.3</version_vaadin>
+		<version_javafx_controls>25.0.1</version_javafx_controls>
+		<version_poi>5.5.1</version_poi>
+		<version_primefaces>15.0.11</version_primefaces>
+		<version_selenium>4.39.0</version_selenium>
+		<version_slf4j>2.0.17</version_slf4j>
+		<version_spring>7.0.2</version_spring>
+		<version_swingx_all>1.6.5-1</version_swingx_all>
+		<version_spring_boot>4.0.1</version_spring_boot>
+		<version_spring_security>7.0.2</version_spring_security>
+		<version_vaadin>25.0.2</version_vaadin>
 
 		<!-- Versions for test dependencies -->
 		<version_junit>5.11.3</version_junit>
 		<version_jersey>3.1.9</version_jersey>
-		<version_log4j>2.23.1</version_log4j>
+		<version_log4j>2.25.3</version_log4j>
 		<version_mockito>5.10.0</version_mockito>
 		<version_h2>2.4.240</version_h2>
 	</properties>

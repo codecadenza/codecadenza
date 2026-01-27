@@ -21,15 +21,15 @@
  */
 package net.codecadenza.runtime.richclient.eclipse.util;
 
+import jakarta.servlet.ServletException;
+import jakarta.servlet.ServletOutputStream;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.nio.file.FileSystems;
 import java.nio.file.Path;
-import javax.servlet.ServletException;
-import javax.servlet.ServletOutputStream;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import org.eclipse.rap.rwt.RWT;
 import org.eclipse.rap.rwt.service.ServiceHandler;
 import org.eclipse.rap.rwt.service.ServiceManager;
@@ -74,8 +74,8 @@ public class DownloadServiceHandler implements ServiceHandler {
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.eclipse.rap.rwt.service.ServiceHandler#service(javax.servlet.http.HttpServletRequest,
-	 * javax.servlet.http.HttpServletResponse)
+	 * @see org.eclipse.rap.rwt.service.ServiceHandler#service(jakarta.servlet.http.HttpServletRequest,
+	 * jakarta.servlet.http.HttpServletResponse)
 	 */
 	@Override
 	public void service(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {

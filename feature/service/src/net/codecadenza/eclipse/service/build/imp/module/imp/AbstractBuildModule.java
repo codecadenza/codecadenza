@@ -88,9 +88,9 @@ public abstract class AbstractBuildModule implements IBuildModule {
 	@Override
 	public Map<String, String> getCompilerOptions() {
 		final var options = new HashMap<String, String>();
-		options.put(JavaCore.COMPILER_COMPLIANCE, JavaCore.VERSION_21);
-		options.put(JavaCore.COMPILER_SOURCE, JavaCore.VERSION_21);
-		options.put(JavaCore.COMPILER_CODEGEN_TARGET_PLATFORM, JavaCore.VERSION_21);
+		options.put(JavaCore.COMPILER_COMPLIANCE, JavaCore.VERSION_25);
+		options.put(JavaCore.COMPILER_SOURCE, JavaCore.VERSION_25);
+		options.put(JavaCore.COMPILER_CODEGEN_TARGET_PLATFORM, JavaCore.VERSION_25);
 
 		return options;
 	}

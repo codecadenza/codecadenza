@@ -24,19 +24,18 @@ Require-Bundle: org.eclipse.ui;bundle-version="3.111.0",
  net.codecadenza.eclipse.resource;bundle-version="1.2.0",
  net.codecadenza.eclipse.shared;bundle-version="1.2.0"
 Bundle-ActivationPolicy: lazy
-Bundle-RequiredExecutionEnvironment: JavaSE-21
+Bundle-RequiredExecutionEnvironment: JavaSE-25
 Bundle-ClassPath: .,
  icons/,
- lib/persistence/antlr4-runtime-4.10.1.jar,
- lib/persistence/byte-buddy-1.12.18.jar,
- lib/persistence/classmate-1.5.1.jar,
- lib/persistence/hibernate-commons-annotations-6.0.2.Final.jar,
- lib/persistence/hibernate-core-6.1.6.Final.jar,
- lib/persistence/jakarta.inject-api-2.0.0.jar,
- lib/persistence/jakarta.persistence-api-3.0.0.jar,
- lib/persistence/jakarta.transaction-api-2.0.0.jar,
- lib/persistence/jandex-2.4.2.Final.jar,
- lib/persistence/jboss-logging-3.4.3.Final.jar
+ lib/persistence/antlr4-runtime-4.13.2.jar,
+ lib/persistence/byte-buddy-1.17.8.jar,
+ lib/persistence/classmate-1.7.1.jar,
+ lib/persistence/hibernate-core-7.2.1.Final.jar,
+ lib/persistence/hibernate-models-1.0.1.jar,
+ lib/persistence/jakarta.inject-api-2.0.1.jar,
+ lib/persistence/jakarta.persistence-api-3.2.0.jar,
+ lib/persistence/jakarta.transaction-api-2.0.1.jar,
+ lib/persistence/jboss-logging-3.6.1.Final.jar
 Export-Package: net.codecadenza.eclipse.tools,
  net.codecadenza.eclipse.tools.angular,
  net.codecadenza.eclipse.tools.dbsync.editor,

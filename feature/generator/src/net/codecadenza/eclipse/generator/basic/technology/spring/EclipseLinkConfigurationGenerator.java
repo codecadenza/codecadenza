@@ -73,7 +73,7 @@ public class EclipseLinkConfigurationGenerator extends AbstractJavaSourceGenerat
 		importPackage("java.util");
 		importClass("javax.sql.DataSource");
 		importClass("org.springframework.beans.factory.ObjectProvider");
-		importPackage("org.springframework.boot.autoconfigure.orm.jpa");
+		importPackage("org.springframework.boot.jpa.autoconfigure");
 		importClass("org.springframework.context.annotation.Configuration");
 		importPackage("org.springframework.orm.jpa.vendor");
 		importPackage("org.springframework.transaction.jta");
@@ -137,10 +137,11 @@ public class EclipseLinkConfigurationGenerator extends AbstractJavaSourceGenerat
 		addMethod(methodSignature, b.toString());
 
 		b = new StringBuilder();
-		methodSignature = "Map<String, Object> getVendorProperties()";
+		methodSignature = "Map<String, Object> getVendorProperties(DataSource dataSource)";
 
 		b.append("/* (non-Javadoc)\n");
-		b.append(" * @see org.springframework.boot.autoconfigure.orm.jpa.JpaBaseConfiguration#getVendorProperties()\n");
+		b.append(" * @see org.springframework.boot.autoconfigure.orm.jpa.JpaBaseConfiguration#");
+		b.append("getVendorProperties(javax.sql.DataSource)\n");
 		b.append(" */\n");
 		b.append("@Override\n");
 		b.append(getAnnotationForGeneratedElement());

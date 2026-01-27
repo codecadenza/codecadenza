@@ -28,16 +28,12 @@ import static net.codecadenza.runtime.webclient.vaadin.i18n.InternalI18NService.
 import static net.codecadenza.runtime.webclient.vaadin.i18n.InternalI18NService.MSG_UPLOAD_TITLE;
 
 import com.vaadin.flow.component.AttachEvent;
+import com.vaadin.flow.component.ModalityMode;
 import com.vaadin.flow.component.Unit;
 import com.vaadin.flow.component.button.Button;
-import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
-import com.vaadin.flow.component.upload.StartedEvent;
-import com.vaadin.flow.component.upload.SucceededEvent;
 import com.vaadin.flow.component.upload.Upload;
-import com.vaadin.flow.component.upload.receivers.FileBuffer;
-import java.io.ByteArrayOutputStream;
+import com.vaadin.flow.server.streams.UploadHandler;
 import java.io.File;
-import java.io.OutputStream;
 import java.io.Serializable;
 import java.lang.invoke.MethodHandles;
 import java.util.HashSet;
@@ -62,10 +58,9 @@ public class FileUploadDialog extends AbstractTitleDialog {
 	private static final Logger logger = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 	private static final long serialVersionUID = 838665681410915830L;
 
-	private final FileBuffer fileBuffer = new FileBuffer();
-	private final Upload upload = new Upload(fileBuffer);
-	private final Set<String> validMimeTypes = new HashSet<>();
-	private final Integer maxFileSize;
+	private final Set<String> acceptedFileTypes = new HashSet<>();
+	private Integer maxFileSize;
+	private Upload upload;
 	private UploadFinishedListener uploadFinishedListener;
 
 	public interface UploadFinishedListener extends Serializable {
@@ -98,14 +93,23 @@ public class FileUploadDialog extends AbstractTitleDialog {
 	protected void onAttach(AttachEvent attachEvent) {
 		super.onAttach(attachEvent);
 
-		setModal(true);
+		setModality(ModalityMode.STRICT);
 		setWidth(400, Unit.PIXELS);
 		setHeight(250, Unit.PIXELS);
 
-		upload.addStartedListener(this::onUploadStarted);
-		upload.addSucceededListener(this::onUploadSucceeded);
+		final var uploadHandler = UploadHandler.toTempFile((metadata, file) -> onUploadSucceeded(file, metadata.fileName()));
+
+		upload = new Upload(uploadHandler);
 		upload.setMaxFiles(1);
 		upload.setId("upload");
+		upload.setAcceptedFileTypes(acceptedFileTypes.stream().toArray(String[]::new));
+
+		upload.addFileRejectedListener(_ -> {
+			final String dialogTitle = i18n.getTranslation(MSG_UPLOAD_TITLE);
+			final String dialogMsg = i18n.getTranslation(MSG_UPLOAD_ILLEGAL_MIMETYPE);
+
+			new InfoMessageDialog(dialogTitle, dialogMsg, i18n.getLocale()).open();
+		});
 
 		if (maxFileSize != null)
 			upload.setMaxFileSize(maxFileSize);
@@ -125,21 +129,21 @@ public class FileUploadDialog extends AbstractTitleDialog {
 	 * @return the maximum size of a file in bytes
 	 */
 	public int getMaxFileSize() {
-		return upload.getMaxFileSize();
+		return maxFileSize;
 	}
 
 	/**
 	 * @param maxFileSize
 	 */
 	public void setMaxFileSize(int maxFileSize) {
-		upload.setMaxFileSize(maxFileSize);
+		this.maxFileSize = maxFileSize;
 	}
 
 	/**
-	 * @param mimeType
+	 * @param fileType
 	 */
-	public void addValidMimeType(String mimeType) {
-		validMimeTypes.add(mimeType);
+	public void addAcceptedFileType(String fileType) {
+		acceptedFileTypes.add(fileType);
 	}
 
 	/**
@@ -151,54 +155,36 @@ public class FileUploadDialog extends AbstractTitleDialog {
 
 	/*
 	 * (non-Javadoc)
-	 * @see net.codecadenza.runtime.webclient.vaadin.dialog.AbstractMessageDialog#addButtons(com.vaadin.ui.HorizontalLayout)
+	 * @see net.codecadenza.runtime.webclient.vaadin.dialog.AbstractTitleDialog#
+	 * addButtons(com.vaadin.flow.component.dialog.Dialog.DialogFooter)
 	 */
 	@Override
-	protected void addButtons(HorizontalLayout buttonLayout) {
+	protected void addButtons(DialogFooter dialogFooter) {
 		final var cmdCancel = new Button(i18n.getTranslation(CMD_CANCEL));
 		cmdCancel.setId("cmdCancel");
 
-		cmdCancel.addClickListener(event -> {
+		cmdCancel.addClickListener(_ -> {
 			if (upload.isUploading())
 				upload.interruptUpload();
 
 			close();
 		});
 
-		buttonLayout.add(cmdCancel);
-	}
-
-	/**
-	 * Method that is invoked as soon as the upload has been started
-	 * @param event
-	 * @return the {@link OutputStream} where the content of the uploaded file will be written to
-	 */
-	protected OutputStream onUploadStarted(StartedEvent event) {
-		// Check if the selected MIME type is allowed!
-		if (!validMimeTypes.isEmpty() && !validMimeTypes.contains(event.getMIMEType())) {
-			upload.interruptUpload();
-
-			final String dialogTitle = i18n.getTranslation(MSG_UPLOAD_TITLE);
-			final String dialogMsg = i18n.getTranslation(MSG_UPLOAD_ILLEGAL_MIMETYPE);
-
-			new InfoMessageDialog(dialogTitle, dialogMsg, i18n.getLocale()).open();
-			return new ByteArrayOutputStream();
-		}
-
-		return fileBuffer.receiveUpload(event.getFileName(), event.getMIMEType());
+		dialogFooter.add(cmdCancel);
 	}
 
 	/**
 	 * Method that is invoked as soon as the upload has been finished successfully
-	 * @param event
+	 * @param file
+	 * @param fileName
 	 */
-	protected void onUploadSucceeded(SucceededEvent event) {
-		logger.debug("Upload operation finished! Generated file {}!", event.getFileName());
+	protected void onUploadSucceeded(File file, String fileName) {
+		logger.debug("Upload operation finished! Generated file {}!", fileName);
 
 		// Notify the receiver that the uploaded file is ready!
 		if (uploadFinishedListener != null)
 			try {
-				uploadFinishedListener.onUploadFinished(fileBuffer.getFileData().getFile(), event.getFileName());
+				uploadFinishedListener.onUploadFinished(file, fileName);
 			}
 			catch (final Exception e) {
 				logger.error("Could not finish the upload!", e);

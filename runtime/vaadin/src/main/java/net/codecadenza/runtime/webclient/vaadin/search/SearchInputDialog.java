@@ -43,6 +43,7 @@ import static net.codecadenza.runtime.webclient.vaadin.i18n.InternalI18NService.
 
 import com.vaadin.flow.component.AttachEvent;
 import com.vaadin.flow.component.Component;
+import com.vaadin.flow.component.ModalityMode;
 import com.vaadin.flow.component.Unit;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.checkbox.Checkbox;
@@ -51,7 +52,6 @@ import com.vaadin.flow.component.datepicker.DatePicker;
 import com.vaadin.flow.component.datetimepicker.DateTimePicker;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.formlayout.FormLayout.ResponsiveStep;
-import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.binder.Binder;
@@ -132,7 +132,7 @@ public class SearchInputDialog extends AbstractTitleDialog {
 		setWidth(750, Unit.PIXELS);
 		setHeight(500, Unit.PIXELS);
 		setResizable(true);
-		setModal(true);
+		setModality(ModalityMode.STRICT);
 
 		final var flSearchInput = new FormLayout();
 		flSearchInput.getStyle().set("display", "block");
@@ -199,7 +199,7 @@ public class SearchInputDialog extends AbstractTitleDialog {
 		flAddSettings.addFormItem(chkExactFilter, i18n.getTranslationForFieldLabel(SEARCH_INPUT_DIALOG_CHK_EXACTFILTER));
 		flAddSettings.addFormItem(cboFetchSize, i18n.getTranslationForFieldLabel(SEARCH_INPUT_DIALOG_CBO_FETCHSIZE));
 
-		final var tabSheet = new TabSheet(getContentArea());
+		final var tabSheet = new TabSheet(this);
 		tabSheet.addTab(scrollLayout, i18n.getTranslation(SEARCH_INPUT_DIALOG_TAB_PAGE_FILTER));
 		tabSheet.addTab(flAddSettings, i18n.getTranslation(SEARCH_INPUT_DIALOG_TAB_PAGE_ADDSETTINGS));
 
@@ -211,28 +211,28 @@ public class SearchInputDialog extends AbstractTitleDialog {
 
 	/*
 	 * (non-Javadoc)
-	 * @see net.codecadenza.runtime.webclient.vaadin.dialog.AbstractTitleDialog#addButtons(com.vaadin.flow.component.
-	 * orderedlayout.HorizontalLayout)
+	 * @see net.codecadenza.runtime.webclient.vaadin.dialog.AbstractTitleDialog#
+	 * addButtons(com.vaadin.flow.component.dialog.Dialog.DialogFooter)
 	 */
 	@Override
-	protected void addButtons(HorizontalLayout hlButtons) {
+	protected void addButtons(DialogFooter dialogFooter) {
 		final var cmdOK = new Button(i18n.getTranslation(CMD_OK));
 		cmdOK.setId("cmdOK");
-		cmdOK.addClickListener(event -> applyFormData(OperationMode.SEARCH));
+		cmdOK.addClickListener(_ -> applyFormData(OperationMode.SEARCH));
 
 		final var cmdCount = new Button(i18n.getTranslation(CMD_COUNT));
 		cmdCount.setId("cmdCount");
-		cmdCount.addClickListener(event -> applyFormData(OperationMode.COUNT));
+		cmdCount.addClickListener(_ -> applyFormData(OperationMode.COUNT));
 
 		final var cmdReset = new Button(i18n.getTranslation(CMD_RESET));
 		cmdReset.setId("cmdReset");
-		cmdReset.addClickListener(event -> resetFields());
+		cmdReset.addClickListener(_ -> resetFields());
 
 		final var cmdCancel = new Button(i18n.getTranslation(CMD_CANCEL));
 		cmdCancel.setId("cmdCancel");
-		cmdCancel.addClickListener(event -> close());
+		cmdCancel.addClickListener(_ -> close());
 
-		hlButtons.add(cmdOK, cmdCount, cmdReset, cmdCancel);
+		dialogFooter.add(cmdOK, cmdCount, cmdReset, cmdCancel);
 	}
 
 	/**

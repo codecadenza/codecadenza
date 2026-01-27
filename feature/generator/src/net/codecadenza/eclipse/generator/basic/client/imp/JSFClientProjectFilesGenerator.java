@@ -572,8 +572,8 @@ public class JSFClientProjectFilesGenerator extends AbstractClientProjectFilesGe
 		b.append("<faces-config xmlns=\"https://jakarta.ee/xml/ns/jakartaee\"\n");
 		b.append("\txmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\n");
 		b.append("\txsi:schemaLocation=\"https://jakarta.ee/xml/ns/jakartaee ");
-		b.append("https://jakarta.ee/xml/ns/jakartaee/web-facesconfig_4_0.xsd\"\n");
-		b.append("\tversion=\"4.0\">\n\n");
+		b.append("https://jakarta.ee/xml/ns/jakartaee/web-facesconfig_4_1.xsd\"\n");
+		b.append("\tversion=\"4.1\">\n\n");
 		b.append("<application>\n");
 
 		if (project.isSpringBootApplication())
@@ -609,11 +609,11 @@ public class JSFClientProjectFilesGenerator extends AbstractClientProjectFilesGe
 		final boolean enableSecurity = project.getApplicationLogOnDTO() != null;
 
 		b.append("<?xml version=\"1.0\"?>\n");
-		b.append("<web-app id=\"WebApp_ID\" version=\"6.0\"\n");
+		b.append("<web-app id=\"WebApp_ID\" version=\"6.1\"\n");
 		b.append("\txmlns=\"https://jakarta.ee/xml/ns/jakartaee\"\n");
 		b.append("\txmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\n");
 		b.append("\txsi:schemaLocation=\"https://jakarta.ee/xml/ns/jakartaee ");
-		b.append("https://jakarta.ee/xml/ns/jakartaee/web-app_6_0.xsd\">\n\n");
+		b.append("https://jakarta.ee/xml/ns/jakartaee/web-app_6_1.xsd\">\n\n");
 		b.append("<filter>\n");
 		b.append("\t<filter-name>Character Encoding Filter</filter-name>\n");
 		b.append("\t<filter-class>net.codecadenza.runtime.webclient.");

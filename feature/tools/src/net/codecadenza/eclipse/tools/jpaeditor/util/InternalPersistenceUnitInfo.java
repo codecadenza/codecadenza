@@ -86,6 +86,7 @@ public class InternalPersistenceUnitInfo implements PersistenceUnitInfo {
 	 * (non-Javadoc)
 	 * @see jakarta.persistence.spi.PersistenceUnitInfo#getTransactionType()
 	 */
+	@SuppressWarnings("removal")
 	@Override
 	public PersistenceUnitTransactionType getTransactionType() {
 		return PersistenceUnitTransactionType.RESOURCE_LOCAL;
@@ -214,6 +215,24 @@ public class InternalPersistenceUnitInfo implements PersistenceUnitInfo {
 	 */
 	@Override
 	public ClassLoader getNewTempClassLoader() {
+		return null;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see jakarta.persistence.spi.PersistenceUnitInfo#getQualifierAnnotationNames()
+	 */
+	@Override
+	public List<String> getQualifierAnnotationNames() {
+		return Collections.emptyList();
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see jakarta.persistence.spi.PersistenceUnitInfo#getScopeAnnotationName()
+	 */
+	@Override
+	public String getScopeAnnotationName() {
 		return null;
 	}
 

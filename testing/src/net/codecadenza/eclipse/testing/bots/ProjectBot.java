@@ -42,7 +42,7 @@ import org.slf4j.LoggerFactory;
 public class ProjectBot extends AbstractBot {
 	private static final String NODE_CODECADENZA_PROJECT = "CodeCadenza project";
 	private static final String TREE_ITEM_CODECADENZA = "CodeCadenza";
-	private static final String SHELL_NEW_PROJECT_WIZARD = "Select a wizard";
+	private static final String SHELL_NEW_PROJECT_WIZARD = "New";
 	private static final String MNU_OTHER = "Other...";
 	private static final String MNU_FILE = "File";
 	private static final String MNU_NEW = "New";

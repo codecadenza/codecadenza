@@ -568,7 +568,7 @@ public class DataTableComponent extends AbstractPrimefacesPageComponent {
 	 * @return the element that represents the 'Next Page' button or null if it could not be found
 	 */
 	protected WebElement getPaginatorNext() {
-		final var expression = "//div[@id='" + tableElementId + "_paginator_top']/a";
+		final var expression = "//div[@id='" + tableElementId + "_paginator_top']/div/button";
 		final List<WebElement> elements = findWebElementsByXPath(expression);
 
 		for (final WebElement element : elements) {
