@@ -905,11 +905,6 @@ public class DomainObjectGenerator extends AbstractJavaSourceGenerator {
 					jpaQLCheckByUniqueAndPrimaryKey.append(" and a." + pkAttribute.getName() + " <> :");
 					jpaQLCheckByUniqueAndPrimaryKey.append(pkAttribute.getName());
 
-					final var jpaQLUKMap = new StringBuilder();
-					jpaQLUKMap.append("select concat(concat(a." + uniqueAttribute1.getName() + ",';;;'),");
-					jpaQLUKMap.append("a." + uniqueAssoc1.getName() + "." + uniqueAssocAttribute1.getName() + "),");
-					jpaQLUKMap.append("a." + pkAttribute.getName() + " from " + domainObjectName + " a");
-
 					// Add a named query to find the domain object by the unique key
 					b.append("@NamedQuery(name=" + domainObjectName + ".NQ_UK_FIND_BY_" + ukAttrName.toUpperCase());
 					b.append(", query=\"" + jpaQLGet.toString() + "\")\n");
@@ -967,12 +962,6 @@ public class DomainObjectGenerator extends AbstractJavaSourceGenerator {
 					jpaQLCheckByUniqueAndPrimaryKey.append(" and a." + pkAttribute.getName() + " <> :");
 					jpaQLCheckByUniqueAndPrimaryKey.append(pkAttribute.getName());
 
-					final var jpaQLUKMap = new StringBuilder();
-					jpaQLUKMap.append("select concat(concat(a." + uniqueAssoc1.getName());
-					jpaQLUKMap.append("." + uniqueAssocAttribute1.getName() + ",';;;'),");
-					jpaQLUKMap.append("a." + uniqueAssoc2.getName() + "." + uniqueAssocAttribute2.getName() + "),");
-					jpaQLUKMap.append("a." + pkAttribute.getName() + " from " + domainObjectName + " a");
-
 					// Add a named query to find the domain object by the unique key
 					b.append("@NamedQuery(name=" + domainObjectName + ".NQ_UK_FIND_BY_" + ukAttrName.toUpperCase());
 					b.append(", query=\"" + jpaQLGet.toString() + "\")\n");
@@ -1012,10 +1001,6 @@ public class DomainObjectGenerator extends AbstractJavaSourceGenerator {
 					jpaQLCheckByUniqueAndPrimaryKey.append("." + uniqueAssocAttribute1.getName() + " = :");
 					jpaQLCheckByUniqueAndPrimaryKey.append(uniqueAssoc1.getName());
 					jpaQLCheckByUniqueAndPrimaryKey.append(" and a." + pkAttribute.getName() + " <> :" + pkAttribute.getName());
-
-					final var jpaQLUKMap = new StringBuilder();
-					jpaQLUKMap.append("select a." + uniqueAssoc1.getName() + "." + uniqueAssocAttribute1.getName() + ",");
-					jpaQLUKMap.append("a." + pkAttribute.getName() + " from " + domainObjectName + " a");
 
 					// Add a named query to find the domain object by the unique key
 					b.append("@NamedQuery(name=" + domainObjectName + ".NQ_UK_FIND_BY_" + ukAttrName.toUpperCase());
