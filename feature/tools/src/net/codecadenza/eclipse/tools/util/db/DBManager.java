@@ -191,7 +191,7 @@ public class DBManager implements AutoCloseable {
 			else
 				return "The database connection could not be established!";
 		}
-		catch (final Exception e) {
+		catch (final Exception | NoClassDefFoundError e) {
 			CodeCadenzaToolsPlugin.getInstance().logInfo(null, e);
 			return "The database connection could not be established! Message: " + e.getMessage();
 		}
