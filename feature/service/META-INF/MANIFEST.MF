@@ -3,7 +3,7 @@ Automatic-Module-Name: net.codecadenza.eclipse.service
 Bundle-ManifestVersion: 2
 Bundle-Name: CodeCadenza common services plug-in
 Bundle-SymbolicName: net.codecadenza.eclipse.service
-Bundle-Version: 1.2.0
+Bundle-Version: 2.0.0
 Bundle-Activator: net.codecadenza.eclipse.service.CodeCadenzaServicePlugin
 Require-Bundle: org.eclipse.ui;bundle-version="3.111.0",
  org.eclipse.core.runtime;bundle-version="3.15.100",
@@ -18,11 +18,11 @@ Require-Bundle: org.eclipse.ui;bundle-version="3.111.0",
  org.eclipse.jdt.core;bundle-version="3.16.0",
  org.eclipse.jdt.launching;bundle-version="3.19.300",
  org.eclipse.m2e.maven.runtime,
- net.codecadenza.eclipse.generator;bundle-version="1.2.0",
- net.codecadenza.eclipse.model;bundle-version="1.2.0",
- net.codecadenza.eclipse.resource;bundle-version="1.2.0",
- net.codecadenza.eclipse.shared;bundle-version="1.2.0",
- net.codecadenza.eclipse.tools;bundle-version="1.2.0"
+ net.codecadenza.eclipse.generator;bundle-version="2.0.0",
+ net.codecadenza.eclipse.model;bundle-version="2.0.0",
+ net.codecadenza.eclipse.resource;bundle-version="2.0.0",
+ net.codecadenza.eclipse.shared;bundle-version="2.0.0",
+ net.codecadenza.eclipse.tools;bundle-version="2.0.0"
 Bundle-ActivationPolicy: lazy
 Bundle-RequiredExecutionEnvironment: JavaSE-25
 Bundle-Vendor: Martin Ganserer

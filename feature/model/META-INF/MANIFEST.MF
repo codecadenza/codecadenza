@@ -3,7 +3,7 @@ Automatic-Module-Name: net.codecadenza.eclipse.model
 Bundle-ManifestVersion: 2
 Bundle-Name: CodeCadenza meta-model plug-in
 Bundle-SymbolicName: net.codecadenza.eclipse.model;singleton:=true
-Bundle-Version: 1.2.0
+Bundle-Version: 2.0.0
 Bundle-ClassPath: .
 Bundle-Vendor: Martin Ganserer
 Bundle-Localization: plugin
@@ -50,5 +50,5 @@ Export-Package: net.codecadenza.eclipse.model.boundary,
  net.codecadenza.eclipse.model.util
 Require-Bundle: org.eclipse.core.runtime;bundle-version="3.15.100",
  org.eclipse.emf.ecore;bundle-version="2.16.0";visibility:=reexport,
- net.codecadenza.eclipse.shared;bundle-version="1.2.0"
+ net.codecadenza.eclipse.shared;bundle-version="2.0.0"
 Bundle-ActivationPolicy: lazy

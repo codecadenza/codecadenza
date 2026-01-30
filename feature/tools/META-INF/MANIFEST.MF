@@ -3,7 +3,7 @@ Automatic-Module-Name: net.codecadenza.eclipse.tools
 Bundle-ManifestVersion: 2
 Bundle-Name: CodeCadenza tools plug-in
 Bundle-SymbolicName: net.codecadenza.eclipse.tools;singleton:=true
-Bundle-Version: 1.2.0
+Bundle-Version: 2.0.0
 Bundle-Activator: net.codecadenza.eclipse.tools.CodeCadenzaToolsPlugin
 Require-Bundle: org.eclipse.ui;bundle-version="3.111.0",
  org.eclipse.core.runtime;bundle-version="3.15.100",
@@ -20,9 +20,9 @@ Require-Bundle: org.eclipse.ui;bundle-version="3.111.0",
  org.eclipse.m2e.core;bundle-version="[2.0.0,3.0.0)",
  org.eclipse.m2e.maven.runtime,
  org.eclipse.swt;bundle-version="3.109.0",
- net.codecadenza.eclipse.model;bundle-version="1.2.0",
- net.codecadenza.eclipse.resource;bundle-version="1.2.0",
- net.codecadenza.eclipse.shared;bundle-version="1.2.0"
+ net.codecadenza.eclipse.model;bundle-version="2.0.0",
+ net.codecadenza.eclipse.resource;bundle-version="2.0.0",
+ net.codecadenza.eclipse.shared;bundle-version="2.0.0"
 Bundle-ActivationPolicy: lazy
 Bundle-RequiredExecutionEnvironment: JavaSE-25
 Bundle-ClassPath: .,

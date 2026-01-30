@@ -19,9 +19,9 @@
 			<attribute name="module" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry exported="true" kind="lib" path="lib/codecadenza-eclipse-1.2.0.jar"/>
-	<classpathentry exported="true" kind="lib" path="lib/codecadenza-rcp-1.2.0.jar"/>
-	<classpathentry exported="true" kind="lib" path="lib/codecadenza-richclient-1.2.0.jar"/>
-	<classpathentry exported="true" kind="lib" path="lib/codecadenza-util-1.2.0.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/codecadenza-eclipse-2.0.0.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/codecadenza-rcp-2.0.0.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/codecadenza-richclient-2.0.0.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/codecadenza-util-2.0.0.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

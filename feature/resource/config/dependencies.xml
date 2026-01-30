@@ -3,7 +3,7 @@
 	<dependency_config buildType="DOMAIN" comment="">
 		<filter clientPlatform="ALL" technology="ALL" serverPlatform="ALL" validationType="ALL" database="ALL" jpaProvider="ALL">
 			<dependency name="jakarta.jakartaee-api" groupName="jakarta.platform" version="11.0.0" scope="provided"/>
-			<dependency name="codecadenza-jpa" groupName="net.codecadenza.runtime" version="1.2.0" scope="compile"/>
+			<dependency name="codecadenza-jpa" groupName="net.codecadenza.runtime" version="2.0.0" scope="compile"/>
 		</filter>
 		<filter clientPlatform="ALL" technology="SPRING_BOOT" serverPlatform="ALL" validationType="ALL" database="ALL" jpaProvider="HIBERNATE">
 			<dependency name="spring-boot-starter-data-jpa" groupName="org.springframework.boot" scope="compile"/>
@@ -35,7 +35,7 @@
 
 	<dependency_config buildType="DTO" comment="">
 		<filter clientPlatform="ALL" technology="ALL" serverPlatform="ALL" validationType="ALL" database="ALL" jpaProvider="ALL">
-			<dependency name="codecadenza-util" groupName="net.codecadenza.runtime" version="1.2.0" scope="compile"/>
+			<dependency name="codecadenza-util" groupName="net.codecadenza.runtime" version="2.0.0" scope="compile"/>
 		</filter>
 		<filter clientPlatform="ALL" technology="JAVA_SE" serverPlatform="ALL" validationType="ALL" database="ALL" jpaProvider="ALL">
 			<dependency name="jakarta.json.bind-api" groupName="jakarta.json.bind" version="3.0.1" scope="provided"/>
@@ -53,13 +53,13 @@
 			<dependency name="jakarta.jakartaee-api" groupName="jakarta.platform" version="11.0.0" scope="provided"/>
 		</filter>
 		<filter clientPlatform="ALL" technology="JAVA_SE" serverPlatform="ALL" validationType="ALL" database="ALL" jpaProvider="ALL">
-			<dependency name="codecadenza-richclient" groupName="net.codecadenza.runtime" version="1.2.0" scope="compile"/>
+			<dependency name="codecadenza-richclient" groupName="net.codecadenza.runtime" version="2.0.0" scope="compile"/>
 		</filter>
 		<filter clientPlatform="ALL" technology="SPRING_BOOT" serverPlatform="ALL" validationType="ALL" database="ALL" jpaProvider="ALL">
-			<dependency name="codecadenza-server" groupName="net.codecadenza.runtime" version="1.2.0" scope="compile"/>
+			<dependency name="codecadenza-server" groupName="net.codecadenza.runtime" version="2.0.0" scope="compile"/>
 		</filter>
 		<filter clientPlatform="ALL" technology="JAKARTA_EE" serverPlatform="ALL" validationType="ALL" database="ALL" jpaProvider="ALL">
-			<dependency name="codecadenza-server" groupName="net.codecadenza.runtime" version="1.2.0" scope="compile"/>
+			<dependency name="codecadenza-server" groupName="net.codecadenza.runtime" version="2.0.0" scope="compile"/>
 		</filter>
 	</dependency_config>
 
@@ -68,13 +68,13 @@
 			<dependency name="jakarta.jakartaee-api" groupName="jakarta.platform" version="11.0.0" scope="provided"/>
 		</filter>
 		<filter clientPlatform="ALL" technology="JAVA_SE" serverPlatform="ALL" validationType="ALL" database="ALL" jpaProvider="ALL">
-			<dependency name="codecadenza-richclient" groupName="net.codecadenza.runtime" version="1.2.0" scope="compile"/>
+			<dependency name="codecadenza-richclient" groupName="net.codecadenza.runtime" version="2.0.0" scope="compile"/>
 		</filter>
 		<filter clientPlatform="ALL" technology="JAKARTA_EE" serverPlatform="ALL" validationType="ALL" database="ALL" jpaProvider="ALL">
-			<dependency name="codecadenza-jakartaee" groupName="net.codecadenza.runtime" version="1.2.0" scope="compile"/>
+			<dependency name="codecadenza-jakartaee" groupName="net.codecadenza.runtime" version="2.0.0" scope="compile"/>
 		</filter>
 		<filter clientPlatform="ALL" technology="SPRING_BOOT" serverPlatform="ALL" validationType="ALL" database="ALL" jpaProvider="ALL">
-			<dependency name="codecadenza-spring" groupName="net.codecadenza.runtime" version="1.2.0" scope="compile"/>
+			<dependency name="codecadenza-spring" groupName="net.codecadenza.runtime" version="2.0.0" scope="compile"/>
 		</filter>
 	</dependency_config>
 
@@ -91,17 +91,17 @@
 			<dependency name="commons-csv" groupName="org.apache.commons" version="1.14.1" scope="compile"/>
 		</filter>
 		<filter clientPlatform="ALL" technology="JAVA_SE" serverPlatform="ALL" validationType="ALL" database="ALL" jpaProvider="ALL">
-			<dependency name="codecadenza-richclient" groupName="net.codecadenza.runtime" version="1.2.0" scope="compile"/>
+			<dependency name="codecadenza-richclient" groupName="net.codecadenza.runtime" version="2.0.0" scope="compile"/>
 			<dependency name="jaxb-runtime" groupName="org.glassfish.jaxb" version="4.0.6" scope="compile"/>
 			<dependency name="yasson" groupName="org.eclipse" version="3.0.4" scope="compile"/>
 		</filter>
 		<filter clientPlatform="ALL" technology="SPRING_BOOT" serverPlatform="ALL" validationType="ALL" database="ALL" jpaProvider="ALL">
-			<dependency name="codecadenza-spring" groupName="net.codecadenza.runtime" version="1.2.0" scope="compile"/>
+			<dependency name="codecadenza-spring" groupName="net.codecadenza.runtime" version="2.0.0" scope="compile"/>
 			<dependency name="jaxb-runtime" groupName="org.glassfish.jaxb" scope="compile"/>
 			<dependency name="yasson" groupName="org.eclipse" scope="compile"/>
 		</filter>
 		<filter clientPlatform="ALL" technology="JAKARTA_EE" serverPlatform="ALL" validationType="ALL" database="ALL" jpaProvider="ALL">
-			<dependency name="codecadenza-jakartaee" groupName="net.codecadenza.runtime" version="1.2.0" scope="compile"/>
+			<dependency name="codecadenza-jakartaee" groupName="net.codecadenza.runtime" version="2.0.0" scope="compile"/>
 		</filter>
 	</dependency_config>
 
@@ -110,14 +110,14 @@
 			<dependency name="jakarta.jakartaee-api" groupName="jakarta.platform" version="11.0.0" scope="provided"/>
 		</filter>
 		<filter clientPlatform="ALL" technology="JAVA_SE" serverPlatform="ALL" validationType="ALL" database="ALL" jpaProvider="ALL">
-			<dependency name="codecadenza-richclient" groupName="net.codecadenza.runtime" version="1.2.0" scope="compile"/>
+			<dependency name="codecadenza-richclient" groupName="net.codecadenza.runtime" version="2.0.0" scope="compile"/>
 		</filter>
 		<filter clientPlatform="ALL" technology="JAKARTA_EE" serverPlatform="ALL" validationType="ALL" database="ALL" jpaProvider="ALL">
-			<dependency name="codecadenza-jakartaee" groupName="net.codecadenza.runtime" version="1.2.0" scope="compile"/>
+			<dependency name="codecadenza-jakartaee" groupName="net.codecadenza.runtime" version="2.0.0" scope="compile"/>
 		</filter>
 		<filter clientPlatform="ALL" technology="SPRING_BOOT" serverPlatform="ALL" validationType="ALL" database="ALL" jpaProvider="ALL">
 			<dependency name="spring-security-core" groupName="org.springframework.security" scope="provided"/>
-			<dependency name="codecadenza-spring" groupName="net.codecadenza.runtime" version="1.2.0" scope="compile"/>
+			<dependency name="codecadenza-spring" groupName="net.codecadenza.runtime" version="2.0.0" scope="compile"/>
 		</filter>
 	</dependency_config>
 
@@ -126,13 +126,13 @@
 			<dependency name="jakarta.jakartaee-api" groupName="jakarta.platform" version="11.0.0" scope="provided"/>
 		</filter>
 		<filter clientPlatform="ALL" technology="JAVA_SE" serverPlatform="ALL" validationType="ALL" database="ALL" jpaProvider="ALL">
-			<dependency name="codecadenza-richclient" groupName="net.codecadenza.runtime" version="1.2.0" scope="compile"/>
+			<dependency name="codecadenza-richclient" groupName="net.codecadenza.runtime" version="2.0.0" scope="compile"/>
 		</filter>
 		<filter clientPlatform="ALL" technology="JAKARTA_EE" serverPlatform="ALL" validationType="ALL" database="ALL" jpaProvider="ALL">
-			<dependency name="codecadenza-jakartaee" groupName="net.codecadenza.runtime" version="1.2.0" scope="compile"/>
+			<dependency name="codecadenza-jakartaee" groupName="net.codecadenza.runtime" version="2.0.0" scope="compile"/>
 		</filter>
 		<filter clientPlatform="ALL" technology="SPRING_BOOT" serverPlatform="ALL" validationType="ALL" database="ALL" jpaProvider="ALL">
-			<dependency name="codecadenza-spring" groupName="net.codecadenza.runtime" version="1.2.0" scope="compile"/>
+			<dependency name="codecadenza-spring" groupName="net.codecadenza.runtime" version="2.0.0" scope="compile"/>
 			<dependency name="spring-security-core" groupName="org.springframework.security" scope="provided"/>
 		</filter>
 	</dependency_config>
@@ -146,16 +146,16 @@
 			<dependency name="junit-jupiter" groupName="org.junit.jupiter" version="5.11.3" scope="test"/>
 		</filter>
 		<filter clientPlatform="JAVAFX" technology="JAKARTA_EE" serverPlatform="ALL" validationType="ALL" database="ALL" jpaProvider="ALL">
-			<dependency name="codecadenza-invoker-jakartaee" groupName="net.codecadenza.runtime" version="1.2.0" scope="compile"/>
+			<dependency name="codecadenza-invoker-jakartaee" groupName="net.codecadenza.runtime" version="2.0.0" scope="compile"/>
 		</filter>
 		<filter clientPlatform="SWING" technology="JAKARTA_EE" serverPlatform="ALL" validationType="ALL" database="ALL" jpaProvider="ALL">
-			<dependency name="codecadenza-invoker-jakartaee" groupName="net.codecadenza.runtime" version="1.2.0" scope="compile"/>
+			<dependency name="codecadenza-invoker-jakartaee" groupName="net.codecadenza.runtime" version="2.0.0" scope="compile"/>
 		</filter>
 		<filter clientPlatform="RCP" technology="JAKARTA_EE" serverPlatform="ALL" validationType="ALL" database="ALL" jpaProvider="ALL">
-			<dependency name="codecadenza-invoker-jakartaee" groupName="net.codecadenza.runtime" version="1.2.0" scope="compile"/>
+			<dependency name="codecadenza-invoker-jakartaee" groupName="net.codecadenza.runtime" version="2.0.0" scope="compile"/>
 		</filter>
 		<filter clientPlatform="RAP" technology="JAKARTA_EE" serverPlatform="ALL" validationType="ALL" database="ALL" jpaProvider="ALL">
-			<dependency name="codecadenza-invoker-jakartaee" groupName="net.codecadenza.runtime" version="1.2.0" scope="compile"/>
+			<dependency name="codecadenza-invoker-jakartaee" groupName="net.codecadenza.runtime" version="2.0.0" scope="compile"/>
 		</filter>
 		<filter clientPlatform="ALL" technology="SPRING_BOOT" serverPlatform="ALL" validationType="ALL" database="ALL" jpaProvider="ALL">
 			<dependency name="spring-boot-starter" groupName="org.springframework.boot" scope="compile">
@@ -170,16 +170,16 @@
 			<dependency name="junit-jupiter" groupName="org.junit.jupiter" scope="test"/>
 		</filter>
 		<filter clientPlatform="JAVAFX" technology="SPRING_BOOT" serverPlatform="ALL" validationType="ALL" database="ALL" jpaProvider="ALL">
-			<dependency name="codecadenza-invoker-spring" groupName="net.codecadenza.runtime" version="1.2.0" scope="compile"/>
+			<dependency name="codecadenza-invoker-spring" groupName="net.codecadenza.runtime" version="2.0.0" scope="compile"/>
 		</filter>
 		<filter clientPlatform="SWING" technology="SPRING_BOOT" serverPlatform="ALL" validationType="ALL" database="ALL" jpaProvider="ALL">
-			<dependency name="codecadenza-invoker-spring" groupName="net.codecadenza.runtime" version="1.2.0" scope="compile"/>
+			<dependency name="codecadenza-invoker-spring" groupName="net.codecadenza.runtime" version="2.0.0" scope="compile"/>
 		</filter>
 		<filter clientPlatform="RCP" technology="SPRING_BOOT" serverPlatform="ALL" validationType="ALL" database="ALL" jpaProvider="ALL">
-			<dependency name="codecadenza-invoker-spring" groupName="net.codecadenza.runtime" version="1.2.0" scope="compile"/>
+			<dependency name="codecadenza-invoker-spring" groupName="net.codecadenza.runtime" version="2.0.0" scope="compile"/>
 		</filter>
 		<filter clientPlatform="RAP" technology="SPRING_BOOT" serverPlatform="ALL" validationType="ALL" database="ALL" jpaProvider="ALL">
-			<dependency name="codecadenza-invoker-spring" groupName="net.codecadenza.runtime" version="1.2.0" scope="compile"/>
+			<dependency name="codecadenza-invoker-spring" groupName="net.codecadenza.runtime" version="2.0.0" scope="compile"/>
 		</filter>
 		<filter clientPlatform="ANGULAR" technology="SPRING_BOOT" serverPlatform="ALL" validationType="ALL" database="ALL" jpaProvider="ALL">
 			<dependency name="spring-boot-devtools" groupName="org.springframework.boot" scope="runtime"/>
@@ -205,31 +205,31 @@
 			<dependency name="poi-ooxml" groupName="org.apache.poi" version="5.5.1" scope="compile"/>
 		</filter>
 		<filter clientPlatform="JAVAFX" technology="ALL" serverPlatform="ALL" validationType="ALL" database="ALL" jpaProvider="ALL">
-			<dependency name="codecadenza-javafx" groupName="net.codecadenza.runtime" version="1.2.0" scope="compile"/>
+			<dependency name="codecadenza-javafx" groupName="net.codecadenza.runtime" version="2.0.0" scope="compile"/>
 			<dependency name="log4j-slf4j2-impl" groupName="org.apache.logging.log4j" version="2.25.3" scope="compile"/>
 			<dependency name="junit-jupiter" groupName="org.junit.jupiter" version="5.11.3" scope="test"/>
 		</filter>
 		<filter clientPlatform="SWING" technology="ALL" serverPlatform="ALL" validationType="ALL" database="ALL" jpaProvider="ALL">
-			<dependency name="codecadenza-swing" groupName="net.codecadenza.runtime" version="1.2.0" scope="compile"/>
+			<dependency name="codecadenza-swing" groupName="net.codecadenza.runtime" version="2.0.0" scope="compile"/>
 			<dependency name="log4j-slf4j2-impl" groupName="org.apache.logging.log4j" version="2.25.3" scope="compile"/>
 			<dependency name="swingx-all" groupName="org.swinglabs.swingx" version="1.6.5-1" scope="compile"/>
 			<dependency name="swingx-beaninfo" groupName="org.swinglabs.swingx" version="1.6.5-1" scope="compile"/>
 			<dependency name="junit-jupiter" groupName="org.junit.jupiter" version="5.11.3" scope="test"/>
 		</filter>
 		<filter clientPlatform="RCP" technology="ALL" serverPlatform="ALL" validationType="ALL" database="ALL" jpaProvider="ALL">
-			<dependency name="codecadenza-rcp" groupName="net.codecadenza.runtime" version="1.2.0" scope="compile"/>
+			<dependency name="codecadenza-rcp" groupName="net.codecadenza.runtime" version="2.0.0" scope="compile"/>
 			<dependency name="log4j-slf4j2-impl" groupName="org.apache.logging.log4j" version="2.25.3" scope="compile"/>
 			<dependency name="junit-jupiter" groupName="org.junit.jupiter" version="5.11.3" scope="test"/>
 		</filter>
 		<filter clientPlatform="RAP" technology="ALL" serverPlatform="ALL" validationType="ALL" database="ALL" jpaProvider="ALL">
-			<dependency name="codecadenza-rap" groupName="net.codecadenza.runtime" version="1.2.0" scope="compile"/>
+			<dependency name="codecadenza-rap" groupName="net.codecadenza.runtime" version="2.0.0" scope="compile"/>
 			<dependency name="log4j-slf4j2-impl" groupName="org.apache.logging.log4j" version="2.25.3" scope="compile"/>
 			<dependency name="junit-jupiter" groupName="org.junit.jupiter" version="5.11.3" scope="test"/>
 		</filter>
 		<filter clientPlatform="JSF_PRIMEFACES" technology="ALL" serverPlatform="ALL" validationType="ALL" database="ALL" jpaProvider="ALL">
 			<dependency name="primefaces-themes" groupName="org.primefaces" version="15.0.11" scope="compile"/>
 			<dependency name="openpdf" groupName="com.github.librepdf" version="2.0.2" scope="compile"/>
-			<dependency name="codecadenza-jsf-primefaces" groupName="net.codecadenza.runtime" version="1.2.0" scope="compile"/>
+			<dependency name="codecadenza-jsf-primefaces" groupName="net.codecadenza.runtime" version="2.0.0" scope="compile"/>
 		</filter>
 		<filter clientPlatform="JSF_PRIMEFACES" technology="JAKARTA_EE" serverPlatform="ALL" validationType="ALL" database="ALL" jpaProvider="ALL">
 			<dependency name="jakarta.jakartaee-api" groupName="jakarta.platform" version="11.0.0" scope="provided"/>
@@ -256,7 +256,7 @@
 			<dependency name="vaadin" groupName="com.vaadin" scope="compile"/>
 			<dependency name="vaadin-dev" groupName="com.vaadin" scope="compile"/>
 			<dependency name="jakarta.jakartaee-api" groupName="jakarta.platform" version="11.0.0" scope="provided"/>
-			<dependency name="codecadenza-vaadin" groupName="net.codecadenza.runtime" version="1.2.0" scope="compile"/>
+			<dependency name="codecadenza-vaadin" groupName="net.codecadenza.runtime" version="2.0.0" scope="compile"/>
 		</filter>
 		<filter clientPlatform="VAADIN" technology="JAKARTA_EE" serverPlatform="ALL" validationType="ALL" database="ALL" jpaProvider="ALL">
 			<dependency name="vaadin-cdi" groupName="com.vaadin" scope="compile"/>
@@ -401,8 +401,8 @@
 
 	<dependency_config buildType="INTEGRATION_SEI_KAFKA" comment="">
 		<filter clientPlatform="ALL" technology="SPRING_BOOT" serverPlatform="ALL" validationType="ALL" database="ALL" jpaProvider="ALL">
-			<dependency name="codecadenza-avro" groupName="net.codecadenza.runtime" version="1.2.0" scope="compile"/>
-			<dependency name="codecadenza-util" groupName="net.codecadenza.runtime" version="1.2.0" scope="compile"/>
+			<dependency name="codecadenza-avro" groupName="net.codecadenza.runtime" version="2.0.0" scope="compile"/>
+			<dependency name="codecadenza-util" groupName="net.codecadenza.runtime" version="2.0.0" scope="compile"/>
 		</filter>
 	</dependency_config>
 
@@ -421,7 +421,7 @@
 
 	<dependency_config buildType="INTEGRATION_IMP_REST" comment="">
 		<filter clientPlatform="ALL" technology="ALL" serverPlatform="ALL" validationType="ALL" database="ALL" jpaProvider="ALL">
-			<dependency name="codecadenza-rest" groupName="net.codecadenza.runtime" version="1.2.0" scope="compile"/>
+			<dependency name="codecadenza-rest" groupName="net.codecadenza.runtime" version="2.0.0" scope="compile"/>
 		</filter>
 		<filter clientPlatform="ALL" technology="JAKARTA_EE" serverPlatform="ALL" validationType="ALL" database="ALL" jpaProvider="ALL">
 			<dependency name="jakarta.jakartaee-api" groupName="jakarta.platform" version="11.0.0" scope="provided"/>
@@ -443,7 +443,7 @@
 	<dependency_config buildType="INTEGRATION_IMP_KAFKA" comment="">
 		<filter clientPlatform="ALL" technology="SPRING_BOOT" serverPlatform="ALL" validationType="ALL" database="ALL" jpaProvider="ALL">
 			<dependency name="jakarta.jakartaee-api" groupName="jakarta.platform" version="11.0.0" scope="provided"/>
-			<dependency name="codecadenza-spring-kafka" groupName="net.codecadenza.runtime" version="1.2.0" scope="compile"/>
+			<dependency name="codecadenza-spring-kafka" groupName="net.codecadenza.runtime" version="2.0.0" scope="compile"/>
 		</filter>
 	</dependency_config>
 	
@@ -458,8 +458,8 @@
 
 	<dependency_config buildType="SELENIUM_TEST" comment="">
 		<filter clientPlatform="ALL" technology="ALL" serverPlatform="ALL" validationType="ALL" database="ALL" jpaProvider="ALL">
-			<dependency name="codecadenza-util" groupName="net.codecadenza.runtime" version="1.2.0" scope="compile"/>
-			<dependency name="codecadenza-selenium" groupName="net.codecadenza.runtime" version="1.2.0" scope="compile"/>
+			<dependency name="codecadenza-util" groupName="net.codecadenza.runtime" version="2.0.0" scope="compile"/>
+			<dependency name="codecadenza-selenium" groupName="net.codecadenza.runtime" version="2.0.0" scope="compile"/>
 			<dependency name="jaxb-runtime" groupName="org.glassfish.jaxb" version="4.0.6" scope="compile"/>
 			<dependency name="junit-platform-suite-engine" groupName="org.junit.platform" version="1.11.3" scope="compile"/>
 			<dependency name="log4j-slf4j2-impl" groupName="org.apache.logging.log4j" version="2.25.3" scope="compile"/>
@@ -468,7 +468,7 @@
 
 	<dependency_config buildType="INTEGRATION_TEST_SOAP" comment="SOAP integration test">
 		<filter clientPlatform="ALL" technology="ALL" serverPlatform="ALL" validationType="ALL" database="ALL" jpaProvider="ALL">
-			<dependency name="codecadenza-ddt" groupName="net.codecadenza.runtime" version="1.2.0" scope="test"/>
+			<dependency name="codecadenza-ddt" groupName="net.codecadenza.runtime" version="2.0.0" scope="test"/>
 		</filter>
 		<filter clientPlatform="ALL" technology="JAKARTA_EE" serverPlatform="ALL" validationType="ALL" database="ALL" jpaProvider="ALL">
 			<dependency name="junit-jupiter-engine" groupName="org.junit.jupiter" version="5.14.0" scope="test"/>
@@ -507,7 +507,7 @@
 
 	<dependency_config buildType="INTEGRATION_TEST_REST" comment="REST integration test">
 		<filter clientPlatform="ALL" technology="ALL" serverPlatform="ALL" validationType="ALL" database="ALL" jpaProvider="ALL">
-			<dependency name="codecadenza-ddt" groupName="net.codecadenza.runtime" version="1.2.0" scope="test"/>
+			<dependency name="codecadenza-ddt" groupName="net.codecadenza.runtime" version="2.0.0" scope="test"/>
 		</filter>
 		<filter clientPlatform="ALL" technology="JAKARTA_EE" serverPlatform="ALL" validationType="ALL" database="ALL" jpaProvider="ALL">
 			<dependency name="junit-jupiter-engine" groupName="org.junit.jupiter" version="5.14.0" scope="test"/>
@@ -546,7 +546,7 @@
 
 	<dependency_config buildType="INTEGRATION_TEST_RMI" comment="RMI integration test">
 		<filter clientPlatform="ALL" technology="ALL" serverPlatform="ALL" validationType="ALL" database="ALL" jpaProvider="ALL">
-			<dependency name="codecadenza-ddt" groupName="net.codecadenza.runtime" version="1.2.0" scope="test"/>
+			<dependency name="codecadenza-ddt" groupName="net.codecadenza.runtime" version="2.0.0" scope="test"/>
 			<dependency name="junit-jupiter-engine" groupName="org.junit.jupiter" version="5.14.0" scope="test"/>
 			<dependency name="assertj-core" groupName="org.assertj" version="3.27.3" scope="test"/>
 			<dependency name="log4j-slf4j2-impl" groupName="org.apache.logging.log4j" version="2.25.3" scope="test"/>
@@ -565,7 +565,7 @@
 
 	<dependency_config buildType="INTEGRATION_TEST_KAFKA" comment="Kafka integration test">
 		<filter clientPlatform="ALL" technology="ALL" serverPlatform="ALL" validationType="ALL" database="ALL" jpaProvider="ALL">
-			<dependency name="codecadenza-ddt" groupName="net.codecadenza.runtime" version="1.2.0" scope="test"/>
+			<dependency name="codecadenza-ddt" groupName="net.codecadenza.runtime" version="2.0.0" scope="test"/>
 			<dependency name="junit-jupiter-engine" groupName="org.junit.jupiter" scope="test"/>
 			<dependency name="assertj-core" groupName="org.assertj" scope="test"/>
 			<dependency name="log4j-slf4j2-impl" groupName="org.apache.logging.log4j" scope="test"/>
@@ -587,7 +587,7 @@
 
 	<dependency_config buildType="INTEGRATION_TEST_JMS" comment="JMS integration test">
 		<filter clientPlatform="ALL" technology="ALL" serverPlatform="ALL" validationType="ALL" database="ALL" jpaProvider="ALL">
-			<dependency name="codecadenza-ddt" groupName="net.codecadenza.runtime" version="1.2.0" scope="test"/>
+			<dependency name="codecadenza-ddt" groupName="net.codecadenza.runtime" version="2.0.0" scope="test"/>
 		</filter>
 		<filter clientPlatform="ALL" technology="JAKARTA_EE" serverPlatform="ALL" validationType="ALL" database="ALL" jpaProvider="ALL">
 			<dependency name="junit-jupiter-engine" groupName="org.junit.jupiter" version="5.14.0" scope="test"/>

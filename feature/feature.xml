@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<feature id="net.codecadenza.eclipse.feature" label="CodeCadenza" version="1.2.0" provider-name="Martin Ganserer">
+<feature id="net.codecadenza.eclipse.feature" label="CodeCadenza" version="2.0.0" provider-name="Martin Ganserer">
 
    <description url="https://github.com/codecadenza/">
       CodeCadenza contains plug-ins and runtime libraries in order to create
@@ -735,14 +735,14 @@ Public License instead of this License.  But first, please read
       <import plugin="org.eclipse.ui.views" version="3.9.200" match="greaterOrEqual"/>
    </requires>
 
-   <plugin id="net.codecadenza.eclipse.domain-diagram" download-size="0" install-size="0" version="1.2.0" unpack="false"/>
-   <plugin id="net.codecadenza.eclipse.generator" download-size="0" install-size="0" version="1.2.0" unpack="false"/>
-   <plugin id="net.codecadenza.eclipse.model" download-size="0" install-size="0" version="1.2.0" unpack="false"/>
-   <plugin id="net.codecadenza.eclipse.resource" download-size="0" install-size="0" version="1.2.0" unpack="false"/>
-   <plugin id="net.codecadenza.eclipse.service" download-size="0" install-size="0" version="1.2.0" unpack="false"/>
-   <plugin id="net.codecadenza.eclipse.shared" download-size="0" install-size="0" version="1.2.0" unpack="false"/>
-   <plugin id="net.codecadenza.eclipse.tools" download-size="0" install-size="0" version="1.2.0" unpack="false"/>
-   <plugin id="net.codecadenza.eclipse.ui" download-size="0" install-size="0" version="1.2.0" unpack="false"/>
-   <plugin id="net.codecadenza.eclipse.buildtest" download-size="0" install-size="0" version="1.2.0" unpack="false"/>
+   <plugin id="net.codecadenza.eclipse.domain-diagram" download-size="0" install-size="0" version="2.0.0" unpack="false"/>
+   <plugin id="net.codecadenza.eclipse.generator" download-size="0" install-size="0" version="2.0.0" unpack="false"/>
+   <plugin id="net.codecadenza.eclipse.model" download-size="0" install-size="0" version="2.0.0" unpack="false"/>
+   <plugin id="net.codecadenza.eclipse.resource" download-size="0" install-size="0" version="2.0.0" unpack="false"/>
+   <plugin id="net.codecadenza.eclipse.service" download-size="0" install-size="0" version="2.0.0" unpack="false"/>
+   <plugin id="net.codecadenza.eclipse.shared" download-size="0" install-size="0" version="2.0.0" unpack="false"/>
+   <plugin id="net.codecadenza.eclipse.tools" download-size="0" install-size="0" version="2.0.0" unpack="false"/>
+   <plugin id="net.codecadenza.eclipse.ui" download-size="0" install-size="0" version="2.0.0" unpack="false"/>
+   <plugin id="net.codecadenza.eclipse.buildtest" download-size="0" install-size="0" version="2.0.0" unpack="false"/>
 
 </feature>
