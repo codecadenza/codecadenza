@@ -131,7 +131,8 @@ public class JavaFXClientProjectFilesGenerator extends AbstractClientProjectFile
 		final var b = new StringBuilder();
 		final String exitConf = i18n.getI18NMessage("application_exit", "Do you really want to exit?");
 		final String appTitle = i18n.getI18NMessage("application_name", "Application name");
-		final boolean usesEmbeddedDerby = project.getDatabase().getVendorGroup() == DBVendorGroupEnumeration.DERBY_EMBEDDED;
+		final boolean usesEmbeddedDerby = project.isJavaSEApplication()
+				&& project.getDatabase().getVendorGroup() == DBVendorGroupEnumeration.DERBY_EMBEDDED;
 
 		b.append("import static " + project.getClientNamespace().toString() + "." + APP_I18N_PROVIDER_CLASS + ".*;\n");
 		b.append("import java.util.*;\n");

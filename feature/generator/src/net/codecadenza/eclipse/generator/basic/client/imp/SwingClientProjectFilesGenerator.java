@@ -116,10 +116,8 @@ public class SwingClientProjectFilesGenerator extends AbstractClientProjectFiles
 	 */
 	private String createApplication() {
 		final var b = new StringBuilder();
-		boolean usesEmbeddedDerby = false;
-
-		if (project.getDatabase().getVendorGroup() == DBVendorGroupEnumeration.DERBY_EMBEDDED)
-			usesEmbeddedDerby = true;
+		final boolean usesEmbeddedDerby = project.isJavaSEApplication()
+				&& project.getDatabase().getVendorGroup() == DBVendorGroupEnumeration.DERBY_EMBEDDED;
 
 		b.append("import static " + project.getClientNamespace().toString() + "." + APP_I18N_PROVIDER_CLASS + ".*;\n");
 		b.append("import java.awt.*;\n");

@@ -261,7 +261,7 @@ public class EclipseClientProjectFilesGenerator extends AbstractClientProjectFil
 	 */
 	private String createE4LifeCycle() {
 		final var b = new StringBuilder();
-		final boolean usesEmbeddedDerby = project.hasRCPClient()
+		final boolean usesEmbeddedDerby = project.hasRCPClient() && project.isJavaSEApplication()
 				&& project.getDatabase().getVendorGroup() == DBVendorGroupEnumeration.DERBY_EMBEDDED;
 
 		b.append("import static " + project.getClientNamespace().toString() + "." + APP_I18N_PROVIDER_CLASS + ".*;\n");
@@ -526,7 +526,8 @@ public class EclipseClientProjectFilesGenerator extends AbstractClientProjectFil
 	 */
 	private String createActivator() {
 		final var b = new StringBuilder();
-		final boolean usesEmbeddedDerby = project.getDatabase().getVendorGroup() == DBVendorGroupEnumeration.DERBY_EMBEDDED;
+		final boolean usesEmbeddedDerby = project.isJavaSEApplication()
+				&& project.getDatabase().getVendorGroup() == DBVendorGroupEnumeration.DERBY_EMBEDDED;
 
 		b.append("import org.osgi.framework.*;\n");
 
