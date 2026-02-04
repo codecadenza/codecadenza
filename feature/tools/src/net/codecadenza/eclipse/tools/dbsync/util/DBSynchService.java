@@ -86,7 +86,8 @@ import org.eclipse.swt.widgets.TreeItem;
  * @version 1.0.0
  */
 public class DBSynchService {
-	private static final String DERBY_SYS_INDEX_PREFIX = "sql";
+	private static final String H2_PRIMARY_KEY_INDEX = "PRIMARY_KEY_";
+	private static final String H2_FOREIGN_KEY_INDEX = "_INDEX_";
 
 	private Datasource ds;
 	private int transCount;
@@ -358,9 +359,9 @@ public class DBSynchService {
 						if (indexName == null || indexName.isEmpty())
 							continue;
 
-						// If we are using Derby the JDBC meta-data interface will also return system-generated indexes that we should skip!
-						if ((dbVendor == DBVendorGroupEnumeration.DERBY || dbVendor == DBVendorGroupEnumeration.DERBY_EMBEDDED)
-								&& indexName.toLowerCase().startsWith(DERBY_SYS_INDEX_PREFIX))
+						// When using H2 the JDBC meta-data interface will also return system-generated indexes that should be skipped!
+						if ((dbVendor == DBVendorGroupEnumeration.H2 || dbVendor == DBVendorGroupEnumeration.H2_EMBEDDED)
+								&& (indexName.startsWith(H2_PRIMARY_KEY_INDEX)) || indexName.contains(H2_FOREIGN_KEY_INDEX))
 							continue;
 
 						final String keyName = DBNamingUtil.convertToStyle(indexName, db);

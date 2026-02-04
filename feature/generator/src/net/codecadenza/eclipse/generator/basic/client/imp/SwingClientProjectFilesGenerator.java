@@ -32,7 +32,6 @@ import static net.codecadenza.eclipse.shared.Constants.SUB_PACKAGE_UTIL;
 import java.util.List;
 import net.codecadenza.eclipse.generator.client.common.i18n.RichClientI18NGenerator;
 import net.codecadenza.eclipse.generator.common.LoggingGenerator;
-import net.codecadenza.eclipse.model.db.DBVendorGroupEnumeration;
 import net.codecadenza.eclipse.model.java.JavaFile;
 import net.codecadenza.eclipse.model.project.Project;
 
@@ -116,9 +115,6 @@ public class SwingClientProjectFilesGenerator extends AbstractClientProjectFiles
 	 */
 	private String createApplication() {
 		final var b = new StringBuilder();
-		final boolean usesEmbeddedDerby = project.isJavaSEApplication()
-				&& project.getDatabase().getVendorGroup() == DBVendorGroupEnumeration.DERBY_EMBEDDED;
-
 		b.append("import static " + project.getClientNamespace().toString() + "." + APP_I18N_PROVIDER_CLASS + ".*;\n");
 		b.append("import java.awt.*;\n");
 		b.append("import java.awt.event.*;\n");
@@ -130,9 +126,6 @@ public class SwingClientProjectFilesGenerator extends AbstractClientProjectFiles
 		b.append("import net.codecadenza.runtime.richclient.swing.dialog.*;\n");
 		b.append("import net.codecadenza.runtime.richclient.swing.image.*;\n");
 		b.append("import javax.swing.plaf.*;\n");
-
-		if (usesEmbeddedDerby)
-			b.append("import java.sql.*;\n");
 
 		if (project.isJavaSEApplication())
 			b.append("import net.codecadenza.runtime.jpa.*;\n");
@@ -159,10 +152,6 @@ public class SwingClientProjectFilesGenerator extends AbstractClientProjectFiles
 		b.append(" */\n");
 		b.append("public void shutdown()\n");
 		b.append("{\n");
-
-		if (usesEmbeddedDerby)
-			b.append("Connection con = null;\n\n");
-
 		b.append("final int result = JOptionPane.showConfirmDialog(mainFrame, ");
 		b.append(i18n.getI18NMessage("application_exit", "Do you really want to exit?"));
 		b.append(", " + i18n.getI18NMessage("application_name", "Application name") + ", JOptionPane.YES_NO_OPTION);\n\n");
@@ -178,47 +167,13 @@ public class SwingClientProjectFilesGenerator extends AbstractClientProjectFiles
 			b.append("PersistenceEngine.shutdown();\n");
 		}
 
-		if (usesEmbeddedDerby) {
-			b.append("\n// Shutdown embedded database instance!\n");
-
-			String connectionURL = project.getDataSource().getConnectionURL();
-
-			if (!connectionURL.endsWith(";"))
-				connectionURL += ";";
-
-			connectionURL += "shutdown=true";
-
-			b.append("con = DriverManager.getConnection(\"" + connectionURL + "\");\n");
-		}
-
 		b.append("}\n");
 		b.append("catch (final Exception ex)\n");
 		b.append("{\n");
 
-		if (usesEmbeddedDerby)
-			LoggingGenerator.addInfoLog(b, "The embedded database has been shut down!");
-		else
-			LoggingGenerator.addErrorLog(b, "Error while closing the application!", "ex");
+		LoggingGenerator.addErrorLog(b, "Error while closing the application!", "ex");
 
 		b.append("}\n");
-
-		if (usesEmbeddedDerby) {
-			b.append("finally\n");
-			b.append("{\n");
-			b.append("if(con != null)\n");
-			b.append("try\n");
-			b.append("{\n");
-			b.append("con.close();\n");
-			b.append("}\n");
-			b.append("catch (final SQLException e)\n");
-			b.append("{\n");
-
-			LoggingGenerator.addWarningLog(b, "Could not close the database connection!", "e");
-
-			b.append("}\n");
-			b.append("}\n");
-		}
-
 		b.append("\nmainFrame.dispose();\n");
 		b.append("}\n\n");
 		b.append("/**\n");

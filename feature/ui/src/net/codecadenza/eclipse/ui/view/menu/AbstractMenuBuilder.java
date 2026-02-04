@@ -63,7 +63,6 @@ public abstract class AbstractMenuBuilder<T> {
 	public static final String TITLE_REBUILD_LOG = "Rebuild logging";
 	public static final String TITLE_REBUILD_SEC = "Rebuild security";
 	public static final String TITLE_REBUILD_SAVED_QUERY = "Rebuild saved query service";
-	public static final String TITLE_SHUTDOWN = "Shutdown embedded DB";
 	public static final String TITLE_CREATE = "Create";
 	public static final String TITLE_RECREATE = "Recreate";
 	public static final String TITLE_DROP = "Drop";

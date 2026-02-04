@@ -317,8 +317,7 @@ public class Constants {
 	// JDBC drivers
 	public static final String DRIVER_ORACEL = "oracle.jdbc.OracleDriver";
 	public static final String DRIVER_MYSQL = "com.mysql.cj.jdbc.Driver";
-	public static final String DRIVER_DERBY = "org.apache.derby.jdbc.ClientDriver";
-	public static final String DRIVER_DERBY_EMBEDDED = "org.apache.derby.jdbc.EmbeddedDriver";
+	public static final String DRIVER_H2 = "org.h2.Driver";
 	public static final String DRIVER_POSTGRESQL = "org.postgresql.Driver";
 	public static final String DRIVER_MSSQL = "com.microsoft.sqlserver.jdbc.SQLServerDriver";
 

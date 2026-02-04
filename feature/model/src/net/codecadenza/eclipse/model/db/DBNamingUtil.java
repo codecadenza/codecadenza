@@ -57,7 +57,7 @@ public class DBNamingUtil {
 
 		if (db.getIdentifierStyle() == IdentifierStyleEnumeration.CASE_SENSITIVE) {
 			if (dbVendor == DBVendorGroupEnumeration.ORACLE || dbVendor == DBVendorGroupEnumeration.POSTGRESQL
-					|| dbVendor == DBVendorGroupEnumeration.DERBY || dbVendor == DBVendorGroupEnumeration.DERBY_EMBEDDED)
+					|| dbVendor == DBVendorGroupEnumeration.H2 || dbVendor == DBVendorGroupEnumeration.H2_EMBEDDED)
 				return QUOTE + name + QUOTE;
 		}
 		else if (db.getIdentifierStyle() == IdentifierStyleEnumeration.UPPERCASE) {
@@ -67,8 +67,8 @@ public class DBNamingUtil {
 			return name.toUpperCase();
 		}
 		else if (db.getIdentifierStyle() == IdentifierStyleEnumeration.LOWERCASE) {
-			if (dbVendor == DBVendorGroupEnumeration.ORACLE || dbVendor == DBVendorGroupEnumeration.DERBY
-					|| dbVendor == DBVendorGroupEnumeration.DERBY_EMBEDDED)
+			if (dbVendor == DBVendorGroupEnumeration.ORACLE || dbVendor == DBVendorGroupEnumeration.H2
+					|| dbVendor == DBVendorGroupEnumeration.H2_EMBEDDED)
 				return QUOTE + name.toLowerCase() + QUOTE;
 
 			return name.toLowerCase();

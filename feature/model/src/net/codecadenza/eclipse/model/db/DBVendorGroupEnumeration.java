@@ -49,20 +49,20 @@ public enum DBVendorGroupEnumeration implements Enumerator {
 	ORACLE(1, "ORACLE", "ORACLE"),
 
 	/**
-	 * The '<em><b>DERBY</b></em>' literal object
-	 * @see #DERBY_VALUE
+	 * The '<em><b>H2</b></em>' literal object
+	 * @see #H2_VALUE
 	 * @generated
 	 * @ordered
 	 */
-	DERBY(2, "DERBY", "DERBY"),
+	H2(2, "H2", "H2"),
 
 	/**
-	 * The '<em><b>DERBY EMBEDDED</b></em>' literal object
-	 * @see #DERBY_EMBEDDED_VALUE
+	 * The '<em><b>H2 EMBEDDED</b></em>' literal object
+	 * @see #H2_EMBEDDED_VALUE
 	 * @generated
 	 * @ordered
 	 */
-	DERBY_EMBEDDED(3, "DERBY_EMBEDDED", "DERBY_EMBEDDED"),
+	H2_EMBEDDED(3, "H2_EMBEDDED", "H2_EMBEDDED"),
 
 	/**
 	 * The '<em><b>POSTGRESQL</b></em>' literal object
@@ -99,22 +99,22 @@ public enum DBVendorGroupEnumeration implements Enumerator {
 	public static final int ORACLE_VALUE = 1;
 
 	/**
-	 * The '<em><b>DERBY</b></em>' literal value
-	 * @see #DERBY
+	 * The '<em><b>H2</b></em>' literal value
+	 * @see #H2
 	 * @model
 	 * @generated
 	 * @ordered
 	 */
-	public static final int DERBY_VALUE = 2;
+	public static final int H2_VALUE = 2;
 
 	/**
-	 * The '<em><b>DERBY EMBEDDED</b></em>' literal value
-	 * @see #DERBY_EMBEDDED
+	 * The '<em><b>H2 EMBEDDED</b></em>' literal value
+	 * @see #H2_EMBEDDED
 	 * @model
 	 * @generated
 	 * @ordered
 	 */
-	public static final int DERBY_EMBEDDED_VALUE = 3;
+	public static final int H2_EMBEDDED_VALUE = 3;
 
 	/**
 	 * The '<em><b>POSTGRESQL</b></em>' literal value
@@ -138,7 +138,7 @@ public enum DBVendorGroupEnumeration implements Enumerator {
 	 * An array of all the '<em><b>DB Vendor Group Enumeration</b></em>' enumerators
 	 * @generated
 	 */
-	private static final DBVendorGroupEnumeration[] VALUES_ARRAY = { MYSQL, ORACLE, DERBY, DERBY_EMBEDDED, POSTGRESQL, MSSQL };
+	private static final DBVendorGroupEnumeration[] VALUES_ARRAY = { MYSQL, ORACLE, H2, H2_EMBEDDED, POSTGRESQL, MSSQL };
 
 	/**
 	 * A public read-only list of all the '<em><b>DB Vendor Group Enumeration</b></em>' enumerators
@@ -175,10 +175,10 @@ public enum DBVendorGroupEnumeration implements Enumerator {
 				return MYSQL;
 			case ORACLE_VALUE:
 				return ORACLE;
-			case DERBY_VALUE:
-				return DERBY;
-			case DERBY_EMBEDDED_VALUE:
-				return DERBY_EMBEDDED;
+			case H2_VALUE:
+				return H2;
+			case H2_EMBEDDED_VALUE:
+				return H2_EMBEDDED;
 			case POSTGRESQL_VALUE:
 				return POSTGRESQL;
 			case MSSQL_VALUE:

@@ -49,7 +49,7 @@
         <description xmi:type="description_1:DiagramDescription" href="platform:/plugin/org.eclipse.emf.ecoretools.design/description/ecore.odesign#//@ownedViewpoints[name='Design']/@ownedRepresentations[name='Entities']"/>
         <target xmi:type="ecore:EPackage" href="exchange.ecore#/"/>
       </ownedRepresentationDescriptors>
-      <ownedRepresentationDescriptors xmi:type="viewpoint:DRepresentationDescriptor" uid="_i-g1AKEbEei_DovGwMC79w" name="DB class diagram" repPath="#_omkTIKfmEeWakPsQJlEbvQ" changeId="1712036176779">
+      <ownedRepresentationDescriptors xmi:type="viewpoint:DRepresentationDescriptor" uid="_i-g1AKEbEei_DovGwMC79w" name="DB class diagram" repPath="#_omkTIKfmEeWakPsQJlEbvQ" changeId="1769852215992">
         <description xmi:type="description_1:DiagramDescription" href="platform:/plugin/org.eclipse.emf.ecoretools.design/description/ecore.odesign#//@ownedViewpoints[name='Design']/@ownedRepresentations[name='Entities']"/>
         <target xmi:type="ecore:EPackage" href="db.ecore#/"/>
       </ownedRepresentationDescriptors>
@@ -14070,17 +14070,17 @@
         </ownedStyle>
         <actualMapping xmi:type="description_1:NodeMapping" href="platform:/plugin/org.eclipse.emf.ecoretools.design/description/ecore.odesign#//@ownedViewpoints[name='Design']/@ownedRepresentations[name='Entities']/@defaultLayer/@containerMappings[name='EC%20EEnum']/@subNodeMappings[name='EC%20EEnumLiteral']"/>
       </ownedElements>
-      <ownedElements xmi:type="diagram:DNodeListElement" uid="_pAYhU6fmEeWakPsQJlEbvQ" name="DERBY" tooltipText="">
-        <target xmi:type="ecore:EEnumLiteral" href="db.ecore#//DBVendorGroupEnumeration/DERBY"/>
-        <semanticElements xmi:type="ecore:EEnumLiteral" href="db.ecore#//DBVendorGroupEnumeration/DERBY"/>
+      <ownedElements xmi:type="diagram:DNodeListElement" uid="_pAYhU6fmEeWakPsQJlEbvQ" name="H2" tooltipText="">
+        <target xmi:type="ecore:EEnumLiteral" href="db.ecore#//DBVendorGroupEnumeration/H2"/>
+        <semanticElements xmi:type="ecore:EEnumLiteral" href="db.ecore#//DBVendorGroupEnumeration/H2"/>
         <ownedStyle xmi:type="diagram:BundledImage" uid="_pAYhVKfmEeWakPsQJlEbvQ" labelAlignment="LEFT">
           <description xmi:type="style:BundledImageDescription" href="platform:/plugin/org.eclipse.emf.ecoretools.design/description/ecore.odesign#//@ownedViewpoints[name='Design']/@ownedRepresentations[name='Entities']/@defaultLayer/@containerMappings[name='EC%20EEnum']/@subNodeMappings[name='EC%20EEnumLiteral']/@style"/>
         </ownedStyle>
         <actualMapping xmi:type="description_1:NodeMapping" href="platform:/plugin/org.eclipse.emf.ecoretools.design/description/ecore.odesign#//@ownedViewpoints[name='Design']/@ownedRepresentations[name='Entities']/@defaultLayer/@containerMappings[name='EC%20EEnum']/@subNodeMappings[name='EC%20EEnumLiteral']"/>
       </ownedElements>
-      <ownedElements xmi:type="diagram:DNodeListElement" uid="_pAYhVafmEeWakPsQJlEbvQ" name="DERBY_EMBEDDED" tooltipText="">
-        <target xmi:type="ecore:EEnumLiteral" href="db.ecore#//DBVendorGroupEnumeration/DERBY_EMBEDDED"/>
-        <semanticElements xmi:type="ecore:EEnumLiteral" href="db.ecore#//DBVendorGroupEnumeration/DERBY_EMBEDDED"/>
+      <ownedElements xmi:type="diagram:DNodeListElement" uid="_pAYhVafmEeWakPsQJlEbvQ" name="H2_EMBEDDED" tooltipText="">
+        <target xmi:type="ecore:EEnumLiteral" href="db.ecore#//DBVendorGroupEnumeration/H2_EMBEDDED"/>
+        <semanticElements xmi:type="ecore:EEnumLiteral" href="db.ecore#//DBVendorGroupEnumeration/H2_EMBEDDED"/>
         <ownedStyle xmi:type="diagram:BundledImage" uid="_pAYhVqfmEeWakPsQJlEbvQ" labelAlignment="LEFT">
           <description xmi:type="style:BundledImageDescription" href="platform:/plugin/org.eclipse.emf.ecoretools.design/description/ecore.odesign#//@ownedViewpoints[name='Design']/@ownedRepresentations[name='Entities']/@defaultLayer/@containerMappings[name='EC%20EEnum']/@subNodeMappings[name='EC%20EEnumLiteral']/@style"/>
         </ownedStyle>

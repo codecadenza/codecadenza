@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <db_templates>
-    <db_template vendor_group="DERBY">
-        <driver_name>org.apache.derby.jdbc.ClientDriver</driver_name>
-        <sample_url>jdbc:derby://localhost:1527/[instance];user=sa;password=sa;create=true;</sample_url>
-        <hibernate_dialect>org.hibernate.dialect.DerbyDialect</hibernate_dialect>
-        <max_identifier_length>128</max_identifier_length>
-        <eclipselink_target_dbname>Derby</eclipselink_target_dbname>
+    <db_template vendor_group="H2">
+        <driver_name>org.h2.Driver</driver_name>
+        <sample_url>jdbc:h2:tcp//localhost:9092[instance];user=sa;password=sa;IFEXISTS=FALSE;MODE=LEGACY</sample_url>
+        <hibernate_dialect>org.hibernate.dialect.H2Dialect</hibernate_dialect>
+        <max_identifier_length>255</max_identifier_length>
+        <eclipselink_target_dbname>org.eclipse.persistence.platform.database.H2Platform</eclipselink_target_dbname>
         <identifier_regex>[A-Za-z][A-Za-z0-9_]*</identifier_regex>
         <default_schema_name></default_schema_name>
-        <comment>Derby 10</comment>
-        <reserved_words>ADD ALL ALLOCATE ALTER AND ANY ARE AS ASC ASSERTION AT AUTHORIZATION AVG BEGIN BETWEEN BIGINT BIT BOOLEAN BOTH BY CALL CASCADE CASCADED CASE CAST CHAR CHARACTER CHECK CLOSE COALESCE COLLATE COLLATION COLUMN COMMIT CONNECT CONNECTION CONSTRAINT CONSTRAINTS CONTINUE CONVERT CORRESPONDING CREATE CURRENT CURRENT_DATE CURRENT_TIME CURRENT_TIMESTAMP CURRENT_USER CURSOR DEALLOCATE DEC DECIMAL DECLARE DEFAULT DEFERRABLE DEFERRED DELETE DESC DESCRIBE DIAGNOSTICS DISCONNECT DISTINCT DOUBLE DROP ELSE END END-EXEC ESCAPE EXCEPT EXCEPTION EXEC EXECUTE EXISTS EXPLAIN EXTERNAL FALSE FETCH FIRST FLOAT FOR FOREIGN FOUND FROM FULL FUNCTION GET GETCURRENTCONNECTION GLOBAL GO GOTO GRANT GROUP HAVING HOUR IDENTITY IMMEDIATE IN INDICATOR INITIALLY INNER INOUT INPUT INSENSITIVE INSERT INT INTEGER INTERSECT INTO IS ISOLATION JOIN KEY LAST LEFT LIKE LOWER LTRIM MATCH MAX MIN MINUTE NATIONAL NATURAL NCHAR NVARCHAR NEXT NO NOT NULL NULLIF NUMERIC OF ON ONLY OPEN OPTION OR ORDER OUTER OUTPUT OVERLAPS PAD PARTIAL PREPARE PRESERVE PRIMARY PRIOR PRIVILEGES PROCEDURE PUBLIC READ REAL REFERENCES RELATIVE RESTRICT REVOKE RIGHT ROLLBACK ROWS RTRIM SCHEMA SCROLL SECOND SELECT SESSION_USER SET SMALLINT SOME SPACE SQL SQLCODE SQLERROR SQLSTATE SUBSTR SUBSTRING SUM SYSTEM_USER TABLE TEMPORARY TIMEZONE_HOUR TIMEZONE_MINUTE TO TRANSACTION TRANSLATE TRANSLATION TRIM TRUE UNION UNIQUE UNKNOWN UPDATE UPPER USER USING VALUES VARCHAR VARYING VIEW WHENEVER WHERE WITH WORK WRITE XML XMLEXISTS XMLPARSE XMLQUERY XMLSERIALIZE YEAR</reserved_words>
+        <comment>H2</comment>
+        <reserved_words>ALL AND ANY ARRAY AS ASYMMETRIC AUTHORIZATION BETWEEN BOTH CASE CAST CHECK CONSTRAINT CROSS CURRENT_CATALOG CURRENT_DATE CURRENT_PATH CURRENT_ROLE CURRENT_SCHEMA CURRENT_TIME CURRENT_TIMESTAMP CURRENT_USER DAY DEFAULT DISTINCT ELSE END EXCEPT EXISTS FALSE FETCH FOR FOREIGN FROM FULL GROUP GROUPS HAVING HOUR IF ILIKE IN INNER INTERSECT INTERVAL IS JOIN KEY LEADING LEFT LIKE LIMIT LOCALTIME LOCALTIMESTAMP MINUS MINUTE MONTH NATURAL NOT NULL OFFSET ON OR ORDER OVER PARTITION PRIMARY QUALIFY RANGE REGEXP RIGHT ROW ROWNUM ROWS SECOND SELECT SESSION_USER SET SOME SYMMETRIC SYSTEM_USER TABLE TO TOP TRAILING TRUE UESCAPE UNION UNIQUE UNKNOWN USER USING VALUE VALUES WHEN WHERE WINDOW WITH YEAR _ROWID_</reserved_words>
         <identity_column_support>true</identity_column_support>
-        <sequence_support>false</sequence_support>
+        <sequence_support>true</sequence_support>
         <conversion_type>UPPERCASE</conversion_type>
         <column_type_mapping name="INTEGER" omit_length_information="true">
             <java_type name="int"/>
@@ -21,7 +21,7 @@
             <java_type name="long"/>
             <java_type name="Long"/>
         </column_type_mapping>
-        <column_type_mapping name="DOUBLE" omit_length_information="true">
+        <column_type_mapping name="DOUBLE PRECISION" omit_length_information="true">
             <java_type name="double"/>
             <java_type name="Double"/>
         </column_type_mapping>
@@ -48,19 +48,17 @@
             <java_type name="char"/>
             <java_type name="UUID"/>
         </column_type_mapping>
-        <column_type_mapping name="SMALLINT" omit_length_information="true">
+        <column_type_mapping name="BOOLEAN" omit_length_information="true">
             <java_type name="boolean"/>
             <java_type name="Boolean"/>
         </column_type_mapping>
-        <column_type_mapping name="BLOB" omit_length_information="false">
+        <column_type_mapping name="BINARY" omit_length_information="false">
             <java_type name="byte[]"/>
             <java_type name="Byte[]"/>
             <java_type name="UUID"/>
         </column_type_mapping>
-        <column_type_mapping name="CLOB" omit_length_information="false">
-            <java_type name="byte[]"/>
-            <java_type name="Byte[]"/>
-            <java_type name="UUID"/>
+        <column_type_mapping name="CHARACTER LARGE OBJECT" omit_length_information="false">
+            <java_type name="String"/>
         </column_type_mapping>
         <column_type_mapping name="NUMERIC" omit_length_information="true">
             <java_type name="BigDecimal"/>
@@ -88,37 +86,28 @@
             <java_type name="String"/>
             <java_type name="UUID"/>
         </column_type_mapping>
-        <column_type_mapping name="CHARACTER LARGE OBJECT" omit_length_information="false">
-            <java_type name="String"/>
-            <java_type name="UUID"/>
-        </column_type_mapping>
         <column_type_mapping name="CHARACTER VARYING" omit_length_information="false">
             <java_type name="String"/>
             <java_type name="UUID"/>
         </column_type_mapping>
-        <column_type_mapping name="DOUBLE PRECISION" omit_length_information="true">
-            <java_type name="double"/>
-            <java_type name="Double"/>
-        </column_type_mapping>
-        <column_type_mapping name="LONG VARCHAR" omit_length_information="true">
-            <java_type name="String"/>
+        <column_type_mapping name="UUID" omit_length_information="true">
             <java_type name="UUID"/>
         </column_type_mapping>
     </db_template>
-    <db_template vendor_group="DERBY_EMBEDDED">
-        <driver_name>org.apache.derby.jdbc.EmbeddedDriver</driver_name>
-        <sample_url>jdbc:derby:[instance];user=sa;password=sa;create=true</sample_url>
-        <hibernate_dialect>org.hibernate.dialect.DerbyDialect</hibernate_dialect>
-        <max_identifier_length>128</max_identifier_length>
-        <eclipselink_target_dbname>Derby</eclipselink_target_dbname>
+    <db_template vendor_group="H2_EMBEDDED">
+        <driver_name>org.h2.Driver</driver_name>
+        <sample_url>jdbc:h2:file:[path];user=sa;password=sa;MODE=LEGACY</sample_url>
+        <hibernate_dialect>org.hibernate.dialect.H2Dialect</hibernate_dialect>
+        <max_identifier_length>255</max_identifier_length>
+        <eclipselink_target_dbname>org.eclipse.persistence.platform.database.H2Platform</eclipselink_target_dbname>
         <identifier_regex>[A-Za-z][A-Za-z0-9_]*</identifier_regex>
         <default_schema_name></default_schema_name>
-        <comment>Derby 10 (for embedded use)</comment>
-        <reserved_words>ADD ALL ALLOCATE ALTER AND ANY ARE AS ASC ASSERTION AT AUTHORIZATION AVG BEGIN BETWEEN BIGINT BIT BOOLEAN BOTH BY CALL CASCADE CASCADED CASE CAST CHAR CHARACTER CHECK CLOSE COALESCE COLLATE COLLATION COLUMN COMMIT CONNECT CONNECTION CONSTRAINT CONSTRAINTS CONTINUE CONVERT CORRESPONDING CREATE CURRENT CURRENT_DATE CURRENT_TIME CURRENT_TIMESTAMP CURRENT_USER CURSOR DEALLOCATE DEC DECIMAL DECLARE DEFAULT DEFERRABLE DEFERRED DELETE DESC DESCRIBE DIAGNOSTICS DISCONNECT DISTINCT DOUBLE DROP ELSE END END-EXEC ESCAPE EXCEPT EXCEPTION EXEC EXECUTE EXISTS EXPLAIN EXTERNAL FALSE FETCH FIRST FLOAT FOR FOREIGN FOUND FROM FULL FUNCTION GET GETCURRENTCONNECTION GLOBAL GO GOTO GRANT GROUP HAVING HOUR IDENTITY IMMEDIATE IN INDICATOR INITIALLY INNER INOUT INPUT INSENSITIVE INSERT INT INTEGER INTERSECT INTO IS ISOLATION JOIN KEY LAST LEFT LIKE LOWER LTRIM MATCH MAX MIN MINUTE NATIONAL NATURAL NCHAR NVARCHAR NEXT NO NOT NULL NULLIF NUMERIC OF ON ONLY OPEN OPTION OR ORDER OUTER OUTPUT OVERLAPS PAD PARTIAL PREPARE PRESERVE PRIMARY PRIOR PRIVILEGES PROCEDURE PUBLIC READ REAL REFERENCES RELATIVE RESTRICT REVOKE RIGHT ROLLBACK ROWS RTRIM SCHEMA SCROLL SECOND SELECT SESSION_USER SET SMALLINT SOME SPACE SQL SQLCODE SQLERROR SQLSTATE SUBSTR SUBSTRING SUM SYSTEM_USER TABLE TEMPORARY TIMEZONE_HOUR TIMEZONE_MINUTE TO TRANSACTION TRANSLATE TRANSLATION TRIM TRUE UNION UNIQUE UNKNOWN UPDATE UPPER USER USING VALUES VARCHAR VARYING VIEW WHENEVER WHERE WITH WORK WRITE XML XMLEXISTS XMLPARSE XMLQUERY XMLSERIALIZE YEAR</reserved_words>
+        <comment>H2</comment>
+        <reserved_words>ALL AND ANY ARRAY AS ASYMMETRIC AUTHORIZATION BETWEEN BOTH CASE CAST CHECK CONSTRAINT CROSS CURRENT_CATALOG CURRENT_DATE CURRENT_PATH CURRENT_ROLE CURRENT_SCHEMA CURRENT_TIME CURRENT_TIMESTAMP CURRENT_USER DAY DEFAULT DISTINCT ELSE END EXCEPT EXISTS FALSE FETCH FOR FOREIGN FROM FULL GROUP GROUPS HAVING HOUR IF ILIKE IN INNER INTERSECT INTERVAL IS JOIN KEY LEADING LEFT LIKE LIMIT LOCALTIME LOCALTIMESTAMP MINUS MINUTE MONTH NATURAL NOT NULL OFFSET ON OR ORDER OVER PARTITION PRIMARY QUALIFY RANGE REGEXP RIGHT ROW ROWNUM ROWS SECOND SELECT SESSION_USER SET SOME SYMMETRIC SYSTEM_USER TABLE TO TOP TRAILING TRUE UESCAPE UNION UNIQUE UNKNOWN USER USING VALUE VALUES WHEN WHERE WINDOW WITH YEAR _ROWID_</reserved_words>
         <identity_column_support>true</identity_column_support>
-        <sequence_support>false</sequence_support>
+        <sequence_support>true</sequence_support>
         <conversion_type>UPPERCASE</conversion_type>
-       	<column_type_mapping name="INTEGER" omit_length_information="true">
+        <column_type_mapping name="INTEGER" omit_length_information="true">
             <java_type name="int"/>
             <java_type name="Integer"/>
         </column_type_mapping>
@@ -126,7 +115,7 @@
             <java_type name="long"/>
             <java_type name="Long"/>
         </column_type_mapping>
-        <column_type_mapping name="DOUBLE" omit_length_information="true">
+        <column_type_mapping name="DOUBLE PRECISION" omit_length_information="true">
             <java_type name="double"/>
             <java_type name="Double"/>
         </column_type_mapping>
@@ -153,19 +142,17 @@
             <java_type name="char"/>
             <java_type name="UUID"/>
         </column_type_mapping>
-        <column_type_mapping name="SMALLINT" omit_length_information="true">
+        <column_type_mapping name="BOOLEAN" omit_length_information="true">
             <java_type name="boolean"/>
             <java_type name="Boolean"/>
         </column_type_mapping>
-        <column_type_mapping name="BLOB" omit_length_information="false">
+        <column_type_mapping name="BINARY" omit_length_information="false">
             <java_type name="byte[]"/>
             <java_type name="Byte[]"/>
             <java_type name="UUID"/>
         </column_type_mapping>
-        <column_type_mapping name="CLOB" omit_length_information="false">
-            <java_type name="byte[]"/>
-            <java_type name="Byte[]"/>
-            <java_type name="UUID"/>
+        <column_type_mapping name="CHARACTER LARGE OBJECT" omit_length_information="false">
+            <java_type name="String"/>
         </column_type_mapping>
         <column_type_mapping name="NUMERIC" omit_length_information="true">
             <java_type name="BigDecimal"/>
@@ -173,40 +160,31 @@
         <column_type_mapping name="DECIMAL" omit_length_information="true">
             <java_type name="BigDecimal"/>
         </column_type_mapping>
-        <column_type_mapping name="CHARACTER" omit_length_information="false">
-            <java_type name="String"/>
-            <java_type name="UUID"/>
-        </column_type_mapping>
-        <column_type_mapping name="DOUBLE PRECISION" omit_length_information="true">
-            <java_type name="double"/>
-            <java_type name="Double"/>
-        </column_type_mapping>
         <column_type_mapping name="INT" omit_length_information="true">
             <java_type name="int"/>
             <java_type name="Integer"/>
-        </column_type_mapping>
-        <column_type_mapping name="LONG VARCHAR" omit_length_information="true">
-            <java_type name="String"/>
-            <java_type name="UUID"/>
-        </column_type_mapping>
-        <column_type_mapping name="DEC" omit_length_information="true">
-            <java_type name="BigDecimal"/>
         </column_type_mapping>
         <column_type_mapping name="BINARY LARGE OBJECT" omit_length_information="false">
             <java_type name="byte[]"/>
             <java_type name="Byte[]"/>
             <java_type name="UUID"/>
         </column_type_mapping>
-        <column_type_mapping name="CHARACTER LARGE OBJECT" omit_length_information="false">
-            <java_type name="String"/>
-            <java_type name="UUID"/>
+        <column_type_mapping name="DEC" omit_length_information="true">
+            <java_type name="BigDecimal"/>
         </column_type_mapping>
         <column_type_mapping name="CHAR VARYING" omit_length_information="false">
             <java_type name="String"/>
             <java_type name="UUID"/>
         </column_type_mapping>
+        <column_type_mapping name="CHARACTER" omit_length_information="false">
+            <java_type name="String"/>
+            <java_type name="UUID"/>
+        </column_type_mapping>
         <column_type_mapping name="CHARACTER VARYING" omit_length_information="false">
             <java_type name="String"/>
+            <java_type name="UUID"/>
+        </column_type_mapping>
+        <column_type_mapping name="UUID" omit_length_information="true">
             <java_type name="UUID"/>
         </column_type_mapping>
     </db_template>

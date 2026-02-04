@@ -7,10 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+
 ### Changed
+2026-02-04: Switch from Apache Derby to H2
 2026-01-30: Catch a NoClassDefFoundError in database connection tests
 2026-01-30: Add missing tabs in generated web.xml files for JSF applications
-2026-01-30: Only shutdown the embedded Derby database in standalone applications
 2026-01-27: Declare unnamed patterns, local variables and exception parameters
 2026-01-27: Update to Java 25, Jakarta EE 11 and Spring Boot 4
 2026-01-27: Remove unused named query fragments in the domain object generator

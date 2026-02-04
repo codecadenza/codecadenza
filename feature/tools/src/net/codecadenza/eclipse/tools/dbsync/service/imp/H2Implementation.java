@@ -21,9 +21,13 @@
  */
 package net.codecadenza.eclipse.tools.dbsync.service.imp;
 
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.Statement;
 import java.util.HashSet;
 import net.codecadenza.eclipse.model.db.DBColumn;
 import net.codecadenza.eclipse.model.db.DBIndex;
+import net.codecadenza.eclipse.model.db.DBNamingUtil;
 import net.codecadenza.eclipse.model.db.DBTable;
 import net.codecadenza.eclipse.model.db.Database;
 import net.codecadenza.eclipse.model.db.ForeignKey;
@@ -35,7 +39,7 @@ import org.eclipse.emf.common.util.EList;
 
 /**
  * <p>
- * Derby implementation for creating DDL scripts
+ * H2 implementation for creating DDL scripts
  * </p>
  * <p>
  * Copyright 2025 (C) by Martin Ganserer
@@ -43,7 +47,7 @@ import org.eclipse.emf.common.util.EList;
  * @author Martin Ganserer
  * @version 1.0.0
  */
-public class DerbyImplementation implements IDDLService {
+public class H2Implementation implements IDDLService {
 	/**
 	 * @param col
 	 * @return the generated fragment of a column statement
@@ -78,7 +82,13 @@ public class DerbyImplementation implements IDDLService {
 	 */
 	@Override
 	public String createSequence(String name, int startIndex, int blockSize) {
-		return null;
+		final var b = new StringBuilder();
+		b.append("create sequence ");
+		b.append(name + " minvalue " + startIndex + " ");
+		b.append("increment by ");
+		b.append(blockSize);
+
+		return b.toString();
 	}
 
 	/*
@@ -87,13 +97,7 @@ public class DerbyImplementation implements IDDLService {
 	 */
 	@Override
 	public String createPrimaryKey(DBTable table) {
-		final var b = new StringBuilder();
-		b.append("alter table " + table.getFullDatabaseName() + " add constraint ");
-		b.append(table.getPrimaryKey().getDatabaseName() + " primary key (");
-		b.append(table.getPrimaryKey().getColumn().getDatabaseName());
-		b.append(")");
-
-		return b.toString();
+		return null;
 	}
 
 	/*
@@ -102,10 +106,7 @@ public class DerbyImplementation implements IDDLService {
 	 */
 	@Override
 	public String dropPrimaryKey(DBTable table) {
-		final var b = new StringBuilder();
-		b.append("alter table " + table.getFullDatabaseName() + " drop primary key");
-
-		return b.toString();
+		return null;
 	}
 
 	/*
@@ -210,7 +211,7 @@ public class DerbyImplementation implements IDDLService {
 		b.append("alter table " + column.getDatabaseTable().getFullDatabaseName());
 		b.append(" alter column " + column.getDatabaseName() + " ");
 
-		// Derby doesn't support a column modification command in order to change all parameters in one statement! Thus, we can just
+		// H2 doesn't support a column modification command in order to change all parameters in one statement! Thus, we can just
 		// change the type and the length or the nullable constraint!
 		if (column.getLength() > 0)
 			b.append("set data type " + column.getColumnType().getName() + "(" + column.getLength() + ")");
@@ -270,6 +271,16 @@ public class DerbyImplementation implements IDDLService {
 		for (final DBColumn col : table.getColumns()) {
 			boolean addAutoincrement = false;
 
+			boolean addPrimaryKey = false;
+
+			// Check if this column should be supplied with a primary key
+			if (table.getPrimaryKey() != null && table.getPrimaryKey().getColumn().equals(col)) {
+				if (hasAutoIncrement)
+					addAutoincrement = true;
+
+				addPrimaryKey = true;
+			}
+
 			// Check if this column should be supplied with an auto-increment primary key
 			if (table.getPrimaryKey() != null && table.getPrimaryKey().getColumn().equals(col) && hasAutoIncrement)
 				addAutoincrement = true;
@@ -278,6 +289,9 @@ public class DerbyImplementation implements IDDLService {
 
 			if (addAutoincrement)
 				b.append(" generated always as identity");
+
+			if (addPrimaryKey)
+				b.append(" primary key");
 
 			b.append(", ");
 		}
@@ -323,9 +337,9 @@ public class DerbyImplementation implements IDDLService {
 	@Override
 	public String renameTable(String oldName, DBTable table) {
 		final var b = new StringBuilder();
-		b.append("rename table ");
+		b.append("alter table ");
 		b.append(oldName);
-		b.append(" to ");
+		b.append(" rename to ");
 		b.append(table.getDatabaseName());
 
 		return b.toString();
@@ -338,7 +352,22 @@ public class DerbyImplementation implements IDDLService {
 	 */
 	@Override
 	public HashSet<String> getAllSequences(Database database, DBManager dbManager, String catalogName, String schemaName) {
-		return new HashSet<>();
+		final var sequences = new HashSet<String>();
+		final var query = "select sequence_name from information_schema.sequences";
+
+		try (Connection con = dbManager.getConnection();
+				Statement st = con.createStatement();
+				ResultSet rs = st.executeQuery(query)) {
+			while (rs.next()) {
+				final String sequence = DBNamingUtil.convertToStyle(rs.getString("sequence_name"), database);
+				sequences.add(sequence);
+			}
+
+			return sequences;
+		}
+		catch (final Exception e) {
+			throw new RuntimeException(e);
+		}
 	}
 
 }

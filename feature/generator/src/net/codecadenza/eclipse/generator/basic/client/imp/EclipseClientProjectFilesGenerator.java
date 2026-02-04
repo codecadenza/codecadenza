@@ -53,7 +53,6 @@ import java.util.ArrayList;
 import java.util.List;
 import net.codecadenza.eclipse.generator.client.common.i18n.RichClientI18NGenerator;
 import net.codecadenza.eclipse.generator.common.LoggingGenerator;
-import net.codecadenza.eclipse.model.db.DBVendorGroupEnumeration;
 import net.codecadenza.eclipse.model.java.JavaFile;
 import net.codecadenza.eclipse.model.project.Project;
 import net.codecadenza.eclipse.tools.ide.IDGenerator;
@@ -261,9 +260,6 @@ public class EclipseClientProjectFilesGenerator extends AbstractClientProjectFil
 	 */
 	private String createE4LifeCycle() {
 		final var b = new StringBuilder();
-		final boolean usesEmbeddedDerby = project.hasRCPClient() && project.isJavaSEApplication()
-				&& project.getDatabase().getVendorGroup() == DBVendorGroupEnumeration.DERBY_EMBEDDED;
-
 		b.append("import static " + project.getClientNamespace().toString() + "." + APP_I18N_PROVIDER_CLASS + ".*;\n");
 		b.append("import java.util.*;\n");
 		b.append("import org.eclipse.e4.core.contexts.*;\n");
@@ -274,9 +270,6 @@ public class EclipseClientProjectFilesGenerator extends AbstractClientProjectFil
 		b.append("import org.eclipse.jface.dialogs.MessageDialog;\n");
 		b.append("import net.codecadenza.runtime.richclient.persistence.PersistenceHelper;\n");
 		b.append("import net.codecadenza.runtime.richclient.transport.*;\n");
-
-		if (usesEmbeddedDerby)
-			b.append("import java.sql.*;\n");
 
 		new LoggingGenerator(false).getImports().forEach(imp -> b.append(imp + "\n"));
 
@@ -341,10 +334,6 @@ public class EclipseClientProjectFilesGenerator extends AbstractClientProjectFil
 		b.append(" * @param workbenchContext\n");
 		b.append(" */\n");
 		b.append("@ProcessAdditions\n");
-
-		if (usesEmbeddedDerby)
-			b.append("@SuppressWarnings(\"unused\")\n");
-
 		b.append("protected void processAdditions(IEclipseContext workbenchContext)\n");
 		b.append("{\n");
 
@@ -385,35 +374,7 @@ public class EclipseClientProjectFilesGenerator extends AbstractClientProjectFil
 			b.append("final var logOn = new " + DEFAULT_LOG_ON_DLG_NAME + "(shell, initializeHosts());\n");
 			b.append("final int dlgReturnCode = logOn.open();\n\n");
 			b.append("if(dlgReturnCode == Dialog.CANCEL)\n");
-
-			if (usesEmbeddedDerby) {
-				String connectionURL = project.getDataSource().getConnectionURL();
-
-				if (!connectionURL.endsWith(";"))
-					connectionURL += ";";
-
-				connectionURL += "shutdown=true";
-
-				b.append("{\n");
-				b.append("// Shutdown embedded database instance!\n");
-				b.append("try(final Connection con = DriverManager.getConnection(\"" + connectionURL + "\"))\n");
-				b.append("{\n\n");
-				b.append("}\n");
-				b.append("catch (final SQLException e)\n");
-				b.append("{\n");
-				b.append("// Derby throws an exception even in the case that shutdown was successful!\n");
-
-				LoggingGenerator.addInfoLog(b, "The embedded database has been shut down!");
-
-				b.append("}\n\n");
-			}
-
-			b.append("System.exit(-1);\n");
-
-			if (usesEmbeddedDerby)
-				b.append("}\n");
-
-			b.append("\n");
+			b.append("System.exit(-1);\n\n");
 			b.append("PersistenceHelper.save();\n");
 		}
 
@@ -476,8 +437,7 @@ public class EclipseClientProjectFilesGenerator extends AbstractClientProjectFil
 		b.append("import org.eclipse.e4.core.di.annotations.*;\n");
 		b.append("import org.eclipse.swt.widgets.*;\n");
 		b.append("import net.codecadenza.runtime.richclient.eclipse.dialog.*;\n");
-		b.append("import org.eclipse.e4.ui.workbench.*;\n");
-		b.append("\n");
+		b.append("import org.eclipse.e4.ui.workbench.*;\n\n");
 		b.append("public class " + FORMAT_HANDLER_NAME + "\n");
 		b.append("{\n");
 		b.append("/**\n");
@@ -502,8 +462,7 @@ public class EclipseClientProjectFilesGenerator extends AbstractClientProjectFil
 		final var b = new StringBuilder();
 		b.append("import org.eclipse.e4.core.di.annotations.*;\n");
 		b.append("import org.eclipse.swt.widgets.*;\n");
-		b.append("import org.eclipse.e4.ui.workbench.*;\n");
-		b.append("\n");
+		b.append("import org.eclipse.e4.ui.workbench.*;\n\n");
 		b.append("public class " + CHANGE_PASSWORD_HANDLER_NAME + "\n");
 		b.append("{\n");
 		b.append("/**\n");
@@ -526,24 +485,9 @@ public class EclipseClientProjectFilesGenerator extends AbstractClientProjectFil
 	 */
 	private String createActivator() {
 		final var b = new StringBuilder();
-		final boolean usesEmbeddedDerby = project.isJavaSEApplication()
-				&& project.getDatabase().getVendorGroup() == DBVendorGroupEnumeration.DERBY_EMBEDDED;
-
-		b.append("import org.osgi.framework.*;\n");
-
-		if (usesEmbeddedDerby)
-			b.append("import java.sql.*;\n");
-
-		if (usesEmbeddedDerby)
-			new LoggingGenerator(false).getImports().forEach(imp -> b.append(imp + "\n"));
-
-		b.append("\n");
+		b.append("import org.osgi.framework.*;\n\n");
 		b.append("public class " + DEFAULT_ACTIVATOR_NAME + " implements BundleActivator\n");
 		b.append("{\n");
-
-		if (usesEmbeddedDerby)
-			b.append("private static final Logger logger = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());\n");
-
 		b.append("private static BundleContext context;\n\n");
 		b.append("/**\n");
 		b.append(" * @return the context of this bundle\n");
@@ -564,34 +508,8 @@ public class EclipseClientProjectFilesGenerator extends AbstractClientProjectFil
 		b.append(" * @see org.osgi.framework.BundleActivator#stop(org.osgi.framework.BundleContext)\n");
 		b.append(" */\n");
 		b.append("@Override\n");
-
-		if (usesEmbeddedDerby)
-			b.append("@SuppressWarnings(\"unused\")\n");
-
 		b.append("public void stop(BundleContext bundleContext) throws Exception\n");
 		b.append("{\n");
-
-		if (usesEmbeddedDerby) {
-			String connectionURL = project.getDataSource().getConnectionURL();
-
-			if (!connectionURL.endsWith(";"))
-				connectionURL += ";";
-
-			connectionURL += "shutdown=true";
-
-			b.append("// Shutdown embedded database instance!\n");
-			b.append("try(final Connection con = DriverManager.getConnection(\"" + connectionURL + "\"))\n");
-			b.append("{\n\n");
-			b.append("}\n");
-			b.append("catch (final SQLException e)\n");
-			b.append("{\n");
-			b.append("// Derby throws an exception even in the case that shutdown was successful!\n");
-
-			LoggingGenerator.addInfoLog(b, "The embedded database has been shut down!");
-
-			b.append("}\n\n");
-		}
-
 		b.append("Activator.context = null;\n");
 		b.append("}\n\n");
 		b.append("}\n");

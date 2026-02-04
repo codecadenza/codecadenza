@@ -41,7 +41,6 @@ import net.codecadenza.eclipse.generator.service.ServiceConfigurationGenerator;
 import net.codecadenza.eclipse.model.boundary.BoundaryBean;
 import net.codecadenza.eclipse.model.client.Form;
 import net.codecadenza.eclipse.model.client.FormPanel;
-import net.codecadenza.eclipse.model.db.DBVendorGroupEnumeration;
 import net.codecadenza.eclipse.model.domain.DomainObject;
 import net.codecadenza.eclipse.model.domain.DomainTagEnumeration;
 import net.codecadenza.eclipse.model.dto.DTOBean;
@@ -704,12 +703,6 @@ public abstract class AbstractProjectBuildService implements IProjectBuildServic
 
 			// Disable the L2 cache for all kinds of applications by default!
 			addPersistenceUnitProperty("eclipselink.cache.shared.default", "false");
-		}
-
-		if (project.getDatabase().getVendorGroup() == DBVendorGroupEnumeration.DERBY_EMBEDDED) {
-			// Let the application create the schema as it cannot be created by CodeCadenza's DB sync tool because of class loading
-			// issues!
-			addPersistenceUnitProperty("jakarta.persistence.schema-generation.database.action", "create");
 		}
 	}
 

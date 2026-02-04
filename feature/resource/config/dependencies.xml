@@ -187,13 +187,11 @@
 		<filter clientPlatform="ALL" technology="SPRING_BOOT" serverPlatform="ALL" validationType="ALL" database="MYSQL" jpaProvider="ALL">
 			<dependency name="mysql-connector-j" groupName="com.mysql" scope="compile"/>
 		</filter>
-		<filter clientPlatform="ALL" technology="SPRING_BOOT" serverPlatform="ALL" validationType="ALL" database="DERBY" jpaProvider="ALL">
-			<dependency name="derbyclient" groupName="org.apache.derby" scope="compile"/>
-			<dependency name="derbytools" groupName="org.apache.derby" scope="compile"/>
+		<filter clientPlatform="ALL" technology="SPRING_BOOT" serverPlatform="ALL" validationType="ALL" database="H2" jpaProvider="ALL">
+			<dependency name="h2" groupName="com.h2database" scope="compile"/>
 		</filter>
-		<filter clientPlatform="ALL" technology="SPRING_BOOT" serverPlatform="ALL" validationType="ALL" database="DERBY_EMBEDDED" jpaProvider="ALL">
-			<dependency name="derby" groupName="org.apache.derby" scope="compile"/>
-			<dependency name="derbytools" groupName="org.apache.derby" scope="compile"/>
+		<filter clientPlatform="ALL" technology="SPRING_BOOT" serverPlatform="ALL" validationType="ALL" database="H2_EMBEDDED" jpaProvider="ALL">
+			<dependency name="h2" groupName="com.h2database" scope="compile"/>
 		</filter>
 		<filter clientPlatform="ALL" technology="SPRING_BOOT" serverPlatform="ALL" validationType="ALL" database="POSTGRESQL" jpaProvider="ALL">
 			<dependency name="postgresql" groupName="org.postgresql" scope="compile"/>
@@ -277,13 +275,11 @@
 			<dependency name="spring-security-test" groupName="org.springframework.security" scope="test"/>
 			<dependency name="junit-jupiter" groupName="org.junit.jupiter" scope="test"/>
 		</filter>
-		<filter clientPlatform="ALL" technology="SPRING_BOOT" serverPlatform="ALL" validationType="ALL" database="DERBY" jpaProvider="ALL">
-			<dependency name="derbyclient" groupName="org.apache.derby" scope="compile"/>
-			<dependency name="derbytools" groupName="org.apache.derby" scope="compile"/>
+		<filter clientPlatform="ALL" technology="SPRING_BOOT" serverPlatform="ALL" validationType="ALL" database="H2" jpaProvider="ALL">
+			<dependency name="h2" groupName="com.h2database" scope="compile"/>
 		</filter>
-		<filter clientPlatform="ALL" technology="SPRING_BOOT" serverPlatform="ALL" validationType="ALL" database="DERBY_EMBEDDED" jpaProvider="ALL">
-			<dependency name="derby" groupName="org.apache.derby" scope="compile"/>
-			<dependency name="derbytools" groupName="org.apache.derby" scope="compile"/>
+		<filter clientPlatform="ALL" technology="SPRING_BOOT" serverPlatform="ALL" validationType="ALL" database="H2_EMBEDDED" jpaProvider="ALL">
+			<dependency name="h2" groupName="com.h2database" scope="compile"/>
 		</filter>
 		<filter clientPlatform="ALL" technology="SPRING_BOOT" serverPlatform="ALL" validationType="ALL" database="MYSQL" jpaProvider="ALL">
 			<dependency name="mysql-connector-j" groupName="com.mysql" scope="compile"/>
@@ -291,13 +287,11 @@
 		<filter clientPlatform="ALL" technology="SPRING_BOOT" serverPlatform="ALL" validationType="ALL" database="POSTGRESQL" jpaProvider="ALL">
 			<dependency name="postgresql" groupName="org.postgresql" scope="compile"/>
 		</filter>
-		<filter clientPlatform="ALL" technology="JAVA_SE" serverPlatform="ALL" validationType="ALL" database="DERBY" jpaProvider="ALL">
-			<dependency name="derbyclient" groupName="org.apache.derby" version="10.16.1.1" scope="compile"/>
-			<dependency name="derbytools" groupName="org.apache.derby" version="10.16.1.1" scope="compile"/>
+		<filter clientPlatform="ALL" technology="JAVA_SE" serverPlatform="ALL" validationType="ALL" database="H2" jpaProvider="ALL">
+			<dependency name="h2" groupName="com.h2database" version="2.4.240" scope="compile"/>
 		</filter>
-		<filter clientPlatform="ALL" technology="JAVA_SE" serverPlatform="ALL" validationType="ALL" database="DERBY_EMBEDDED" jpaProvider="ALL">
-			<dependency name="derby" groupName="org.apache.derby" version="10.16.1.1" scope="compile"/>
-			<dependency name="derbytools" groupName="org.apache.derby" version="10.16.1.1" scope="compile"/>
+		<filter clientPlatform="ALL" technology="JAVA_SE" serverPlatform="ALL" validationType="ALL" database="H2_EMBEDDED" jpaProvider="ALL">
+			<dependency name="h2" groupName="com.h2database" version="2.4.240" scope="compile"/>
 		</filter>
 		<filter clientPlatform="ALL" technology="JAVA_SE" serverPlatform="ALL" validationType="ALL" database="MYSQL" jpaProvider="ALL">
 			<dependency name="mysql-connector-j" groupName="com.mysql" version="9.5.0" scope="compile"/>
@@ -478,9 +472,8 @@
 		<filter clientPlatform="ALL" technology="JAKARTA_EE" serverPlatform="ALL" validationType="ALL" database="MYSQL" jpaProvider="ALL">
 			<dependency name="mysql-connector-j" groupName="com.mysql" version="9.5.0" scope="test"/>
 		</filter>
-		<filter clientPlatform="ALL" technology="JAKARTA_EE" serverPlatform="ALL" validationType="ALL" database="DERBY" jpaProvider="ALL">
-			<dependency name="derbyclient" groupName="org.apache.derby" version="10.16.1.1" scope="test"/>
-			<dependency name="derbytools" groupName="org.apache.derby" version="10.16.1.1" scope="test"/>
+		<filter clientPlatform="ALL" technology="JAKARTA_EE" serverPlatform="ALL" validationType="ALL" database="H2" jpaProvider="ALL">
+			<dependency name="h2" groupName="com.h2database" version="2.4.240" scope="test"/>
 		</filter>
 		<filter clientPlatform="ALL" technology="JAKARTA_EE" serverPlatform="ALL" validationType="ALL" database="POSTGRESQL" jpaProvider="ALL">
 			<dependency name="postgresql" groupName="org.postgresql" version="42.7.8" scope="test"/>
@@ -496,9 +489,8 @@
 		<filter clientPlatform="ALL" technology="SPRING_BOOT" serverPlatform="ALL" validationType="ALL" database="MYSQL" jpaProvider="ALL">
 			<dependency name="mysql-connector-j" groupName="com.mysql" scope="test"/>
 		</filter>
-		<filter clientPlatform="ALL" technology="SPRING_BOOT" serverPlatform="ALL" validationType="ALL" database="DERBY" jpaProvider="ALL">
-			<dependency name="derbyclient" groupName="org.apache.derby" scope="test"/>
-			<dependency name="derbytools" groupName="org.apache.derby" scope="test"/>
+		<filter clientPlatform="ALL" technology="SPRING_BOOT" serverPlatform="ALL" validationType="ALL" database="H2" jpaProvider="ALL">
+			<dependency name="h2" groupName="com.h2database" scope="test"/>
 		</filter>
 		<filter clientPlatform="ALL" technology="SPRING_BOOT" serverPlatform="ALL" validationType="ALL" database="POSTGRESQL" jpaProvider="ALL">
 			<dependency name="postgresql" groupName="org.postgresql" scope="test"/>
@@ -517,9 +509,8 @@
 		<filter clientPlatform="ALL" technology="JAKARTA_EE" serverPlatform="ALL" validationType="ALL" database="MYSQL" jpaProvider="ALL">
 			<dependency name="mysql-connector-j" groupName="com.mysql" version="9.5.0" scope="test"/>
 		</filter>
-		<filter clientPlatform="ALL" technology="JAKARTA_EE" serverPlatform="ALL" validationType="ALL" database="DERBY" jpaProvider="ALL">
-			<dependency name="derbyclient" groupName="org.apache.derby" version="10.16.1.1" scope="test"/>
-			<dependency name="derbytools" groupName="org.apache.derby" version="10.16.1.1" scope="test"/>
+		<filter clientPlatform="ALL" technology="JAKARTA_EE" serverPlatform="ALL" validationType="ALL" database="H2" jpaProvider="ALL">
+			<dependency name="h2" groupName="com.h2database" version="2.4.240" scope="test"/>
 		</filter>
 		<filter clientPlatform="ALL" technology="JAKARTA_EE" serverPlatform="ALL" validationType="ALL" database="POSTGRESQL" jpaProvider="ALL">
 			<dependency name="postgresql" groupName="org.postgresql" version="42.7.8" scope="test"/>
@@ -535,9 +526,8 @@
 		<filter clientPlatform="ALL" technology="SPRING_BOOT" serverPlatform="ALL" validationType="ALL" database="MYSQL" jpaProvider="ALL">
 			<dependency name="mysql-connector-j" groupName="com.mysql" scope="test"/>
 		</filter>
-		<filter clientPlatform="ALL" technology="SPRING_BOOT" serverPlatform="ALL" validationType="ALL" database="DERBY" jpaProvider="ALL">
-			<dependency name="derbyclient" groupName="org.apache.derby" scope="test"/>
-			<dependency name="derbytools" groupName="org.apache.derby" scope="test"/>
+		<filter clientPlatform="ALL" technology="SPRING_BOOT" serverPlatform="ALL" validationType="ALL" database="H2" jpaProvider="ALL">
+			<dependency name="h2" groupName="com.h2database" scope="test"/>
 		</filter>
 		<filter clientPlatform="ALL" technology="SPRING_BOOT" serverPlatform="ALL" validationType="ALL" database="POSTGRESQL" jpaProvider="ALL">
 			<dependency name="postgresql" groupName="org.postgresql" scope="test"/>
@@ -554,9 +544,8 @@
 		<filter clientPlatform="ALL" technology="ALL" serverPlatform="ALL" validationType="ALL" database="MYSQL" jpaProvider="ALL">
 			<dependency name="mysql-connector-j" groupName="com.mysql" version="9.5.0" scope="test"/>
 		</filter>
-		<filter clientPlatform="ALL" technology="ALL" serverPlatform="ALL" validationType="ALL" database="DERBY" jpaProvider="ALL">
-			<dependency name="derbyclient" groupName="org.apache.derby" version="10.16.1.1" scope="test"/>
-			<dependency name="derbytools" groupName="org.apache.derby" version="10.16.1.1" scope="test"/>
+		<filter clientPlatform="ALL" technology="ALL" serverPlatform="ALL" validationType="ALL" database="H2" jpaProvider="ALL">
+			<dependency name="h2" groupName="com.h2database" version="2.4.240" scope="test"/>
 		</filter>
 		<filter clientPlatform="ALL" technology="ALL" serverPlatform="ALL" validationType="ALL" database="POSTGRESQL" jpaProvider="ALL">
 			<dependency name="postgresql" groupName="org.postgresql" version="42.7.8" scope="test"/>
@@ -576,9 +565,8 @@
 		<filter clientPlatform="ALL" technology="ALL" serverPlatform="ALL" validationType="ALL" database="MYSQL" jpaProvider="ALL">
 			<dependency name="mysql-connector-j" groupName="com.mysql" scope="test"/>
 		</filter>
-		<filter clientPlatform="ALL" technology="ALL" serverPlatform="ALL" validationType="ALL" database="DERBY" jpaProvider="ALL">
-			<dependency name="derbyclient" groupName="org.apache.derby" scope="test"/>
-			<dependency name="derbytools" groupName="org.apache.derby" scope="test"/>
+		<filter clientPlatform="ALL" technology="ALL" serverPlatform="ALL" validationType="ALL" database="H2" jpaProvider="ALL">
+			<dependency name="h2" groupName="com.h2database" scope="test"/>
 		</filter>
 		<filter clientPlatform="ALL" technology="ALL" serverPlatform="ALL" validationType="ALL" database="POSTGRESQL" jpaProvider="ALL">
 			<dependency name="postgresql" groupName="org.postgresql" scope="test"/>
@@ -597,9 +585,8 @@
 		<filter clientPlatform="ALL" technology="JAKARTA_EE" serverPlatform="ALL" validationType="ALL" database="MYSQL" jpaProvider="ALL">
 			<dependency name="mysql-connector-j" groupName="com.mysql" version="9.5.0" scope="test"/>
 		</filter>
-		<filter clientPlatform="ALL" technology="JAKARTA_EE" serverPlatform="ALL" validationType="ALL" database="DERBY" jpaProvider="ALL">
-			<dependency name="derbyclient" groupName="org.apache.derby" version="10.16.1.1" scope="test"/>
-			<dependency name="derbytools" groupName="org.apache.derby" version="10.16.1.1" scope="test"/>
+		<filter clientPlatform="ALL" technology="JAKARTA_EE" serverPlatform="ALL" validationType="ALL" database="H2" jpaProvider="ALL">
+			<dependency name="h2" groupName="com.h2database" version="2.4.240" scope="test"/>
 		</filter>
 		<filter clientPlatform="ALL" technology="JAKARTA_EE" serverPlatform="ALL" validationType="ALL" database="POSTGRESQL" jpaProvider="ALL">
 			<dependency name="postgresql" groupName="org.postgresql" version="42.7.8" scope="test"/>
@@ -615,9 +602,8 @@
 		<filter clientPlatform="ALL" technology="SPRING_BOOT" serverPlatform="ALL" validationType="ALL" database="MYSQL" jpaProvider="ALL">
 			<dependency name="mysql-connector-j" groupName="com.mysql" scope="test"/>
 		</filter>
-		<filter clientPlatform="ALL" technology="SPRING_BOOT" serverPlatform="ALL" validationType="ALL" database="DERBY" jpaProvider="ALL">
-			<dependency name="derbyclient" groupName="org.apache.derby" scope="test"/>
-			<dependency name="derbytools" groupName="org.apache.derby" scope="test"/>
+		<filter clientPlatform="ALL" technology="SPRING_BOOT" serverPlatform="ALL" validationType="ALL" database="H2" jpaProvider="ALL">
+			<dependency name="h2" groupName="com.h2database" scope="test"/>
 		</filter>
 		<filter clientPlatform="ALL" technology="SPRING_BOOT" serverPlatform="ALL" validationType="ALL" database="POSTGRESQL" jpaProvider="ALL">
 			<dependency name="postgresql" groupName="org.postgresql" scope="test"/>

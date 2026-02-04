@@ -21,14 +21,12 @@
  */
 package net.codecadenza.eclipse.ui.view.menu;
 
-import net.codecadenza.eclipse.model.db.DBVendorGroupEnumeration;
 import net.codecadenza.eclipse.model.dto.DTOBean;
 import net.codecadenza.eclipse.model.project.Project;
 import net.codecadenza.eclipse.service.boundary.BoundaryService;
 import net.codecadenza.eclipse.service.build.ProjectBuildFactory;
 import net.codecadenza.eclipse.service.security.SecurityService;
 import net.codecadenza.eclipse.tools.ide.EclipseIDEService;
-import net.codecadenza.eclipse.tools.util.db.DBManager;
 import net.codecadenza.eclipse.ui.CodeCadenzaUserInterfacePlugin;
 import net.codecadenza.eclipse.ui.dialog.project.EditDataSourceDialog;
 import net.codecadenza.eclipse.ui.dialog.project.EditPersistenceUnitDialog;
@@ -279,35 +277,6 @@ public class ProjectMenuBuilder extends AbstractMenuBuilder<Project> {
 				}
 				catch (final IllegalStateException ex) {
 					MessageDialog.openInformation(shell, TITLE_CREATE_LOG_ON, ex.getMessage());
-				}
-				catch (final Exception ex) {
-					CodeCadenzaUserInterfacePlugin.getInstance().handleInternalError(ex);
-				}
-			}
-		});
-
-		// Add a menu item to shutdown the local database
-		final var itemShutdownDB = new MenuItem(menuProject, SWT.NONE);
-		itemShutdownDB.setText(TITLE_SHUTDOWN);
-
-		itemShutdownDB.addSelectionListener(new SelectionAdapter() {
-			/*
-			 * (non-Javadoc)
-			 * @see org.eclipse.swt.events.SelectionAdapter#widgetSelected(org.eclipse.swt.events.SelectionEvent)
-			 */
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-				final Project proj = getSelectedObject();
-
-				if (proj.getDatabase().getVendorGroup() != DBVendorGroupEnumeration.DERBY_EMBEDDED) {
-					MessageDialog.openInformation(shell, TITLE_SHUTDOWN, "The selected project does not use an embedded database!");
-					return;
-				}
-
-				try (var dbManager = new DBManager(proj)) {
-					dbManager.shutdownEmbeddedInstance();
-
-					MessageDialog.openInformation(shell, TITLE_SHUTDOWN, "Operation finished successfully!");
 				}
 				catch (final Exception ex) {
 					CodeCadenzaUserInterfacePlugin.getInstance().handleInternalError(ex);

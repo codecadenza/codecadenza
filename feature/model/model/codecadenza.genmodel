@@ -328,8 +328,8 @@
     <genEnums typeSafeEnumCompatible="false" ecoreEnum="db.ecore#//DBVendorGroupEnumeration">
       <genEnumLiterals ecoreEnumLiteral="db.ecore#//DBVendorGroupEnumeration/MYSQL"/>
       <genEnumLiterals ecoreEnumLiteral="db.ecore#//DBVendorGroupEnumeration/ORACLE"/>
-      <genEnumLiterals ecoreEnumLiteral="db.ecore#//DBVendorGroupEnumeration/DERBY"/>
-      <genEnumLiterals ecoreEnumLiteral="db.ecore#//DBVendorGroupEnumeration/DERBY_EMBEDDED"/>
+      <genEnumLiterals ecoreEnumLiteral="db.ecore#//DBVendorGroupEnumeration/H2"/>
+      <genEnumLiterals ecoreEnumLiteral="db.ecore#//DBVendorGroupEnumeration/H2_EMBEDDED"/>
       <genEnumLiterals ecoreEnumLiteral="db.ecore#//DBVendorGroupEnumeration/POSTGRESQL"/>
       <genEnumLiterals ecoreEnumLiteral="db.ecore#//DBVendorGroupEnumeration/MSSQL"/>
     </genEnums>

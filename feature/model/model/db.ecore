@@ -43,8 +43,8 @@
   <eClassifiers xsi:type="ecore:EEnum" name="DBVendorGroupEnumeration">
     <eLiterals name="MYSQL"/>
     <eLiterals name="ORACLE" value="1"/>
-    <eLiterals name="DERBY" value="2"/>
-    <eLiterals name="DERBY_EMBEDDED" value="3"/>
+    <eLiterals name="H2" value="2"/>
+    <eLiterals name="H2_EMBEDDED" value="3"/>
     <eLiterals name="POSTGRESQL" value="4"/>
     <eLiterals name="MSSQL" value="5"/>
   </eClassifiers>

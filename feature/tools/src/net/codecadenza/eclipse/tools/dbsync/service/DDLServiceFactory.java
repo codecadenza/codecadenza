@@ -22,7 +22,7 @@
 package net.codecadenza.eclipse.tools.dbsync.service;
 
 import net.codecadenza.eclipse.model.db.DBVendorGroupEnumeration;
-import net.codecadenza.eclipse.tools.dbsync.service.imp.DerbyImplementation;
+import net.codecadenza.eclipse.tools.dbsync.service.imp.H2Implementation;
 import net.codecadenza.eclipse.tools.dbsync.service.imp.MSSQLImplementation;
 import net.codecadenza.eclipse.tools.dbsync.service.imp.MySQLImplementation;
 import net.codecadenza.eclipse.tools.dbsync.service.imp.OracleImplementation;
@@ -57,8 +57,8 @@ public class DDLServiceFactory {
 			return new MySQLImplementation();
 		else if (vendor == DBVendorGroupEnumeration.ORACLE)
 			return new OracleImplementation();
-		else if (vendor == DBVendorGroupEnumeration.DERBY || vendor == DBVendorGroupEnumeration.DERBY_EMBEDDED)
-			return new DerbyImplementation();
+		else if (vendor == DBVendorGroupEnumeration.H2 || vendor == DBVendorGroupEnumeration.H2_EMBEDDED)
+			return new H2Implementation();
 		else if (vendor == DBVendorGroupEnumeration.POSTGRESQL)
 			return new PostgreSQLImplementation();
 		else if (vendor == DBVendorGroupEnumeration.MSSQL)

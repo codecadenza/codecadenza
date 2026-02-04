@@ -21,8 +21,7 @@
  */
 package net.codecadenza.eclipse.tools.jpaeditor.util;
 
-import static net.codecadenza.eclipse.shared.Constants.DRIVER_DERBY;
-import static net.codecadenza.eclipse.shared.Constants.DRIVER_DERBY_EMBEDDED;
+import static net.codecadenza.eclipse.shared.Constants.DRIVER_H2;
 import static net.codecadenza.eclipse.shared.Constants.DRIVER_MSSQL;
 import static net.codecadenza.eclipse.shared.Constants.DRIVER_MYSQL;
 import static net.codecadenza.eclipse.shared.Constants.DRIVER_ORACEL;
@@ -111,13 +110,9 @@ public class PersistenceEngine {
 			props.put("hibernate.dialect", "org.hibernate.dialect.Oracle9Dialect");
 			props.put("hibernate.connection.driver_class", DRIVER_ORACEL);
 		}
-		else if (vendor == DBVendorGroupEnumeration.DERBY) {
-			props.put("hibernate.dialect", "org.hibernate.dialect.DerbyDialect");
-			props.put("hibernate.connection.driver_class", DRIVER_DERBY);
-		}
-		else if (vendor == DBVendorGroupEnumeration.DERBY_EMBEDDED) {
-			props.put("hibernate.dialect", "org.hibernate.dialect.DerbyDialect");
-			props.put("hibernate.connection.driver_class", DRIVER_DERBY_EMBEDDED);
+		else if (vendor == DBVendorGroupEnumeration.H2 || vendor == DBVendorGroupEnumeration.H2_EMBEDDED) {
+			props.put("hibernate.dialect", "org.hibernate.dialect.H2Dialect");
+			props.put("hibernate.connection.driver_class", DRIVER_H2);
 		}
 		else if (vendor == DBVendorGroupEnumeration.POSTGRESQL) {
 			props.put("hibernate.dialect", "org.hibernate.dialect.PostgreSQLDialect");

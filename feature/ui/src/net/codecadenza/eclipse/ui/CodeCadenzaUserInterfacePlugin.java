@@ -21,7 +21,6 @@
  */
 package net.codecadenza.eclipse.ui;
 
-import static net.codecadenza.eclipse.shared.Constants.MODEL_ROOT_FILE;
 import static net.codecadenza.eclipse.shared.Constants.PREF_BOUNDARY_CONTEXT;
 import static net.codecadenza.eclipse.shared.Constants.PREF_CONNECTION_URL;
 import static net.codecadenza.eclipse.shared.Constants.PREF_CONV_CONTEXT;
@@ -48,20 +47,10 @@ import static net.codecadenza.eclipse.shared.Constants.PREF_TIME_FORMAT;
 import static net.codecadenza.eclipse.shared.Constants.PREF_USER_NAME;
 import static net.codecadenza.eclipse.shared.Constants.PREF_VALID_CONTEXT;
 
-import java.io.File;
-import net.codecadenza.eclipse.model.project.Project;
-import net.codecadenza.eclipse.tools.util.db.DBManager;
-import net.codecadenza.eclipse.tools.util.db.DBManagerException;
-import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IWorkspace;
-import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
-import org.eclipse.emf.common.util.URI;
-import org.eclipse.emf.ecore.EObject;
-import org.eclipse.emf.ecore.resource.Resource;
-import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.swt.widgets.Display;
@@ -103,45 +92,6 @@ public class CodeCadenzaUserInterfacePlugin extends AbstractUIPlugin {
 		plugin = this;
 
 		initializeDefaultPreferences();
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * @see org.eclipse.ui.plugin.AbstractUIPlugin#stop(org.osgi.framework.BundleContext)
-	 */
-	@Override
-	public synchronized void stop(BundleContext context) throws Exception {
-		// Get all projects to shutdown all embedded databases!
-		final IWorkspaceRoot wsRoot = CodeCadenzaUserInterfacePlugin.getWorkspace().getRoot();
-
-		for (final IProject workspaceProject : wsRoot.getProjects()) {
-			if (!workspaceProject.isAccessible())
-				continue;
-
-			final var modelFile = new File(workspaceProject.getLocation().toString() + File.separatorChar + MODEL_ROOT_FILE);
-
-			if (!modelFile.exists())
-				continue;
-
-			final var resourceSet = new ResourceSetImpl();
-			final URI namespaceURI = URI.createFileURI(modelFile.getAbsolutePath());
-
-			// Get the resource for this file
-			final Resource projectResource = resourceSet.getResource(namespaceURI, true);
-
-			for (final EObject e : projectResource.getContents())
-				if (e instanceof final Project project) {
-					try (var dbManager = new DBManager(project)) {
-						dbManager.shutdownEmbeddedInstance();
-					}
-					catch (final DBManagerException ex) {
-						CodeCadenzaUserInterfacePlugin.getInstance().logError(ex);
-					}
-				}
-		}
-
-		plugin = null;
-		super.stop(context);
 	}
 
 	/**

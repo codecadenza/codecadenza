@@ -21,15 +21,12 @@
  */
 package net.codecadenza.eclipse.tools.util.db;
 
-import static net.codecadenza.eclipse.shared.Constants.DRIVER_DERBY_EMBEDDED;
-
 import java.io.File;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.sql.Connection;
 import java.sql.Driver;
 import java.sql.SQLException;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Properties;
 import net.codecadenza.eclipse.model.project.Datasource;
@@ -55,7 +52,6 @@ public class DBManager implements AutoCloseable {
 	private Driver driver;
 	private Connection connection;
 	private URLClassLoader classLoader;
-	private static HashMap<String, Driver> embeddedDerbyDriverMap = new HashMap<>();
 
 	/**
 	 * Constructor
@@ -100,9 +96,6 @@ public class DBManager implements AutoCloseable {
 		if (driverList == null || driverList.isEmpty())
 			throw new DBManagerException("The database connection cannot be initialized without a JDBC driver!");
 
-		if (driverName.equals(DRIVER_DERBY_EMBEDDED) && embeddedDerbyDriverMap.containsKey(url))
-			return;
-
 		try {
 			final var urls = new URL[driverList.size()];
 			int i = 0;
@@ -122,9 +115,6 @@ public class DBManager implements AutoCloseable {
 			classLoader = URLClassLoader.newInstance(urls);
 
 			driver = (Driver) classLoader.loadClass(driverName).getDeclaredConstructor().newInstance();
-
-			if (driverName.equals(DRIVER_DERBY_EMBEDDED) && !embeddedDerbyDriverMap.containsKey(url))
-				embeddedDerbyDriverMap.put(url, driver);
 		}
 		catch (final Exception ex) {
 			throw new DBManagerException(ex);
@@ -164,10 +154,7 @@ public class DBManager implements AutoCloseable {
 			connectionProps.setProperty("user", username);
 			connectionProps.setProperty("password", password);
 
-			if (driverName.equals(DRIVER_DERBY_EMBEDDED))
-				connection = embeddedDerbyDriverMap.get(url).connect(url, connectionProps);
-			else
-				connection = driver.connect(url, connectionProps);
+			connection = driver.connect(url, connectionProps);
 
 			return connection;
 		}
@@ -239,56 +226,6 @@ public class DBManager implements AutoCloseable {
 		}
 		catch (final SQLException ex) {
 			throw new DBManagerException(ex);
-		}
-	}
-
-	/**
-	 * Shutdown the embedded database instance that is currently in use!
-	 * @throws DBManagerException if either the connection parameters are invalid, or if the JDBC driver could not be initialized
-	 */
-	public synchronized void shutdownEmbeddedInstance() throws DBManagerException {
-		if (!driverName.equals(DRIVER_DERBY_EMBEDDED))
-			return;
-
-		Connection con = null;
-
-		if (url == null || url.isEmpty())
-			throw new DBManagerException("A connection URL is required!");
-
-		if (username == null)
-			throw new DBManagerException("A user name is required!");
-
-		if (password == null)
-			throw new DBManagerException("A password is required!");
-
-		initJDBCDriver();
-
-		try {
-			String shutdownURL = url;
-
-			// The shutdown=true attribute shuts down Derby
-			if (!shutdownURL.endsWith(";"))
-				shutdownURL += ";";
-
-			shutdownURL += "shutdown=true";
-
-			final var connectionProps = new Properties();
-			connectionProps.setProperty("user", username);
-			connectionProps.setProperty("password", password);
-
-			con = embeddedDerbyDriverMap.get(url).connect(shutdownURL, connectionProps);
-		}
-		catch (final Exception _) {
-			// We ignore all exceptions here! Note that Derby throws an exception even if the shutdown was finished successfully!
-		}
-		finally {
-			if (con != null)
-				try {
-					con.close();
-				}
-				catch (final SQLException _) {
-					// This exception will be ignored!
-				}
 		}
 	}
 

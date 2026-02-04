@@ -974,8 +974,8 @@ public class DbPackageImpl extends EPackageImpl implements DbPackage {
 		initEEnum(dbVendorGroupEnumerationEEnum, DBVendorGroupEnumeration.class, "DBVendorGroupEnumeration");
 		addEEnumLiteral(dbVendorGroupEnumerationEEnum, DBVendorGroupEnumeration.MYSQL);
 		addEEnumLiteral(dbVendorGroupEnumerationEEnum, DBVendorGroupEnumeration.ORACLE);
-		addEEnumLiteral(dbVendorGroupEnumerationEEnum, DBVendorGroupEnumeration.DERBY);
-		addEEnumLiteral(dbVendorGroupEnumerationEEnum, DBVendorGroupEnumeration.DERBY_EMBEDDED);
+		addEEnumLiteral(dbVendorGroupEnumerationEEnum, DBVendorGroupEnumeration.H2);
+		addEEnumLiteral(dbVendorGroupEnumerationEEnum, DBVendorGroupEnumeration.H2_EMBEDDED);
 		addEEnumLiteral(dbVendorGroupEnumerationEEnum, DBVendorGroupEnumeration.POSTGRESQL);
 		addEEnumLiteral(dbVendorGroupEnumerationEEnum, DBVendorGroupEnumeration.MSSQL);
 
