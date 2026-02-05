@@ -49,7 +49,7 @@ import org.slf4j.LoggerFactory;
  */
 class BuildTest {
 	private static final String MNU_ECLIPSE = "Eclipse";
-	private static final String MNU_PREFERENCES = "Preferences";
+	private static final String MNU_PREFERENCES = "Preferences...";
 	private static final String MNU_WINDOW = "Window";
 	private static final Logger log = LoggerFactory.getLogger(BuildTest.class);
 	private static final SWTGefBot bot = new SWTGefBot();
