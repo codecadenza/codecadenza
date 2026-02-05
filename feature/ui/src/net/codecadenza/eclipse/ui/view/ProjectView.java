@@ -298,6 +298,14 @@ public class ProjectView extends ViewPart implements GraphicalEditorEventListene
 
 				if (!addToTree)
 					for (final DomainObject domainObj : allDomainObjects)
+						for (final AbstractDomainAssociation assoc : domainObj.getAssociations())
+							if (assoc.isOwner() && assoc instanceof final ManyToManyAssociation mtm && mtm.getTable().equals(table)) {
+								addToTree = true;
+								break;
+							}
+
+				if (!addToTree)
+					for (final DomainObject domainObj : allDomainObjects)
 						for (final DomainAttribute attr : domainObj.getAllAttributes())
 							if (table.equals(attr.getCollectionTable())) {
 								addToTree = true;

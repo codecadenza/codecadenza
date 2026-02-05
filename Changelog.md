@@ -7,8 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-
 ### Changed
+2026-02-05: Display tables of many-to-many associations in the project tree view
 2026-02-04: Switch from Apache Derby to H2
 2026-01-30: Catch a NoClassDefFoundError in database connection tests
 2026-01-30: Add missing tabs in generated web.xml files for JSF applications
