@@ -21,12 +21,16 @@
  */
 package net.codecadenza.eclipse.testing.editor;
 
+import static org.eclipse.swtbot.swt.finder.matchers.WidgetMatcherFactory.widgetOfType;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.List;
 import net.codecadenza.eclipse.testing.bots.AbstractBot;
+import org.eclipse.swt.widgets.Label;
 import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
+import org.eclipse.swtbot.swt.finder.finders.UIThreadRunnable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -45,6 +49,8 @@ public class JPAQueryEditor extends AbstractBot {
 	private static final String STATUS_ERROR = "Error while";
 	private static final String TOOL_ITEM_EXECUTE = "Execute JPA";
 	private static final Logger log = LoggerFactory.getLogger(JPAQueryEditor.class);
+
+	private String statusLabel;
 
 	/**
 	 * Constructor
@@ -82,11 +88,6 @@ public class JPAQueryEditor extends AbstractBot {
 
 		waitForPendingBackgroundJobs();
 
-		final var lblStatus = bot.label(1);
-		final String statusText = lblStatus.getText();
-
-		log.debug("Query execution status: '{}'", statusText);
-
 		if (validQuery) {
 			final var resultSize = bot.tree().getAllItems().length;
 
@@ -94,11 +95,25 @@ public class JPAQueryEditor extends AbstractBot {
 				assertTrue(resultSize > 0);
 			else
 				assertEquals(0, resultSize);
-
-			assertTrue(statusText.startsWith(STATUS_SUCCESS));
 		}
+
+		final var allLabels = bot.widgets(widgetOfType(Label.class));
+
+		UIThreadRunnable.syncExec(() -> {
+			for (final var label : allLabels) {
+				if (label.getText().startsWith(STATUS_SUCCESS) || label.getText().startsWith(STATUS_ERROR)) {
+					statusLabel = label.getText();
+					break;
+				}
+			}
+		});
+
+		assertNotNull("Could not find the query status label", statusLabel);
+
+		if (validQuery)
+			assertTrue(statusLabel.startsWith(STATUS_SUCCESS));
 		else
-			assertTrue(statusText.startsWith(STATUS_ERROR));
+			assertTrue(statusLabel.startsWith(STATUS_ERROR));
 	}
 
 }
