@@ -67,7 +67,7 @@ class BuildTest {
 	 * @param clientPlatformName
 	 */
 	@ParameterizedTest
-	@CsvSource({ "NONE", "ANGULAR", "JSF_PRIMEFACES", "VAADIN", "JAVAFX", "RCP", "RAP", "SWING" })
+	@CsvSource({ "RCP", "RAP", "NONE", "ANGULAR", "JSF_PRIMEFACES", "VAADIN", "JAVAFX", "SWING" })
 	void performProjectBuildTest(String clientPlatformName) {
 		final var clientPlatform = ClientPlatform.valueOf(clientPlatformName);
 		final var packageExplorerView = new PackageExplorerView(bot, null);
