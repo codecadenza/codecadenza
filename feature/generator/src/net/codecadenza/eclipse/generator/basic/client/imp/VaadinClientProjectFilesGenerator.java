@@ -34,6 +34,7 @@ import java.util.List;
 import net.codecadenza.eclipse.generator.client.imp.vaadin.util.VaadinI18NGenerator;
 import net.codecadenza.eclipse.model.java.JavaFile;
 import net.codecadenza.eclipse.model.project.Project;
+import net.codecadenza.eclipse.model.project.ServerPlatformEnumeration;
 
 /**
  * <p>
@@ -476,7 +477,8 @@ public class VaadinClientProjectFilesGenerator extends AbstractClientProjectFile
 	 */
 	public String createWebXML() {
 		final var b = new StringBuilder();
-		final boolean secure = project.getApplicationLogOnDTO() != null && project.getLogOnBoundary() != null;
+		final boolean secure = project.getServerPlatform() != ServerPlatformEnumeration.GLASSFISH
+				&& project.getApplicationLogOnDTO() != null && project.getLogOnBoundary() != null;
 
 		b.append("<?xml version=\"1.0\" encoding=\"" + UTF_8 + "\"?>\n");
 		b.append("<web-app xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\n");
@@ -487,44 +489,44 @@ public class VaadinClientProjectFilesGenerator extends AbstractClientProjectFile
 
 		if (secure) {
 			project.getRoles().forEach(role -> {
-				b.append("<security-role>\n");
-				b.append("\t<role-name>" + role.getName() + "</role-name>\n");
-				b.append("</security-role>\n");
+				b.append("\t<security-role>\n");
+				b.append("\t\t<role-name>" + role.getName() + "</role-name>\n");
+				b.append("\t</security-role>\n");
 			});
 
-			b.append("\n<security-constraint>\n");
-			b.append("\t<web-resource-collection>\n");
-			b.append("\t\t<web-resource-name>Restricted areas</web-resource-name>\n");
-			b.append("\t\t<url-pattern>/dialog/*</url-pattern>\n");
-			b.append("\t\t<url-pattern>/tree/*</url-pattern>\n");
-			b.append("\t\t<url-pattern>/user/*</url-pattern>\n");
-			b.append("\t\t<url-pattern>/view/*</url-pattern>\n");
-			b.append("\t</web-resource-collection>\n");
-			b.append("\t<auth-constraint>\n");
+			b.append("\n\t<security-constraint>\n");
+			b.append("\t\t<web-resource-collection>\n");
+			b.append("\t\t\t<web-resource-name>Restricted areas</web-resource-name>\n");
+			b.append("\t\t\t<url-pattern>/dialog/*</url-pattern>\n");
+			b.append("\t\t\t<url-pattern>/tree/*</url-pattern>\n");
+			b.append("\t\t\t<url-pattern>/user/*</url-pattern>\n");
+			b.append("\t\t\t<url-pattern>/view/*</url-pattern>\n");
+			b.append("\t\t</web-resource-collection>\n");
+			b.append("\t\t<auth-constraint>\n");
 
-			project.getRoles().forEach(role -> b.append("\t\t<role-name>" + role.getName() + "</role-name>\n"));
+			project.getRoles().forEach(role -> b.append("\t\t\t<role-name>" + role.getName() + "</role-name>\n"));
 
-			b.append("\t</auth-constraint>\n");
-			b.append("</security-constraint>\n\n");
-			b.append("<security-constraint>\n");
-			b.append("\t<web-resource-collection>\n");
-			b.append("\t\t<web-resource-name>Unrestricted areas</web-resource-name>\n");
-			b.append("\t\t<url-pattern>/VAADIN/*</url-pattern>\n");
-			b.append("\t\t<url-pattern>/favicon.ico</url-pattern>\n");
-			b.append("\t\t<url-pattern>/manifest.webmanifest</url-pattern>\n");
-			b.append("\t\t<url-pattern>/sw.js</url-pattern>\n");
-			b.append("\t\t<url-pattern>/offline.html</url-pattern>\n");
-			b.append("\t\t<url-pattern>/icons/*</url-pattern>\n");
-			b.append("\t\t<url-pattern>/images/*</url-pattern>\n");
-			b.append("\t\t<url-pattern>/styles/*</url-pattern>\n");
-			b.append("\t\t<url-pattern>/login</url-pattern>\n");
-			b.append("\t</web-resource-collection>\n");
-			b.append("</security-constraint>\n\n");
+			b.append("\t\t</auth-constraint>\n");
+			b.append("\t</security-constraint>\n\n");
+			b.append("\t<security-constraint>\n");
+			b.append("\t\t<web-resource-collection>\n");
+			b.append("\t\t\t<web-resource-name>Unrestricted areas</web-resource-name>\n");
+			b.append("\t\t\t<url-pattern>/VAADIN/*</url-pattern>\n");
+			b.append("\t\t\t<url-pattern>/favicon.ico</url-pattern>\n");
+			b.append("\t\t\t<url-pattern>/manifest.webmanifest</url-pattern>\n");
+			b.append("\t\t\t<url-pattern>/sw.js</url-pattern>\n");
+			b.append("\t\t\t<url-pattern>/offline.html</url-pattern>\n");
+			b.append("\t\t\t<url-pattern>/icons/*</url-pattern>\n");
+			b.append("\t\t\t<url-pattern>/images/*</url-pattern>\n");
+			b.append("\t\t\t<url-pattern>/styles/*</url-pattern>\n");
+			b.append("\t\t\t<url-pattern>/login</url-pattern>\n");
+			b.append("\t\t</web-resource-collection>\n");
+			b.append("\t</security-constraint>\n\n");
 		}
 
-		b.append("<session-config>\n");
-		b.append("\t<session-timeout>30</session-timeout>\n");
-		b.append("</session-config>\n\n");
+		b.append("\t<session-config>\n");
+		b.append("\t\t<session-timeout>30</session-timeout>\n");
+		b.append("\t</session-config>\n\n");
 		b.append("</web-app>\n");
 
 		return b.toString();

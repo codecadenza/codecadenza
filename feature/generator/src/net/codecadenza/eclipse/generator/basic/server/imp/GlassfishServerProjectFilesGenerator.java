@@ -112,7 +112,7 @@ public class GlassfishServerProjectFilesGenerator extends AbstractServerProjectF
 		final DTOBean logOnDTO = project.getApplicationLogOnDTO();
 		final BoundaryBean logOnBoundary = project.getLogOnBoundary();
 
-		if (logOnDTO != null && logOnBoundary != null)
+		if (logOnDTO != null && logOnBoundary != null && !project.hasVaadinClient())
 			project.getRoles().forEach(role -> {
 				b.append("\n\t<security-role-mapping>\n");
 				b.append("\t\t<role-name>" + role.getName() + "</role-name>\n");
