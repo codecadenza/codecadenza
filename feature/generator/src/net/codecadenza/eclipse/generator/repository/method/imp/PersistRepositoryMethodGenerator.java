@@ -93,7 +93,7 @@ public class PersistRepositoryMethodGenerator extends BasicRepositoryMethodGener
 
 		// NOTE: Calling flush and refresh seem to be the one and only solution to avoid different problems concerning the state of
 		// the persisted entity:
-		// 1.) When working with Glassfish it turned out that without calling the
+		// 1.) When working with Payara it turned out that without calling the
 		// flush-method the auto-generated primary key value is not set after persist.
 		// The persistence provider is free to perform a flush-operation at any time if flush-mode
 		// AUTO is set!

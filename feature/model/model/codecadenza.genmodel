@@ -879,8 +879,8 @@
       <genEnumLiterals ecoreEnumLiteral="project.ecore#//ClientPlatformEnumeration/NONE"/>
     </genEnums>
     <genEnums typeSafeEnumCompatible="false" ecoreEnum="project.ecore#//ServerPlatformEnumeration">
-      <genEnumLiterals ecoreEnumLiteral="project.ecore#//ServerPlatformEnumeration/JBOSS"/>
-      <genEnumLiterals ecoreEnumLiteral="project.ecore#//ServerPlatformEnumeration/GLASSFISH"/>
+      <genEnumLiterals ecoreEnumLiteral="project.ecore#//ServerPlatformEnumeration/WILDFLY"/>
+      <genEnumLiterals ecoreEnumLiteral="project.ecore#//ServerPlatformEnumeration/PAYARA"/>
       <genEnumLiterals ecoreEnumLiteral="project.ecore#//ServerPlatformEnumeration/NONE"/>
       <genEnumLiterals ecoreEnumLiteral="project.ecore#//ServerPlatformEnumeration/TOMCAT"/>
     </genEnums>

@@ -130,7 +130,7 @@ public class RMIIntegrationProjectFilesGenerator extends AbstractIntegrationProj
 		b.append("private static final Logger logger = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());\n");
 		b.append("protected static final String NAMING_PREFIX = \"");
 
-		if (project.isDeployedOnGlassfish())
+		if (project.isDeployedOnPayara())
 			b.append("java:global/");
 
 		b.append(project.getCode() + "/\";\n\n");

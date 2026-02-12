@@ -33,20 +33,20 @@ import org.eclipse.emf.common.util.Enumerator;
  */
 public enum ServerPlatformEnumeration implements Enumerator {
 	/**
-	 * The '<em><b>JBOSS</b></em>' literal object
-	 * @see #JBOSS_VALUE
+	 * The '<em><b>WILDFLY</b></em>' literal object
+	 * @see #WILDFLY_VALUE
 	 * @generated
 	 * @ordered
 	 */
-	JBOSS(0, "JBOSS", "JBOSS"),
+	WILDFLY(0, "WILDFLY", "WILDFLY"),
 
 	/**
-	 * The '<em><b>GLASSFISH</b></em>' literal object
-	 * @see #GLASSFISH_VALUE
+	 * The '<em><b>PAYARA</b></em>' literal object
+	 * @see #PAYARA_VALUE
 	 * @generated
 	 * @ordered
 	 */
-	GLASSFISH(1, "GLASSFISH", "GLASSFISH"),
+	PAYARA(1, "PAYARA", "PAYARA"),
 
 	/**
 	 * The '<em><b>NONE</b></em>' literal object
@@ -65,22 +65,22 @@ public enum ServerPlatformEnumeration implements Enumerator {
 	TOMCAT(3, "TOMCAT", "TOMCAT");
 
 	/**
-	 * The '<em><b>JBOSS</b></em>' literal value
-	 * @see #JBOSS
+	 * The '<em><b>WILDFLY</b></em>' literal value
+	 * @see #WILDFLY
 	 * @model
 	 * @generated
 	 * @ordered
 	 */
-	public static final int JBOSS_VALUE = 0;
+	public static final int WILDFLY_VALUE = 0;
 
 	/**
-	 * The '<em><b>GLASSFISH</b></em>' literal value
-	 * @see #GLASSFISH
+	 * The '<em><b>PAYARA</b></em>' literal value
+	 * @see #PAYARA
 	 * @model
 	 * @generated
 	 * @ordered
 	 */
-	public static final int GLASSFISH_VALUE = 1;
+	public static final int PAYARA_VALUE = 1;
 
 	/**
 	 * The '<em><b>NONE</b></em>' literal value
@@ -104,7 +104,7 @@ public enum ServerPlatformEnumeration implements Enumerator {
 	 * An array of all the '<em><b>Server Platform Enumeration</b></em>' enumerators
 	 * @generated
 	 */
-	private static final ServerPlatformEnumeration[] VALUES_ARRAY = { JBOSS, GLASSFISH, NONE, TOMCAT };
+	private static final ServerPlatformEnumeration[] VALUES_ARRAY = { WILDFLY, PAYARA, NONE, TOMCAT };
 
 	/**
 	 * A public read-only list of all the '<em><b>Server Platform Enumeration</b></em>' enumerators
@@ -137,10 +137,10 @@ public enum ServerPlatformEnumeration implements Enumerator {
 	 */
 	public static ServerPlatformEnumeration get(int value) {
 		switch (value) {
-			case JBOSS_VALUE:
-				return JBOSS;
-			case GLASSFISH_VALUE:
-				return GLASSFISH;
+			case WILDFLY_VALUE:
+				return WILDFLY;
+			case PAYARA_VALUE:
+				return PAYARA;
 			case NONE_VALUE:
 				return NONE;
 			case TOMCAT_VALUE:

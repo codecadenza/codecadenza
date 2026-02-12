@@ -98,8 +98,8 @@ import org.xml.sax.InputSource;
  */
 public class RunBuildAction implements IViewActionDelegate {
 	private static final String PROJ_CONFIG_FILE = "/config/projects.xml";
-	private static final String PROP_DIR_GLASSFISH = "glassfish_folder";
-	private static final String PROP_DIR_JBOSS = "jboss_folder";
+	private static final String PROP_DIR_PAYARA = "payara_folder";
+	private static final String PROP_DIR_WILDFLY = "wildfly_folder";
 	private static final String PROP_DIR_TOMCAT = "tomcat_folder";
 	private static final String PROP_JDBC_DIR = "jdbc_lib_folder";
 	private static final String PROP_SELENIUM_DRIVER_DIR = "selenium_driver_folder";
@@ -244,10 +244,10 @@ public class RunBuildAction implements IViewActionDelegate {
 				project.setProtectManualChanges(projectConf.isProtectManualChanges());
 				project.getBuildConfiguration().addAll(buildConfig);
 
-				if (project.isDeployedOnGlassfish())
-					deploySubFolder = properties.getProperty(PROP_DIR_GLASSFISH);
-				else if (project.isDeployedOnJBoss())
-					deploySubFolder = properties.getProperty(PROP_DIR_JBOSS);
+				if (project.isDeployedOnPayara())
+					deploySubFolder = properties.getProperty(PROP_DIR_PAYARA);
+				else if (project.isDeployedOnWildfly())
+					deploySubFolder = properties.getProperty(PROP_DIR_WILDFLY);
 				else if (project.isDeployedOnTomcat())
 					deploySubFolder = properties.getProperty(PROP_DIR_TOMCAT);
 
@@ -353,7 +353,7 @@ public class RunBuildAction implements IViewActionDelegate {
 					|| (module.getTechnology() == IntegrationTechnology.JMS && !projectConf.isAddJMS());
 
 			if (!remove) {
-				if (module.getTechnology() == IntegrationTechnology.JMS && project.isDeployedOnJBoss()) {
+				if (module.getTechnology() == IntegrationTechnology.JMS && project.isDeployedOnWildfly()) {
 					// When deploying the application on Wildfly all JMS response destination names must be corrected!
 					module.getNamespace().getJavaTypes().stream().map(JMSIntegrationBean.class::cast)
 							.map(JMSIntegrationBean::getResponseDestination)

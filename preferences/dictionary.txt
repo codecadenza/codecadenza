@@ -7,7 +7,6 @@ validator
 validators
 onboard
 classpath
-glassfish
 namespace
 maven
 facelet

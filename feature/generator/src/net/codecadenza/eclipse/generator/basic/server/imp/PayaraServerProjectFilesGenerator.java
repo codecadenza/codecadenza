@@ -29,7 +29,7 @@ import net.codecadenza.eclipse.model.project.Project;
 
 /**
  * <p>
- * Generator for basic source and configuration files for applications that are deployed on Glassfish
+ * Generator for basic source and configuration files for applications that are deployed on Payara
  * </p>
  * <p>
  * Copyright 2025 (C) by Martin Ganserer
@@ -37,14 +37,14 @@ import net.codecadenza.eclipse.model.project.Project;
  * @author Martin Ganserer
  * @version 1.0.0
  */
-public class GlassfishServerProjectFilesGenerator extends AbstractServerProjectFilesGenerator {
-	public static final String GLASSFISH_WEBXML = "glassfish-web.xml";
+public class PayaraServerProjectFilesGenerator extends AbstractServerProjectFilesGenerator {
+	public static final String PAYARA_WEBXML = "payara-web.xml";
 
 	/**
 	 * Constructor
 	 * @param project
 	 */
-	public GlassfishServerProjectFilesGenerator(Project project) {
+	public PayaraServerProjectFilesGenerator(Project project) {
 		this.project = project;
 	}
 
@@ -63,8 +63,9 @@ public class GlassfishServerProjectFilesGenerator extends AbstractServerProjectF
 		final String password = project.getDataSource().getPassword();
 
 		b.append("<?xml version=\"1.0\" encoding=\"" + UTF_8 + "\"?>\n");
-		b.append("<!DOCTYPE resources PUBLIC \"-//GlassFish.org//DTD GlassFish Application Server 3.1 Resource Definitions//EN\" ");
-		b.append("\"http://glassfish.org/dtds/glassfish-resources_1_5.dtd\">\n");
+		b.append("<!DOCTYPE resources PUBLIC \"-//Payara.fish//DTD Payara Server 4 Resource Definitions//EN\" ");
+		b.append("\"https://raw.githubusercontent.com/payara/Payara-Documentation/master/docs/modules/ROOT");
+		b.append("/pages/Appendix/Schemas/payara-resources_1_7.dtd\">\n");
 		b.append("<resources>\n\n");
 		b.append("\t<jdbc-connection-pool name=\"java:app/jdbc/" + poolName + "\" res-type=\"java.sql.Driver\" ");
 		b.append("driver-classname=\"" + driverName + "\" ");
@@ -90,7 +91,7 @@ public class GlassfishServerProjectFilesGenerator extends AbstractServerProjectF
 	 */
 	@Override
 	public String getVendorWebXMLName() {
-		return GLASSFISH_WEBXML;
+		return PAYARA_WEBXML;
 	}
 
 	/*
@@ -101,9 +102,10 @@ public class GlassfishServerProjectFilesGenerator extends AbstractServerProjectF
 	public String createVendorWebXML() {
 		final var b = new StringBuilder();
 		b.append("<?xml version=\"1.0\" encoding=\"" + UTF_8 + "\"?>\n");
-		b.append("<!DOCTYPE glassfish-web-app PUBLIC \"-//GlassFish.org//DTD GlassFish Application Server 3.1 Servlet 3.0//EN\" ");
-		b.append("\"http://glassfish.org/dtds/glassfish-web-app_3_0-1.dtd\">\n");
-		b.append("<glassfish-web-app>\n\n");
+		b.append("<!DOCTYPE payara-web-app PUBLIC \"-//Payara.fish//DTD Payara Server 4 Servlet 3.0//EN\" ");
+		b.append("\"https://raw.githubusercontent.com/payara/Payara-Documentation/master/docs/modules/ROOT");
+		b.append("/pages/Appendix/Schemas/payara-web-app_4.dtd\">\n");
+		b.append("<payara-web-app>\n\n");
 		b.append("\t<context-root>/" + project.getCode() + "</context-root>\n");
 
 		// Add this configuration to enable logging (see https://github.com/payara/Payara/issues/5898)
@@ -120,7 +122,7 @@ public class GlassfishServerProjectFilesGenerator extends AbstractServerProjectF
 				b.append("\t</security-role-mapping>\n");
 			});
 
-		b.append("\n</glassfish-web-app>\n");
+		b.append("\n</payara-web-app>\n");
 
 		return b.toString();
 	}

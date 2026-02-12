@@ -46,7 +46,7 @@ public class CreateProjectWizard extends AbstractDialog {
 	private static final String LBL_MODULE_REST = "Add REST module";
 	private static final String LBL_MODULE_RMI = "Add RMI module";
 	private static final String LBL_MODULE_SOAP = "Add SOAP module";
-	private static final String SERVER_PLATFORM_GLASSFISH = "GLASSFISH";
+	private static final String SERVER_PLATFORM_PAYARA = "PAYARA";
 	private static final String SERVER_PLATFORM_NONE = "NONE";
 	private static final String SERVER_PLATFORM_TOMCAT = "TOMCAT";
 	private static final String SHELL_TITLE = "Create new CodeCadenza project";
@@ -78,7 +78,7 @@ public class CreateProjectWizard extends AbstractDialog {
 		bot.comboBoxWithLabel(LBL_IMPLEMENTATION).setSelection(project.getClientPlatform().name());
 
 		if (project.getTechnologyPlatform() == TechnologyPlatform.JAKARTA_EE)
-			bot.comboBoxWithLabel(LBL_PLATFORM).setSelection(SERVER_PLATFORM_GLASSFISH);
+			bot.comboBoxWithLabel(LBL_PLATFORM).setSelection(SERVER_PLATFORM_PAYARA);
 		else if (project.getTechnologyPlatform() == TechnologyPlatform.SPRING_BOOT)
 			bot.comboBoxWithLabel(LBL_PLATFORM).setSelection(SERVER_PLATFORM_TOMCAT);
 		else

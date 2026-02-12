@@ -59,7 +59,7 @@ import org.eclipse.jdt.core.JavaCore;
 public class MavenBuildFileService extends AbstractMavenBuildFileService implements IBuildFileService {
 	private static final String MAVEN_PLUGIN_GROUP = "org.apache.maven.plugins";
 
-	// Constants for Glassfish
+	// Constants for Payara
 	private static final String GL_PLUGIN_GROUP = "org.glassfish.maven.plugin";
 	private static final String GL_PLUGIN_VERSION = "2.1";
 	private static final String GL_PLUGIN_ID = "maven-glassfish-plugin";
@@ -89,10 +89,10 @@ public class MavenBuildFileService extends AbstractMavenBuildFileService impleme
 	private static final String MAVEN_WAR_PLUGIN_ID = "maven-war-plugin";
 	private static final String MAVEN_WAR_PLUGIN_VERSION = "3.5.1";
 
-	// Constants for JBoss
-	private static final String JB_PLUGIN_GROUP = "org.wildfly.plugins";
-	private static final String JB_PLUGIN_VERSION = "5.1.5.Final";
-	private static final String JB_PLUGIN_ID = "wildfly-maven-plugin";
+	// Constants for Wildfly
+	private static final String WILDFLY_PLUGIN_GROUP = "org.wildfly.plugins";
+	private static final String WILDFLY_PLUGIN_VERSION = "5.1.5.Final";
+	private static final String WILDFLY_PLUGIN_ID = "wildfly-maven-plugin";
 
 	// Constants for Vaadin
 	private static final String VD_VERSION = "25.0.2";
@@ -150,10 +150,10 @@ public class MavenBuildFileService extends AbstractMavenBuildFileService impleme
 	private static final String DEFAULT_USER = "admin";
 	private static final String DEFAULT_PASSWORD = "admin";
 
-	private static final String JB_ELEMENT_PASSWORD = "password";
-	private static final String JB_ELEMENT_USER = "username";
-	private static final String JB_ELEMENT_DIRECTORY = "jbossHome";
-	private static final String JB_ELEMENT_NAME = "name";
+	private static final String WILDFLY_ELEMENT_PASSWORD = "password";
+	private static final String WILDFLY_ELEMENT_USER = "username";
+	private static final String WILDFLY_ELEMENT_DIRECTORY = "jbossHome";
+	private static final String WILDFLY_ELEMENT_NAME = "name";
 
 	private static final String PROP_NAME_ENCODING = "project.build.sourceEncoding";
 	private static final String PROP_NAME_COMP_SOURCE = "maven.compiler.source";
@@ -309,7 +309,7 @@ public class MavenBuildFileService extends AbstractMavenBuildFileService impleme
 			return;
 		}
 
-		if (project.isDeployedOnGlassfish()) {
+		if (project.isDeployedOnPayara()) {
 			final var configuration = new Xpp3Dom(CONFIGURATION_ELEMENT);
 
 			deployPlugin.setArtifactId(GL_PLUGIN_ID);
@@ -342,18 +342,18 @@ public class MavenBuildFileService extends AbstractMavenBuildFileService impleme
 
 			deployPlugin.addExecution(execution);
 		}
-		else if (project.isDeployedOnJBoss()) {
+		else if (project.isDeployedOnWildfly()) {
 			final var configuration = new Xpp3Dom(CONFIGURATION_ELEMENT);
 
-			deployPlugin.setArtifactId(JB_PLUGIN_ID);
-			deployPlugin.setVersion(JB_PLUGIN_VERSION);
-			deployPlugin.setGroupId(JB_PLUGIN_GROUP);
+			deployPlugin.setArtifactId(WILDFLY_PLUGIN_ID);
+			deployPlugin.setVersion(WILDFLY_PLUGIN_VERSION);
+			deployPlugin.setGroupId(WILDFLY_PLUGIN_GROUP);
 			deployPlugin.setConfiguration(configuration);
 
-			addElement(configuration, JB_ELEMENT_DIRECTORY, serverDirectory);
-			addElement(configuration, JB_ELEMENT_USER, DEFAULT_USER);
-			addElement(configuration, JB_ELEMENT_PASSWORD, DEFAULT_PASSWORD);
-			addElement(configuration, JB_ELEMENT_NAME, project.getCode() + ".war");
+			addElement(configuration, WILDFLY_ELEMENT_DIRECTORY, serverDirectory);
+			addElement(configuration, WILDFLY_ELEMENT_USER, DEFAULT_USER);
+			addElement(configuration, WILDFLY_ELEMENT_PASSWORD, DEFAULT_PASSWORD);
+			addElement(configuration, WILDFLY_ELEMENT_NAME, project.getCode() + ".war");
 
 			final var execution = new PluginExecution();
 			execution.setPhase(PHASE_INSTALL);

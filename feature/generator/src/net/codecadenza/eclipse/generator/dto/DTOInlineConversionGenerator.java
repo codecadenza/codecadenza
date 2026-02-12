@@ -224,7 +224,7 @@ public class DTOInlineConversionGenerator {
 				if (domainAttribute.isSetDateOnPersist() || domainAttribute.isSetDateOnUpdate())
 					continue;
 
-				// In case of JBoss 4.2.3 with Hibernate 3.2.4 we must check the version manually!
+				// In case of Hibernate the version must be checked manually!
 				if (project.getPersistenceProvider() == PersistenceProviderEnumeration.HIBERNATE) {
 					if (domainAttribute.isTrackVersion())
 						continue;

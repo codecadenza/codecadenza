@@ -8724,7 +8724,7 @@
         </ownedStyle>
         <actualMapping xmi:type="description_1:NodeMapping" href="platform:/plugin/org.eclipse.emf.ecoretools.design/description/ecore.odesign#//@ownedViewpoints[name='Design']/@ownedRepresentations[name='Entities']/@defaultLayer/@containerMappings[name='EC%20EClass']/@subNodeMappings[name='EC%20EAttribute']"/>
       </ownedElements>
-      <ownedElements xmi:type="diagram:DNodeListElement" uid="_fiYr8qfdEeWakPsQJlEbvQ" name="serverPlatform : ServerPlatformEnumeration = JBOSS" tooltipText="">
+      <ownedElements xmi:type="diagram:DNodeListElement" uid="_fiYr8qfdEeWakPsQJlEbvQ" name="serverPlatform : ServerPlatformEnumeration = WILDFLY" tooltipText="">
         <target xmi:type="ecore:EAttribute" href="project.ecore#//Project/serverPlatform"/>
         <semanticElements xmi:type="ecore:EAttribute" href="project.ecore#//Project/serverPlatform"/>
         <ownedStyle xmi:type="diagram:BundledImage" uid="_fiYr86fdEeWakPsQJlEbvQ" labelAlignment="LEFT">
@@ -8874,17 +8874,17 @@
         <description xmi:type="style:FlatContainerStyleDescription" href="platform:/plugin/org.eclipse.emf.ecoretools.design/description/ecore.odesign#//@ownedViewpoints[name='Design']/@ownedRepresentations[name='Entities']/@defaultLayer/@containerMappings[name='EC%20EEnum']/@style"/>
       </ownedStyle>
       <actualMapping xmi:type="description_1:ContainerMapping" href="platform:/plugin/org.eclipse.emf.ecoretools.design/description/ecore.odesign#//@ownedViewpoints[name='Design']/@ownedRepresentations[name='Entities']/@defaultLayer/@containerMappings[name='EC%20EEnum']"/>
-      <ownedElements xmi:type="diagram:DNodeListElement" uid="_ficWUqfdEeWakPsQJlEbvQ" name="JBOSS" tooltipText="">
-        <target xmi:type="ecore:EEnumLiteral" href="project.ecore#//ServerPlatformEnumeration/JBOSS"/>
-        <semanticElements xmi:type="ecore:EEnumLiteral" href="project.ecore#//ServerPlatformEnumeration/JBOSS"/>
+      <ownedElements xmi:type="diagram:DNodeListElement" uid="_ficWUqfdEeWakPsQJlEbvQ" name="WILDFLY" tooltipText="">
+        <target xmi:type="ecore:EEnumLiteral" href="project.ecore#//ServerPlatformEnumeration/WILDFLY"/>
+        <semanticElements xmi:type="ecore:EEnumLiteral" href="project.ecore#//ServerPlatformEnumeration/WILDFLY"/>
         <ownedStyle xmi:type="diagram:BundledImage" uid="_ficWU6fdEeWakPsQJlEbvQ" labelAlignment="LEFT">
           <description xmi:type="style:BundledImageDescription" href="platform:/plugin/org.eclipse.emf.ecoretools.design/description/ecore.odesign#//@ownedViewpoints[name='Design']/@ownedRepresentations[name='Entities']/@defaultLayer/@containerMappings[name='EC%20EEnum']/@subNodeMappings[name='EC%20EEnumLiteral']/@style"/>
         </ownedStyle>
         <actualMapping xmi:type="description_1:NodeMapping" href="platform:/plugin/org.eclipse.emf.ecoretools.design/description/ecore.odesign#//@ownedViewpoints[name='Design']/@ownedRepresentations[name='Entities']/@defaultLayer/@containerMappings[name='EC%20EEnum']/@subNodeMappings[name='EC%20EEnumLiteral']"/>
       </ownedElements>
-      <ownedElements xmi:type="diagram:DNodeListElement" uid="_ficWVKfdEeWakPsQJlEbvQ" name="GLASSFISH" tooltipText="">
-        <target xmi:type="ecore:EEnumLiteral" href="project.ecore#//ServerPlatformEnumeration/GLASSFISH"/>
-        <semanticElements xmi:type="ecore:EEnumLiteral" href="project.ecore#//ServerPlatformEnumeration/GLASSFISH"/>
+      <ownedElements xmi:type="diagram:DNodeListElement" uid="_ficWVKfdEeWakPsQJlEbvQ" name="PAYARA" tooltipText="">
+        <target xmi:type="ecore:EEnumLiteral" href="project.ecore#//ServerPlatformEnumeration/PAYARA"/>
+        <semanticElements xmi:type="ecore:EEnumLiteral" href="project.ecore#//ServerPlatformEnumeration/PAYARA"/>
         <ownedStyle xmi:type="diagram:BundledImage" uid="_ficWVafdEeWakPsQJlEbvQ" labelAlignment="LEFT">
           <description xmi:type="style:BundledImageDescription" href="platform:/plugin/org.eclipse.emf.ecoretools.design/description/ecore.odesign#//@ownedViewpoints[name='Design']/@ownedRepresentations[name='Entities']/@defaultLayer/@containerMappings[name='EC%20EEnum']/@subNodeMappings[name='EC%20EEnumLiteral']/@style"/>
         </ownedStyle>
@@ -14507,7 +14507,7 @@
         </ownedStyle>
         <actualMapping xmi:type="description_1:NodeMapping" href="platform:/plugin/org.eclipse.emf.ecoretools.design/description/ecore.odesign#//@ownedViewpoints[name='Design']/@ownedRepresentations[name='Entities']/@defaultLayer/@containerMappings[name='EC%20EClass']/@subNodeMappings[name='EC%20EAttribute']"/>
       </ownedElements>
-      <ownedElements xmi:type="diagram:DNodeListElement" uid="_wxr6cafmEeWakPsQJlEbvQ" name="serverPlatform : ServerPlatformEnumeration = JBOSS" visible="false" tooltipText="">
+      <ownedElements xmi:type="diagram:DNodeListElement" uid="_wxr6cafmEeWakPsQJlEbvQ" name="serverPlatform : ServerPlatformEnumeration = WILDFLY" visible="false" tooltipText="">
         <target xmi:type="ecore:EAttribute" href="project.ecore#//Project/serverPlatform"/>
         <semanticElements xmi:type="ecore:EAttribute" href="project.ecore#//Project/serverPlatform"/>
         <ownedStyle xmi:type="diagram:BundledImage" uid="_wxr6cqfmEeWakPsQJlEbvQ" labelAlignment="LEFT">
@@ -20955,7 +20955,7 @@
         </ownedStyle>
         <actualMapping xmi:type="description_1:NodeMapping" href="platform:/plugin/org.eclipse.emf.ecoretools.design/description/ecore.odesign#//@ownedViewpoints[name='Design']/@ownedRepresentations[name='Entities']/@defaultLayer/@containerMappings[name='EC%20EClass']/@subNodeMappings[name='EC%20EAttribute']"/>
       </ownedElements>
-      <ownedElements xmi:type="diagram:DNodeListElement" uid="_2UTKSKftEeWakPsQJlEbvQ" name="serverPlatform : ServerPlatformEnumeration = JBOSS" visible="false" tooltipText="">
+      <ownedElements xmi:type="diagram:DNodeListElement" uid="_2UTKSKftEeWakPsQJlEbvQ" name="serverPlatform : ServerPlatformEnumeration = WILDFLY" visible="false" tooltipText="">
         <target xmi:type="ecore:EAttribute" href="project.ecore#//Project/serverPlatform"/>
         <semanticElements xmi:type="ecore:EAttribute" href="project.ecore#//Project/serverPlatform"/>
         <ownedStyle xmi:type="diagram:BundledImage" uid="_2UTKSaftEeWakPsQJlEbvQ" labelAlignment="LEFT">

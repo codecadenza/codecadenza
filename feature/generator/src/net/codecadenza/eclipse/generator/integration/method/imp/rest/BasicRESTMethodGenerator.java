@@ -397,7 +397,7 @@ public class BasicRESTMethodGenerator extends AbstractIntegrationMethodGenerator
 				b.append(", ");
 
 			if (addAnnotations) {
-				final boolean isJerseyUsed = project.isSpringBootApplication() || project.isDeployedOnGlassfish();
+				final boolean isJerseyUsed = project.isSpringBootApplication() || project.isDeployedOnPayara();
 
 				// Applications that use Eclipse Jersey require a mapping for all additional parameters of a 'CREATE' method!
 				if (isJerseyUsed && method.getBoundaryMethod().getMethodType() == BoundaryMethodTypeEnumeration.CREATE && !firstParam)

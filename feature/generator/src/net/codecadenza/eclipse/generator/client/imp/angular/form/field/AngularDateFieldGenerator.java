@@ -98,7 +98,7 @@ public class AngularDateFieldGenerator extends AbstractAngularFieldGenerator {
 
 		final var attributeAccessor = "object." + field.getDTOAttribute().getName();
 
-		if (project.isDeployedOnGlassfish()) {
+		if (project.isDeployedOnPayara()) {
 			if (type.isLocalDateTime())
 				return attributeAccessor + " = DateConverter.removeMilliseconds(" + attributeAccessor + ");";
 		}

@@ -80,8 +80,8 @@
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="readonlyRole" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EEnum" name="ServerPlatformEnumeration">
-    <eLiterals name="JBOSS"/>
-    <eLiterals name="GLASSFISH" value="1" literal="GLASSFISH"/>
+    <eLiterals name="WILDFLY"/>
+    <eLiterals name="PAYARA" value="1" literal="PAYARA"/>
     <eLiterals name="NONE" value="2" literal="NONE"/>
     <eLiterals name="TOMCAT" value="3"/>
   </eClassifiers>

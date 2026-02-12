@@ -195,7 +195,7 @@ public class ProjectImpl extends EObjectImpl implements Project {
 	 * @generated
 	 * @ordered
 	 */
-	protected static final ServerPlatformEnumeration SERVER_PLATFORM_EDEFAULT = ServerPlatformEnumeration.JBOSS;
+	protected static final ServerPlatformEnumeration SERVER_PLATFORM_EDEFAULT = ServerPlatformEnumeration.WILDFLY;
 
 	/**
 	 * The cached value of the '{@link #getServerPlatform() <em>Server Platform</em>}' attribute
@@ -2888,9 +2888,9 @@ public class ProjectImpl extends EObjectImpl implements Project {
 	 */
 	@Override
 	public String getDataSourceJNDIName() {
-		if (isDeployedOnGlassfish())
+		if (isDeployedOnPayara())
 			return "java:app/jdbc/" + getDataSource().getName();
-		else if (isDeployedOnJBoss())
+		else if (isDeployedOnWildfly())
 			return "java:jboss/datasources/" + getDataSource().getName();
 
 		return "";
@@ -2903,9 +2903,9 @@ public class ProjectImpl extends EObjectImpl implements Project {
 	 */
 	@Override
 	public String getDataSourceFileName() {
-		if (isDeployedOnGlassfish())
+		if (isDeployedOnPayara())
 			return "glassfish-resources.xml";
-		else if (isDeployedOnJBoss())
+		else if (isDeployedOnWildfly())
 			return "app-ds.xml";
 
 		return null;
@@ -3043,22 +3043,22 @@ public class ProjectImpl extends EObjectImpl implements Project {
 
 	/*
 	 * (non-Javadoc)
-	 * @see net.codecadenza.eclipse.model.project.Project#isDeployedOnGlassfish()
+	 * @see net.codecadenza.eclipse.model.project.Project#isDeployedOnPayara()
 	 * @generated not
 	 */
 	@Override
-	public boolean isDeployedOnGlassfish() {
-		return serverPlatform == ServerPlatformEnumeration.GLASSFISH;
+	public boolean isDeployedOnPayara() {
+		return serverPlatform == ServerPlatformEnumeration.PAYARA;
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * @see net.codecadenza.eclipse.model.project.Project#isDeployedOnJBoss()
+	 * @see net.codecadenza.eclipse.model.project.Project#isDeployedOnWildfly()
 	 * @generated not
 	 */
 	@Override
-	public boolean isDeployedOnJBoss() {
-		return serverPlatform == ServerPlatformEnumeration.JBOSS;
+	public boolean isDeployedOnWildfly() {
+		return serverPlatform == ServerPlatformEnumeration.WILDFLY;
 	}
 
 	/*

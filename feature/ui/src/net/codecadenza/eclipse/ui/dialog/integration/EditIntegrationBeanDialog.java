@@ -1333,7 +1333,7 @@ public class EditIntegrationBeanDialog extends CodeCadenzaTitleAreaDialog {
 	private String getDefaultJMSDestinationName(DomainObject domainObject, boolean request) {
 		final var name = new StringBuilder();
 
-		if (!request && project.isDeployedOnJBoss())
+		if (!request && project.isDeployedOnWildfly())
 			name.append("java:/");
 
 		name.append("jms/");

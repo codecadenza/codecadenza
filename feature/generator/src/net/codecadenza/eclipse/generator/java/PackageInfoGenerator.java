@@ -58,7 +58,7 @@ public class PackageInfoGenerator {
 
 		// If the application is deployed on Wildfly the invocation of document-style SOAP services will fail if the option
 		// XmlNsForm.QUALIFIED is selected!
-		if (project.isDeployedOnJBoss() && artifactType == BuildArtifactType.INTEGRATION_SEI_SOAP)
+		if (project.isDeployedOnWildfly() && artifactType == BuildArtifactType.INTEGRATION_SEI_SOAP)
 			b.append("UNQUALIFIED");
 		else
 			b.append("QUALIFIED");

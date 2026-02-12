@@ -120,7 +120,7 @@ public class ServerBuildModule extends AbstractBuildModule {
 			configFiles.add(dataSourceFile);
 		}
 
-		if (project.isDeployedOnJBoss()) {
+		if (project.isDeployedOnWildfly()) {
 			path = project.getWebInfFolder() + "/jboss-deployment-structure.xml";
 			content = serverFileGenerator.createDeploymentStructureXML();
 			final var deploymentStructureXMLFile = new WorkspaceFile(project, BuildArtifactType.SERVER, path, content);

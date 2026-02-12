@@ -325,10 +325,10 @@ public class ProjectConfiguration implements Serializable {
 		if (!boundaryMode)
 			name += "FA-";
 
-		if (serverPlatform == ServerPlatformEnumeration.GLASSFISH)
-			name += "GL-";
-		else if (serverPlatform == ServerPlatformEnumeration.JBOSS)
-			name += "JB-";
+		if (serverPlatform == ServerPlatformEnumeration.PAYARA)
+			name += "PA-";
+		else if (serverPlatform == ServerPlatformEnumeration.WILDFLY)
+			name += "WI-";
 		else if (serverPlatform == ServerPlatformEnumeration.TOMCAT)
 			name += "TO-";
 

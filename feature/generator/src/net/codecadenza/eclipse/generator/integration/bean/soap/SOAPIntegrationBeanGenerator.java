@@ -105,8 +105,8 @@ public class SOAPIntegrationBeanGenerator extends AbstractJavaSourceGenerator {
 		b.append(")\n");
 		b.append("@HandlerChain(file = \"");
 
-		// When deploying the application on Glassfish the name of the handler chain file must not start with a slash!
-		if (!project.isDeployedOnGlassfish())
+		// When deploying the application on Payara the name of the handler chain file must not start with a slash!
+		if (!project.isDeployedOnPayara())
 			b.append("/");
 
 		b.append("handler-chain-server.xml\")\n");

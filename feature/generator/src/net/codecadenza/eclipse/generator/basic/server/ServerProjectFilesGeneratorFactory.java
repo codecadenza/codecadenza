@@ -21,8 +21,8 @@
  */
 package net.codecadenza.eclipse.generator.basic.server;
 
-import net.codecadenza.eclipse.generator.basic.server.imp.GlassfishServerProjectFilesGenerator;
-import net.codecadenza.eclipse.generator.basic.server.imp.JBossServerProjectFilesGenerator;
+import net.codecadenza.eclipse.generator.basic.server.imp.PayaraServerProjectFilesGenerator;
+import net.codecadenza.eclipse.generator.basic.server.imp.WildflyServerProjectFilesGenerator;
 import net.codecadenza.eclipse.generator.basic.server.imp.LocalServerProjectFilesGenerator;
 import net.codecadenza.eclipse.generator.basic.server.imp.TomcatServerProjectFilesGenerator;
 import net.codecadenza.eclipse.model.project.Project;
@@ -55,10 +55,10 @@ public class ServerProjectFilesGeneratorFactory {
 	public static IServerProjectFilesGenerator getGenerator(Project project) {
 		final ServerPlatformEnumeration serverPlatform = project.getServerPlatform();
 
-		if (serverPlatform == ServerPlatformEnumeration.JBOSS)
-			return new JBossServerProjectFilesGenerator(project);
-		else if (serverPlatform == ServerPlatformEnumeration.GLASSFISH)
-			return new GlassfishServerProjectFilesGenerator(project);
+		if (serverPlatform == ServerPlatformEnumeration.WILDFLY)
+			return new WildflyServerProjectFilesGenerator(project);
+		else if (serverPlatform == ServerPlatformEnumeration.PAYARA)
+			return new PayaraServerProjectFilesGenerator(project);
 		else if (serverPlatform == ServerPlatformEnumeration.TOMCAT)
 			return new TomcatServerProjectFilesGenerator(project);
 		else if (serverPlatform == ServerPlatformEnumeration.NONE)

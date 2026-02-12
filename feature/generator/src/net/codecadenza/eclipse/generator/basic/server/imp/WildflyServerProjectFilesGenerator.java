@@ -29,7 +29,7 @@ import net.codecadenza.eclipse.model.project.Project;
 
 /**
  * <p>
- * Generator for basic source and configuration files for applications that are deployed on JBoss
+ * Generator for basic source and configuration files for applications that are deployed on Wildfly
  * </p>
  * <p>
  * Copyright 2025 (C) by Martin Ganserer
@@ -37,14 +37,14 @@ import net.codecadenza.eclipse.model.project.Project;
  * @author Martin Ganserer
  * @version 1.0.0
  */
-public class JBossServerProjectFilesGenerator extends AbstractServerProjectFilesGenerator {
+public class WildflyServerProjectFilesGenerator extends AbstractServerProjectFilesGenerator {
 	public static final String JBOSS_WEBXML = "jboss-web.xml";
 
 	/**
 	 * Constructor
 	 * @param project
 	 */
-	public JBossServerProjectFilesGenerator(Project project) {
+	public WildflyServerProjectFilesGenerator(Project project) {
 		this.project = project;
 	}
 
@@ -62,7 +62,7 @@ public class JBossServerProjectFilesGenerator extends AbstractServerProjectFiles
 		final String password = project.getDataSource().getPassword();
 
 		b.append("<?xml version=\"1.0\" encoding=\"" + UTF_8 + "\"?>\n");
-		b.append("<datasources xmlns=\"http://www.jboss.org/ironjacamar/schema\">\n\n");
+		b.append("<datasources xmlns=\"urn:jboss:domain:datasources:7.2\">\n\n");
 		b.append("\t<datasource jndi-name=\"" + project.getDataSourceJNDIName());
 		b.append("\" enabled=\"true\" use-java-context=\"true\" pool-name=\"");
 		b.append(poolName + "\">\n");
@@ -101,10 +101,9 @@ public class JBossServerProjectFilesGenerator extends AbstractServerProjectFiles
 		final BoundaryBean logOnBoundary = project.getLogOnBoundary();
 
 		b.append("<?xml version=\"1.0\" encoding=\"" + UTF_8 + "\"?>\n");
-		b.append("<jboss-web xmlns=\"http://www.jboss.com/xml/ns/javaee\" ");
-		b.append("xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" ");
-		b.append("xsi:schemaLocation=\"http://www.jboss.com/xml/ns/javaee http://www.jboss.org/schema/jbossas/jboss-web_14_0.xsd\" ");
-		b.append("version=\"14.0\">\n\n");
+		b.append("<jboss-web xmlns:xsi=\"http://www.w3.org/2001/XMLSchema\" ");
+		b.append("xsi:schemaLocation=\"http://www.jboss.org/schema/jbossas/jboss-web_15_0.xsd\" ");
+		b.append("version=\"15.0\">\n\n");
 		b.append("\t<context-root>/" + project.getCode() + "</context-root>\n");
 
 		if (logOnDTO != null && logOnBoundary != null)
@@ -123,7 +122,7 @@ public class JBossServerProjectFilesGenerator extends AbstractServerProjectFiles
 	public String createDeploymentStructureXML() {
 		final var b = new StringBuilder();
 		b.append("<?xml version=\"1.0\" encoding=\"" + UTF_8 + "\"?>\n");
-		b.append("<jboss-deployment-structure xmlns=\"urn:jboss:deployment-structure:1.2\">\n");
+		b.append("<jboss-deployment-structure xmlns=\"urn:jboss:deployment-structure:1.2\">\n\n");
 		b.append("\t<deployment>\n");
 		b.append("\t\t<exclude-subsystems>\n");
 		b.append("\t\t\t<subsystem name=\"logging\"/>\n");
@@ -131,7 +130,7 @@ public class JBossServerProjectFilesGenerator extends AbstractServerProjectFiles
 		b.append("\t\t<exclusions>\n");
 		b.append("\t\t\t<module name=\"org.dom4j\"/>\n");
 		b.append("\t\t</exclusions>\n");
-		b.append("\t</deployment>\n");
+		b.append("\t</deployment>\n\n");
 		b.append("</jboss-deployment-structure>\n");
 
 		return b.toString();

@@ -1058,16 +1058,16 @@ public interface Project extends EObject {
 	boolean isSpringBootApplication();
 
 	/**
-	 * @return true if the project is deployed on either Glassfish or Payara
+	 * @return true if the project is deployed on Payara
 	 * @generated not
 	 */
-	boolean isDeployedOnGlassfish();
+	boolean isDeployedOnPayara();
 
 	/**
-	 * @return true if the project is deployed on either JBoss or Wildfly
+	 * @return true if the project is deployed on Wildfly
 	 * @generated not
 	 */
-	boolean isDeployedOnJBoss();
+	boolean isDeployedOnWildfly();
 
 	/**
 	 * @return true if the project is deployed on Apache Tomcat

@@ -133,8 +133,8 @@ public class ApplicationWizardPage extends WizardPage {
 				lblDeployDir.setEnabled(true);
 				cmdBrowse.setEnabled(true);
 
-				cboServerPlatform.add(ServerPlatformEnumeration.GLASSFISH.name());
-				cboServerPlatform.add(ServerPlatformEnumeration.JBOSS.name());
+				cboServerPlatform.add(ServerPlatformEnumeration.PAYARA.name());
+				cboServerPlatform.add(ServerPlatformEnumeration.WILDFLY.name());
 				cboServerPlatform.add(ServerPlatformEnumeration.TOMCAT.name());
 
 				if (selClientPlatform == ClientPlatformEnumeration.RCP || selClientPlatform == ClientPlatformEnumeration.SWING
@@ -174,8 +174,8 @@ public class ApplicationWizardPage extends WizardPage {
 
 		cboServerPlatform = new Combo(groupServer, SWT.READ_ONLY);
 		cboServerPlatform.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
-		cboServerPlatform.add(ServerPlatformEnumeration.GLASSFISH.name());
-		cboServerPlatform.add(ServerPlatformEnumeration.JBOSS.name());
+		cboServerPlatform.add(ServerPlatformEnumeration.PAYARA.name());
+		cboServerPlatform.add(ServerPlatformEnumeration.WILDFLY.name());
 		cboServerPlatform.add(ServerPlatformEnumeration.TOMCAT.name());
 		cboServerPlatform.select(0);
 
@@ -385,7 +385,7 @@ public class ApplicationWizardPage extends WizardPage {
 
 		if (selTechnology == TechnologyPlatformEnumeration.JAVA_SE)
 			cboPersistenceProvider.add(PersistenceProviderEnumeration.ECLIPSELINK.name());
-		else if (selServerPlatform == ServerPlatformEnumeration.GLASSFISH) {
+		else if (selServerPlatform == ServerPlatformEnumeration.PAYARA) {
 			cboPersistenceProvider.add(PersistenceProviderEnumeration.ECLIPSELINK.name());
 			cboPersistenceProvider.add(PersistenceProviderEnumeration.HIBERNATE.name());
 		}

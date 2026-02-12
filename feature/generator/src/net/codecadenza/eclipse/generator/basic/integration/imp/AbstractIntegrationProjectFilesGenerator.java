@@ -319,7 +319,7 @@ public abstract class AbstractIntegrationProjectFilesGenerator implements IInteg
 	protected String createJNDIProperties() {
 		final var b = new StringBuilder();
 
-		if (project.isDeployedOnGlassfish()) {
+		if (project.isDeployedOnPayara()) {
 			b.append("java.naming.factory.initial=com.sun.enterprise.naming.SerialInitContextFactory\n");
 			b.append("java.naming.factory.url.pkgs=com.sun.enterprise.naming\n");
 			b.append("java.naming.factory.state=com.sun.corba.ee.impl.presentation.rmi.JNDIStateFactoryImpl\n");

@@ -34,7 +34,6 @@ import java.util.List;
 import net.codecadenza.eclipse.generator.client.imp.vaadin.util.VaadinI18NGenerator;
 import net.codecadenza.eclipse.model.java.JavaFile;
 import net.codecadenza.eclipse.model.project.Project;
-import net.codecadenza.eclipse.model.project.ServerPlatformEnumeration;
 
 /**
  * <p>
@@ -477,8 +476,8 @@ public class VaadinClientProjectFilesGenerator extends AbstractClientProjectFile
 	 */
 	public String createWebXML() {
 		final var b = new StringBuilder();
-		final boolean secure = project.getServerPlatform() != ServerPlatformEnumeration.GLASSFISH
-				&& project.getApplicationLogOnDTO() != null && project.getLogOnBoundary() != null;
+		final boolean secure = !project.isDeployedOnPayara() && project.getApplicationLogOnDTO() != null
+				&& project.getLogOnBoundary() != null;
 
 		b.append("<?xml version=\"1.0\" encoding=\"" + UTF_8 + "\"?>\n");
 		b.append("<web-app xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\n");

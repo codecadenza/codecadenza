@@ -320,7 +320,7 @@ public class SOAPIntegrationProjectFilesGenerator extends AbstractIntegrationPro
 		b.append(module.getFileServiceName() + ".SERVICE_NAME, portName = " + module.getFileServiceName() + ".PORT_NAME)\n");
 		b.append("@HandlerChain(file = \"");
 
-		if (!project.isDeployedOnGlassfish())
+		if (!project.isDeployedOnPayara())
 			b.append("/");
 
 		b.append(HANDLER_CHAIN + "\")\n");

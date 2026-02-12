@@ -254,7 +254,7 @@ public class GUIBuildModule extends AbstractBuildModule {
 				configFiles.add(new WorkspaceFile(project, BuildArtifactType.GUI, path, content));
 			}
 
-			if (project.isDeployedOnJBoss()) {
+			if (project.isDeployedOnWildfly()) {
 				path = project.getWebInfFolder() + "/jboss-deployment-structure.xml";
 				content = serverFileGenerator.createDeploymentStructureXML();
 

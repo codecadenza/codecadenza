@@ -343,10 +343,10 @@
 			<dependency name="junit-jupiter" groupName="org.junit.jupiter" version="5.11.3" scope="test"/>
 			<dependency name="log4j-slf4j2-impl" groupName="org.apache.logging.log4j" version="2.25.3" scope="test"/>
 		</filter>
-		<filter clientPlatform="ALL" technology="ALL" serverPlatform="JBOSS" validationType="ALL" database="ALL" jpaProvider="ALL">
+		<filter clientPlatform="ALL" technology="ALL" serverPlatform="WILDFLY" validationType="ALL" database="ALL" jpaProvider="ALL">
 			<dependency name="wildfly-ejb-client-bom" groupName="org.wildfly" version="39.0.0.Final" scope="compile" type="pom"/>
 		</filter>
-		<filter clientPlatform="ALL" technology="ALL" serverPlatform="GLASSFISH" validationType="ALL" database="ALL" jpaProvider="ALL">
+		<filter clientPlatform="ALL" technology="ALL" serverPlatform="PAYARA" validationType="ALL" database="ALL" jpaProvider="ALL">
 			<dependency name="gf-client" groupName="org.glassfish.main.appclient" version="7.1.0" scope="compile" type="pom"/>
 		</filter>
 	</dependency_config>
@@ -371,11 +371,11 @@
 			<dependency name="log4j-slf4j2-impl" groupName="org.apache.logging.log4j" version="2.25.3" scope="test"/>
 			<dependency name="junit-jupiter" groupName="org.junit.jupiter" version="5.11.3" scope="test"/>
 		</filter>
-		<filter clientPlatform="ALL" technology="JAKARTA_EE" serverPlatform="JBOSS" validationType="ALL" database="ALL" jpaProvider="ALL">
+		<filter clientPlatform="ALL" technology="JAKARTA_EE" serverPlatform="WILDFLY" validationType="ALL" database="ALL" jpaProvider="ALL">
 			<dependency name="wildfly-ejb-client-bom" groupName="org.wildfly" version="39.0.0.Final" scope="compile" type="pom"/>
 			<dependency name="wildfly-jms-client-bom" groupName="org.wildfly" version="39.0.0.Final" scope="compile" type="pom"/>
 		</filter>
-		<filter clientPlatform="ALL" technology="JAKARTA_EE" serverPlatform="GLASSFISH" validationType="ALL" database="ALL" jpaProvider="ALL">
+		<filter clientPlatform="ALL" technology="JAKARTA_EE" serverPlatform="PAYARA" validationType="ALL" database="ALL" jpaProvider="ALL">
 			<dependency name="gf-client" groupName="org.glassfish.main.appclient" version="7.1.0" scope="compile" type="pom"/>
 		</filter>
 		<filter clientPlatform="ALL" technology="SPRING_BOOT" serverPlatform="ALL" validationType="ALL" database="ALL" jpaProvider="ALL">

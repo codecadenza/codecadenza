@@ -1260,8 +1260,8 @@ public class ProjectPackageImpl extends EPackageImpl implements ProjectPackage {
 		addEEnumLiteral(clientPlatformEnumerationEEnum, ClientPlatformEnumeration.ANGULAR);
 
 		initEEnum(serverPlatformEnumerationEEnum, ServerPlatformEnumeration.class, "ServerPlatformEnumeration");
-		addEEnumLiteral(serverPlatformEnumerationEEnum, ServerPlatformEnumeration.JBOSS);
-		addEEnumLiteral(serverPlatformEnumerationEEnum, ServerPlatformEnumeration.GLASSFISH);
+		addEEnumLiteral(serverPlatformEnumerationEEnum, ServerPlatformEnumeration.WILDFLY);
+		addEEnumLiteral(serverPlatformEnumerationEEnum, ServerPlatformEnumeration.PAYARA);
 		addEEnumLiteral(serverPlatformEnumerationEEnum, ServerPlatformEnumeration.NONE);
 		addEEnumLiteral(serverPlatformEnumerationEEnum, ServerPlatformEnumeration.TOMCAT);
 

@@ -6,8 +6,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
-
 ### Changed
+2026-02-12: Rename the application server literals that represent the supported Jakarta EE platforms
 2026-02-07: Disable the Jakarta EE security configuration for Vaadin applications deployed on Payara
 2026-02-07: Improve the stability of the build test by changing the order of client technologies
 2026-02-05: Improve the determination of the query status when testing the JPA query editor

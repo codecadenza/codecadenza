@@ -598,7 +598,7 @@ public class JMSIntegrationProjectFilesGenerator extends AbstractIntegrationProj
 		b.append("{\n");
 
 		if (project.isJakartaEEApplication()) {
-			if (project.isDeployedOnGlassfish())
+			if (project.isDeployedOnPayara())
 				b.append("private static final String CONNECTION_FACTORY_NAME = \"jms/__defaultConnectionFactory\";\n");
 			else
 				b.append("private static final String CONNECTION_FACTORY_NAME = \"jms/RemoteConnectionFactory\";\n");
@@ -898,7 +898,7 @@ public class JMSIntegrationProjectFilesGenerator extends AbstractIntegrationProj
 		b.append("}\n\n");
 
 		if (project.isJakartaEEApplication()) {
-			final String prefix = project.isDeployedOnJBoss() ? "java:/" : "";
+			final String prefix = project.isDeployedOnWildfly() ? "java:/" : "";
 
 			b.append("/**\n");
 			b.append(" * Inject the response queue\n");
