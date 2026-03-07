@@ -27,7 +27,7 @@ import net.codecadenza.eclipse.generator.client.imp.angular.domain.AngularDomain
 import net.codecadenza.eclipse.generator.client.imp.angular.domain.AngularEnumGenerator;
 import net.codecadenza.eclipse.generator.client.imp.angular.form.AngularGridPanelGenerator;
 import net.codecadenza.eclipse.generator.client.imp.angular.form.AngularSingleRecordFormGenerator;
-import net.codecadenza.eclipse.generator.client.imp.angular.module.AngularAppModuleGenerator;
+import net.codecadenza.eclipse.generator.client.imp.angular.module.AngularAppConfigGenerator;
 import net.codecadenza.eclipse.generator.client.imp.angular.module.AngularFormModuleGenerator;
 import net.codecadenza.eclipse.generator.client.imp.angular.service.AngularServiceGenerator;
 import net.codecadenza.eclipse.generator.client.imp.angular.view.AngularListOfValuesGenerator;
@@ -139,7 +139,7 @@ public class AngularFormGenerator implements IFormGenerator {
 	}
 
 	/**
-	 * Create the application module and the respective form module
+	 * Create the application configuration and the respective form module
 	 * @param dto
 	 * @throws Exception if an internal error has occurred
 	 */
@@ -150,7 +150,7 @@ public class AngularFormGenerator implements IFormGenerator {
 		// Create the folder where the forms of this domain object should be saved to
 		EclipseIDEService.createFolder(project.getTargetProjectName(BuildArtifactType.GUI), pageFolder);
 
-		new AngularAppModuleGenerator(project).createSourceFile();
+		new AngularAppConfigGenerator(project).createSourceFile();
 		new AngularFormModuleGenerator(dto.getDomainObject()).createSourceFile();
 	}
 

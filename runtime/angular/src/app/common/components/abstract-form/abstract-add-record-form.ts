@@ -6,7 +6,7 @@ import { Observable, of } from 'rxjs';
  * Base class for all single-record forms that add a new object to a parent object
  */
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export abstract class AbstractAddRecordForm<T extends { [key: string]: any; }> extends AbstractSingleRecordForm<T> {
+export abstract class AbstractAddRecordForm<T extends Record<string, any>> extends AbstractSingleRecordForm<T> {
   parentObjectId!: string;
 
   /**

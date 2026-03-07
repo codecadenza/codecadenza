@@ -1,32 +1,36 @@
-import { Component, Inject, LOCALE_ID, Input, Output, EventEmitter } from '@angular/core';
+import { Component, inject, LOCALE_ID, Input, Output, EventEmitter } from '@angular/core';
 import { SavedSearchService } from '../../services/saved-search.service';
 import { SavedSearch } from '../../model/saved-search.model';
 import { SearchInput } from '../../model/search-input.model';
-import { I18NService } from '../../services/i18n.service';
+import { Bind } from 'primeng/bind';
+import { Dialog } from 'primeng/dialog';
+import { FormContainerComponent } from '../form-container/form-container.component';
+import { FormControlContainerComponent } from '../form-control-container/form-control-container.component';
+import { Listbox } from 'primeng/listbox';
+import { FormsModule } from '@angular/forms';
+import { PrimeTemplate } from 'primeng/api';
+import { ButtonDirective } from 'primeng/button';
 
 /**
  * Dialog for selecting a saved search that should be either executed or deleted
  */
 @Component({
   selector: 'cc-saved-search-selection-dialog',
-  templateUrl: './saved-search-selection-dialog.html'
+  templateUrl: './saved-search-selection-dialog.html',
+  imports: [Bind, Dialog, FormContainerComponent, FormControlContainerComponent, Listbox, FormsModule, PrimeTemplate,
+    ButtonDirective]
 })
 export class SavedSearchSelectionDialog {
-  @Input() visible = false;
-  @Input() viewName = '';
-  @Input() searchInput!: SearchInput;
-  @Output() savedSearchSelected = new EventEmitter();
-  @Output() closeDialog = new EventEmitter();
-  selectedItem: SavedSearch | null = null;
-  savedSearchObjects: SavedSearch[] = [];
-  confirmDelete = false;
-
-  /**
-   * Create a new instance
-   */
-  constructor(protected savedSearchService: SavedSearchService, protected i18n: I18NService,
-    @Inject(LOCALE_ID) protected locale: string) {
-  }
+  private readonly savedSearchService = inject(SavedSearchService);
+  private readonly locale: string = inject(LOCALE_ID);
+  @Input() public visible = false;
+  @Input() public viewName = '';
+  @Input() public searchInput!: SearchInput;
+  @Output() private savedSearchSelected = new EventEmitter();
+  @Output() private closeDialog = new EventEmitter();
+  protected selectedItem: SavedSearch | null = null;
+  protected savedSearchObjects: SavedSearch[] = [];
+  protected confirmDelete = false;
 
   /**
    * Load the available saved search objects of the given view

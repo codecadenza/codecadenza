@@ -6,7 +6,7 @@
         <input pInputText formControlName="dateFormat" class="inputfield w-full"/>
       </cc-form-control-container>
 
-      <cc-form-control-container [fillEmptySpace]="true"></cc-form-control-container>
+      <cc-form-control-container [fillEmptySpace]="true"/>
 
       <cc-form-control-container i18n-label="@@usersettingspage_lbldatetimeformat" label="Date time format:" [formGroup]="formGroup"
         name="dateTimeFormat" [required]="true">
@@ -18,18 +18,20 @@
       <cc-form-control-container i18n-label="@@usersettingspage_lblnumberformat" label="Number format:" [formGroup]="formGroup"
         name="numberFormat" [required]="true">
         <input pInputText formControlName="numberFormat" class="inputfield w-full"/>
-        <p-message severity="error" *ngIf="!validateControl('numberFormat', 'invalidDecimalFormat')"
-           i18n-text="@@usersettingspage_msginvalidnumberformat" text="Invalid number format!"></p-message>
+        @if (!validateControl('numberFormat', 'invalidDecimalFormat')) {
+          <p-message severity="error" i18n-text="@@usersettingspage_msginvalidnumberformat"
+            text="Invalid number format!"></p-message>
+        }
       </cc-form-control-container>
 
-      <cc-form-control-container [fillEmptySpace]="true"></cc-form-control-container>
+      <cc-form-control-container [fillEmptySpace]="true"/>
 
       <cc-form-control-container i18n-label="@@usersettingspage_lblcomponentscaling" label="Component scaling:" [formGroup]="formGroup"
         name="fontSize" [required]="true">
-        <p-slider formControlName="fontSize" (onChange)="onComponentScalingChanged($event)" [min]="minFontSize" [max]="maxFontSize"></p-slider>
+        <p-slider formControlName="fontSize" (onChange)="onComponentScalingChanged($event)" [min]="minFontSize" [max]="maxFontSize"/>
       </cc-form-control-container>
     </cc-form-container>
 
-    <button pButton type="submit" icon="pi pi-check" i18n-label="@@button_submit" label="Submit" [disabled]="!formGroup.valid"></button>
+    <button pButton type="submit" icon="pi pi-check" i18n="@@button_submit" [disabled]="!formGroup.valid">Submit</button>
   </form>
 </cc-view-container>

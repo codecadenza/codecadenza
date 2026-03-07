@@ -5,7 +5,7 @@
 export class DateConverter {
 
   /**
-   * Convert the given input to a date. This is necessary if the back-end provides date
+   * Convert the given input to a date. This is necessary if the backend provides date
    * values in a format which cannot be handled by the JSon parser.
    */
   static convertToDate(input: string | Date | number | null): any {

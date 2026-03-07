@@ -1,4 +1,4 @@
-import { LOCALE_ID, Inject, Injectable } from '@angular/core';
+import { LOCALE_ID, inject, Injectable } from '@angular/core';
 import { DatePipe, DecimalPipe } from '@angular/common';
 import { DateConverter } from '../converter/date-converter';
 import { FieldTypeEnum } from '../model/field-type.enum';
@@ -16,6 +16,7 @@ export class FormatterService {
   private static readonly STORAGE_ITEM_DATE_FORMAT = 'app-date-format';
   private static readonly STORAGE_ITEM_NUMBER_FORMAT = 'app-number-format';
 
+  private readonly locale = inject(LOCALE_ID);
   private readonly datePipe: DatePipe;
   private readonly decimalPipe: DecimalPipe;
   private dateFormatString = FormatterService.DEFAULT_DATE_FORMAT;
@@ -25,13 +26,13 @@ export class FormatterService {
   /**
    * Initialize internal properties
    */
-  constructor(@Inject(LOCALE_ID) public locale: string) {
+  constructor() {
     const dateTimeFormat = localStorage.getItem(FormatterService.STORAGE_ITEM_DATE_TIME_FORMAT);
     const dateFormat = localStorage.getItem(FormatterService.STORAGE_ITEM_DATE_FORMAT);
     const numberFormat = localStorage.getItem(FormatterService.STORAGE_ITEM_NUMBER_FORMAT);
 
-    this.datePipe = new DatePipe(locale);
-    this.decimalPipe = new DecimalPipe(locale);
+    this.datePipe = new DatePipe(this.locale);
+    this.decimalPipe = new DecimalPipe(this.locale);
 
     if (dateTimeFormat) {
       this.dateTimeFormatString = dateTimeFormat;
@@ -136,13 +137,6 @@ export class FormatterService {
    */
   setNumberFormat(formatString: string) {
     this.numberFormatString = formatString;
-  }
-
-  /**
-   * Get the locale of this service
-   */
-  getLocale() {
-    return this.locale;
   }
 
   /**

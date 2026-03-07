@@ -1,23 +1,26 @@
-import { Component, OnInit } from '@angular/core';
-import { Validators, FormGroup, FormControl } from '@angular/forms';
+import { Component, inject, OnInit } from '@angular/core';
+import { Validators, FormGroup, FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AuthService } from '../../services/auth.service';
 import { ChangePassword } from '../../model/change-password.model';
+import { ViewContainer } from '../../components/view-container/view-container.component';
+import { FormContainerComponent } from '../../components/form-container/form-container.component';
+import { FormControlContainerComponent } from '../../components/form-control-container/form-control-container.component';
+import { Bind } from 'primeng/bind';
+import { PasswordDirective } from 'primeng/password';
+import { ButtonDirective } from 'primeng/button';
 
 /**
  * Page for changing the user's password
  */
 @Component({
-  templateUrl: './change-password-page.html'
+  templateUrl: './change-password-page.html',
+  imports: [ViewContainer, FormsModule, ReactiveFormsModule, FormContainerComponent, FormControlContainerComponent, Bind,
+    PasswordDirective, ButtonDirective]
 })
 export class ChangePasswordPage implements OnInit {
-  formGroup!: FormGroup;
-  passwords!: ChangePassword;
-
-  /**
-   * Create a new instance
-   */
-  constructor(protected authService: AuthService) {
-  }
+  private readonly authService = inject(AuthService);
+  protected formGroup!: FormGroup;
+  protected passwords!: ChangePassword;
 
   /**
    * Initialize the form

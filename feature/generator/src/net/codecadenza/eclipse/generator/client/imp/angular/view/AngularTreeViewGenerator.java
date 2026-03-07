@@ -38,6 +38,7 @@ import java.util.Set;
 import java.util.stream.Stream;
 import net.codecadenza.eclipse.generator.client.imp.angular.common.AbstractTypeScriptSourceGenerator;
 import net.codecadenza.eclipse.generator.client.imp.angular.common.AngularContentFormatter;
+import net.codecadenza.eclipse.generator.client.imp.angular.common.TypeScriptFieldGenerator;
 import net.codecadenza.eclipse.generator.client.imp.angular.security.AngularSecurityHelper;
 import net.codecadenza.eclipse.generator.client.imp.angular.service.AngularServiceInvocationGenerator;
 import net.codecadenza.eclipse.generator.client.imp.angular.util.AngularI18NGenerator;
@@ -137,6 +138,7 @@ public class AngularTreeViewGenerator extends AbstractTypeScriptSourceGenerator 
 		importTypes(Stream.of("Component", "OnInit", "ViewChild"), "@angular/core");
 		importTypes(primengTypes.stream(), "primeng/api");
 		importType("ContextMenu", "primeng/contextmenu");
+		importType("AppCommonModule", "../../common/app-common.module");
 		importType("AbstractTreeView", "../../common/components/tree-view/abstract-tree-view");
 		importType(rootItem.getItemDTO().getName(), "../../domain/" + rootItem.getItemDTO().getName().toLowerCase() + ".interface");
 
@@ -160,11 +162,13 @@ public class AngularTreeViewGenerator extends AbstractTypeScriptSourceGenerator 
 	protected void addTypeDeclaration(AngularContentFormatter formatter) {
 		formatter.addLine("@Component({");
 		formatter.increaseIndent();
-		formatter.addLine("templateUrl: './" + tree.getName().toLowerCase() + ".html'" + (dropItems.isEmpty() ? "" : ","));
+		formatter.addLine("selector: 'app-" + tree.getName().toLowerCase() + "',");
+		formatter.addLine("templateUrl: './" + tree.getName().toLowerCase() + ".html',");
 
 		if (!dropItems.isEmpty())
-			formatter.addLine("providers: [TreeDragDropService]");
+			formatter.addLine("providers: [TreeDragDropService],");
 
+		formatter.addLine("imports: [AppCommonModule]");
 		formatter.decreaseIndent();
 		formatter.addLine("})");
 		formatter.addLine("export class " + tree.getName() + " extends AbstractTreeView implements OnInit {");
@@ -176,25 +180,22 @@ public class AngularTreeViewGenerator extends AbstractTypeScriptSourceGenerator 
 	 */
 	@Override
 	protected void addFields() {
-		addService(tree.getDTO());
+		final TypeScriptFieldGenerator service = addService(tree.getDTO());
 
-		addServiceOfSuperclass("MessageService", "messageService", "primeng/api");
-		addServiceOfSuperclass("ConfirmationService", "confirmationService", "primeng/api");
-		addServiceOfSuperclass("Router", "router", "@angular/router");
-		addServiceOfSuperclass("FormatterService", "formatterService", "../../common/services/formatter.service");
-		addServiceOfSuperclass("I18NService", "i18n", "../../common/services/i18n.service");
+		if (service != null)
+			service.create();
 
 		if (!dropItems.isEmpty())
-			addService("TreeDragDropService", "dragAndDropService", null);
+			addService("TreeDragDropService", "dragAndDropService", null).create();
 
 		if (securityHelper.isSecurityEnabled()) {
-			addService("AuthService", "authService", "../../common/services/auth.service");
+			addService("AuthService", "authService", "../../common/services/auth.service").create();
 
 			importType("RoleEnum ", "../../common/model/role.enum");
 		}
 
 		if (addFileService)
-			addService("FileService", "fileService", "../../common/services/file.service");
+			addService("FileService", "fileService", "../../common/services/file.service").create();
 
 		treeItemsWithActions.forEach(treeItem -> {
 			final var methods = new HashSet<BoundaryMethod>();
@@ -205,7 +206,12 @@ public class AngularTreeViewGenerator extends AbstractTypeScriptSourceGenerator 
 			if (methodActionsOfItem.get(treeItem) != null)
 				methods.addAll(methodActionsOfItem.get(treeItem));
 
-			methods.forEach(method -> addService(method.getBoundaryBean().getDomainObject()));
+			for (final var method : methods) {
+				final TypeScriptFieldGenerator methodService = addService(method.getBoundaryBean().getDomainObject());
+
+				if (methodService != null)
+					methodService.create();
+			}
 		});
 
 		addContextMenuFields();
@@ -503,7 +509,7 @@ public class AngularTreeViewGenerator extends AbstractTypeScriptSourceGenerator 
 		final var itemListName = rootItem.getItemDTO().getDomainObject().getLowerCaseName() + "Items";
 		final var addItemMethodName = "add" + rootItem.getItemDTO().getDomainObject().getUpperCaseName() + "Items";
 		final var methodParam = addAdvSearch || addQuickSearch ? "searchInput: SearchInput" : "";
-		final var invocationParam = tree.needsSearchObject() ? "searchInputBackend" : "";
+		String invocationParam = "";
 
 		if (addAdvSearch || addQuickSearch)
 			formatter.addBlockComment("Send the search input object to the back-end and add the received objects to the tree view");
@@ -515,11 +521,9 @@ public class AngularTreeViewGenerator extends AbstractTypeScriptSourceGenerator 
 
 		if (tree.needsSearchObject()) {
 			if (addAdvSearch || addQuickSearch)
-				formatter.addLine("const searchInputBackend = searchInput.convert(this.formatterService.getLocale());");
+				invocationParam = "searchInput";
 			else
-				formatter.addLine("const searchInputBackend = new SearchInput().convert(this.formatterService.getLocale());");
-
-			formatter.addBlankLine();
+				invocationParam = "new SearchInput()";
 		}
 
 		formatter.addLine("this.displayLoadingMessageInStatusField();");
@@ -1058,7 +1062,7 @@ public class AngularTreeViewGenerator extends AbstractTypeScriptSourceGenerator 
 		final String messageSummary = i18n.getI18NMessage("msg_countresult", "This query would return $(result) items!",
 				"countResult.toString()");
 		final String countMethodInvocation = new AngularServiceInvocationGenerator(tree.getCountMethod())
-				.createInvocation("searchInputBackend");
+				.createInvocation("this.searchInput");
 		final String errorMsg = i18n.getI18NMessage("msg_errorcount", "Error while performing count operation!");
 
 		formatter.addBlockComment("Callback listener that notifies this component to start a count operation");
@@ -1066,7 +1070,6 @@ public class AngularTreeViewGenerator extends AbstractTypeScriptSourceGenerator 
 		formatter.increaseIndent();
 		formatter.addLine("this.searchInput = searchInput;");
 		formatter.addLine("this.showSearchInputDialog = false;");
-		formatter.addLine("const searchInputBackend = this.searchInput.convert(this.formatterService.getLocale());");
 		formatter.addBlankLine();
 		formatter.addLine("console.log('Perform count operation by using: ' + JSON.stringify(this.searchInput));");
 		formatter.addBlankLine();
@@ -1504,7 +1507,7 @@ public class AngularTreeViewGenerator extends AbstractTypeScriptSourceGenerator 
 			refreshButton.append("performSearchOperation()");
 
 		refreshButton.append("\" ");
-		refreshButton.append("i18n-label=\"@@button_refresh\" label=\"Refresh\"></button>");
+		refreshButton.append("i18n=\"@@button_refresh\">Refresh</button>");
 
 		formatter.addLine("<div class=\"form-field-cell\">");
 		formatter.increaseIndent();
@@ -1515,7 +1518,7 @@ public class AngularTreeViewGenerator extends AbstractTypeScriptSourceGenerator 
 		if (addAdvSearch) {
 			final var searchButton = new StringBuilder("<button pButton type=\"button\" icon=\"pi pi-search\" ");
 			searchButton.append("(click)=\"showSearchInputDialog = !showSearchInputDialog\" ");
-			searchButton.append("i18n-label=\"@@button_search\" label=\"Search\"></button>");
+			searchButton.append("i18n=\"@@button_search\">Search</button>");
 
 			formatter.addLine("<div class=\"form-field-cell\">");
 			formatter.increaseIndent();
@@ -1604,7 +1607,7 @@ public class AngularTreeViewGenerator extends AbstractTypeScriptSourceGenerator 
 				final var menuItemArrayName = "menuItems" + treeItem.getItemDTO().getDomainObject().getName();
 				hasContextMenu = true;
 
-				formatter.addLine("<p-contextMenu #" + contextMenuName + " [model]=\"" + menuItemArrayName + "\"></p-contextMenu>");
+				formatter.addLine("<p-contextmenu #" + contextMenuName + " [model]=\"" + menuItemArrayName + "\"/>");
 			}
 
 			if (hasAction(treeItem, true)) {
@@ -1617,7 +1620,7 @@ public class AngularTreeViewGenerator extends AbstractTypeScriptSourceGenerator 
 					menuItemArrayName = "menuItems" + treeItem.getAssociation().getUpperCaseName();
 				}
 
-				formatter.addLine("<p-contextMenu #" + contextMenuName + " [model]=\"" + menuItemArrayName + "\"></p-contextMenu>");
+				formatter.addLine("<p-contextmenu #" + contextMenuName + " [model]=\"" + menuItemArrayName + "\"/>");
 			}
 		}
 

@@ -241,7 +241,7 @@ public abstract class AbstractPageObject extends AbstractAngularPageComponent {
 		logger.debug("Enter text '{}' into auto-complete field '{}'", testData.getNewValue(), testData.getElementId());
 
 		// Clear the input field and enter the search condition
-		final WebElement inputField = findWebElementByXPath("//p-autocomplete[@id='" + testData.getElementId() + "']/div/input");
+		final WebElement inputField = findWebElementByXPath("//p-autocomplete[@id='" + testData.getElementId() + "']/input");
 		inputField.clear();
 		inputField.sendKeys(testData.getNewValue());
 
@@ -253,7 +253,7 @@ public abstract class AbstractPageObject extends AbstractAngularPageComponent {
 		testContext.delayTest(AUTO_COMPLETE_DELAY_MILLIS);
 
 		// Search for the first selectable item
-		final WebElement listElement = findWebElementByXPath("//p-overlay/div/div/div/ul");
+		final WebElement listElement = findWebElementByXPath("//p-overlay//*/ul");
 
 		final boolean itemFound = selectItem(listElement, testData.getNewValue());
 
@@ -271,7 +271,7 @@ public abstract class AbstractPageObject extends AbstractAngularPageComponent {
 				testData.getExpectedValue());
 
 		final String fieldId = testData.getElementId();
-		final var expression = "//p-autocomplete[@id='" + fieldId + "']/div/input";
+		final var expression = "//p-autocomplete[@id='" + fieldId + "']/input";
 
 		logger.debug("Validate the selected item of auto-complete field '{}'", fieldId);
 
@@ -296,7 +296,7 @@ public abstract class AbstractPageObject extends AbstractAngularPageComponent {
 		combobox.click();
 
 		// When using PrimeNG the items are added dynamically by using an overlay element
-		final var itemExpression = "//p-overlay//p-dropdownitem/li//*[text()='";
+		final var itemExpression = "//p-overlay//p-selectitem/li//*[text()='";
 
 		final WebElement itemElement = findWebElementByXPath(itemExpression + testData.getNewValue() + "']");
 
@@ -317,7 +317,7 @@ public abstract class AbstractPageObject extends AbstractAngularPageComponent {
 		logger.debug("Validate the selected item of combobox '{}'", fieldId);
 
 		final var message = "Validation of combobox '" + fieldId + "' has failed!";
-		final String selectedItem = findWebElementByXPath("//p-dropdown[@id='" + fieldId + "']/div/span").getText();
+		final String selectedItem = findWebElementByXPath("//p-select[@id='" + fieldId + "']/span").getText();
 
 		logger.trace("Found selected combobox item '{}'", selectedItem);
 
@@ -390,7 +390,7 @@ public abstract class AbstractPageObject extends AbstractAngularPageComponent {
 
 		logger.debug("Enter text '{}' into date field '{}'", testData.getNewValue(), testData.getElementId());
 
-		final var expression = "//p-calendar[@id='" + testData.getElementId() + "']/span/input";
+		final var expression = "//p-datepicker[@id='" + testData.getElementId() + "']/input";
 
 		final WebElement dateField = findWebElementByXPath(expression);
 		dateField.sendKeys(Keys.CONTROL + "a");
@@ -412,7 +412,7 @@ public abstract class AbstractPageObject extends AbstractAngularPageComponent {
 
 		logger.debug("Validate value of date field '{}'", testData.getElementId());
 
-		final var expression = "//p-calendar[@id='" + testData.getElementId() + "']/span/input";
+		final var expression = "//p-datepicker[@id='" + testData.getElementId() + "']/input";
 		final WebElement dateField = findWebElementByXPath(expression);
 		final String actualValue = dateField.getAttribute(ATTR_NAME_VALUE);
 		final String expectedValue = testData.getExpectedValue();
@@ -508,17 +508,7 @@ public abstract class AbstractPageObject extends AbstractAngularPageComponent {
 	public void openTabPage(String tabPageId) {
 		logger.debug("Open tab page '{}'", tabPageId);
 
-		final WebElement pageContent = driver.findElement(By.xpath("//p-tabpanel[@id='" + tabPageId + "']/div"));
-		final String pageContentId = pageContent.getAttribute("id");
-
-		if (pageContentId == null) {
-			fail("The 'id' attribute could not be found!");
-			return;
-		}
-
-		final String pageHeaderId = pageContentId.replace("_content", "_header_action");
-
-		findWebElement(pageHeaderId).click();
+		driver.findElement(By.xpath("//p-tab[@value='" + tabPageId + "']")).click();
 	}
 
 	/**

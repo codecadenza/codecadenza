@@ -57,7 +57,7 @@ public class AngularDateFieldGenerator extends AbstractAngularFieldGenerator {
 	@Override
 	protected String addControlToTemplate() {
 		final var control = new StringBuilder();
-		control.append("<p-calendar formControlName=\"" + field.getDTOAttribute().getName() + "\" dateFormat=\"dd.mm.yy\" ");
+		control.append("<p-datepicker formControlName=\"" + field.getDTOAttribute().getName() + "\" dateFormat=\"dd.mm.yy\" ");
 		control.append("[style]=\"{'width':'100%'}\" id=\"" + field.getName() + "\"");
 
 		if (field.getFieldType() == FormFieldTypeEnumeration.DATE_TIME)
@@ -66,7 +66,7 @@ public class AngularDateFieldGenerator extends AbstractAngularFieldGenerator {
 		if (readonly || disabled)
 			control.append(" [disabled]=\"true\"");
 
-		control.append("></p-calendar>");
+		control.append("></p-datepicker>");
 
 		return control.toString();
 	}

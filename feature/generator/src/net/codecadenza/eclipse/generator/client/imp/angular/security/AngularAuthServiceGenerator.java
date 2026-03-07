@@ -95,7 +95,7 @@ public class AngularAuthServiceGenerator extends AbstractTypeScriptSourceGenerat
 		importTypes(Stream.of("BehaviorSubject", OBSERVABLE), "rxjs");
 		importType("Injectable", "@angular/core");
 		importType("RoleEnum", "../model/role.enum");
-		importType("SHA256", "crypto-es/lib/sha256");
+		importType("SHA256", "crypto-es");
 		importType(logOnDTO.getName(), "../../domain/" + logOnDTO.getName().toLowerCase() + ".interface");
 	}
 
@@ -130,12 +130,14 @@ public class AngularAuthServiceGenerator extends AbstractTypeScriptSourceGenerat
 		else
 			addPrivateConstant(STRING, "ITEM_NAME_CREDENTIALS", "'credentials'").create();
 
-		addService(logOnDomainObject.getName() + "Service", logOnDomainObject.getLowerCaseName() + "Service", logOnServicePath);
-		addService("I18NService", "i18n", "../../common/services/i18n.service");
-		addService("Router", "router", "@angular/router");
-		addService("MessageService", "messageService", "primeng/api");
-		addService("NavigationHistoryService", "navigationHistoryService", "../../common/services/navigation-history.service");
-		addField("BehaviorSubject<boolean>", "loginStatusSubject").create();
+		addService(logOnDomainObject.getName() + "Service", logOnDomainObject.getLowerCaseName() + "Service", logOnServicePath)
+				.create();
+		addService("I18NService", "i18n", "../../common/services/i18n.service").create();
+		addService("Router", "router", "@angular/router").create();
+		addService("MessageService", "messageService", "primeng/api").create();
+		addService("NavigationHistoryService", "navigationHistoryService", "../../common/services/navigation-history.service")
+				.create();
+		addField(null, "loginStatusSubject").withDefaultValue("new BehaviorSubject<boolean>(this.isLoggedIn())").create();
 
 		addDependentDTO(logOnDTO);
 
@@ -146,16 +148,6 @@ public class AngularAuthServiceGenerator extends AbstractTypeScriptSourceGenerat
 			if (attr.getReferencedDTOBean() != null)
 				addDependentDTO(attr.getReferencedDTOBean());
 		});
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * @see net.codecadenza.eclipse.generator.client.imp.angular.common.AbstractTypeScriptSourceGenerator#
-	 * addConstructorStatements(net.codecadenza.eclipse.generator.client.imp.angular.common.AngularContentFormatter)
-	 */
-	@Override
-	protected void addConstructorStatements(AngularContentFormatter formatter) {
-		formatter.addLine("this.loginStatusSubject = new BehaviorSubject<boolean>(this.isLoggedIn());");
 	}
 
 	/*
@@ -206,7 +198,6 @@ public class AngularAuthServiceGenerator extends AbstractTypeScriptSourceGenerat
 		formatter.increaseIndent();
 		formatter.addLine("const grantedRoles = [];");
 		formatter.addBlankLine();
-		formatter.addLineComment("tslint:disable-next-line:forin");
 		formatter.addLine("for (const role in RoleEnum) {");
 		formatter.increaseIndent();
 

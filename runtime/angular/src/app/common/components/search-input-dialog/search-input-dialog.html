@@ -8,7 +8,7 @@
       <tr style="vertical-align: top;">
         <td style="padding: 10px;">
           <div class="label-field-mandatory" i18n="@@searchinput_lblfetchsize">Max. number of recordsets:</div>
-          <p-dropdown [options]="fetchSizeItems" formControlName="maxResult"></p-dropdown>
+          <p-select [options]="fetchSizeItems" formControlName="maxResult"/>
         </td>
         <td style="padding: 10px;">
           <div class="label-field-mandatory" i18n="@@searchinput_lblcasesensitive">Case sensitve:</div>
@@ -35,70 +35,93 @@
           </tr>
         </thead>
         <tbody>
-          <tr *ngFor="let searchInputField of searchFieldFormArray.controls; let i=index" [formGroupName]="i">
-            <td class="label-field-optional" *ngIf="displaySearchInputField(searchInputField)" style="padding: 5px;">
-              <div>{{ getSearchInputFieldLabel(searchInputField) }}</div>
-            </td>
-            <td *ngIf="displaySearchInputField(searchInputField)" style="padding: 5px;">
-              <p-dropdown [options]="sortOrderItems" formControlName="sortOrder" [id]="'s_' + i"></p-dropdown>
-            </td>
-
-            <!-- Add a dropdown field with search operators depending on the data type -->
-            <td *ngIf="displaySearchInputField(searchInputField)" style="padding: 5px;">
-              <p-dropdown *ngIf="getSearchInputFieldType(searchInputField) === FieldType.STRING" [options]="stringOperatorItems"
-                formControlName="operator" [id]="'o_' + i"></p-dropdown>
-              <p-dropdown *ngIf="getSearchInputFieldType(searchInputField) === FieldType.ENUM" [options]="enumOperatorItems"
-                formControlName="operator" [id]="'o_' + i"></p-dropdown>
-              <p-dropdown *ngIf="getSearchInputFieldType(searchInputField) === FieldType.DECIMAL" [options]="numericOperatorItems"
-                formControlName="operator" (onChange)="onOperatorChange(searchInputField)" [id]="'o_' + i"></p-dropdown>
-              <p-dropdown *ngIf="getSearchInputFieldType(searchInputField) === FieldType.INTEGER" [options]="numericOperatorItems"
-                formControlName="operator" (onChange)="onOperatorChange(searchInputField)" [id]="'o_' + i"></p-dropdown>
-              <p-dropdown *ngIf="getSearchInputFieldType(searchInputField) === FieldType.BOOLEAN" [options]="booleanOperatorItems"
-                formControlName="operator" [id]="'o_' + i"></p-dropdown>
-              <p-dropdown *ngIf="getSearchInputFieldType(searchInputField) === FieldType.DATE" [options]="dateOperatorItems"
-                formControlName="operator" [id]="'o_' + i"></p-dropdown>
-              <p-dropdown *ngIf="getSearchInputFieldType(searchInputField) === FieldType.UUID" [options]="stringOperatorItems"
-                formControlName="operator" [id]="'o_' + i"></p-dropdown>
-              <p-dropdown *ngIf="getSearchInputFieldType(searchInputField) === FieldType.UUID_BINARY" [options]="uuidOperatorItems"
-                formControlName="operator" [id]="'o_' + i"></p-dropdown>
-            </td>
-
-            <!-- Add a filter input control depending on the data type -->
-            <td style="width: 100%" *ngIf="displaySearchInputField(searchInputField)" style="padding: 5px;">
-              <input style="width: 100%;" *ngIf="getSearchInputFieldType(searchInputField) === FieldType.STRING" pInputText (keyup.enter)="applyInput()"
-                formControlName="filterCriteria" [id]="'fi_' + i">
-              <input style="width: 100%;" *ngIf="getSearchInputFieldType(searchInputField) === FieldType.DECIMAL" pInputText (keyup.enter)="applyInput()"
-                formControlName="filterCriteria" [id]="'fi_' + i">
-              <input style="width: 100%;" *ngIf="getSearchInputFieldType(searchInputField) === FieldType.INTEGER" pInputText (keyup.enter)="applyInput()"
-                formControlName="filterCriteria" [id]="'fi_' + i">
-              <input style="width: 100%;" *ngIf="getSearchInputFieldType(searchInputField) === FieldType.UUID" pInputText (keyup.enter)="applyInput()"
-                formControlName="filterCriteria" [id]="'fi_' + i">
-              <input style="width: 100%;" *ngIf="getSearchInputFieldType(searchInputField) === FieldType.UUID_BINARY" pInputText (keyup.enter)="applyInput()"
-                formControlName="filterCriteria" [id]="'fi_' + i">
-              <p-dropdown *ngIf="getSearchInputFieldType(searchInputField) === FieldType.BOOLEAN" [options]="booleanValueItems"
-                formControlName="filterCriteria" [id]="'fc_' + i"></p-dropdown>
-              <p-dropdown *ngIf="getSearchInputFieldType(searchInputField) === FieldType.ENUM" [options]="getSelectionList(searchInputField)"
-                formControlName="filterCriteria" [id]="'fc_' + i"></p-dropdown>
-              <p-calendar *ngIf="getSearchInputFieldType(searchInputField) === FieldType.DATE" formControlName="dateCriterion" (keyup.enter)="applyInput()"
-                [showTime]="showTime(searchInputField)" dateFormat="dd.mm.yy" [id]="'fd_' + i"></p-calendar>
-            </td>
-
-            <td style="text-align: center;" *ngIf="displaySearchInputField(searchInputField)" style="padding: 5px;">
-              <input type="checkbox" formControlName="displayInTable">
-            </td>
-          </tr>
+          @for (searchInputField of searchFieldFormArray.controls; track $index; let i = $index) {
+            <tr [formGroupName]="i">
+              @if (displaySearchInputField(searchInputField)) {
+                <td class="label-field-optional" style="padding: 5px;">
+                  <div>{{ getSearchInputFieldLabel(searchInputField) }}</div>
+                </td>
+                <td style="padding: 5px;">
+                  <p-select [options]="sortOrderItems" formControlName="sortOrder" [id]="'s_' + i"/>
+                </td>
+                <td style="padding: 5px;">
+                  @if (getSearchInputFieldType(searchInputField) === FieldType.STRING) {
+                    <p-select [options]="stringOperatorItems" formControlName="operator" [id]="'o_' + i"/>
+                  }
+                  @if (getSearchInputFieldType(searchInputField) === FieldType.ENUM) {
+                    <p-select [options]="enumOperatorItems" formControlName="operator" [id]="'o_' + i"/>
+                  }
+                  @if (getSearchInputFieldType(searchInputField) === FieldType.DECIMAL) {
+                    <p-select [options]="numericOperatorItems" formControlName="operator"
+                      (onChange)="onOperatorChange(searchInputField)" [id]="'o_' + i"/>
+                  }
+                  @if (getSearchInputFieldType(searchInputField) === FieldType.INTEGER) {
+                    <p-select [options]="numericOperatorItems"
+                      formControlName="operator" (onChange)="onOperatorChange(searchInputField)" [id]="'o_' + i"/>
+                  }
+                  @if (getSearchInputFieldType(searchInputField) === FieldType.BOOLEAN) {
+                    <p-select [options]="booleanOperatorItems" formControlName="operator" [id]="'o_' + i"/>
+                  }
+                  @if (getSearchInputFieldType(searchInputField) === FieldType.DATE) {
+                    <p-select [options]="dateOperatorItems" formControlName="operator" [id]="'o_' + i"/>
+                  }
+                  @if (getSearchInputFieldType(searchInputField) === FieldType.UUID) {
+                    <p-select [options]="stringOperatorItems" formControlName="operator" [id]="'o_' + i"/>
+                  }
+                  @if (getSearchInputFieldType(searchInputField) === FieldType.UUID_BINARY) {
+                    <p-select [options]="uuidOperatorItems" formControlName="operator" [id]="'o_' + i"/>
+                  }
+                </td>
+                <td style="width: 100%" style="padding: 5px;">
+                  @if (getSearchInputFieldType(searchInputField) === FieldType.STRING) {
+                    <input style="width: 100%;" pInputText (keyup.enter)="applyInput()"
+                      formControlName="filterCriteria" [id]="'fi_' + i">
+                  }
+                  @if (getSearchInputFieldType(searchInputField) === FieldType.DECIMAL) {
+                    <input style="width: 100%;" pInputText (keyup.enter)="applyInput()"
+                      formControlName="filterCriteria" [id]="'fi_' + i">
+                  }
+                  @if (getSearchInputFieldType(searchInputField) === FieldType.INTEGER) {
+                    <input style="width: 100%;" pInputText (keyup.enter)="applyInput()"
+                      formControlName="filterCriteria" [id]="'fi_' + i">
+                  }
+                  @if (getSearchInputFieldType(searchInputField) === FieldType.UUID) {
+                    <input style="width: 100%;" pInputText (keyup.enter)="applyInput()"
+                      formControlName="filterCriteria" [id]="'fi_' + i">
+                  }
+                  @if (getSearchInputFieldType(searchInputField) === FieldType.UUID_BINARY) {
+                    <input style="width: 100%;" pInputText (keyup.enter)="applyInput()"
+                      formControlName="filterCriteria" [id]="'fi_' + i">
+                  }
+                  @if (getSearchInputFieldType(searchInputField) === FieldType.BOOLEAN) {
+                    <p-select [options]="booleanValueItems" formControlName="filterCriteria" [id]="'fc_' + i"/>
+                  }
+                  @if (getSearchInputFieldType(searchInputField) === FieldType.ENUM) {
+                    <p-select [options]="getSelectionList(searchInputField)" formControlName="filterCriteria" [id]="'fc_' + i"/>
+                  }
+                  @if (getSearchInputFieldType(searchInputField) === FieldType.DATE) {
+                    <p-datepicker formControlName="dateCriterion" (keyup.enter)="applyInput()"
+                      [showTime]="showTime(searchInputField)" dateFormat="dd.mm.yy" [id]="'fd_' + i"/>
+                  }
+                </td>
+                <td style="text-align: center;" style="padding: 5px;">
+                  <input type="checkbox" formControlName="displayInTable">
+                </td>
+              }
+            </tr>
+          }
         </tbody>
       </table>
     </div>
   </form>
 
   <ng-template pTemplate="footer">
-    <button pButton style="min-width: 120px;" type="button" icon="pi pi-check" i18n-label="@@button_submit" label="Submit"
-      (click)="applyInput()" [disabled]="!searchInputForm.valid" id="cmdSubmit"></button>
-    <button pButton style="min-width: 120px;" type="button" icon="pi pi-info" i18n-label="@@button_count" label="Count"
-      (click)="countRecords()" [disabled]="!searchInputForm.valid" id="cmdCount"></button>
-    <button pButton style="min-width: 120px;" type="button" icon="pi pi-times" i18n-label="@@button_reset" label="Reset"
-      (click)="resetSearchInput()" id="cmdReset"></button>
+    <button pButton style="min-width: 120px;" type="button" icon="pi pi-check" i18n="@@button_submit"
+      (click)="applyInput()" [disabled]="!searchInputForm.valid" id="cmdSubmit">Submit</button>
+    <button pButton style="min-width: 120px;" type="button" icon="pi pi-info" i18n="@@button_count"
+      (click)="countRecords()" [disabled]="!searchInputForm.valid" id="cmdCount">Count</button>
+    <button pButton style="min-width: 120px;" type="button" icon="pi pi-times" i18n="@@button_reset"
+      (click)="resetSearchInput()" id="cmdReset">Reset</button>
   </ng-template>
 
 </p-dialog>

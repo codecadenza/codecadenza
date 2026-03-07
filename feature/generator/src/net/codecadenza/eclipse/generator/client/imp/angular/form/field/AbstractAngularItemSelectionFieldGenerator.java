@@ -95,8 +95,8 @@ public abstract class AbstractAngularItemSelectionFieldGenerator extends Abstrac
 		if (!field.isVisible())
 			return Collections.emptyList();
 
-		return Collections.singletonList(
-				new TypeScriptFieldGenerator(itemListName + ": " + listDTO.getName() + "[]", null, formatter).withDefaultValue("[]"));
+		return Collections.singletonList(new TypeScriptFieldGenerator(itemListName + ": " + listDTO.getName() + "[]",
+				TypeScriptFieldGenerator.VISIBILITY_PROTECTED, formatter).withDefaultValue("[]"));
 	}
 
 	/*

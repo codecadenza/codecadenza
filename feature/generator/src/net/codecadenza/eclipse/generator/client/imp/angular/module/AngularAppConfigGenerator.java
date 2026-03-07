@@ -36,7 +36,7 @@ import net.codecadenza.eclipse.model.project.WorkspaceFile;
 
 /**
  * <p>
- * Generator for the root module of an application
+ * Generator for the application configuration
  * </p>
  * <p>
  * Copyright 2025 (C) by Martin Ganserer
@@ -44,9 +44,7 @@ import net.codecadenza.eclipse.model.project.WorkspaceFile;
  * @author Martin Ganserer
  * @version 1.0.0
  */
-public class AngularAppModuleGenerator extends AbstractTypeScriptSourceGenerator {
-	private static final int MAX_MODULES_PER_LINE = 4;
-
+public class AngularAppConfigGenerator extends AbstractTypeScriptSourceGenerator {
 	private final Project project;
 	private final boolean securityEnabled;
 	private final Set<DomainObject> domainObjectsWithForms;
@@ -55,8 +53,8 @@ public class AngularAppModuleGenerator extends AbstractTypeScriptSourceGenerator
 	 * Constructor
 	 * @param project
 	 */
-	public AngularAppModuleGenerator(Project project) {
-		super("The application's main module");
+	public AngularAppConfigGenerator(Project project) {
+		super("The application configuration");
 
 		this.project = project;
 		this.securityEnabled = project.getApplicationLogOnDTO() != null;
@@ -69,7 +67,7 @@ public class AngularAppModuleGenerator extends AbstractTypeScriptSourceGenerator
 	 */
 	@Override
 	public WorkspaceFile getSourceFile() {
-		final var path = ANGULAR_APP_FOLDER + "/app.module.ts";
+		final var path = ANGULAR_APP_FOLDER + "/app.config.ts";
 
 		return new WorkspaceFile(project, BuildArtifactType.GUI, path, null);
 	}
@@ -80,12 +78,13 @@ public class AngularAppModuleGenerator extends AbstractTypeScriptSourceGenerator
 	 */
 	@Override
 	protected void addImports() {
-		importType("NgModule", "@angular/core");
+		importTypes(Stream.of("ApplicationConfig", "importProvidersFrom"), "@angular/core");
+		importTypes(Stream.of("Routes", "provideRouter", "withComponentInputBinding"), "@angular/router");
+		importTypes(Stream.of("provideHttpClient", "withInterceptorsFromDi"), "@angular/common/http");
 		importTypes(Stream.of("ConfirmationService", "MessageService"), "primeng/api");
-		importTypes(Stream.of("RouterModule", "Routes"), "@angular/router");
-		importType("BrowserModule", "@angular/platform-browser");
-		importType("BrowserAnimationsModule", "@angular/platform-browser/animations");
-		importType("AppComponent", "./app.component");
+		importType("Aura", "@primeuix/themes/aura");
+		importType("definePreset", "@primeuix/themes");
+		importType("providePrimeNG", "primeng/config");
 		importType("AppCommonModule", "./common/app-common.module");
 		importType("NotFoundPage", "./common/pages/not-found/not-found-page");
 		importType("HTTP_INTERCEPTORS", "@angular/common/http");
@@ -106,9 +105,7 @@ public class AngularAppModuleGenerator extends AbstractTypeScriptSourceGenerator
 	 */
 	@Override
 	protected void addTypeDeclaration(AngularContentFormatter formatter) {
-		final var loadingInterceptor = "{ provide: HTTP_INTERCEPTORS, useClass: HTTPLoadingInterceptor, multi: true }";
-		int moduleCounter = 0;
-		var modules = new StringBuilder();
+		final var loadingInterceptor = "provide: HTTP_INTERCEPTORS, useClass: HTTPLoadingInterceptor, multi: true";
 
 		formatter.addLine("const appRoutes: Routes = [");
 		formatter.increaseIndent();
@@ -117,16 +114,28 @@ public class AngularAppModuleGenerator extends AbstractTypeScriptSourceGenerator
 		formatter.decreaseIndent();
 		formatter.addLine("];");
 		formatter.addBlankLine();
-		formatter.addLine("@NgModule({");
+		formatter.addLine("const defaultPreset = definePreset(Aura, {");
 		formatter.increaseIndent();
-		formatter.addLine("declarations: [");
+		formatter.addLine("semantic: {");
 		formatter.increaseIndent();
-		formatter.addLine("AppComponent");
+		formatter.addLine("primary: {");
+		formatter.increaseIndent();
+		formatter.addLine("50: '{blue.50}',");
+		formatter.addLine("100: '{blue.100}',");
+		formatter.addLine("500: '{blue.500}',");
+		formatter.addLine("600: '{blue.600}'");
 		formatter.decreaseIndent();
-		formatter.addLine("],");
-		formatter.addLine("imports: [");
+		formatter.addLine("}");
+		formatter.decreaseIndent();
+		formatter.addLine("}");
+		formatter.decreaseIndent();
+		formatter.addLine("});");
+		formatter.addBlankLine();
+		formatter.addLine("export const appConfig: ApplicationConfig = {");
 		formatter.increaseIndent();
-		formatter.addLine("BrowserAnimationsModule, BrowserModule, AppCommonModule,");
+		formatter.addLine("providers: [");
+		formatter.increaseIndent();
+		formatter.addLine("importProvidersFrom(AppCommonModule),");
 
 		for (final DomainObject domainObject : domainObjectsWithForms) {
 			final String domainObjectName = domainObject.getName().toLowerCase();
@@ -134,42 +143,42 @@ public class AngularAppModuleGenerator extends AbstractTypeScriptSourceGenerator
 
 			importType(moduleName, "./pages/" + domainObjectName + "/" + domainObjectName + ".module");
 
-			modules.append(moduleName + ", ");
-
-			moduleCounter++;
-
-			// Limit the number of modules per line!
-			if (moduleCounter == MAX_MODULES_PER_LINE) {
-				formatter.addLine(modules.toString().trim());
-				modules = new StringBuilder();
-				moduleCounter = 0;
-			}
+			formatter.addLine("importProvidersFrom(" + moduleName + "),");
 		}
 
-		if (!modules.isEmpty())
-			formatter.addLine(modules.toString().trim());
-
-		formatter.addLine("RouterModule.forRoot(appRoutes)");
-		formatter.decreaseIndent();
-		formatter.addLine("],");
-		formatter.addLine("providers: [");
+		formatter.addLine("provideRouter(appRoutes, withComponentInputBinding()),");
+		formatter.addLine("provideHttpClient(withInterceptorsFromDi()), [{");
 		formatter.increaseIndent();
-		formatter.addLine("MessageService, ConfirmationService,");
-		formatter.addLine(loadingInterceptor + (securityEnabled ? "," : ""));
+		formatter.addLine(loadingInterceptor);
+		formatter.decreaseIndent();
+		formatter.addLine("}" + (securityEnabled ? ", {" : "],"));
 
 		if (securityEnabled) {
+			formatter.increaseIndent();
+
 			if (project.isSpringBootApplication())
-				formatter.addLine("{ provide: HTTP_INTERCEPTORS, useClass: HTTPAuthInterceptor, multi: true }");
+				formatter.addLine("provide: HTTP_INTERCEPTORS, useClass: HTTPAuthInterceptor, multi: true");
 			else
-				formatter.addLine("{ provide: HTTP_INTERCEPTORS, useClass: HTTPBasicAuthInterceptor, multi: true }");
+				formatter.addLine("provide: HTTP_INTERCEPTORS, useClass: HTTPBasicAuthInterceptor, multi: true");
+
+			formatter.decreaseIndent();
+			formatter.addLine("}],");
 		}
 
+		formatter.addLine("providePrimeNG({");
+		formatter.increaseIndent();
+		formatter.addLine("theme: {");
+		formatter.increaseIndent();
+		formatter.addLine("preset: defaultPreset");
 		formatter.decreaseIndent();
-		formatter.addLine("],");
-		formatter.addLine("bootstrap: [AppComponent]");
+		formatter.addLine("}");
 		formatter.decreaseIndent();
-		formatter.addLine("})");
-		formatter.addLine("export class AppModule {");
+		formatter.addLine("}),");
+		formatter.addLine("ConfirmationService,");
+		formatter.addLine("MessageService");
+		formatter.decreaseIndent();
+		formatter.addLine("]");
+		formatter.decreaseIndent();
 	}
 
 }

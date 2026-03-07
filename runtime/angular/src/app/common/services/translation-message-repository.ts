@@ -7,8 +7,21 @@ export class TranslationMessageRepository {
   static readonly LOCALE_EN = 'EN';
 
   // Translation messages for the default locale
-  private static readonly messagesEN: Array<Translation> =
+  private static readonly messagesEN: Translation[] =
     [
+      { 'key': 'action_delete', 'message': 'Delete' },
+      { 'key': 'action_delete_all', 'message': 'Delete all' },
+      { 'key': 'action_home', 'message': 'Home' },
+      { 'key': 'action_settings', 'message': 'Settings' },
+      { 'key': 'action_home', 'message': 'Home' },
+      { 'key': 'action_change_password', 'message': 'Change password' },
+      { 'key': 'cmd_search', 'message': 'Search' },
+      { 'key': 'cmd_save', 'message': 'Save' },
+      { 'key': 'cmd_open', 'message': 'Open' },
+      { 'key': 'cmd_refresh', 'message': 'Refresh' },
+      { 'key': 'cmd_export', 'message': 'Export' },
+      { 'key': 'cmd_new', 'message': 'New' },
+      { 'key': 'cmd_import', 'message': 'Import' },
       { 'key': 'errordialog_title', 'message': 'An internal error has occurred!' },
       { 'key': 'dlg_header_conf', 'message': 'Confirmation required' },
       { 'key': 'msg_countresult', 'message': 'This query would return $(result) items!' },
@@ -18,6 +31,9 @@ export class TranslationMessageRepository {
       { 'key': 'msg_finisheddataload', 'message': 'The query returned $(result) item(s)' },
       { 'key': 'msg_errorcount', 'message': 'Error while performing count operation!' },
       { 'key': 'msg_errorlogin', 'message': 'Login has failed! Please provide valid credentials!' },
+      { 'key': 'msg_errorconvertdecimal', 'message': 'The value "$(value)" could not be converted to a decimal!' },
+      { 'key': 'msg_errorconvertinteger', 'message': 'The value "$(value)" could not be converted to an integer!' },
+      { 'key': 'msg_errorbetween', 'message': 'The between operator requires two operands delimited by two whitespace characters!' },
       { 'key': 'msg_passwordmatch', 'message': 'The passwords do not match!' },
       { 'key': 'msg_minpasswordlength', 'message': 'The password is too short! Please enter $(length) characters at least!' },
       { 'key': 'msg_noconnection', 'message': 'No Internet connection!' },
@@ -45,8 +61,8 @@ export class TranslationMessageRepository {
     ];
 
   /**
-   * Return the translation messages for a given locale. It will return
-   * an empty array if the locale is not supported!
+   * Return the translation messages for a given locale.
+   * It will return an empty array if the locale is not supported!
    */
   public static getTranlationMessages(locale: string) {
     if (locale === TranslationMessageRepository.LOCALE_EN) {

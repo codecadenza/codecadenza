@@ -314,7 +314,7 @@ public class DataTableComponent extends AbstractAngularPageComponent {
 		logger.debug("Click 'Yes' button in order to confirm delete operation");
 
 		// Click on the 'Yes' button in order to confirm the delete operation
-		findWebElementByXPath("//p-confirmdialog//button[contains(@class, 'p-confirm-dialog-accept')]").click();
+		findWebElementByXPath("//button[contains(@class, 'p-confirmdialog-accept-button')]").click();
 	}
 
 	/**
@@ -328,7 +328,7 @@ public class DataTableComponent extends AbstractAngularPageComponent {
 		logger.debug("Click 'Yes' button in order to confirm copy operation");
 
 		// Click on the 'Yes' button in order to confirm the copy operation
-		findWebElementByXPath("//p-confirmdialog//button[contains(@class, 'p-confirm-dialog-accept')]").click();
+		findWebElementByXPath("//button[contains(@class, 'p-confirmdialog-accept-button')]").click();
 	}
 
 	/**
@@ -537,7 +537,7 @@ public class DataTableComponent extends AbstractAngularPageComponent {
 		if (cellValue == null || cellValue.isEmpty())
 			fail("Parameter 'cellValue' must not be null or empty!");
 
-		final Optional<WebElement> optionalRow = findWebElementsByXPath(getTableRowsXPath() + "/td[text()=' " + cellValue + " ']")
+		final Optional<WebElement> optionalRow = findWebElementsByXPath(getTableRowsXPath() + "/td[text()='" + cellValue + "']")
 				.stream().findFirst();
 
 		if (optionalRow.isPresent()) {
@@ -589,7 +589,7 @@ public class DataTableComponent extends AbstractAngularPageComponent {
 	 * @return a XPath expression for finding all rows of the data table
 	 */
 	protected String getTableRowsXPath() {
-		return "//p-table[@id='" + tableElementId + "']/div/div/table/tbody/tr";
+		return "//p-table[@id='" + tableElementId + "']/div/table/tbody/tr";
 	}
 
 	/**
@@ -606,7 +606,7 @@ public class DataTableComponent extends AbstractAngularPageComponent {
 		if (tableElementId.equals(TABLE_ELEMENT_ID_OF_VIEW))
 			findWebElement(buttonId).click();
 		else
-			findWebElementByXPath("//div/*[@tableid='" + tableElementId + "']/div/button[@id='" + buttonId + "']").click();
+			findWebElementByXPath("//div/*[@tableid='" + tableElementId + "']/p-menubar/ul/li[@id='" + buttonId + "']").click();
 
 		if (pageClass == null)
 			return null;

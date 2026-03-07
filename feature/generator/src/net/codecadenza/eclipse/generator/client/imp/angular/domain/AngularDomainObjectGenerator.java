@@ -21,7 +21,6 @@
  */
 package net.codecadenza.eclipse.generator.client.imp.angular.domain;
 
-import static net.codecadenza.eclipse.generator.client.imp.angular.common.JavaScriptType.ARRAY;
 import static net.codecadenza.eclipse.generator.client.imp.angular.common.JavaScriptType.BOOLEAN;
 import static net.codecadenza.eclipse.generator.client.imp.angular.common.JavaScriptType.DATE;
 import static net.codecadenza.eclipse.generator.client.imp.angular.common.JavaScriptType.NUMBER;
@@ -105,9 +104,6 @@ public class AngularDomainObjectGenerator extends AbstractTypeScriptSourceGenera
 				final JavaType type = attr.getDomainAttribute().getJavaType();
 				String typeName = "";
 
-				if (attr.getDomainAttribute().getCollectionType() != CollectionTypeEnumeration.NONE)
-					typeName = ARRAY + "<";
-
 				if (type.isBoolean())
 					typeName += BOOLEAN;
 				else if (type.isNumber())
@@ -120,7 +116,7 @@ public class AngularDomainObjectGenerator extends AbstractTypeScriptSourceGenera
 					typeName += STRING;
 
 				if (attr.getDomainAttribute().getCollectionType() != CollectionTypeEnumeration.NONE)
-					typeName += ">";
+					typeName += "[]";
 
 				fieldGenerator = addField(typeName, attr.getName());
 			}
@@ -131,7 +127,7 @@ public class AngularDomainObjectGenerator extends AbstractTypeScriptSourceGenera
 				if (assoc instanceof final ManyToOneAssociation mto && mto.isOptional())
 					typeName += " | null";
 				else if (assoc instanceof ManyToManyAssociation)
-					typeName = ARRAY + "<" + attr.getReferencedDTOBean().getName() + ">";
+					typeName = attr.getReferencedDTOBean().getName() + "[]";
 
 				fieldGenerator = addField(typeName, attr.getName());
 			}

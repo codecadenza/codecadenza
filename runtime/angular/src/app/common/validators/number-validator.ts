@@ -11,7 +11,7 @@ export class NumberValidator {
    * Create a validator that only allows decimal values
    */
   static decimal(numberConverter: NumberConverter): ValidatorFn {
-    return (control: AbstractControl): { [key: string]: boolean } | null => {
+    return (control: AbstractControl): Record<string, boolean> | null => {
       const value = control.value;
 
       try {
@@ -20,7 +20,7 @@ export class NumberValidator {
         }
 
         return null;
-      } catch(error) {
+      } catch {
         return { 'decimal': true };
       }
     };

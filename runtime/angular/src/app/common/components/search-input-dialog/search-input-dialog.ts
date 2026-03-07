@@ -1,6 +1,6 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { Validators, UntypedFormGroup, UntypedFormControl, AbstractControl, UntypedFormBuilder, UntypedFormArray, ValidatorFn } from '@angular/forms';
-import { MessageService, SelectItem } from 'primeng/api';
+import { Component, OnInit, Input, Output, EventEmitter, inject } from '@angular/core';
+import { Validators, UntypedFormGroup, UntypedFormControl, AbstractControl, UntypedFormBuilder, UntypedFormArray, ValidatorFn, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { MessageService, SelectItem, PrimeTemplate } from 'primeng/api';
 import { SelectionItem } from '../../model/selection-item.model';
 import { SearchInput } from '../../model/search-input.model';
 import { FieldTypeEnum } from '../../model/field-type.enum';
@@ -8,46 +8,50 @@ import { SortDirectionEnum } from '../../model/sort-direction.enum';
 import { FilterOperatorEnum } from '../../model/filter-operator.enum';
 import { NumberConverter } from '../../converter/number-converter';
 import { I18NService } from '../../services/i18n.service';
+import { Bind } from 'primeng/bind';
+import { Dialog } from 'primeng/dialog';
+import { Select } from 'primeng/select';
+import { InputText } from 'primeng/inputtext';
+import { DatePicker } from 'primeng/datepicker';
+import { ButtonDirective } from 'primeng/button';
 
 /**
  * This component provides a dialog with a dynamic form for entering filter and sorting criteria
  */
 @Component({
   selector: 'cc-search-input-dialog',
-  templateUrl: './search-input-dialog.html'
+  templateUrl: './search-input-dialog.html',
+  imports: [Bind, Dialog, FormsModule, ReactiveFormsModule, Select, InputText, DatePicker, PrimeTemplate, ButtonDirective]
 })
 export class SearchInputDialog implements OnInit {
   private static readonly IN_DELIMITER = ';;';
   private static readonly BETWEEN_DELIMITER = '  ';
   private static readonly INTEGER_REGEX = RegExp(/^-?\d+$/);
 
-  @Input() searchInput!: SearchInput;
-  @Input() visible = false;
-  @Output() performSearch = new EventEmitter();
-  @Output() performCount = new EventEmitter();
-  @Output() closeDialog = new EventEmitter();
-  FieldType = FieldTypeEnum;
-  searchFieldFormArray!: UntypedFormArray;
-  fetchSizeValues = [10, 50, 100, 500, 1000, 5000, 10000];
-  booleanValues = ['', 'true', 'false'];
-  sortOrders = [SortDirectionEnum.NONE, SortDirectionEnum.ASC, SortDirectionEnum.DESC];
-  searchInputForm!: UntypedFormGroup;
-  sortOrderItems: SelectItem[] = [];
-  stringOperatorItems: SelectItem[] = [];
-  enumOperatorItems: SelectItem[] = [];
-  booleanOperatorItems: SelectItem[] = [];
-  dateOperatorItems: SelectItem[] = [];
-  numericOperatorItems: SelectItem[] = [];
-  uuidOperatorItems: SelectItem[] = [];
-  fetchSizeItems: SelectItem[] = [];
-  booleanValueItems: SelectItem[] = [];
-
-  /**
-   * Create a new instance
-   */
-  constructor(protected formBuilder: UntypedFormBuilder, protected numberConverter: NumberConverter,
-    protected messageService: MessageService, protected i18n: I18NService) {
-  }
+  private readonly formBuilder = inject(UntypedFormBuilder);
+  private readonly numberConverter = inject(NumberConverter);
+  private readonly messageService = inject(MessageService);
+  private readonly i18n = inject(I18NService);
+  @Input() public searchInput!: SearchInput;
+  @Input() public visible = false;
+  @Output() private performSearch = new EventEmitter();
+  @Output() private performCount = new EventEmitter();
+  @Output() private closeDialog = new EventEmitter();
+  protected FieldType = FieldTypeEnum;
+  protected searchFieldFormArray!: UntypedFormArray;
+  protected fetchSizeValues = [10, 50, 100, 500, 1000, 5000, 10000];
+  protected booleanValues = ['', 'true', 'false'];
+  protected sortOrders = [SortDirectionEnum.NONE, SortDirectionEnum.ASC, SortDirectionEnum.DESC];
+  protected searchInputForm!: UntypedFormGroup;
+  protected sortOrderItems: SelectItem[] = [];
+  protected stringOperatorItems: SelectItem[] = [];
+  protected enumOperatorItems: SelectItem[] = [];
+  protected booleanOperatorItems: SelectItem[] = [];
+  protected dateOperatorItems: SelectItem[] = [];
+  protected numericOperatorItems: SelectItem[] = [];
+  protected uuidOperatorItems: SelectItem[] = [];
+  protected fetchSizeItems: SelectItem[] = [];
+  protected booleanValueItems: SelectItem[] = [];
 
   /**
    * Callback listener that is triggered as soon as the component should be initialized
@@ -174,7 +178,7 @@ export class SearchInputDialog implements OnInit {
    * Create a validator that only allows decimal values
    */
   createDecimalValidator(): ValidatorFn {
-    return (control: AbstractControl): { [key: string]: boolean } | null => {
+    return (control: AbstractControl): Record<string, boolean> | null => {
       let value = control.value;
 
       try {
@@ -207,7 +211,7 @@ export class SearchInputDialog implements OnInit {
         }
 
         return null;
-      } catch(error) {
+      } catch {
         if (!control.errors) {
           const message = { severity: 'warn', summary: this.i18n.translate('msg_errorconvertdecimal', value) };
           this.messageService.add(message);
@@ -222,7 +226,7 @@ export class SearchInputDialog implements OnInit {
    * Create a validator that only allows integer values
    */
   createIntegerValidator(): ValidatorFn {
-    return (control: AbstractControl): { [key: string]: boolean } | null => {
+    return (control: AbstractControl): Record<string, boolean> | null => {
       const filterOperator = control.parent?.get('operator')?.value;
       const value = control.value;
 

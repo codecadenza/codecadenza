@@ -1,5 +1,5 @@
 import { Router, NavigationEnd } from '@angular/router';
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 
 /**
  * Service that keeps track of the navigation history and provides a browser independent
@@ -8,13 +8,8 @@ import { Injectable } from '@angular/core';
  */
 @Injectable({ providedIn: 'root' })
 export class NavigationHistoryService {
+  private readonly router = inject(Router);
   private readonly history: string[] = [];
-
-  /**
-   * Create a new instance
-   */
-  constructor(protected router: Router) {
-  }
 
   /**
    * Start tracking the navigation history

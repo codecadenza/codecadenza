@@ -1,5 +1,8 @@
 import { Component, forwardRef, Input, EventEmitter, Output } from '@angular/core';
 import { NG_VALUE_ACCESSOR, ControlValueAccessor } from '@angular/forms';
+import { Bind } from 'primeng/bind';
+import { InputText } from 'primeng/inputtext';
+import { Button } from 'primeng/button';
 
 /**
  * Input field for list-of-values
@@ -11,14 +14,15 @@ import { NG_VALUE_ACCESSOR, ControlValueAccessor } from '@angular/forms';
     provide: NG_VALUE_ACCESSOR,
     useExisting: forwardRef(() => LovInputField),
     multi: true
-  }]
+  }],
+  imports: [Bind, InputText, Button]
 })
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export class LovInputField<T extends { [key: string]: any; }> implements ControlValueAccessor {
-  @Input() labelFieldName = '';
-  @Input() readonly = false;
-  @Output() searchClicked = new EventEmitter();
-  value: T | null = null;
+export class LovInputField<T extends Record<string, any>> implements ControlValueAccessor {
+  @Input() public labelFieldName = '';
+  @Input() public readonly = false;
+  @Output() protected searchClicked = new EventEmitter();
+  protected value: T | null = null;
 
   /**
    * Write the value

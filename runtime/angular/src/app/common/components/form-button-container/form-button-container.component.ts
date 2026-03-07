@@ -8,7 +8,7 @@ import { Component, HostBinding, OnInit } from '@angular/core';
   templateUrl: './form-button-container.component.html'
 })
 export class FormButtonContainerComponent implements OnInit {
-  @HostBinding('style.padding') parentPadding!: number;
+  @HostBinding('style.padding') protected parentPadding!: number;
 
   /**
    * Initialize the style of the parent element

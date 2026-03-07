@@ -1,16 +1,12 @@
-import { LOCALE_ID, Inject, Injectable } from '@angular/core';
-import { NumberSymbol, getLocaleNumberSymbol } from '@angular/common';
+import { inject, Injectable } from '@angular/core';
+import { LocaleService } from '../services/locale.service';
 
 /**
  * Converter for numeric values
  */
 @Injectable({ providedIn: 'root' })
 export class NumberConverter {
-
-  /**
-   * Inject the locale
-   */
-  constructor(@Inject(LOCALE_ID) public locale: string) {}
+  private readonly localeService = inject(LocaleService);
 
   /**
    * Convert the given value to a number
@@ -36,8 +32,8 @@ export class NumberConverter {
       throw Error(`The string '${value}' could not be converted to a number!`);
     }
 
-    const decimalSymbol = getLocaleNumberSymbol(this.locale, NumberSymbol.Decimal);
-    const groupSymbol = getLocaleNumberSymbol(this.locale, NumberSymbol.Group);
+    const decimalSymbol = this.localeService.getDecimalSeparator();
+    const groupSymbol = this.localeService.getGroupingSeparator();
 
     // Remove all group separators. We assume that the decimal symbol occurs only once.
     const numberValue = Number(value.split(groupSymbol).join('').replace(decimalSymbol, '.'));
@@ -53,7 +49,7 @@ export class NumberConverter {
    * Get the locale of this converter
    */
   getLocale() {
-    return this.locale;
+    return this.localeService.getLocale();
   }
 
 }

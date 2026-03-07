@@ -1,39 +1,40 @@
-import { Component, Input } from '@angular/core';
+import { Component, inject, Input } from '@angular/core';
 import { HttpErrorResponse } from '@angular/common/http';
 import { I18NService } from '../../services/i18n.service';
 import { NavigationHistoryService } from '../../services/navigation-history.service';
+import { Bind } from 'primeng/bind';
+import { Dialog } from 'primeng/dialog';
+import { PrimeTemplate } from 'primeng/api';
+import { ButtonDirective } from 'primeng/button';
 
 /**
  * Dialog that displays errors
  */
 @Component({
   selector: '<cc-error-dialog>',
-  templateUrl: './error-dialog.html'
+  templateUrl: './error-dialog.html',
+  imports: [Bind, Dialog, PrimeTemplate, ButtonDirective]
 })
 export class ErrorDialog {
-  @Input() leavePage = false;
+  private readonly navigationHistoryService = inject(NavigationHistoryService);
+  private readonly i18n = inject(I18NService);
+  @Input() public leavePage = false;
   private _error: Error | null = null;
-  visible = false;
-  title = '';
-  details = '';
-
-  /**
-   * Create a new instance
-   */
-  constructor(protected i18n: I18NService, private readonly navigationHistoryService: NavigationHistoryService) {
-  }
+  protected visible = false;
+  protected title = '';
+  protected details = '';
 
   /**
    * Return the error
    */
-  @Input() get error() {
+  @Input() public get error() {
     return this._error;
   }
 
   /**
    * Set the error
    */
-  set error(error: Error | null) {
+  public set error(error: Error | null) {
     this._error = error;
 
     if (!error) {

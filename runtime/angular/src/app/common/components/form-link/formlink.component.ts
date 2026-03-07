@@ -1,5 +1,6 @@
 import { Component, forwardRef, Input } from '@angular/core';
 import { NG_VALUE_ACCESSOR, ControlValueAccessor } from '@angular/forms';
+import { RouterLink } from '@angular/router';
 
 /**
  * Component for opening a page by using the provided data of a reactive form binding
@@ -11,14 +12,15 @@ import { NG_VALUE_ACCESSOR, ControlValueAccessor } from '@angular/forms';
     provide: NG_VALUE_ACCESSOR,
     useExisting: forwardRef(() => FormLink),
     multi: true
-  }]
+  }],
+  imports: [RouterLink]
 })
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export class FormLink<T extends { [key: string]: any; }> implements ControlValueAccessor {
-  @Input() route = '';
-  @Input() labelFieldName = '';
-  @Input() idFieldName = '';
-  value: T | null = null;
+export class FormLink<T extends Record<string, any>> implements ControlValueAccessor {
+  @Input() public route = '';
+  @Input() public labelFieldName = '';
+  @Input() public idFieldName = '';
+  protected value: T | null = null;
 
   /**
    * Write the value

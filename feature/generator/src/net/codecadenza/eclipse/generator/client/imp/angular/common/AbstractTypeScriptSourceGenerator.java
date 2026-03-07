@@ -46,6 +46,7 @@ import net.codecadenza.eclipse.tools.ide.EclipseIDEService;
  */
 public abstract class AbstractTypeScriptSourceGenerator {
 	public static final String SELECTOR_PREFIX = "cc-";
+	private static final String THEME_TYPE = "Aura";
 
 	private final Set<DTOBean> dependentDTOs = new HashSet<>();
 	private final Set<JavaEnum> dependentEnums = new HashSet<>();
@@ -53,7 +54,6 @@ public abstract class AbstractTypeScriptSourceGenerator {
 	private final String commentText;
 	private final Map<String, String> typeImports = new HashMap<>();
 	private final Map<String, String> services = new HashMap<>();
-	private final List<String> servicesOfSuperclass = new ArrayList<>();
 	private final AngularContentFormatter formatter = new AngularContentFormatter();
 	private WorkspaceFile sourceFile;
 
@@ -95,8 +95,6 @@ public abstract class AbstractTypeScriptSourceGenerator {
 		formatter.addBlankLine();
 		formatter.increaseIndent();
 
-		addConstructor(formatter);
-
 		addMethods(formatter);
 
 		formatter.decreaseIndent();
@@ -119,7 +117,10 @@ public abstract class AbstractTypeScriptSourceGenerator {
 		modulePaths.entrySet().forEach(modulePath -> {
 			final String types = modulePath.getValue().stream().reduce((a, b) -> a + ", " + b).get();
 
-			fullContent.append("import { " + types + " } from '" + modulePath.getKey() + "';\n");
+			if (THEME_TYPE.equals(types))
+				fullContent.append("import " + types + " from '" + modulePath.getKey() + "';\n");
+			else
+				fullContent.append("import { " + types + " } from '" + modulePath.getKey() + "';\n");
 		});
 
 		if (!typeImports.isEmpty())
@@ -158,57 +159,6 @@ public abstract class AbstractTypeScriptSourceGenerator {
 	 * Add fields to source file
 	 */
 	protected void addFields() {
-
-	}
-
-	/**
-	 * Add a constructor to the source file
-	 * @param formatter
-	 */
-	protected void addConstructor(AngularContentFormatter formatter) {
-		if (services.isEmpty())
-			return;
-
-		boolean firstService = true;
-
-		formatter.addBlockComment("Create a new instance and inject all required services");
-		formatter.addLine("constructor(");
-		formatter.increaseIndent();
-
-		for (final var entry : services.entrySet()) {
-			final var override = servicesOfSuperclass.contains(entry.getValue()) ? "override " : "";
-			final var injectedService = "protected " + override + entry.getValue() + " : " + entry.getKey();
-
-			if (firstService) {
-				formatter.addLine(injectedService);
-				firstService = false;
-			}
-			else
-				formatter.addLine(", " + injectedService);
-		}
-
-		formatter.decreaseIndent();
-		formatter.addLine(") {");
-		formatter.increaseIndent();
-
-		final String superArguments = servicesOfSuperclass.stream().reduce((a, b) -> a + ", " + b).orElse("");
-
-		if (!superArguments.isEmpty())
-			formatter.addLine("super(" + superArguments + ");");
-
-		addConstructorStatements(formatter);
-
-		formatter.decreaseIndent();
-		formatter.addLine("}");
-		formatter.addBlankLine();
-	}
-
-	/**
-	 * Add statements in the constructor after calling super()
-	 * @param formatter
-	 */
-	@SuppressWarnings("unused")
-	protected void addConstructorStatements(AngularContentFormatter formatter) {
 
 	}
 
@@ -365,62 +315,57 @@ public abstract class AbstractTypeScriptSourceGenerator {
 	}
 
 	/**
-	 * Add an injected service that is required by the superclass
-	 * @param type
-	 * @param name
-	 * @param path
-	 */
-	public void addServiceOfSuperclass(String type, String name, String path) {
-		addService(type, name, path);
-
-		servicesOfSuperclass.add(name);
-	}
-
-	/**
 	 * Add an injected service
-	 * @param type
-	 * @param name
-	 * @param path
+	 * @param type the service type
+	 * @param name the name of the service
+	 * @param path the path of the service
+	 * @return the {@link TypeScriptFieldGenerator}
 	 */
-	public void addService(String type, String name, String path) {
+	public TypeScriptFieldGenerator addService(String type, String name, String path) {
 		if (path != null && !path.isEmpty())
 			importType(type, path);
 
 		services.put(type, name);
+
+		importType("inject", "@angular/core");
+
+		return new TypeScriptFieldGenerator(null, TypeScriptFieldGenerator.VISIBILITY_PRIVATE, formatter).withInject(type, name);
 	}
 
 	/**
 	 * Add the corresponding service for the given data transfer object
 	 * @param dto
+	 * @return the {@link TypeScriptFieldGenerator} or null if the service should not be added
 	 */
-	public void addService(DTOBean dto) {
+	public TypeScriptFieldGenerator addService(DTOBean dto) {
 		if (dto == null)
-			return;
+			return null;
 
 		importType(dto.getName(), "../../domain/" + dto.getName().toLowerCase() + ".interface");
 
 		addDependentDTO(dto);
 
-		addService(dto.getDomainObject());
+		return addService(dto.getDomainObject());
 	}
 
 	/**
 	 * Add the corresponding service for the given domain object
 	 * @param domainObject
+	 * @return the {@link TypeScriptFieldGenerator} or null if the service should not be added
 	 */
-	public void addService(DomainObject domainObject) {
+	public TypeScriptFieldGenerator addService(DomainObject domainObject) {
 		if (domainObject == null)
-			return;
+			return null;
 
 		if (domainObjectServices.contains(domainObject))
-			return;
+			return null;
 
 		domainObjectServices.add(domainObject);
 
 		final var serviceTypeName = domainObject.getName() + "Service";
 		final var serviceName = domainObject.getLowerCaseName() + "Service";
 
-		addService(serviceTypeName, serviceName, "../../services/" + domainObject.getName().toLowerCase() + ".service");
+		return addService(serviceTypeName, serviceName, "../../services/" + domainObject.getName().toLowerCase() + ".service");
 	}
 
 	/**

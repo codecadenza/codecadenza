@@ -1,21 +1,17 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { HttpEvent, HttpHandler, HttpInterceptor, HttpRequest } from '@angular/common/http';
 import { finalize, tap } from 'rxjs/operators';
 import { Observable } from 'rxjs';
 import { HTTPLoadingEventController } from '../listeners/http-loading-event-controller.service';
 
 /**
- * HTTP interceptor for detecting if the application is currently communicating with the back-end
+ * HTTP interceptor for detecting if the application is currently communicating with the backend
  */
 @Injectable()
 export class HTTPLoadingInterceptor implements HttpInterceptor {
   private static readonly LOADING_DELAY = 400;
 
-  /**
-   * Create a new instance
-   */
-  constructor(protected loadingEventController: HTTPLoadingEventController) {
-  }
+  private readonly loadingEventController = inject(HTTPLoadingEventController);
 
   /**
    * Intercept all HTTP requests

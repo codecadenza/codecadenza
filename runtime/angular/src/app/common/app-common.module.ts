@@ -1,23 +1,22 @@
 import { CommonModule } from '@angular/common';
-import { HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { RouterModule, Routes } from '@angular/router';
 import { AutoCompleteModule } from 'primeng/autocomplete';
 import { ButtonModule } from 'primeng/button';
-import { CalendarModule } from 'primeng/calendar';
+import { DatePickerModule } from 'primeng/datepicker';
 import { CheckboxModule } from 'primeng/checkbox';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { ContextMenuModule } from 'primeng/contextmenu';
 import { DialogModule } from 'primeng/dialog';
-import { DropdownModule} from 'primeng/dropdown';
+import { SelectModule} from 'primeng/select';
 import { FieldsetModule } from 'primeng/fieldset';
 import { FileUploadModule } from 'primeng/fileupload';
 import { InputTextModule } from 'primeng/inputtext';
-import { InputTextareaModule } from 'primeng/inputtextarea';
+import { TextareaModule } from 'primeng/textarea';
 import { ListboxModule } from 'primeng/listbox';
+import { MenubarModule } from 'primeng/menubar';
 import { MessageModule } from 'primeng/message';
-import { MessagesModule } from 'primeng/messages';
 import { PanelModule } from 'primeng/panel';
 import { PasswordModule } from 'primeng/password';
 import { PickListModule } from 'primeng/picklist';
@@ -25,7 +24,7 @@ import { ProgressBarModule } from 'primeng/progressbar';
 import { ScrollPanelModule} from 'primeng/scrollpanel';
 import { SliderModule } from 'primeng/slider';
 import { TableModule } from 'primeng/table';
-import { TabViewModule } from 'primeng/tabview';
+import { TabsModule } from 'primeng/tabs';
 import { ToastModule } from 'primeng/toast';
 import { TreeModule } from 'primeng/tree';
 import { UserSettingsPage } from './pages/settings/user-settings-page';
@@ -36,7 +35,6 @@ import { ErrorDialog } from './components/error-dialog/error-dialog';
 import { WelcomePage } from './pages/welcome/welcome-page';
 import { MultiSelectionList } from './components/multi-selection-list/multi-selection-list';
 import { ElementCollectionEditor } from './components/element-collection-editor/element-collection-editor';
-import { NotFoundPage } from './pages/not-found/not-found-page';
 import { LoginPage } from './pages/login/login-page';
 import { AuthGuardService } from './services/auth-guard.service';
 import { ChangePasswordPage } from './pages/change-password/change-password-page';
@@ -49,6 +47,7 @@ import { SavedSearchSelectionDialog } from './components/saved-search-selection-
 import { FormLink } from './components/form-link/formlink.component';
 import { MailLink } from './components/mail-link/maillink.component';
 import { WebLink } from './components/web-link/weblink.component';
+import { MainMenu } from './components/main-menu/main-menu';
 import { DateTimeFormatterDirective } from './directives/date-time-formatter.directive';
 import { DateFormatterDirective } from './directives/date-formatter.directive';
 import { NumberFormatterDirective } from './directives/number-formatter.directive';
@@ -82,24 +81,22 @@ const routes: Routes = [
 @NgModule({
   imports: [
     CommonModule, FormsModule, ReactiveFormsModule, DialogModule, SliderModule,
-    ConfirmDialogModule, CheckboxModule, DropdownModule, CalendarModule, FieldsetModule,
+    ConfirmDialogModule, CheckboxModule, SelectModule, DatePickerModule, FieldsetModule,
     PickListModule, TreeModule, ToastModule, ButtonModule, TableModule, InputTextModule, ScrollPanelModule,
-    MessageModule, PasswordModule, ListboxModule, ContextMenuModule, RouterModule.forChild(routes)
-  ],
-  declarations: [
-    WelcomePage, TreeNavigator, UserSettingsPage, SearchInputDialog, ErrorDialog, ViewContainer,
-    FormContainerComponent, FormLink, MailLink, WebLink, LovInputField, MultiSelectionList, ElementCollectionEditor, NotFoundPage,
+    MessageModule, PasswordModule, ListboxModule, ContextMenuModule, MenubarModule, RouterModule.forChild(routes),
+    WelcomePage, TreeNavigator, UserSettingsPage, SearchInputDialog, ErrorDialog, ViewContainer, MainMenu,
+    FormContainerComponent, FormLink, MailLink, WebLink, LovInputField, MultiSelectionList, ElementCollectionEditor,
     LoginPage, ChangePasswordPage, FormControlContainerComponent, FormContainerComponent,
     FormButtonContainerComponent, SaveSearchDialog, SavedSearchSelectionDialog, DateTimeFormatterDirective,
     DateFormatterDirective, NumberFormatterDirective
   ],
   exports: [
-    CommonModule, FormsModule, ReactiveFormsModule, HttpClientModule, ServiceModule, AutoCompleteModule,
-    ButtonModule, CalendarModule, CheckboxModule, ConfirmDialogModule, ContextMenuModule, DialogModule,
-    DropdownModule, FieldsetModule, FileUploadModule, InputTextareaModule, InputTextModule, MessageModule,
-    MessagesModule, PanelModule, ProgressBarModule, TableModule, TabViewModule, TreeModule, ToastModule,
+    CommonModule, FormsModule, ReactiveFormsModule, ServiceModule, AutoCompleteModule,
+    ButtonModule, DatePickerModule, CheckboxModule, ConfirmDialogModule, ContextMenuModule, DialogModule,
+    SelectModule, FieldsetModule, FileUploadModule, TextareaModule, InputTextModule, MessageModule,
+    PanelModule, ProgressBarModule, TableModule, TabsModule, TreeModule, ToastModule, MenubarModule,
     ScrollPanelModule, TreeNavigator, SearchInputDialog, LovInputField, MultiSelectionList, ElementCollectionEditor, ViewContainer,
-    FormContainerComponent, FormLink, MailLink, WebLink, ErrorDialog, LoginPage, ChangePasswordPage,
+    FormContainerComponent, FormLink, MailLink, WebLink, MainMenu, ErrorDialog, LoginPage, ChangePasswordPage,
     FormControlContainerComponent, FormButtonContainerComponent, SaveSearchDialog, SavedSearchSelectionDialog,
     DateTimeFormatterDirective, DateFormatterDirective, NumberFormatterDirective
   ]

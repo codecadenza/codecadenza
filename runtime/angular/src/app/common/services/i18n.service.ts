@@ -8,7 +8,7 @@ import { environment } from '../../../environments/environment';
  */
 @Injectable({ providedIn: 'root' })
 export class I18NService {
-  private readonly translations: Array<Translation>;
+  private readonly translations: Translation[];
 
   /**
    * Load translations

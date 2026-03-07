@@ -1,24 +1,18 @@
 import { TestBed } from '@angular/core/testing';
-import { AppComponent } from './app.component';
-import { AppCommonModule } from './common/app-common.module';
-import { AppModule } from './app.module';
+import { App } from './app';
 import { ConfirmationService, MessageService } from 'primeng/api';
 
-describe('AppComponent', () => {
+describe('App', () => {
   beforeEach(() => TestBed.configureTestingModule({
-    declarations: [AppComponent],
+    imports: [App],
     providers: [
-      AppModule,
       MessageService,
       ConfirmationService
     ],
-    imports: [
-      AppCommonModule
-    ]
   }));
 
   it('should create the app', () => {
-    const fixture = TestBed.createComponent(AppComponent);
+    const fixture = TestBed.createComponent(App);
     const app = fixture.componentInstance;
     expect(app).toBeTruthy();
   });

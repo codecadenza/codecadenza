@@ -26,6 +26,7 @@ import static net.codecadenza.eclipse.generator.client.imp.angular.common.JavaSc
 import java.util.stream.Stream;
 import net.codecadenza.eclipse.generator.client.imp.angular.common.AbstractTypeScriptSourceGenerator;
 import net.codecadenza.eclipse.generator.client.imp.angular.common.AngularContentFormatter;
+import net.codecadenza.eclipse.generator.client.imp.angular.common.TypeScriptFieldGenerator;
 import net.codecadenza.eclipse.generator.client.imp.angular.service.AngularServiceInvocationGenerator;
 import net.codecadenza.eclipse.generator.client.imp.angular.util.AngularCommonDataTableGenerator;
 import net.codecadenza.eclipse.generator.client.imp.angular.util.AngularI18NGenerator;
@@ -74,6 +75,7 @@ public class AngularGridPanelGenerator extends AbstractTypeScriptSourceGenerator
 	@Override
 	protected void addImports() {
 		importTypes(Stream.of("Component", "Input", "OnInit"), "@angular/core");
+		importType("AppCommonModule", "../../common/app-common.module");
 		importType("TableDefinition", "../../common/model/table-definition.model");
 		importType("AbstractDataTable", "../../common/components/abstract-data-table/abstract-data-table");
 
@@ -93,7 +95,8 @@ public class AngularGridPanelGenerator extends AbstractTypeScriptSourceGenerator
 		formatter.addLine("@Component({");
 		formatter.increaseIndent();
 		formatter.addLine("selector: '" + SELECTOR_PREFIX + gridPanel.getName().toLowerCase() + "',");
-		formatter.addLine("templateUrl: '../../common/components/abstract-data-table/abstract-data-table.html'");
+		formatter.addLine("templateUrl: '../../common/components/abstract-data-table/abstract-data-table.html',");
+		formatter.addLine("imports: [AppCommonModule]");
 		formatter.decreaseIndent();
 		formatter.addLine("})");
 		formatter.addLine(classDeclaration);
@@ -107,13 +110,10 @@ public class AngularGridPanelGenerator extends AbstractTypeScriptSourceGenerator
 	protected void addFields() {
 		final DomainObject boundaryDomainObject = gridPanel.getBoundaryMethod().getBoundaryBean().getDomainObject();
 
-		addService(boundaryDomainObject);
-		addServiceOfSuperclass("ConfirmationService", "confirmationService", "primeng/api");
-		addServiceOfSuperclass("MessageService", "messageService", "primeng/api");
-		addServiceOfSuperclass("I18NService", "i18n", "../../common/services/i18n.service");
-		addServiceOfSuperclass("FormatterService", "formatterService", "../../common/services/formatter.service");
-		addServiceOfSuperclass("WindowResizeEventController", "windowEventController",
-				"../../common/listeners/window-resize-event-controller.service");
+		final TypeScriptFieldGenerator service = addService(boundaryDomainObject);
+
+		if (service != null)
+			service.create();
 
 		addField(null, PARENT_OBJ_ID).withDefaultValue("''").withInputModifier().create();
 
@@ -151,6 +151,7 @@ public class AngularGridPanelGenerator extends AbstractTypeScriptSourceGenerator
 		tableGenerator.addContextMenuItems();
 
 		formatter.addBlankLine();
+		formatter.addLine("this.addMenuItems();");
 		formatter.addLine("this.refreshView();");
 		formatter.decreaseIndent();
 		formatter.addLine("}");

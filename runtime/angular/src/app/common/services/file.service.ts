@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from '../../../environments/environment';
 import { Observable } from 'rxjs';
@@ -8,12 +8,7 @@ import { Observable } from 'rxjs';
  */
 @Injectable({ providedIn: 'root' })
 export class FileService {
-
-  /**
-   * Create a new instance
-   */
-  constructor(protected httpClient: HttpClient) {
-  }
+  private readonly httpClient = inject(HttpClient);
 
  /**
    * Upload a file
@@ -33,7 +28,7 @@ export class FileService {
   }
 
   /**
-   * Download the file by providing its physical path on the back-end. It is in the
+   * Download the file by providing its physical path on the backend. It is in the
    * responsibility of the caller to provide a valid path!
    */
   downloadFile(path: string): Observable<Blob>{

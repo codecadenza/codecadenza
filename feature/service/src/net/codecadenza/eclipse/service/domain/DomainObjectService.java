@@ -21,7 +21,7 @@
  */
 package net.codecadenza.eclipse.service.domain;
 
-import net.codecadenza.eclipse.generator.client.imp.angular.module.AngularAppModuleGenerator;
+import net.codecadenza.eclipse.generator.client.imp.angular.module.AngularAppConfigGenerator;
 import net.codecadenza.eclipse.generator.client.imp.angular.module.AngularFormModuleGenerator;
 import net.codecadenza.eclipse.generator.domain.CallbackListenerGenerator;
 import net.codecadenza.eclipse.generator.domain.DomainMetaModelGenerator;
@@ -299,8 +299,8 @@ public class DomainObjectService {
 
 			EclipseIDEService.deleteWorkspaceFile(formModule);
 
-			// Rebuild the main module
-			new AngularAppModuleGenerator(project).createSourceFile();
+			// Rebuild the configuration
+			new AngularAppConfigGenerator(project).createSourceFile();
 		}
 	}
 

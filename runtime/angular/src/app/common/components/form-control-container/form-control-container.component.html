@@ -1,41 +1,74 @@
-<div *ngIf="!fillEmptySpace">
+@if (!fillEmptySpace) {
+  <div>
+    <div class="{{ labelClass }}" style="margin-top: 0.4rem;">
+      {{ label }}
+    </div>
 
-  <div class="{{labelClass}}" style="margin-top: 0.4rem;">
-    {{label}}
+    <ng-content/>
+
+    @if (requiredSet) {
+      <div>
+        @if (!validateControl('required')) {
+          <p-message severity="error">{{ messageRequired }}</p-message>
+        }
+      </div>
+    }
+
+    @if (minLengthSet) {
+      <div>
+        @if (!validateControl('minlength')) {
+          <p-message severity="error">{{ messageMinLength }}</p-message>
+        }
+      </div>
+    }
+
+    @if (maxLengthSet) {
+      <div>
+        @if (!validateControl('maxlength')) {
+          <p-message severity="error">{{ messageMaxLength }}</p-message>
+        }
+      </div>
+    }
+
+    @if (minValueSet) {
+      <div>
+        @if (!validateControl('min')) {
+          <p-message severity="error">{{ messageMinValue }}</p-message>
+        }
+      </div>
+    }
+
+    @if (maxValueSet) {
+      <div>
+        @if (!validateControl('max')) {
+          <p-message severity="error">{{ messageMaxValue }}</p-message>
+        }
+      </div>
+    }
+
+    @if (patternSet) {
+      <div>
+        @if (!validateControl('pattern')) {
+          <p-message severity="error">{{ messagePattern }}</p-message>
+        }
+      </div>
+    }
+
+    @if (integerSet) {
+      <div>
+        @if (!validateControl('integer')) {
+          <p-message severity="error">{{ messageInteger }}</p-message>
+        }
+      </div>
+    }
+
+    @if (decimalSet) {
+      <div>
+        @if (!validateControl('decimal')) {
+          <p-message severity="error">{{ messageDecimal }}</p-message>
+        }
+      </div>
+    }
+
   </div>
-
-  <ng-content></ng-content>
-
-  <div *ngIf="requiredSet">
-    <p-message severity="error" *ngIf="!validateControl('required')" text="{{messageRequired}}"></p-message>
-  </div>
-
-  <div *ngIf="minLengthSet">
-    <p-message severity="error" *ngIf="!validateControl('minlength')" text="{{messageMinLength}}"></p-message>
-  </div>
-
-  <div *ngIf="maxLengthSet">
-    <p-message severity="error" *ngIf="!validateControl('maxlength')" text="{{messageMaxLength}}"></p-message>
-  </div>
-
-  <div *ngIf="minValueSet">
-    <p-message severity="error" *ngIf="!validateControl('min')" text="{{messageMinValue}}"></p-message>
-  </div>
-
-  <div *ngIf="maxValueSet">
-    <p-message severity="error" *ngIf="!validateControl('max')" text="{{messageMaxValue}}"></p-message>
-  </div>
-
-  <div *ngIf="patternSet">
-    <p-message severity="error" *ngIf="!validateControl('pattern')" text="{{messagePattern}}"></p-message>
-  </div>
-
-  <div *ngIf="integerSet">
-    <p-message severity="error" *ngIf="!validateControl('integer')" text="{{messageInteger}}"></p-message>
-  </div>
-
-  <div *ngIf="decimalSet">
-    <p-message severity="error" *ngIf="!validateControl('decimal')" text="{{messageDecimal}}"></p-message>
-  </div>
-
-</div>
+}

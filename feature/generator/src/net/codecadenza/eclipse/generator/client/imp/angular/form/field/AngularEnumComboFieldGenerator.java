@@ -67,14 +67,14 @@ public class AngularEnumComboFieldGenerator extends AbstractAngularFieldGenerato
 	@Override
 	protected String addControlToTemplate() {
 		final var control = new StringBuilder();
-		control.append("<p-dropdown [options]=\"" + itemListName + "\" ");
+		control.append("<p-select [options]=\"" + itemListName + "\" ");
 		control.append("formControlName=\"" + field.getDTOAttribute().getName() + "\" ");
 		control.append("[style]=\"{'width':'100%'}\" id=\"" + field.getName() + "\"");
 
 		if (readonly || disabled)
 			control.append(" [readonly]=\"true\"");
 
-		control.append("></p-dropdown>");
+		control.append("/>");
 
 		return control.toString();
 	}

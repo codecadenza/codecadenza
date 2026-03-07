@@ -127,11 +127,11 @@ public class AngularUploadGenerator {
 				maxFileSize = Integer.toString(maxSize);
 
 			final var button = new StringBuilder();
-			button.append("<p-fileUpload #fileUpload mode=\"basic\" [customUpload]=\"true\" ");
+			button.append("<p-fileupload #fileUpload mode=\"basic\" [customUpload]=\"true\" ");
 			button.append("[auto]=\"true\" [maxFileSize]=\"" + maxFileSize + "\" ");
 			button.append("[style]=\"{'margin': '0px 0px 0.5em 0.5em'}\" class=\"ui-g-2 ui-xl-1 ui-md-3 ui-sm-12\" ");
 			button.append("i18n-chooseLabel=\"@@button_upload\" chooseLabel=\"Upload\" id=\"" + buttonId + "\" ");
-			button.append("(uploadHandler)=\"" + action.getBoundaryMethod().getName() + "($event, fileUpload)\"></p-fileUpload>");
+			button.append("(uploadHandler)=\"" + action.getBoundaryMethod().getName() + "($event, fileUpload)\"/>");
 
 			formatter.addLine(button.toString());
 		});

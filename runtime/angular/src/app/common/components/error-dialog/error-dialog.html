@@ -9,7 +9,7 @@
         <i class="pi pi-exclamation-triangle" style="font-size: 4rem" id="imgStatus"></i>
       </td>
       <td>
-        <div style="font-size: 1.4rem; font-weight: bold;">{{title}}</div>
+        <div style="font-size: 1.4rem; font-weight: bold;">{{ title }}</div>
       </td>
     </tr>
   </table>
@@ -20,13 +20,12 @@
 
   <div style="border: 1px solid var(--surface-border); width: 100%; min-height: 100px; padding: 0.3rem; margin-bottom: 0.5rem;"
     id="lblDetails">
-    <div>{{details}}</div>
+    <div>{{ details }}</div>
   </div>
 
   <ng-template pTemplate="footer">
-    <button pButton style="min-width: 100px" type="button" i18n-label="@@button_ok" label="OK" (click)="visible = false"
-      id="cmdClose">
-    </button>
+    <button pButton style="min-width: 100px" type="button" i18n="@@button_ok" (click)="visible = false"
+      id="cmdClose">OK</button>
   </ng-template>
 
 </p-dialog>

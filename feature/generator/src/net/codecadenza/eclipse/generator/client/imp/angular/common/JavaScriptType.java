@@ -39,7 +39,6 @@ public class JavaScriptType {
 
 	}
 
-	public static final String ARRAY = "Array";
 	public static final String ANY = "any";
 	public static final String BOOLEAN = "boolean";
 	public static final String DATE = "Date";

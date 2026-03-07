@@ -69,7 +69,7 @@ public class AngularProposalTextFieldGenerator extends AbstractAngularItemSelect
 	@Override
 	protected String addControlToTemplate() {
 		final var control = new StringBuilder();
-		control.append("<p-autoComplete field=\"" + displayAttr.getName() + "\" ");
+		control.append("<p-autocomplete optionLabel=\"" + displayAttr.getName() + "\" ");
 		control.append("formControlName=\"" + field.getDTOAttribute().getName() + "\" ");
 		control.append("[forceSelection]=\"true\" ");
 		control.append("[suggestions]=\"" + itemListName + "\" ");
@@ -83,7 +83,7 @@ public class AngularProposalTextFieldGenerator extends AbstractAngularItemSelect
 		if (readonly || disabled)
 			control.append(" [readonly]=\"true\"");
 
-		control.append("></p-autoComplete>");
+		control.append("/>");
 
 		return control.toString();
 	}

@@ -1,15 +1,13 @@
-import { NumberSymbol, getLocaleNumberSymbol } from '@angular/common';
+import { DatePipe } from '@angular/common';
 import { FilterOperatorEnum } from './filter-operator.enum';
 import { FieldTypeEnum } from './field-type.enum';
-import { FormatterService } from '../services/formatter.service';
 import { AbstractSearchInput } from './abstract-search-input.model';
 import { SearchInputField } from './search-input-field.model';
-import { SearchInputBackend } from './search-input-backend.model';
-import { SearchInputBaseField } from './search-input-base-field.model';
+import { DateConverter } from '../converter/date-converter';
 
 /**
  * Class that contains all properties that are necessary for building a dynamic search input form.
- * Instances of this class are also used to send their state to the back-end in order to perform a
+ * Instances of this class are also used to send their state to the backend in order to perform a
  * search operation.
  */
 export class SearchInput extends AbstractSearchInput {
@@ -18,7 +16,7 @@ export class SearchInput extends AbstractSearchInput {
   /**
    * Return all supported filter operators for numeric fields
    */
-  static getNumericOperators(): Array<FilterOperatorEnum> {
+  static getNumericOperators(): FilterOperatorEnum[] {
     return [FilterOperatorEnum.EQUAL, FilterOperatorEnum.GREATER, FilterOperatorEnum.SMALLER,
       FilterOperatorEnum.GREATER_OR_EQUAL, FilterOperatorEnum.SMALLER_OR_EQUAL,
       FilterOperatorEnum.BETWEEN, FilterOperatorEnum.IN, FilterOperatorEnum.NOT_IN,
@@ -28,7 +26,7 @@ export class SearchInput extends AbstractSearchInput {
   /**
    * Return all supported filter operators for string fields
    */
-  static getStringOperators(): Array<FilterOperatorEnum> {
+  static getStringOperators(): FilterOperatorEnum[] {
     return [FilterOperatorEnum.LIKE, FilterOperatorEnum.EQUAL, FilterOperatorEnum.NOT_LIKE,
       FilterOperatorEnum.IS_NULL, FilterOperatorEnum.IS_NOT_NULL];
   }
@@ -36,21 +34,21 @@ export class SearchInput extends AbstractSearchInput {
   /**
    * Return all supported filter operators for enumeration fields
    */
-  static getEnumOperators(): Array<FilterOperatorEnum> {
+  static getEnumOperators(): FilterOperatorEnum[] {
     return [FilterOperatorEnum.EQUAL, FilterOperatorEnum.NOT_LIKE];
   }
 
   /**
    * Return all supported filter operators for boolean fields
    */
-  static getBooleanOperators(): Array<FilterOperatorEnum> {
+  static getBooleanOperators(): FilterOperatorEnum[] {
     return [FilterOperatorEnum.EQUAL, FilterOperatorEnum.IS_NULL, FilterOperatorEnum.IS_NOT_NULL];
   }
 
   /**
    * Return all supported filter operators for date fields
    */
-  static getDateOperators(): Array<FilterOperatorEnum> {
+  static getDateOperators(): FilterOperatorEnum[] {
     return [FilterOperatorEnum.EQUAL, FilterOperatorEnum.GREATER, FilterOperatorEnum.SMALLER,
       FilterOperatorEnum.GREATER_OR_EQUAL, FilterOperatorEnum.SMALLER_OR_EQUAL,
       FilterOperatorEnum.IS_NULL, FilterOperatorEnum.IS_NOT_NULL];
@@ -59,7 +57,7 @@ export class SearchInput extends AbstractSearchInput {
   /**
    * Return all supported filter operators for UUID fields
    */
-  static getUUIDOperators(): Array<FilterOperatorEnum> {
+  static getUUIDOperators(): FilterOperatorEnum[] {
     return [FilterOperatorEnum.EQUAL, FilterOperatorEnum.IS_NULL, FilterOperatorEnum.IS_NOT_NULL];
   }
 
@@ -96,60 +94,31 @@ export class SearchInput extends AbstractSearchInput {
 
   /**
    * If no data is entered into a filter field the data binding will automatically write an empty
-   * string into field 'filterCriteria'. The back-end tries to interpret these values which is
+   * string into field 'filterCriteria'. The backend tries to interpret these values which is
    * basically unintended and is likely to cause parsing errors. Thus, the empty strings must be
    * replaced by using null! Furthermore, it is necessary to change the filter criteria of date
    * fields.
    */
   prepareFilterCriteria(locale: string) {
-    const formatter =  new FormatterService(locale);
-    formatter.setDateFormat(SearchInput.DATE_FORMAT);
-    formatter.setDateTimeFormat(SearchInput.DATE_TIME_FORMAT);
-
     this.searchFields.forEach(field => {
       if (field.filterCriteria === '') {
         field.filterCriteria = null;
       }
 
-      // Date values must be converted by using a format that can be handled by the back-end!
+      // Date values must be converted by using a format that can be handled by the backend!
       if (field.type === FieldTypeEnum.DATE && field.dateCriterion !== null) {
+        const datePipe = new DatePipe(locale);
+        const dateValue = DateConverter.convertToDate(new Date(field.dateCriterion));
+
         if (field.dateTimeFormat === true) {
-          field.filterCriteria = formatter.formatDateTime(new Date(field.dateCriterion));
+          field.filterCriteria = datePipe.transform(dateValue, SearchInput.DATE_TIME_FORMAT);
         } else {
-          field.filterCriteria = formatter.formatDate(new Date(field.dateCriterion));
+          field.filterCriteria = datePipe.transform(dateValue, SearchInput.DATE_FORMAT);
         }
       }
     });
 
     return this;
-  }
-
-  /**
-   * Convert this object in order to send it to the back-end. All GUI-related properties are
-   * removed in order to avoid problems if the back-end forces a strict conversion of the provided
-   * JSon string into a respective object.
-   */
-  convert(locale: string): SearchInputBackend {
-    const searchInputBackend = new SearchInputBackend();
-    searchInputBackend.decimalSeparator = getLocaleNumberSymbol(locale, NumberSymbol.Decimal);
-    searchInputBackend.groupingSeparator = getLocaleNumberSymbol(locale, NumberSymbol.Group);
-
-    Object.assign(searchInputBackend, this);
-
-    searchInputBackend.searchFields = [];
-
-    this.searchFields.forEach(searchInputField => {
-      const backendField = new SearchInputBaseField();
-      backendField.dateTimeFormat = searchInputField.dateTimeFormat;
-      backendField.filterCriteria = searchInputField.filterCriteria;
-      backendField.name = searchInputField.name;
-      backendField.operator = searchInputField.operator;
-      backendField.sortOrder = searchInputField.sortOrder;
-
-      searchInputBackend.searchFields.push(backendField);
-    });
-
-    return searchInputBackend;
   }
 
 }

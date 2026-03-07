@@ -1,4 +1,4 @@
-import { Inject, Injectable, Renderer2, RendererFactory2 } from '@angular/core';
+import { inject, Injectable, Renderer2, RendererFactory2 } from '@angular/core';
 import { DOCUMENT } from '@angular/common';
 
 /**
@@ -8,16 +8,18 @@ import { DOCUMENT } from '@angular/common';
 export class ComponentScalingService {
   public static readonly MIN_FONT_SIZE = 8;
   public static readonly MAX_FONT_SIZE = 18;
+
+  private readonly rendererFactory = inject(RendererFactory2);
+  private readonly document = inject(DOCUMENT);
   private fontSize = 13;
   private readonly renderer: Renderer2;
 
   /**
    * Create a new instance and try to load the global font size from the local storage
    */
-  constructor(@Inject(DOCUMENT) private readonly document: Document,
-    private readonly rendererFactory: RendererFactory2) {
+  constructor() {
     const storedFontSize = localStorage.getItem('app-font-size');
-    this.renderer = rendererFactory.createRenderer(null, null);
+    this.renderer = this.rendererFactory.createRenderer(null, null);
 
     if (!storedFontSize || Number.isNaN(parseInt(storedFontSize, 10))) {
       return;

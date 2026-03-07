@@ -1,6 +1,10 @@
-import { Component, Input, forwardRef, Output, EventEmitter } from '@angular/core';
+import { Component, Input, forwardRef, Output, EventEmitter, inject } from '@angular/core';
 import { NG_VALUE_ACCESSOR, ControlValueAccessor } from '@angular/forms';
 import { I18NService } from '../../services/i18n.service';
+import { Bind } from 'primeng/bind';
+import { InputText } from 'primeng/inputtext';
+import { PickList } from 'primeng/picklist';
+import { PrimeTemplate } from 'primeng/api';
 
 /**
  * Component to select any number of items from a source list
@@ -12,33 +16,35 @@ import { I18NService } from '../../services/i18n.service';
     provide: NG_VALUE_ACCESSOR,
     useExisting: forwardRef(() => MultiSelectionList),
     multi: true
-  }]
+  }],
+  imports: [Bind, InputText, PickList, PrimeTemplate]
 })
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export class MultiSelectionList<T extends { [key: string]: any; }> implements ControlValueAccessor {
+export class MultiSelectionList<T extends Record<string, any>> implements ControlValueAccessor {
   private static readonly DEFAULT_INPUT_LENGTH = 2;
   private static readonly DEFAULT_DELAY = 200;
   private static readonly DEFAULT_MAX_NUMBER_OF_ITEMS = 100;
 
-  @Output() filterInputChanged = new EventEmitter<string>();
-  @Input() labelFieldName = '';
-  @Input() delay: number;
-  @Input() minLength: number;
-  @Input() filterSourceItems = true;
-  @Input() maxNumberOfItems: number;
-  @Input() disabled = false;
-  selectedItems: T[] = [];
-  loading = false;
-  timeout: ReturnType<typeof setTimeout> | null = null;
-  lastInput: string | null = null;
-  sourceListHeader = '';
-  targetListHeader = '';
-  _availableItems: T[] = [];
+  private readonly i18n = inject(I18NService);
+  @Output() private filterInputChanged = new EventEmitter<string>();
+  @Input() public labelFieldName = '';
+  @Input() public delay: number;
+  @Input() public minLength: number;
+  @Input() public filterSourceItems = true;
+  @Input() public maxNumberOfItems: number;
+  @Input() public disabled = false;
+  protected selectedItems: T[] = [];
+  protected loading = false;
+  protected timeout: ReturnType<typeof setTimeout> | null = null;
+  protected lastInput: string | null = null;
+  protected sourceListHeader = '';
+  protected targetListHeader = '';
+  protected _availableItems: T[] = [];
 
   /**
    * Initialize internal properties
    */
-  constructor(protected i18n: I18NService) {
+  constructor() {
     this.minLength = MultiSelectionList.DEFAULT_INPUT_LENGTH;
     this.delay = MultiSelectionList.DEFAULT_DELAY;
     this.maxNumberOfItems = MultiSelectionList.DEFAULT_MAX_NUMBER_OF_ITEMS;
@@ -108,7 +114,7 @@ export class MultiSelectionList<T extends { [key: string]: any; }> implements Co
     }
 
     if (this.loading) {
-      // In case of a slow back-end we save the input in order to stay in sync!
+      // In case of a slow backend we save the input in order to stay in sync!
       this.lastInput = filterInput;
       return;
     } else {
@@ -151,7 +157,7 @@ export class MultiSelectionList<T extends { [key: string]: any; }> implements Co
   /**
    * Add the items of the given array to the list of available items
    */
-  set availableItems(items: Array<T>) {
+  set availableItems(items: T[]) {
     this._availableItems = [];
 
     if (!items) {

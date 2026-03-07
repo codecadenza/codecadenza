@@ -1,34 +1,34 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { Validators, FormGroup, FormControl, ValidatorFn, AbstractControl } from '@angular/forms';
-import { MessageService } from 'primeng/api';
-import { SliderChangeEvent } from 'primeng/slider';
-import { I18NService } from '../../services/i18n.service';
+import { Component, inject, OnInit } from '@angular/core';
+import { Validators, FormGroup, FormControl, ValidatorFn, AbstractControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { SliderChangeEvent, Slider } from 'primeng/slider';
 import { ComponentScalingService } from '../../services/component-scaling.service';
 import { FormatterService } from '../../services/formatter.service';
 import { NavigationHistoryService } from '../../services/navigation-history.service';
 import { UserSettings } from '../../model/user-settings.model';
+import { ViewContainer } from '../../components/view-container/view-container.component';
+import { FormContainerComponent } from '../../components/form-container/form-container.component';
+import { FormControlContainerComponent } from '../../components/form-control-container/form-control-container.component';
+import { Bind } from 'primeng/bind';
+import { InputText } from 'primeng/inputtext';
+import { Message } from 'primeng/message';
+import { ButtonDirective } from 'primeng/button';
 
 /**
  * Page for changing the user settings
  */
 @Component({
-  templateUrl: './user-settings-page.html'
+  templateUrl: './user-settings-page.html',
+  imports: [ViewContainer, FormsModule, ReactiveFormsModule, FormContainerComponent, FormControlContainerComponent, Bind,
+    InputText, Message, Slider, ButtonDirective]
 })
 export class UserSettingsPage implements OnInit {
-  @Input()
-  minFontSize = ComponentScalingService.MIN_FONT_SIZE;
-  @Input()
-  maxFontSize = ComponentScalingService.MAX_FONT_SIZE;
-  formGroup!: FormGroup;
-  settings!: UserSettings;
-
-  /**
-   * Create a new instance
-   */
-  constructor(protected i18n: I18NService, protected formatterService: FormatterService,
-    protected componentScalingService: ComponentScalingService, protected messageService: MessageService,
-    protected navigationHistoryService: NavigationHistoryService) {
-  }
+  private readonly formatterService = inject(FormatterService);
+  private readonly componentScalingService = inject(ComponentScalingService);
+  private readonly navigationHistoryService = inject(NavigationHistoryService);
+  protected minFontSize = ComponentScalingService.MIN_FONT_SIZE;
+  protected maxFontSize = ComponentScalingService.MAX_FONT_SIZE;
+  protected formGroup!: FormGroup;
+  protected settings!: UserSettings;
 
   /**
    * Initialize the form
@@ -66,7 +66,7 @@ export class UserSettingsPage implements OnInit {
    * Create a validator that checks if the number format is valid
    */
   createNumberFormatValidator(): ValidatorFn {
-    return (control: AbstractControl): { [key: string]: boolean } | null => {
+    return (control: AbstractControl): Record<string, boolean> | null => {
       const currentNumberFormat = this.formatterService.getNumberFormat();
       const value = control.value;
 
@@ -77,7 +77,7 @@ export class UserSettingsPage implements OnInit {
         }
 
         return null;
-      } catch(error) {
+      } catch {
         this.formatterService.setNumberFormat(currentNumberFormat);
 
         return { 'invalidDecimalFormat': true };

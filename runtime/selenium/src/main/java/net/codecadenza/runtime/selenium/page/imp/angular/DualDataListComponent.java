@@ -153,7 +153,7 @@ public class DualDataListComponent extends AbstractAngularPageComponent {
 		logger.debug("Remove all selected items from list '{}'", elementId);
 
 		var expression = "//cc-multi-selection-list[@id='" + elementId + "']//";
-		expression += "button[contains(@data-pc-section, 'moveAllToSourceButton')]";
+		expression += "button[contains(@data-pc-name, 'pcmovealltosourcebutton')]";
 
 		final WebElement removeAllButton = findWebElementByXPath(expression);
 
@@ -185,7 +185,7 @@ public class DualDataListComponent extends AbstractAngularPageComponent {
 	 */
 	protected String getSourceItemsExpression() {
 		var expression = "//cc-multi-selection-list[@id='" + elementId + "']//";
-		expression += "div[contains(@class, 'p-picklist-source-wrapper')]//li/div";
+		expression += "div[contains(@class, 'p-picklist-source-list-container')]//li/div";
 
 		return expression;
 	}
@@ -195,7 +195,7 @@ public class DualDataListComponent extends AbstractAngularPageComponent {
 	 */
 	protected String getTargetItemsExpression() {
 		var expression = "//cc-multi-selection-list[@id='" + elementId + "']//";
-		expression += "div[contains(@class, 'p-picklist-target-wrapper')]//li/div";
+		expression += "div[contains(@class, 'p-picklist-target-list-container')]//li/div";
 
 		return expression;
 	}

@@ -1,6 +1,7 @@
-import { Component, OnInit, Input, HostBinding } from '@angular/core';
+import { Component, OnInit, Input, HostBinding, inject } from '@angular/core';
 import { UntypedFormGroup } from '@angular/forms';
 import { I18NService } from '../../services/i18n.service';
+import { Message } from 'primeng/message';
 
 /**
  * This component provides a responsive container for a given control.
@@ -9,44 +10,40 @@ import { I18NService } from '../../services/i18n.service';
  */
 @Component({
   selector: 'cc-form-control-container',
-  templateUrl: './form-control-container.component.html'
+  templateUrl: './form-control-container.component.html',
+  imports: [Message]
 })
 export class FormControlContainerComponent implements OnInit {
-  @HostBinding('class') parentClass!: string;
-  @Input() label = '';
-  @Input() name = '';
-  @Input() formGroup!: UntypedFormGroup;
-  @Input() fillEmptySpace = false;
-  @Input() span = false;
+  protected readonly i18n = inject(I18NService);
+  @HostBinding('class') protected parentClass!: string;
+  @Input() public label = '';
+  @Input() public name = '';
+  @Input() public formGroup!: UntypedFormGroup;
+  @Input() public fillEmptySpace = false;
+  @Input() public span = false;
   private _required = false;
   private _minLength = 0;
   private _maxLength = 0;
   private _maxValue = 0;
   private _minValue = 0;
   private _pattern = '';
-  labelClass = '';
-  requiredSet = false;
-  minLengthSet = false;
-  maxLengthSet = false;
-  minValueSet = false;
-  maxValueSet = false;
-  patternSet = false;
-  integerSet = false;
-  decimalSet = false;
-  messageRequired = '';
-  messageMinLength = '';
-  messageMaxLength = '';
-  messageMinValue = '';
-  messageMaxValue = '';
-  messagePattern = '';
-  messageInteger = '';
-  messageDecimal = '';
-
-  /**
-   * Create a new instance
-   */
-  constructor(protected i18n: I18NService) {
-  }
+  protected labelClass = '';
+  protected requiredSet = false;
+  protected minLengthSet = false;
+  protected maxLengthSet = false;
+  protected minValueSet = false;
+  protected maxValueSet = false;
+  protected patternSet = false;
+  protected integerSet = false;
+  protected decimalSet = false;
+  protected messageRequired = '';
+  protected messageMinLength = '';
+  protected messageMaxLength = '';
+  protected messageMinValue = '';
+  protected messageMaxValue = '';
+  protected messagePattern = '';
+  protected messageInteger = '';
+  protected messageDecimal = '';
 
   /**
    * Initialize the component

@@ -14,7 +14,7 @@ import { NG_VALUE_ACCESSOR, ControlValueAccessor } from '@angular/forms';
   }]
 })
 export class MailLink implements ControlValueAccessor {
-  value = '';
+  protected value = '';
 
   /**
    * Write the value

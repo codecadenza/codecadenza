@@ -23,7 +23,6 @@ package net.codecadenza.eclipse.generator.client.imp.angular.module;
 
 import static net.codecadenza.eclipse.shared.Constants.ANGULAR_PAGE_FOLDER;
 
-import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Stream;
@@ -32,19 +31,15 @@ import net.codecadenza.eclipse.generator.client.imp.angular.common.AngularConten
 import net.codecadenza.eclipse.generator.client.imp.angular.security.AngularSecurityHelper;
 import net.codecadenza.eclipse.generator.client.imp.angular.util.AngularURLGenerator;
 import net.codecadenza.eclipse.model.client.Form;
-import net.codecadenza.eclipse.model.client.FormField;
-import net.codecadenza.eclipse.model.client.FormFieldTypeEnumeration;
-import net.codecadenza.eclipse.model.client.FormPanel;
 import net.codecadenza.eclipse.model.client.FormTypeEnumeration;
 import net.codecadenza.eclipse.model.domain.DomainObject;
-import net.codecadenza.eclipse.model.dto.DTOBean;
 import net.codecadenza.eclipse.model.project.BuildArtifactType;
 import net.codecadenza.eclipse.model.project.Project;
 import net.codecadenza.eclipse.model.project.WorkspaceFile;
 
 /**
  * <p>
- * Generator for modules that contain all forms of a specific domain object
+ * Generator for modules that contain the routing for all forms of a specific domain object
  * </p>
  * <p>
  * Copyright 2025 (C) by Martin Ganserer
@@ -57,21 +52,18 @@ public class AngularFormModuleGenerator extends AbstractTypeScriptSourceGenerato
 	private final Project project;
 	private final AngularSecurityHelper securityHelper;
 	private final List<Form> forms;
-	private final List<FormPanel> gridPanels;
 
 	/**
 	 * Constructor
 	 * @param domainObject
 	 */
 	public AngularFormModuleGenerator(DomainObject domainObject) {
-		super("Module for forms of domain object " + domainObject.getLabel());
+		super("Routing module for forms of domain object " + domainObject.getLabel());
 
 		this.domainObject = domainObject;
 		this.project = domainObject.getNamespace().getProject();
 		this.securityHelper = new AngularSecurityHelper(project);
 		this.forms = project.getAllFormsOfProject().stream().filter(f -> f.getDomainObject().equals(domainObject)).toList();
-		this.gridPanels = project.getAllGridPanelsOfProject().stream().filter(g -> g.getDTO().getDomainObject().equals(domainObject))
-				.toList();
 	}
 
 	/*
@@ -96,16 +88,16 @@ public class AngularFormModuleGenerator extends AbstractTypeScriptSourceGenerato
 
 		importType("NgModule", "@angular/core");
 		importTypes(Stream.of("RouterModule", "Routes"), "@angular/router");
-		importType("AppCommonModule", "../../common/app-common.module");
 
 		for (final Form form : forms) {
-			if (securityHelper.isSecurityEnabled() && form.getFormType() != FormTypeEnumeration.LOV)
+			if (form.getFormType() == FormTypeEnumeration.LOV)
+				continue;
+
+			if (securityHelper.isSecurityEnabled())
 				importAuthGuardService = true;
 
 			importType(form.getName(), "./" + form.getName().toLowerCase());
 		}
-
-		gridPanels.forEach(gridPanel -> importType(gridPanel.getName(), "./" + gridPanel.getName().toLowerCase()));
 
 		if (importAuthGuardService) {
 			importType("AuthGuardService", "../../common/services/auth-guard.service");
@@ -151,80 +143,8 @@ public class AngularFormModuleGenerator extends AbstractTypeScriptSourceGenerato
 		formatter.addBlankLine();
 		formatter.addLine("@NgModule({");
 		formatter.increaseIndent();
-		formatter.addLine("declarations: [");
-		formatter.increaseIndent();
-
-		forms.forEach(form -> formatter.addLine(form.getName() + ","));
-
-		gridPanels.forEach(gridPanel -> formatter.addLine(gridPanel.getName() + ","));
-
-		formatter.decreaseIndent();
-		formatter.addLine("],");
-		formatter.addLine("exports: [");
-		formatter.increaseIndent();
-
-		for (final Form form : forms) {
-			if (form.getFormType() != FormTypeEnumeration.LOV)
-				continue;
-
-			formatter.addLine(form.getName() + ",");
-		}
-
-		gridPanels.forEach(gridPanel -> formatter.addLine(gridPanel.getName() + ","));
-
-		formatter.decreaseIndent();
-		formatter.addLine("],");
 		formatter.addLine("imports: [");
 		formatter.increaseIndent();
-		formatter.addLine("AppCommonModule,");
-
-		final var refModules = new HashSet<DomainObject>();
-		refModules.add(domainObject);
-
-		final var appModules = new StringBuilder();
-
-		// Search for list-of-values dialogs of other modules that must be imported
-		for (final Form form : forms)
-			for (final FormField formField : form.getAllFormFields()) {
-				if (!formField.isVisible() || formField.isReadonly() || formField.getFieldType() != FormFieldTypeEnumeration.LOV)
-					continue;
-
-				if (!formField.getDTOAttribute().getDTOBean().equals(form.getDTO()))
-					continue;
-
-				if (!refModules.contains(formField.getListOfValues().getDomainObject())) {
-					final String domainObjName = formField.getListOfValues().getDomainObject().getName();
-
-					appModules.append(domainObjName + "Module, ");
-					refModules.add(formField.getListOfValues().getDomainObject());
-
-					importType(domainObjName + "Module",
-							"../" + domainObjName.toLowerCase() + "/" + domainObjName.toLowerCase() + ".module");
-				}
-			}
-
-		// Search for grid panels of other modules that must be imported
-		for (final Form form : forms)
-			for (final FormPanel formPanel : form.getFormPanels()) {
-				if (formPanel.getBasePanel() == null)
-					continue;
-
-				final DTOBean panelDTO = formPanel.getBasePanel().getDTO();
-
-				if (!refModules.contains(panelDTO.getDomainObject())) {
-					final String domainObjName = panelDTO.getDomainObject().getName();
-
-					appModules.append(domainObjName + "Module, ");
-					refModules.add(panelDTO.getDomainObject());
-
-					importType(domainObjName + "Module",
-							"../" + domainObjName.toLowerCase() + "/" + domainObjName.toLowerCase() + ".module");
-				}
-			}
-
-		if (!appModules.isEmpty())
-			formatter.addLine(appModules.toString().trim());
-
 		formatter.addLine("RouterModule.forChild(formRoutes)");
 		formatter.decreaseIndent();
 		formatter.addLine("]");

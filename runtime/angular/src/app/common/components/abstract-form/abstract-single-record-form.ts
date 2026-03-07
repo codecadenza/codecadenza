@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { UntypedFormGroup, ValidatorFn, UntypedFormControl } from '@angular/forms';
 import { Location } from '@angular/common';
@@ -9,23 +9,30 @@ import { Observable } from 'rxjs';
 /**
  * Base class for all single-record forms
  */
-@Component({ template: ''})
+@Component({
+  template: ''
+})
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export abstract class AbstractSingleRecordForm<T extends { [key: string]: any; }> {
+export abstract class AbstractSingleRecordForm<T extends Record<string, any>> implements OnInit {
   public readonly UUID_PATTERN = '[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}';
   public readonly OPTIONAL_UUID_PATTERN = '^$|' + this.UUID_PATTERN;
 
-  id!: string | null;
-  object!: T;
-  formGroup!: UntypedFormGroup;
-  leavePage = true;
-  error: Error | null = null;
+  protected readonly route = inject(ActivatedRoute);
+  protected readonly location = inject(Location);
+  protected readonly router = inject(Router);
+  protected readonly navigationHistoryService = inject(NavigationHistoryService);
+  protected readonly i18n = inject(I18NService);
+  protected id!: string | null;
+  protected object!: T;
+  protected formGroup!: UntypedFormGroup;
+  protected leavePage = true;
+  protected error: Error | null = null;
 
   /**
-   * Initialize the form
+   * Initialize this component
    */
-  constructor(protected route: ActivatedRoute, protected location: Location, protected router: Router,
-    protected navigationHistoryService: NavigationHistoryService, protected i18n: I18NService) {
+  ngOnInit() {
+    this.initForm();
   }
 
   /**
@@ -72,7 +79,7 @@ export abstract class AbstractSingleRecordForm<T extends { [key: string]: any; }
   }
 
   /**
-   * Load the object from the back-end
+   * Load the object from the backend
    */
   _loadObject(id: string) {
     this.loadObject(id).subscribe({

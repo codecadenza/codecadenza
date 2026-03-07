@@ -133,7 +133,7 @@ public class AngularTextFieldGenerator extends AbstractAngularFieldGenerator {
 			imports.put("NumberConverter", "../../common/converter/number-converter");
 
 		if (encryptPassword())
-			imports.put("SHA256", "crypto-es/lib/sha256");
+			imports.put("SHA256", "crypto-es");
 
 		if (type.isUUID() && field.getDefaultValue() != null && !field.getDefaultValue().isEmpty())
 			imports.put("v4 as uuid", "uuid");

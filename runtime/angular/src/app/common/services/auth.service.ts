@@ -10,14 +10,7 @@ import { RoleEnum } from '../model/role.enum';
  */
 @Injectable({ providedIn: 'root' })
 export class AuthService {
-  private readonly loginStatusSubject: BehaviorSubject<boolean>;
-
-  /**
-   * Create a new instance of this service and initialize the login status subject
-   */
-  constructor() {
-    this.loginStatusSubject = new BehaviorSubject<boolean>(this.isLoggedIn());
-  }
+  private readonly loginStatusSubject = new BehaviorSubject<boolean>(this.isLoggedIn());
 
   /**
    * Check if the user has at least one of the given roles granted

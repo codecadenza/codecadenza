@@ -234,8 +234,8 @@ public class SeleniumTestingProjectFilesGenerator implements ITestingProjectFile
 		b.append("HTTP_WAIT_TIMEOUT=5\n");
 		b.append("# The time in milliseconds to wait before checking for pending HTTP requests\n");
 
-		if (project.hasVaadinClient())
-			b.append("HTTP_CHECK_DELAY=300\n");
+		if (project.hasVaadinClient() || project.hasAngularClient())
+			b.append("HTTP_CHECK_DELAY=400\n");
 		else
 			b.append("HTTP_CHECK_DELAY=0\n");
 

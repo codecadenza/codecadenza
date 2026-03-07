@@ -24,6 +24,7 @@ package net.codecadenza.eclipse.generator.client.imp.angular.view;
 import java.util.stream.Stream;
 import net.codecadenza.eclipse.generator.client.imp.angular.common.AbstractTypeScriptSourceGenerator;
 import net.codecadenza.eclipse.generator.client.imp.angular.common.AngularContentFormatter;
+import net.codecadenza.eclipse.generator.client.imp.angular.common.TypeScriptFieldGenerator;
 import net.codecadenza.eclipse.generator.client.imp.angular.service.AngularServiceInvocationGenerator;
 import net.codecadenza.eclipse.generator.client.imp.angular.util.AngularCommonDataTableGenerator;
 import net.codecadenza.eclipse.generator.client.imp.angular.util.AngularI18NGenerator;
@@ -70,6 +71,7 @@ public class AngularListOfValuesGenerator extends AbstractTypeScriptSourceGenera
 	@Override
 	protected void addImports() {
 		importTypes(Stream.of("Component", "OnInit"), "@angular/core");
+		importType("AppCommonModule", "../../common/app-common.module");
 		importType("FieldTypeEnum", "../../common/model/field-type.enum");
 		importType("TableDefinition", "../../common/model/table-definition.model");
 		importType("AbstractListOfValuesDialog",
@@ -83,7 +85,7 @@ public class AngularListOfValuesGenerator extends AbstractTypeScriptSourceGenera
 	 */
 	@Override
 	protected void addTypeDeclaration(AngularContentFormatter formatter) {
-		final var url = "templateUrl: '../../common/components/abstract-list-of-values-dialog/abstract-list-of-values-dialog.html'";
+		final var url = "templateUrl: '../../common/components/abstract-list-of-values-dialog/abstract-list-of-values-dialog.html',";
 
 		var classDeclaration = "export class " + form.getName() + " extends AbstractListOfValuesDialog<";
 		classDeclaration += dto.getName() + "> implements OnInit {";
@@ -92,6 +94,7 @@ public class AngularListOfValuesGenerator extends AbstractTypeScriptSourceGenera
 		formatter.increaseIndent();
 		formatter.addLine("selector: '" + SELECTOR_PREFIX + form.getName().toLowerCase() + "',");
 		formatter.addLine(url);
+		formatter.addLine("imports: [AppCommonModule]");
 		formatter.decreaseIndent();
 		formatter.addLine("})");
 		formatter.addLine(classDeclaration);
@@ -103,15 +106,13 @@ public class AngularListOfValuesGenerator extends AbstractTypeScriptSourceGenera
 	 */
 	@Override
 	protected void addFields() {
-		addServiceOfSuperclass("ConfirmationService", "confirmationService", "primeng/api");
-		addServiceOfSuperclass("MessageService", "messageService", "primeng/api");
-		addServiceOfSuperclass("I18NService", "i18n", "../../common/services/i18n.service");
-		addServiceOfSuperclass("FormatterService", "formatterService", "../../common/services/formatter.service");
-
 		if (new AngularServiceInvocationGenerator(form.getBoundaryMethod(), dto).isAuthServiceRequired())
-			addService("AuthService", "authService", "../../common/services/auth.service");
+			addService("AuthService", "authService", "../../common/services/auth.service").create();
 
-		addService(dto);
+		final TypeScriptFieldGenerator service = addService(dto);
+
+		if (service != null)
+			service.create();
 	}
 
 	/*

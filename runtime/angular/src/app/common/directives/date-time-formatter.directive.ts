@@ -1,4 +1,4 @@
-import { Directive, ElementRef, HostListener, OnInit } from '@angular/core';
+import { Directive, ElementRef, HostListener, inject, OnInit } from '@angular/core';
 import { FormatterService } from '../services/formatter.service';
 
 /**
@@ -6,14 +6,9 @@ import { FormatterService } from '../services/formatter.service';
  */
 @Directive({ selector: '[ccDateTimeFormatter]' })
 export class DateTimeFormatterDirective implements OnInit {
-  private readonly el: HTMLInputElement;
-
-  /**
-   * Initialize the directive
-   */
-  constructor(protected formatter: FormatterService, private readonly elementRef: ElementRef) {
-    this.el = this.elementRef.nativeElement;
-  }
+  private readonly formatter = inject(FormatterService);
+  private readonly elementRef = inject(ElementRef);
+  private readonly el = this.elementRef.nativeElement;
 
   /**
    * Format the value after the component has been initialized

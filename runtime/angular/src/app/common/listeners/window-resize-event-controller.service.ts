@@ -1,4 +1,4 @@
-import { Injectable, NgZone } from '@angular/core';
+import { inject, Injectable, NgZone } from '@angular/core';
 import { ViewportRuler } from '@angular/cdk/scrolling';
 import { Observable, BehaviorSubject } from 'rxjs';
 
@@ -7,14 +7,17 @@ import { Observable, BehaviorSubject } from 'rxjs';
  */
 @Injectable({ providedIn: 'root' })
 export class WindowResizeEventController {
-  private readonly WIDTH_THRESHOLD = 1024;
+  private static readonly WIDTH_THRESHOLD = 1024;
+
+  private readonly viewportRuler = inject(ViewportRuler);
+  private readonly ngZone = inject(NgZone);
   private hasSmallWidth = false;
   private readonly widthThresholdSubject$ = new BehaviorSubject<boolean>(false);
 
   /**
    * Create a new instance
    */
-  constructor(private readonly viewportRuler: ViewportRuler, private readonly ngZone: NgZone) {
+  constructor() {
     this.viewportRuler.change(200).subscribe(() => this.ngZone.run(() => this.checkWindowWidth()));
     this.checkWindowWidth();
   }
@@ -33,7 +36,7 @@ export class WindowResizeEventController {
     const width = this.viewportRuler.getViewportSize().width;
     const previousStatus = this.hasSmallWidth;
 
-    if (width < this.WIDTH_THRESHOLD) {
+    if (width < WindowResizeEventController.WIDTH_THRESHOLD) {
       this.hasSmallWidth = true;
     } else {
       this.hasSmallWidth = false;

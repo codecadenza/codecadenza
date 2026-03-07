@@ -1,8 +1,8 @@
 body {
   margin: 0px;
-  font-family: var(--font-family);
-  background-color: var(--surface-ground);
-  color: var(--text-color);
+  font-family: sans-serif;
+  background-color: var(--p-stone-100);
+  color: black;
 }
 
 a, a:visited, a:hover, a:active {
@@ -10,9 +10,33 @@ a, a:visited, a:hover, a:active {
   text-decoration: none;
 }
 
+.template-menu-bar {
+  border: none !important;
+  background-color: var(--p-stone-100) !important;
+  z-index: 1;
+  position: fixed;
+  width: 100%;
+}
+
+.template-menu-separator {
+  border-top: 1px solid lightgray;
+  position: fixed;
+  top: 3.2em;
+  z-index: 1;
+  width: 100%;
+}
+
+.template-progress-bar {
+  display: table;
+  position: fixed;
+  top: 3.6em;
+  width: 100%;
+  z-index: 1;
+}
+
 .template-main-area {
   position: absolute;
-  top: 45px;
+  top: 4em;
   width: 100%;
 }
 
@@ -40,12 +64,12 @@ a, a:visited, a:hover, a:active {
 }
 
 .template-footer {
+  border-top: 1px solid lightgray;
   position: fixed;
   bottom: 0px;
   width: 100%;
-  height: 35px;
-  background-color: var(--surface-ground);
-  border-top: 1px solid var(--surface-border);
+  height: 40px;
+  background-color: var(--p-stone-100);
 }
 
 .template-footer-text-left {
@@ -91,7 +115,8 @@ a, a:visited, a:hover, a:active {
 }
 
 .form-field-readonly {
-  color: var(--text-color-secondary) !important;
+  background-color: var(--p-surface-200) !important;
+  color: var(--p-slate-500) !important;
 }
 
 .form-spacer {

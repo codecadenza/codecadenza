@@ -10,10 +10,10 @@ import { Component, Input, ViewEncapsulation } from '@angular/core';
   styleUrls: ['view-container.component.css']
 })
 export class ViewContainer {
-  @Input() headerText = '';
-  @Input() headerIcon?: string;
-  @Input() contentPadding = '0.5rem';
-  @Input() enableCollapse = false;
-  @Input() collapsed = false;
+  @Input() public headerText = '';
+  @Input() public headerIcon?: string;
+  @Input() public contentPadding = '0.5rem';
+  @Input() public enableCollapse = false;
+  @Input() public collapsed = false;
 
 }

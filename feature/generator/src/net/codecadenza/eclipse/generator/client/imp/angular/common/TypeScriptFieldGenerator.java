@@ -44,7 +44,10 @@ public class TypeScriptFieldGenerator {
 	private boolean staticModifier;
 	private boolean input;
 	private boolean viewChild;
+	private boolean inject;
 	private String viewChildName;
+	private String typeName;
+	private String fieldName;
 
 	/**
 	 * Constructor
@@ -75,6 +78,21 @@ public class TypeScriptFieldGenerator {
 	 */
 	public TypeScriptFieldGenerator withReadonlyModifier() {
 		readonly = true;
+
+		return this;
+	}
+
+	/**
+	 * Initialize the field using injection
+	 * @param typeName the type name
+	 * @param fieldName the field name
+	 * @return the field generator
+	 */
+	public TypeScriptFieldGenerator withInject(String typeName, String fieldName) {
+		this.typeName = typeName;
+		this.fieldName = fieldName;
+		readonly = true;
+		inject = true;
 
 		return this;
 	}
@@ -144,10 +162,14 @@ public class TypeScriptFieldGenerator {
 		if (readonly)
 			b.append("readonly ");
 
-		b.append(declaration);
+		if (inject)
+			b.append(fieldName + " = inject(" + typeName + ")");
+		else {
+			b.append(declaration);
 
-		if (defaultValue != null && !defaultValue.isEmpty())
-			b.append(" = " + defaultValue);
+			if (defaultValue != null && !defaultValue.isEmpty())
+				b.append(" = " + defaultValue);
+		}
 
 		b.append(";");
 

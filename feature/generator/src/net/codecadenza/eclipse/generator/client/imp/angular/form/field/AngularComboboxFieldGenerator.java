@@ -55,7 +55,7 @@ public class AngularComboboxFieldGenerator extends AbstractAngularItemSelectionF
 	@Override
 	protected String addControlToTemplate() {
 		final var control = new StringBuilder();
-		control.append("<p-dropdown optionLabel=\"" + displayAttr.getName() + "\" ");
+		control.append("<p-select optionLabel=\"" + displayAttr.getName() + "\" ");
 		control.append("[options]=\"" + itemListName + "\" ");
 		control.append("formControlName=\"" + field.getDTOAttribute().getName() + "\" ");
 		control.append("[style]=\"{'width':'100%'}\" id=\"" + field.getName() + "\"");
@@ -63,7 +63,7 @@ public class AngularComboboxFieldGenerator extends AbstractAngularItemSelectionF
 		if (readonly || disabled)
 			control.append(" [readonly]=\"true\"");
 
-		control.append("></p-dropdown>");
+		control.append("/>");
 
 		return control.toString();
 	}

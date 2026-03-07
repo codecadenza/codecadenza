@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { ConfirmationService, TreeNode, MessageService, MenuItem } from 'primeng/api';
 import { FormatterService } from '../../services/formatter.service';
@@ -7,18 +7,18 @@ import { I18NService } from '../../services/i18n.service';
 /**
  * Abstract base class for all tree views
  */
-@Component({ template: ''})
+@Component({
+  template: ''
+})
 export abstract class AbstractTreeView {
-  statusText = '';
-  selectedNode: TreeNode | TreeNode[] | null = null;
-  rootNodes: TreeNode[] = [];
-
-  /**
-   * Create a new instance
-   */
-  constructor(protected messageService: MessageService, protected confirmationService: ConfirmationService,
-    protected router: Router, protected formatterService: FormatterService, protected i18n: I18NService) {
-  }
+  protected readonly router = inject(Router);
+  protected readonly confirmationService = inject(ConfirmationService);
+  protected readonly messageService = inject(MessageService);
+  protected readonly formatterService = inject(FormatterService);
+  protected readonly i18n = inject(I18NService);
+  protected statusText = '';
+  protected selectedNode: TreeNode | TreeNode[] | null = null;
+  protected rootNodes: TreeNode[] = [];
 
   /**
    * Open a confirmation dialog before calling the provided delete function

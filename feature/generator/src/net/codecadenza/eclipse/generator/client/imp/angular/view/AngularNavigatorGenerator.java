@@ -85,7 +85,11 @@ public class AngularNavigatorGenerator extends AbstractTypeScriptSourceGenerator
 	@Override
 	protected void addImports() {
 		importTypes(Stream.of("Component", "OnInit", "Input"), "@angular/core");
-		importType("TreeNode", "primeng/api");
+		importType("RouterLink", "@angular/router");
+		importTypes(Stream.of("TreeNode", "PrimeTemplate"), "primeng/api");
+		importType("Bind", "primeng/bind");
+		importType("Tree", "primeng/tree");
+		importType("ViewContainer", "../view-container/view-container.component");
 		importType("TreeNavigatorNode", "../../model/tree-navigator-node.model");
 	}
 
@@ -99,7 +103,8 @@ public class AngularNavigatorGenerator extends AbstractTypeScriptSourceGenerator
 		formatter.addLine("@Component({");
 		formatter.increaseIndent();
 		formatter.addLine("selector: '" + SELECTOR_PREFIX + "tree-navigator',");
-		formatter.addLine("templateUrl: './tree-navigator.html'");
+		formatter.addLine("templateUrl: './tree-navigator.html',");
+		formatter.addLine("imports: [ViewContainer, Bind, Tree, PrimeTemplate, RouterLink]");
 		formatter.decreaseIndent();
 		formatter.addLine("})");
 		formatter.addLine("export class TreeNavigator implements OnInit {");
@@ -111,14 +116,14 @@ public class AngularNavigatorGenerator extends AbstractTypeScriptSourceGenerator
 	 */
 	@Override
 	protected void addFields() {
+		addService("I18NService", "i18n", "../../services/i18n.service").create();
 		addField(null, "FORM_GROUP_TYPE", "TreeNavigatorNode.FORM_GROUP_TYPE").create();
 		addField(null, "FORM_TYPE", "TreeNavigatorNode.FORM_TYPE").create();
-		addService("I18NService", "i18n", "../../services/i18n.service");
 		addField("TreeNode[]", "nodes").withDefaultValue("[]").create();
 		addField(null, "collapsed").withDefaultValue("false").withInputModifier().create();
 
 		if (securityHelper.isSecurityEnabled()) {
-			addService("AuthService", "authService", "../../services/auth.service");
+			addService("AuthService", "authService", "../../services/auth.service").create();
 
 			importType("RoleEnum", "../../model/role.enum");
 		}

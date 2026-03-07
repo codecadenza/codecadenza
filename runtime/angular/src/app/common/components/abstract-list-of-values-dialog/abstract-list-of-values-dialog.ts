@@ -1,35 +1,24 @@
 import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core';
 import { AbstractDataTable } from '../abstract-data-table/abstract-data-table';
-import { MessageService, ConfirmationService } from 'primeng/api';
-import { I18NService } from '../../services/i18n.service';
-import { FormatterService } from '../../services/formatter.service';
 
 /**
  * Abstract base class for all list-of-values dialogs
  */
-@Component({ template: ''})
+@Component({
+  template: '',
+})
 export abstract class AbstractListOfValuesDialog<T> extends AbstractDataTable<T> implements OnInit {
   private static readonly DEFAULT_INPUT_LENGTH = 1;
   private static readonly DEFAULT_DELAY = 200;
   private static readonly LOV_DEFAULT_MAX_NUMBER_OF_ITEMS = 100;
 
-  @Output() closeDialog = new EventEmitter();
-  @Input() visible = false;
-  @Input() enableReset = false;
-  @Input() minLength = 0;
-  @Input() delay = 0;
-  timeout: ReturnType<typeof setTimeout> | null = null;
-  lastInput: string | null = null;
-
-  /**
-   * Create a new instance
-   */
-  constructor(protected override confirmationService: ConfirmationService,
-    protected override messageService: MessageService,
-    protected override i18n: I18NService,
-    protected override formatterService: FormatterService) {
-    super(confirmationService, messageService, i18n, formatterService);
-  }
+  @Output() private closeDialog = new EventEmitter();
+  @Input() public visible = false;
+  @Input() public enableReset = false;
+  @Input() public minLength = 0;
+  @Input() public delay = 0;
+  protected timeout: ReturnType<typeof setTimeout> | null = null;
+  protected lastInput: string | null = null;
 
   /**
    * Initialize internal properties
@@ -38,6 +27,13 @@ export abstract class AbstractListOfValuesDialog<T> extends AbstractDataTable<T>
     this.minLength = AbstractListOfValuesDialog.DEFAULT_INPUT_LENGTH;
     this.delay = AbstractListOfValuesDialog.DEFAULT_DELAY;
     this.maxNumberOfItems = AbstractListOfValuesDialog.LOV_DEFAULT_MAX_NUMBER_OF_ITEMS;
+  }
+
+  /**
+   * Refresh the view
+   */
+  override refreshView(): void {
+    // No implementation required!
   }
 
   /**
@@ -69,7 +65,7 @@ export abstract class AbstractListOfValuesDialog<T> extends AbstractDataTable<T>
     }
 
     if (this.loading) {
-      // In case of a slow back-end we save the input in order to stay in sync!
+      // In case of a slow backend we save the input in order to stay in sync!
       this.lastInput = filterInput;
       return;
     } else {

@@ -24,6 +24,9 @@ package net.codecadenza.eclipse.generator.client.imp.angular.form;
 import static net.codecadenza.eclipse.generator.client.imp.angular.common.JavaScriptType.OBSERVABLE;
 
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Objects;
 import net.codecadenza.eclipse.generator.client.imp.angular.common.AbstractTypeScriptSourceGenerator;
 import net.codecadenza.eclipse.generator.client.imp.angular.common.AngularContentFormatter;
 import net.codecadenza.eclipse.generator.client.imp.angular.common.TypeScriptFieldGenerator;
@@ -110,6 +113,7 @@ public class AngularSingleRecordFormGenerator extends AbstractTypeScriptSourceGe
 	@Override
 	protected void addImports() {
 		importType("Component", "@angular/core");
+		importType("AppCommonModule", "../../common/app-common.module");
 
 		if (formType == FormTypeEnumeration.ADD)
 			importType(baseClassName, "../../common/components/abstract-form/abstract-add-record-form");
@@ -131,9 +135,54 @@ public class AngularSingleRecordFormGenerator extends AbstractTypeScriptSourceGe
 	 */
 	@Override
 	protected void addTypeDeclaration(AngularContentFormatter formatter) {
+		final var componentsToImport = new HashSet<String>();
+
 		formatter.addLine("@Component({");
 		formatter.increaseIndent();
-		formatter.addLine("templateUrl: './" + form.getName().toLowerCase() + ".html'");
+		formatter.addLine("selector: 'app-" + form.getName().toLowerCase() + "',");
+		formatter.addLine("templateUrl: './" + form.getName().toLowerCase() + ".html',");
+
+		// Import all grid panels
+		for (final FormPanel formPanel : form.getFormPanels()) {
+			if (formPanel.getBasePanel() == null)
+				continue;
+
+			final DomainObject panelDomainObject = formPanel.getBasePanel().getDTO().getDomainObject();
+			final String basePanelName = formPanel.getBasePanel().getName();
+			final String panelDomainObjectName = panelDomainObject.getName();
+
+			componentsToImport.add(basePanelName);
+
+			if (panelDomainObject.equals(domainObject))
+				importType(basePanelName, "./" + basePanelName.toLowerCase());
+			else
+				importType(basePanelName, "../" + panelDomainObjectName.toLowerCase() + "/" + basePanelName.toLowerCase());
+		}
+
+		// Import all list-of-values
+		for (final FormField formField : form.getAllFormFields()) {
+			if (!formField.isVisible() || formField.isReadonly() || formField.getFieldType() != FormFieldTypeEnumeration.LOV)
+				continue;
+
+			final DomainObject listOfValuesDomainObject = formField.getListOfValues().getDomainObject();
+			final String listOfValuesDomainObjectName = listOfValuesDomainObject.getName();
+			final String listOfValuesName = formField.getListOfValues().getName();
+
+			componentsToImport.add(listOfValuesName);
+
+			if (listOfValuesDomainObject.equals(domainObject))
+				importType(listOfValuesName, "./" + listOfValuesName.toLowerCase());
+			else
+				importType(listOfValuesName, "../" + listOfValuesDomainObjectName.toLowerCase() + "/" + listOfValuesName.toLowerCase());
+		}
+
+		final String additionalImports = componentsToImport.stream().reduce((a, b) -> a + ", " + b).orElse("");
+
+		if (additionalImports.isEmpty())
+			formatter.addLine("imports: [AppCommonModule]");
+		else
+			formatter.addLine("imports: [AppCommonModule, " + additionalImports + "]");
+
 		formatter.decreaseIndent();
 		formatter.addLine("})");
 		formatter.addLine("export class " + form.getName() + " extends " + baseClassName + "<" + form.getDTO().getName() + "> {");
@@ -152,21 +201,14 @@ public class AngularSingleRecordFormGenerator extends AbstractTypeScriptSourceGe
 		boolean addAuthService = securityHelper.addClientCheck(form);
 		boolean addNumberConverter = false;
 
-		addService(form.getDTO());
-		addServiceOfSuperclass("ActivatedRoute", "route", "@angular/router");
-		addServiceOfSuperclass("Location", "location", "@angular/common");
-		addServiceOfSuperclass("Router", "router", "@angular/router");
-		addServiceOfSuperclass("NavigationHistoryService", "navigationHistoryService",
-				"../../common/services/navigation-history.service");
-		addServiceOfSuperclass("I18NService", "i18n", "../../common/services/i18n.service");
+		fields.add(addService(form.getDTO()));
 
 		for (final FormField field : form.getAllFormFields()) {
 			final AbstractAngularFieldGenerator fieldGenerator = AngularFieldGeneratorFactory.getFieldGenerator(getContentFormatter(),
 					field);
 			final JavaEnum javaEnum = fieldGenerator.getJavaEnum();
 
-			addService(fieldGenerator.getListDTO());
-
+			fields.add(addService(fieldGenerator.getListDTO()));
 			fields.addAll(fieldGenerator.getFields());
 
 			if (fieldGenerator.isAuthServiceRequired())
@@ -183,31 +225,20 @@ public class AngularSingleRecordFormGenerator extends AbstractTypeScriptSourceGe
 		}
 
 		if (addAuthService)
-			addService("AuthService", "authService", "../../common/services/auth.service");
+			fields.add(addService("AuthService", "authService", "../../common/services/auth.service"));
 
 		if (addNumberConverter)
-			addService("NumberConverter", "numberConverter", null);
+			fields.add(addService("NumberConverter", "numberConverter", null));
 
 		if (addFileService) {
-			addService("FileService", "fileService", "../../common/services/file.service");
+			fields.add(addService("FileService", "fileService", "../../common/services/file.service"));
 
 			if (fileUploadGenerator.isUploadFragmentAdded())
-				addService("MessageService", "messageService", "primeng/api");
+				fields.add(addService("MessageService", "messageService", "primeng/api"));
 		}
 
 		// Add all fields
-		fields.forEach(TypeScriptFieldGenerator::create);
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * @see net.codecadenza.eclipse.generator.client.imp.angular.common.AbstractTypeScriptSourceGenerator#
-	 * addConstructorStatements(net.codecadenza.eclipse.generator.client.imp.angular.common.AngularContentFormatter)
-	 */
-	@Override
-	protected void addConstructorStatements(AngularContentFormatter formatter) {
-		formatter.addBlankLine();
-		formatter.addLine("this.initForm();");
+		fields.stream().filter(Objects::nonNull).forEach(TypeScriptFieldGenerator::create);
 	}
 
 	/*
@@ -403,12 +434,17 @@ public class AngularSingleRecordFormGenerator extends AbstractTypeScriptSourceGe
 		if (hasLOVDialog)
 			formatter.addBlankLine();
 
+		if (formType == FormTypeEnumeration.UPDATE || formType == FormTypeEnumeration.READONLY) {
+			formatter.addLine("@if (object && !error) {");
+			formatter.increaseIndent();
+		}
+
 		final var container = new StringBuilder();
 		container.append("<cc-view-container i18n-headerText=\"@@" + form.getName().toLowerCase() + "_title\" ");
 		container.append("headerIcon=\"pi-file\" ");
 
 		if (formType == FormTypeEnumeration.UPDATE || formType == FormTypeEnumeration.READONLY)
-			container.append("headerText=\"" + form.getTitle() + " '{{id}}'\" *ngIf=\"object\"");
+			container.append("headerText=\"" + form.getTitle() + " '{{id}}'\"");
 		else
 			container.append("headerText=\"" + form.getTitle() + "\"");
 
@@ -430,18 +466,19 @@ public class AngularSingleRecordFormGenerator extends AbstractTypeScriptSourceGe
 			else
 				panelsOfSecondRow.add(panel);
 
-		if (panelsOfFirstRow.size() > 1) {
-			formatter.addLine("<p-tabView>");
-			formatter.increaseIndent();
-		}
-
 		ECollections.sort(panelsOfFirstRow, new FormPanelComparator());
 
-		panelsOfFirstRow.forEach(panel -> addPanel(formatter, panel, panelsOfFirstRow.size() > 1));
+		if (panelsOfFirstRow.size() > 1)
+			addTab(formatter, panelsOfFirstRow);
+
+		for (final FormPanel panel : panelsOfFirstRow)
+			addPanel(formatter, panel, panelsOfFirstRow.size() > 1);
 
 		if (panelsOfFirstRow.size() > 1) {
 			formatter.decreaseIndent();
-			formatter.addLine("</p-tabView>");
+			formatter.addLine("</p-tabpanels>");
+			formatter.decreaseIndent();
+			formatter.addLine("</p-tabs>");
 		}
 
 		if (!panelsOfSecondRow.isEmpty()) {
@@ -450,18 +487,19 @@ public class AngularSingleRecordFormGenerator extends AbstractTypeScriptSourceGe
 			formatter.addBlankLine();
 		}
 
-		if (panelsOfSecondRow.size() > 1) {
-			formatter.addLine("<p-tabView>");
-			formatter.increaseIndent();
-		}
-
 		ECollections.sort(panelsOfSecondRow, new FormPanelComparator());
 
-		panelsOfSecondRow.forEach(panel -> addPanel(formatter, panel, panelsOfSecondRow.size() > 1));
+		if (panelsOfSecondRow.size() > 1)
+			addTab(formatter, panelsOfSecondRow);
+
+		for (final FormPanel panel : panelsOfSecondRow)
+			addPanel(formatter, panel, panelsOfSecondRow.size() > 1);
 
 		if (panelsOfSecondRow.size() > 1) {
 			formatter.decreaseIndent();
-			formatter.addLine("</p-tabView>");
+			formatter.addLine("</p-tabpanels>");
+			formatter.decreaseIndent();
+			formatter.addLine("</p-tabs>");
 		}
 
 		formatter.addBlankLine();
@@ -470,17 +508,17 @@ public class AngularSingleRecordFormGenerator extends AbstractTypeScriptSourceGe
 
 		if (formType != FormTypeEnumeration.READONLY) {
 			final var button = new StringBuilder();
-			button.append("<button pButton type=\"submit\" icon=\"pi pi-check\" i18n-label=\"@@button_save\" ");
+			button.append("<button pButton type=\"submit\" icon=\"pi pi-check\" i18n=\"@@button_save\" ");
 			button.append("[style]=\"{'margin': '0px 0px 0.5em 0.5em'}\" class=\"col xl:col-1 md:col-3 sm:col-12\" ");
-			button.append("label=\"Save\" [disabled]=\"!formGroup.valid\" id=\"cmdSave\"></button>");
+			button.append("[disabled]=\"!formGroup.valid\" id=\"cmdSave\">Save</button>");
 
 			formatter.addLine(button.toString());
 		}
 
 		final var button = new StringBuilder();
-		button.append("<button pButton type=\"button\" icon=\"pi pi-angle-left\" i18n-label=\"@@button_back\" ");
+		button.append("<button pButton type=\"button\" icon=\"pi pi-angle-left\" i18n=\"@@button_back\" ");
 		button.append("[style]=\"{'margin': '0px 0px 0.5em 0.5em'}\" class=\"col xl:col-1 md:col-3 sm:col-12\" ");
-		button.append("label=\"Back\" (click)=\"goBack()\" id=\"cmdBack\"></button>");
+		button.append("(click)=\"goBack()\" id=\"cmdBack\">Back</button>");
 
 		formatter.addLine(button.toString());
 
@@ -497,6 +535,11 @@ public class AngularSingleRecordFormGenerator extends AbstractTypeScriptSourceGe
 		formatter.decreaseIndent();
 		formatter.addLine("</cc-view-container>");
 
+		if (formType == FormTypeEnumeration.UPDATE || formType == FormTypeEnumeration.READONLY) {
+			formatter.decreaseIndent();
+			formatter.addLine("}");
+		}
+
 		final WorkspaceFile templateFile = form.getUserInterfaceFile();
 		templateFile.setContent(formatter.getContent());
 
@@ -507,15 +550,15 @@ public class AngularSingleRecordFormGenerator extends AbstractTypeScriptSourceGe
 	 * Add the given panel to the form's template
 	 * @param formatter
 	 * @param panel
-	 * @param addTab
+	 * @param addToTab
 	 */
-	private void addPanel(AngularContentFormatter formatter, FormPanel panel, boolean addTab) {
+	private void addPanel(AngularContentFormatter formatter, FormPanel panel, boolean addToTab) {
 		final var translationKey = "@@" + form.getName().toLowerCase() + "_" + panel.getName().toLowerCase();
 
-		if (addTab) {
-			final var tabId = "id=\"tab" + panel.getName().substring(0, 1).toUpperCase() + panel.getName().substring(1) + "\"";
+		if (addToTab) {
+			final var value = "tab" + panel.getName().substring(0, 1).toUpperCase() + panel.getName().substring(1);
 
-			formatter.addLine("<p-tabPanel i18n-header=\"" + translationKey + "\" header=\"" + panel.getLabel() + "\" " + tabId + ">");
+			formatter.addLine("<p-tabpanel value=\"" + value + "\">");
 			formatter.increaseIndent();
 		}
 		else if (panel.isDrawBorder()) {
@@ -560,14 +603,41 @@ public class AngularSingleRecordFormGenerator extends AbstractTypeScriptSourceGe
 			formatter.addLine(gridPanel.toString());
 		}
 
-		if (addTab) {
+		if (addToTab) {
 			formatter.decreaseIndent();
-			formatter.addLine("</p-tabPanel>");
+			formatter.addLine("</p-tabpanel>");
 		}
 		else if (panel.isDrawBorder()) {
 			formatter.decreaseIndent();
 			formatter.addLine("</p-fieldset>");
 		}
+	}
+
+	/**
+	 * Add the given form panels to a tab
+	 * @param formatter
+	 * @param panels
+	 */
+	private void addTab(AngularContentFormatter formatter, List<FormPanel> panels) {
+		final FormPanel initialPanel = panels.getFirst();
+		final String initialPanelName = initialPanel.getName().substring(0, 1).toUpperCase() + initialPanel.getName().substring(1);
+
+		formatter.addLine("<p-tabs value=\"tab" + initialPanelName + "\">");
+		formatter.increaseIndent();
+		formatter.addLine("<p-tablist>");
+		formatter.increaseIndent();
+
+		for (final FormPanel panel : panels) {
+			final var translationKey = "@@" + form.getName().toLowerCase() + "_" + panel.getName().toLowerCase();
+			final var value = "value=\"tab" + panel.getName().substring(0, 1).toUpperCase() + panel.getName().substring(1) + "\"";
+
+			formatter.addLine("<p-tab i18n=\"" + translationKey + "\" " + value + ">" + panel.getLabel() + "</p-tab>");
+		}
+
+		formatter.decreaseIndent();
+		formatter.addLine("</p-tablist>");
+		formatter.addLine("<p-tabpanels>");
+		formatter.increaseIndent();
 	}
 
 }

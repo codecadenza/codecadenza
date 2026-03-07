@@ -1,0 +1,10 @@
+<nav>
+  <p-menubar [model]="items" class="template-menu-bar">
+    <ng-template pTemplate="end">
+      <p-button i18n-label="@@action_logout" label="Logout" icon="pi pi-sign-out" severity="danger"
+        id="cmdLogout" [text]="true" (onClick)="onLogout()"/>
+    </ng-template>
+  </p-menubar>
+
+  <div class="template-menu-separator"></div>
+</nav>

@@ -24,6 +24,7 @@ package net.codecadenza.eclipse.generator.client.imp.angular.util;
 import net.codecadenza.eclipse.generator.client.common.action.ActionHelper;
 import net.codecadenza.eclipse.generator.client.imp.angular.common.AbstractTypeScriptSourceGenerator;
 import net.codecadenza.eclipse.generator.client.imp.angular.common.AngularContentFormatter;
+import net.codecadenza.eclipse.generator.client.imp.angular.common.TypeScriptFieldGenerator;
 import net.codecadenza.eclipse.generator.client.imp.angular.exchange.AngularExportGenerator;
 import net.codecadenza.eclipse.generator.client.imp.angular.exchange.AngularImportGenerator;
 import net.codecadenza.eclipse.generator.client.imp.angular.file.AngularDownloadGenerator;
@@ -149,23 +150,24 @@ public class AngularCommonDataTableGenerator {
 			}
 		}
 
-		if (addService)
-			generator.addService(dto);
+		if (addService) {
+			final TypeScriptFieldGenerator service = generator.addService(dto);
+
+			if (service != null)
+				service.create();
+		}
 		else
 			generator.importType(dto.getName(), "../../domain/" + dto.getName().toLowerCase() + ".interface");
 
 		if (!actionList.isEmpty() && securityHelper.isSecurityEnabled()) {
-			generator.addService("AuthService", "authService", "../../common/services/auth.service");
+			generator.addService("AuthService", "authService", "../../common/services/auth.service").create();
 
 			generator.importType("RoleEnum ", "../../common/model/role.enum");
 		}
 
-		if (actionList.stream().anyMatch(action -> action.getTargetForm() != null))
-			generator.addService("Router", "router", "@angular/router");
-
 		if (downloadGenerator.isDownloadFragmentAdded() || dataExportGenerator.addFileService()
 				|| dataImportGenerator.addFileService())
-			generator.addService("FileService", "fileService", "../../common/services/file.service");
+			generator.addService("FileService", "fileService", "../../common/services/file.service").create();
 	}
 
 	/**
@@ -244,13 +246,17 @@ public class AngularCommonDataTableGenerator {
 				formatter.addBlockComment("Open a confirmation dialog before deleting the selected item");
 				formatter.addLine("confirmDelete() {");
 				formatter.increaseIndent();
-				formatter.addLine("this.openConfirmDeleteDialog(this." + methodName + ".bind(this));");
+				formatter.addIfStatement("!this.selectedItem", "return;", true);
+				formatter.addLine("const item = this.selectedItem;");
+				formatter.addLine("this.openConfirmDeleteDialog(() => this." + methodName + "(item));");
 			}
 			else {
 				formatter.addBlockComment("Open a confirmation dialog before creating a copy of the selected item");
 				formatter.addLine("confirmCopy() {");
 				formatter.increaseIndent();
-				formatter.addLine("this.openConfirmCopyDialog(this." + methodName + ".bind(this));");
+				formatter.addIfStatement("!this.selectedItem", "return;", true);
+				formatter.addLine("const item = this.selectedItem;");
+				formatter.addLine("this.openConfirmCopyDialog(() => this." + methodName + "(item));");
 			}
 
 			formatter.decreaseIndent();
@@ -293,7 +299,7 @@ public class AngularCommonDataTableGenerator {
 		}
 
 		actionList.forEach(action -> {
-			var selectedItemId = "this.selectedItem." + dto.getPKAttribute().getName();
+			var selectedItemId = "selectedItem." + dto.getPKAttribute().getName();
 
 			if (dto.getPKAttribute().getDomainAttribute().getJavaType().isIntegerOrLong())
 				selectedItemId += ".toString()";
@@ -318,9 +324,8 @@ public class AngularCommonDataTableGenerator {
 					errorMsg = i18n.getI18NMessage("msg_errordelete", "Error while deleting object!");
 
 				formatter.addBlockComment(action.getDescription());
-				formatter.addLine(methodName + "() {");
+				formatter.addLine(methodName + "(selectedItem: " + dto.getName() + ") {");
 				formatter.increaseIndent();
-				formatter.addIfStatement("!this.selectedItem", "return;", true);
 				formatter.addLine(new AngularServiceInvocationGenerator(boundaryMethod).createInvocation(param) + ".subscribe({");
 				formatter.increaseIndent();
 				formatter.addLine("error: error => this.displayError(error, " + errorMsg + "),");
@@ -343,7 +348,7 @@ public class AngularCommonDataTableGenerator {
 
 				if (targetForm.getFormType() == FormTypeEnumeration.READONLY || targetForm.getFormType() == FormTypeEnumeration.UPDATE) {
 					formatter.addIfStatement("!this.selectedItem", "return;", true);
-					formatter.addLine("const selectedItemId = " + selectedItemId + ";");
+					formatter.addLine("const selectedItemId = this." + selectedItemId + ";");
 					formatter.addLine("this.router.navigate(['" + targetFormURL + "/' + selectedItemId]);");
 				}
 				else if (targetForm.getFormType() == FormTypeEnumeration.ADD)

@@ -1,19 +1,21 @@
-<div class="form-field-table" *ngIf="!readOnly">
-  <div style="display: flex; align-items: center">
-    <div class="form-field-cell label-field-mandatory" i18n="@@elementcollectioneditor_lbladd">
-      Add a new element:
-    </div>
-    <div class="form-field-cell">
-      <input pInputText [(ngModel)]="newValue" type="text" style="width: calc(20vw)" id="txtAdd">
-    </div>
-    <div class="form-field-cell">
-      <button *ngIf="!readOnly" type="button" (click)="addElement()" pButton icon="pi pi-plus" label="Add"
-        i18n-label="@@button_add" id="cmdAdd"></button>
+@if (!readOnly) {
+  <div class="form-field-table">
+    <div style="display: flex; align-items: center">
+      <div class="form-field-cell label-field-mandatory" i18n="@@elementcollectioneditor_lbladd">
+        Add a new element:
+      </div>
+      <div class="form-field-cell">
+        <input pInputText [(ngModel)]="newValue" type="text" style="width: calc(20vw)" id="txtAdd">
+      </div>
+      <div class="form-field-cell">
+        <button type="button" (click)="addElement()" pButton icon="pi pi-plus"
+          i18n="@@button_add" id="cmdAdd">Add</button>
+      </div>
     </div>
   </div>
-</div>
 
-<div class="form-spacer" *ngIf="!readOnly"></div>
+  <div class="form-spacer"></div>
+}
 
 <p-table [value]="filteredElements" selectionMode="single" (onRowSelect)="onRowSelect($event)" [contextMenu]="cm"
   [(contextMenuSelection)]="selectedItem">
@@ -33,4 +35,4 @@
   Number of elements: {{ elements.length }}
 </div>
 
-<p-contextMenu #cm [model]="contextMenuItems" id="elementCollectionEditor_contextMenu"></p-contextMenu>
+<p-contextmenu #cm [model]="contextMenuItems" id="elementCollectionEditor_contextMenu"/>

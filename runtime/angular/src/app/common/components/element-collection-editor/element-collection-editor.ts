@@ -1,9 +1,14 @@
-import { Component, forwardRef, Input, OnInit } from '@angular/core';
-import { ConfirmationService, MenuItem, MessageService } from 'primeng/api';
-import { FormBuilder, NG_VALUE_ACCESSOR, ControlValueAccessor } from '@angular/forms';
+import { Component, forwardRef, inject, Input, OnInit } from '@angular/core';
+import { MenuItem, MessageService, PrimeTemplate } from 'primeng/api';
+import { NG_VALUE_ACCESSOR, ControlValueAccessor, FormsModule } from '@angular/forms';
 import { I18NService } from '../../services/i18n.service';
 import { ValueConverter } from '../../converter/value-converter';
 import { ValueType } from '../../converter/value-type.enum';
+import { Bind } from 'primeng/bind';
+import { InputText } from 'primeng/inputtext';
+import { ButtonDirective } from 'primeng/button';
+import { TableModule } from 'primeng/table';
+import { ContextMenu } from 'primeng/contextmenu';
 
 /**
  * Component for maintaining element collections
@@ -12,30 +17,25 @@ import { ValueType } from '../../converter/value-type.enum';
   selector: 'cc-element-collection-editor',
   templateUrl: './element-collection-editor.html',
   providers: [{
-     provide: NG_VALUE_ACCESSOR,
-     useExisting: forwardRef(() => ElementCollectionEditor),
-     multi: true
-   }]
+    provide: NG_VALUE_ACCESSOR,
+    useExisting: forwardRef(() => ElementCollectionEditor),
+    multi: true
+  }],
+  imports: [FormsModule, Bind, InputText, ButtonDirective, TableModule, PrimeTemplate, ContextMenu]
 })
 export class ElementCollectionEditor<T extends string | Date | number > implements OnInit, ControlValueAccessor {
-  @Input() uniqueElements = false;
-  @Input() readOnly = false;
-  @Input() fieldType = '';
-
-  private onChange: (value: T[]) => void = () => {};
-
-  valueType: ValueType = ValueType.STRING;
-  elements: T[] = [];
-  contextMenuItems: MenuItem[] = [];
-  newValue: string = '';
-  selectedItem: T | null = null;
-
-  /**
-   * Create a new instance
-   */
-  constructor(protected messageService: MessageService, protected confirmationService: ConfirmationService,
-    protected formBuilder: FormBuilder, protected valueConverter: ValueConverter, protected i18n: I18NService) {
-  }
+  private readonly messageService = inject(MessageService);
+  private readonly valueConverter = inject(ValueConverter);
+  private readonly i18n = inject(I18NService);
+  @Input() public uniqueElements = false;
+  @Input() public readOnly = false;
+  @Input() public fieldType = '';
+  private onChange?: (value: T[]) => void;
+  protected valueType: ValueType = ValueType.STRING;
+  protected elements: T[] = [];
+  protected contextMenuItems: MenuItem[] = [];
+  protected newValue = '';
+  protected selectedItem: T | null = null;
 
   /**
    * Initialize the component
@@ -120,7 +120,7 @@ export class ElementCollectionEditor<T extends string | Date | number > implemen
       this.elements.push(newElement);
       this.newValue = '';
 
-      this.onChange(this.elements);
+      this.onChange?.(this.elements);
     } catch (error) {
       if (error instanceof Error) {
         this.messageService.add({ severity: 'warn', summary: error.message });
@@ -141,7 +141,7 @@ export class ElementCollectionEditor<T extends string | Date | number > implemen
   deleteSelectedElement(): void {
     if (this.selectedItem) {
       this.elements = this.elements.filter(item => item !== this.selectedItem);
-      this.onChange(this.elements);
+      this.onChange?.(this.elements);
     }
   }
 
@@ -150,12 +150,13 @@ export class ElementCollectionEditor<T extends string | Date | number > implemen
    */
   deleteAllElements(): void {
     this.elements = [];
-    this.onChange(this.elements);
+    this.onChange?.(this.elements);
   }
 
   /**
    * Callback method that keeps track of the selected element
    */
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   onRowSelect(event: any): void {
     this.selectedItem = event.data;
   }

@@ -2,7 +2,7 @@ import { SortDirectionEnum } from './sort-direction.enum';
 import { FilterOperatorEnum } from './filter-operator.enum';
 
 /**
- * Class that holds all necessary data for filtering data for one field in the back-end
+ * Class that holds all necessary data for filtering data for one field in the backend
  */
 export class SearchInputBaseField {
   name = '';

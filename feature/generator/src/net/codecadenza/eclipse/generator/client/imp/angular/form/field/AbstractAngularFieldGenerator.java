@@ -440,8 +440,7 @@ public abstract class AbstractAngularFieldGenerator {
 			fillSpace = false;
 
 		if (fillSpace) {
-			formatter
-					.addLine("<cc-form-control-container [fillEmptySpace]=\"true\" style=\"margin: 0px\"></cc-form-control-container>");
+			formatter.addLine("<cc-form-control-container [fillEmptySpace]=\"true\" style=\"margin: 0px\"/>");
 			formatter.addBlankLine();
 		}
 	}

@@ -126,7 +126,7 @@ public class AngularI18NGenerator extends AbstractI18NGenerator {
 		formatter.addLine("static readonly LOCALE_EN = 'EN';");
 		formatter.addBlankLine();
 		formatter.addLineComment("Translation messages for the default locale");
-		formatter.addLine("private static readonly messagesEN: Array<Translation> =");
+		formatter.addLine("private static readonly messagesEN: Translation[] =");
 		formatter.increaseIndent();
 		formatter.addLine("[");
 		formatter.increaseIndent();
@@ -139,7 +139,7 @@ public class AngularI18NGenerator extends AbstractI18NGenerator {
 		formatter.decreaseIndent();
 		formatter.addBlankLine();
 		formatter.addBlockComment(methodComment.toString());
-		formatter.addLine("static getTranlationMessages(locale: string) {");
+		formatter.addLine("public static getTranlationMessages(locale: string) {");
 		formatter.increaseIndent();
 		formatter.addIfStatement("locale === TranslationMessageRepository.LOCALE_EN",
 				"return TranslationMessageRepository.messagesEN;", true);

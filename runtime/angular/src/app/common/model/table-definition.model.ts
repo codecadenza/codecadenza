@@ -37,7 +37,7 @@ export class TableDefinition {
   /**
    * Return an array that contains all table columns
    */
-  getColumns(): Array<ColumnDefinition> {
+  getColumns(): ColumnDefinition[] {
     return this.columns;
   }
 }

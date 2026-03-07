@@ -1,22 +1,26 @@
-import { Component, OnInit } from '@angular/core';
-import { UntypedFormGroup, UntypedFormControl, Validators } from '@angular/forms';
+import { Component, inject, OnInit } from '@angular/core';
+import { UntypedFormGroup, UntypedFormControl, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AuthService } from '../../services/auth.service';
+import { Bind } from 'primeng/bind';
+import { Dialog } from 'primeng/dialog';
+import { FormContainerComponent } from '../../components/form-container/form-container.component';
+import { FormControlContainerComponent } from '../../components/form-control-container/form-control-container.component';
+import { InputText } from 'primeng/inputtext';
+import { PasswordDirective } from 'primeng/password';
+import { ButtonDirective } from 'primeng/button';
 
 /**
  * Login page
  */
 @Component({
-  templateUrl: './login-page.html'
+  templateUrl: './login-page.html',
+  imports: [Bind, Dialog, FormsModule, ReactiveFormsModule, FormContainerComponent, FormControlContainerComponent, InputText,
+    PasswordDirective, ButtonDirective]
 })
 export class LoginPage implements OnInit {
-  formGroup!: UntypedFormGroup;
-  credentials = { userName: '', password: '' };
-
-  /**
-   * Create a new instance
-   */
-  constructor(protected authService: AuthService) {
-  }
+  private readonly authService = inject(AuthService);
+  protected formGroup!: UntypedFormGroup;
+  protected credentials = { userName: '', password: '' };
 
   /**
    * Initialize the form

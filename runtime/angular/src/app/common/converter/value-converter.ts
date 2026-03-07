@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { NumberConverter } from './number-converter';
 import { FormatterService } from '../services/formatter.service';
 import { ValueType } from './value-type.enum';
@@ -8,15 +8,13 @@ import { ValueType } from './value-type.enum';
  */
 @Injectable({ providedIn: 'root' })
 export class ValueConverter {
-  /**
-   * Create a new instance
-   */
-  constructor(private readonly formatterService: FormatterService, private readonly numberConverter: NumberConverter) {
-  }
+  private readonly numberConverter = inject(NumberConverter);
+  private readonly formatterService = inject(FormatterService);
 
   /**
    * Convert the given string to the actual type
    */
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   convertToValue(value: any, valueType: ValueType): any {
     if (valueType === ValueType.DECIMAL || valueType === ValueType.INTEGER) {
       return this.numberConverter.convertToNumber(value);

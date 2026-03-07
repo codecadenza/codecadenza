@@ -21,11 +21,11 @@
  */
 package net.codecadenza.eclipse.generator.client.imp.angular.service;
 
-import static net.codecadenza.eclipse.generator.client.imp.angular.common.JavaScriptType.ARRAY;
 import static net.codecadenza.eclipse.generator.client.imp.angular.common.JavaScriptType.NUMBER;
 import static net.codecadenza.eclipse.generator.client.imp.angular.common.JavaScriptType.OBSERVABLE;
 import static net.codecadenza.eclipse.generator.client.imp.angular.common.JavaScriptType.STRING;
 import static net.codecadenza.eclipse.generator.client.imp.angular.common.JavaScriptType.VOID;
+import static net.codecadenza.eclipse.shared.Constants.INTEGRATION_SEARCH_PARAM_TYPE;
 
 import java.util.List;
 import java.util.Optional;
@@ -63,6 +63,7 @@ public class AngularServiceGenerator extends AbstractTypeScriptSourceGenerator {
 	private final String serviceName;
 	private final Project project;
 	private final boolean limitItems;
+	private final boolean addLocaleService;
 
 	/**
 	 * Constructor
@@ -76,6 +77,9 @@ public class AngularServiceGenerator extends AbstractTypeScriptSourceGenerator {
 		this.project = domainObject.getNamespace().getProject();
 		this.limitItems = boundaryBean.getBoundaryMethods().stream()
 				.anyMatch(m -> m.getMethodType() == BoundaryMethodTypeEnumeration.SEARCH_BY_FILTER);
+		this.addLocaleService = boundaryBean.getBoundaryMethods().stream()
+				.anyMatch(m -> m.getMethodType() == BoundaryMethodTypeEnumeration.COUNT
+						|| m.getMethodType() == BoundaryMethodTypeEnumeration.SEARCH);
 	}
 
 	/*
@@ -112,7 +116,10 @@ public class AngularServiceGenerator extends AbstractTypeScriptSourceGenerator {
 		if (limitItems)
 			addPrivateConstant("number", "MAX_LIST_SIZE", "100").create();
 
-		addService("HttpClient", "httpClient", "@angular/common/http");
+		addService("HttpClient", "httpClient", "@angular/common/http").create();
+
+		if (addLocaleService)
+			addService("LocaleService", "localeService", "../common/services/locale.service").create();
 	}
 
 	/*
@@ -166,11 +173,13 @@ public class AngularServiceGenerator extends AbstractTypeScriptSourceGenerator {
 		else
 			importType(returnType, "../domain/" + returnType.toLowerCase() + ".interface");
 
-		if (methodType == BoundaryMethodTypeEnumeration.COUNT || methodType == BoundaryMethodTypeEnumeration.SEARCH)
+		if (methodType == BoundaryMethodTypeEnumeration.COUNT || methodType == BoundaryMethodTypeEnumeration.SEARCH) {
 			importType(SEARCH_INPUT_TYPE_BACKEND, "../common/model/search-input-backend.model");
+			importType(INTEGRATION_SEARCH_PARAM_TYPE, "../common/model/search-input.model");
+		}
 
 		if (restMethod.getReturnTypeModifier() != JavaTypeModifierEnumeration.NONE)
-			returnType = ARRAY + "<" + returnType + ">";
+			returnType = returnType + "[]";
 
 		final var methodSignature = new StringBuilder();
 		methodSignature.append(restMethod.getBoundaryMethod().getName());
@@ -192,16 +201,16 @@ public class AngularServiceGenerator extends AbstractTypeScriptSourceGenerator {
 			else
 				methodSignature.append(", ");
 
-			methodSignature.append(param.getName() + ": ");
+			if (param.getType().equals(Constants.INTEGRATION_SEARCH_PARAM_TYPE))
+				methodSignature.append("searchInputObj: ");
+			else
+				methodSignature.append(param.getName() + ": ");
 
 			if (useType) {
 				if (methodType != BoundaryMethodTypeEnumeration.COUNT && methodType != BoundaryMethodTypeEnumeration.SEARCH)
 					importType(param.getType(), "../domain/" + param.getType().toLowerCase() + ".interface");
 
-				if (param.getType().equals(Constants.INTEGRATION_SEARCH_PARAM_TYPE))
-					methodSignature.append(SEARCH_INPUT_TYPE_BACKEND);
-				else
-					methodSignature.append(param.getType());
+				methodSignature.append(param.getType());
 			}
 			else
 				methodSignature.append(STRING);
@@ -237,6 +246,13 @@ public class AngularServiceGenerator extends AbstractTypeScriptSourceGenerator {
 		url.append(";");
 
 		formatter.addLine(url.toString());
+
+		if (methodType == BoundaryMethodTypeEnumeration.COUNT || methodType == BoundaryMethodTypeEnumeration.SEARCH) {
+			formatter.addLine("const searchInput = SearchInputBackend.convert(searchInputObj,");
+			formatter.increaseIndent();
+			formatter.addLine("this.localeService.getDecimalSeparator(), this.localeService.getGroupingSeparator());");
+			formatter.decreaseIndent();
+		}
 
 		firstParam = true;
 

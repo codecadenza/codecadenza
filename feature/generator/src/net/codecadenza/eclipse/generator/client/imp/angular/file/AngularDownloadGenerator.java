@@ -108,10 +108,10 @@ public class AngularDownloadGenerator {
 			final var button = new StringBuilder();
 			final var buttonId = "cmd" + action.getBoundaryMethod().getDomainAttribute().getUpperCaseName() + "Download";
 
-			button.append("<button pButton type=\"button\" icon=\"pi pi-file\" i18n-label=\"@@button_download\" ");
+			button.append("<button pButton type=\"button\" icon=\"pi pi-file\" i18n=\"@@button_download\" ");
 			button.append("[style]=\"{'margin': '0px 0px 0.5em 0.5em'}\" class=\"col xl:col-1 md:col-3 sm:col-12\" ");
-			button.append("label=\"Download\" (click)=\"" + action.getBoundaryMethod().getName() + "()\" ");
-			button.append("id=\"" + buttonId + "\"></button>");
+			button.append("(click)=\"" + action.getBoundaryMethod().getName() + "()\" ");
+			button.append("id=\"" + buttonId + "\">Download</button>");
 
 			formatter.addLine(button.toString());
 		});

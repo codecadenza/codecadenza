@@ -83,6 +83,7 @@ public class AngularViewGenerator extends AbstractTypeScriptSourceGenerator {
 	@Override
 	protected void addImports() {
 		importTypes(Stream.of("Component", "OnInit"), "@angular/core");
+		importType("AppCommonModule", "../../common/app-common.module");
 		importType("SearchInput", "../../common/model/search-input.model");
 		importType("AbstractDataGridView", "../../common/components/abstract-data-grid-view/abstract-data-grid-view");
 
@@ -101,7 +102,9 @@ public class AngularViewGenerator extends AbstractTypeScriptSourceGenerator {
 
 		formatter.addLine("@Component({");
 		formatter.increaseIndent();
-		formatter.addLine("templateUrl: '../../common/components/abstract-data-grid-view/abstract-data-grid-view.html'");
+		formatter.addLine("selector: 'app-" + form.getName().toLowerCase() + "',");
+		formatter.addLine("templateUrl: '../../common/components/abstract-data-grid-view/abstract-data-grid-view.html',");
+		formatter.addLine("imports: [AppCommonModule]");
 		formatter.decreaseIndent();
 		formatter.addLine("})");
 		formatter.addLine(classDeclaration);
@@ -114,13 +117,7 @@ public class AngularViewGenerator extends AbstractTypeScriptSourceGenerator {
 	@Override
 	protected void addFields() {
 		addField(STRING, "ID").asConstant("'" + form.getName() + "'").create();
-		addField(STRING, "rowKey", "'" + form.getDTO().getPKAttribute().getName() + "'").create();
-
-		addServiceOfSuperclass("ConfirmationService", "confirmationService", "primeng/api");
-		addServiceOfSuperclass("MessageService", "messageService", "primeng/api");
-		addServiceOfSuperclass("I18NService", "i18n", "../../common/services/i18n.service");
-		addServiceOfSuperclass("FormatterService", "formatterService", "../../common/services/formatter.service");
-		addServiceOfSuperclass("SavedSearchService", "savedSearchService", "../../common/services/saved-search.service");
+		addField(null, "rowKey", "'" + form.getDTO().getPKAttribute().getName() + "'").create();
 
 		tableGenerator.addFields();
 	}
@@ -133,7 +130,7 @@ public class AngularViewGenerator extends AbstractTypeScriptSourceGenerator {
 	@Override
 	protected void addMethods(AngularContentFormatter formatter) {
 		final String invocation = new AngularServiceInvocationGenerator(form.getBoundaryMethod())
-				.createInvocation("searchInputBackend");
+				.createInvocation("this.searchInput");
 
 		formatter.addBlockComment("Initialize the view");
 		formatter.addLine("ngOnInit() {");
@@ -147,6 +144,8 @@ public class AngularViewGenerator extends AbstractTypeScriptSourceGenerator {
 		if (tableGenerator.showButtonForDataImport())
 			formatter.addLine("this.showImportButton = true;");
 
+		formatter.addLine("this.addMenuItems();");
+
 		tableGenerator.addContextMenuItems();
 
 		formatter.decreaseIndent();
@@ -158,8 +157,6 @@ public class AngularViewGenerator extends AbstractTypeScriptSourceGenerator {
 		formatter.addBlockComment("Load the items from the back-end");
 		formatter.addLine("loadData() {");
 		formatter.increaseIndent();
-		formatter.addLine("const searchInputBackend = this.searchInput.convert(this.formatterService.getLocale());");
-		formatter.addBlankLine();
 		formatter.addLine("return " + invocation + ";");
 		formatter.decreaseIndent();
 		formatter.addLine("}");
@@ -167,13 +164,11 @@ public class AngularViewGenerator extends AbstractTypeScriptSourceGenerator {
 
 		if (formType == FormTypeEnumeration.SEARCHABLE_VIEW) {
 			final BoundaryMethod countMethod = form.getViewFormPanel().getBoundaryMethod();
-			final String countInvocation = new AngularServiceInvocationGenerator(countMethod).createInvocation("searchInputBackend");
+			final String countInvocation = new AngularServiceInvocationGenerator(countMethod).createInvocation("this.searchInput");
 
 			formatter.addBlockComment("Perform the count operation");
 			formatter.addLine("override countRecords() {");
 			formatter.increaseIndent();
-			formatter.addLine("const searchInputBackend = this.searchInput.convert(this.formatterService.getLocale());");
-			formatter.addBlankLine();
 			formatter.addLine("return " + countInvocation + ";");
 			formatter.decreaseIndent();
 			formatter.addLine("}");

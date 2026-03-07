@@ -37,7 +37,7 @@ import net.codecadenza.runtime.selenium.page.AbstractPageComponent;
  */
 public abstract class AbstractAngularPageComponent extends AbstractPageComponent {
 	private static final String HTTP_REQUEST_CHECK_SCRIPT = """
-			let progressBar = document.querySelector('p-progressBar[mode="indeterminate"]');
+			let progressBar = document.querySelector('p-progressbar[mode="indeterminate"]');
 			if (progressBar && progressBar.offsetParent !== null) {
 			return false;
 			} else {

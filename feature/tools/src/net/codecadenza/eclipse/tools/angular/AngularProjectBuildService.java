@@ -40,26 +40,22 @@ import org.eclipse.core.resources.IProject;
  */
 public class AngularProjectBuildService {
 	private static final String SYSTEM_ENVIRONMENT_PATH = "PATH";
-	private static final String ANGULAR_VERSION = "17.0";
-	private static final String CHART_JS_VERSION = "4.4";
-	private static final String CRYPTO_ES_VERSION = "2.1";
-	private static final String FULLCALENDAR_VERSION = "6.1";
-	private static final String PRIMEICONS_VERSION = "6.0";
-	private static final String PRIMENG_VERSION = "17.3";
-	private static final String PRIMEFLEX_VERSION = "3.3";
-	private static final String QUILL_VERSION = "1.3";
-	private static final String UUID_VERSION = "9.0";
+	private static final String ANGULAR_VERSION = "21.1";
+	private static final String CRYPTO_ES_VERSION = "3.1";
+	private static final String PRIMEICONS_VERSION = "7.0";
+	private static final String PRIMENG_VERSION = "21.1";
+	private static final String PRIMENG_THEMING_VERSION = "2.0";
+	private static final String PRIMEFLEX_VERSION = "4.0";
+	private static final String UUID_VERSION = "13.0";
 	private static final String DEPENDENCY_CDK = "@angular/cdk";
-	private static final String DEPENDENCY_CHART_JS = "chart.js";
 	private static final String DEPENDENCY_CRYPTO_ES = "crypto-es";
-	private static final String DEPENDENCY_FULL_CALENDAR = "@fullcalendar/core";
 	private static final String DEPENDENCY_LOCALIZE = "@angular/localize";
 	private static final String DEPENDENCY_LINT = "@angular-eslint/schematics";
 	private static final String DEPENDENCY_PRIMENG = "primeng";
+	private static final String DEPENDENCY_PRIMENG_THEMING = "@primeuix/themes";
 	private static final String DEPENDENCY_PRIMEICONS = "primeicons";
 	private static final String DEPENDENCY_PRIMEFLEX = "primeflex";
-	private static final String DEPENDENCY_QUILL = "quill";
-	private static final String DEPENDENCY_UUID = "@types/uuid";
+	private static final String DEPENDENCY_UUID = "uuid";
 	private static final String ENVIRONMENTS = "environments";
 
 	private final String projectName;
@@ -89,12 +85,10 @@ public class AngularProjectBuildService {
 
 		// Add all dependencies
 		addDependency(DEPENDENCY_CDK, ANGULAR_VERSION);
-		addDependency(DEPENDENCY_CHART_JS, CHART_JS_VERSION);
 		addDependency(DEPENDENCY_CRYPTO_ES, CRYPTO_ES_VERSION);
-		addDependency(DEPENDENCY_FULL_CALENDAR, FULLCALENDAR_VERSION);
-		addDependency(DEPENDENCY_QUILL, QUILL_VERSION);
 		addDependency(DEPENDENCY_PRIMEICONS, PRIMEICONS_VERSION);
 		addDependency(DEPENDENCY_PRIMENG, PRIMENG_VERSION);
+		addDependency(DEPENDENCY_PRIMENG_THEMING, PRIMENG_THEMING_VERSION);
 		addDependency(DEPENDENCY_PRIMEFLEX, PRIMEFLEX_VERSION);
 		addDependency(DEPENDENCY_UUID, UUID_VERSION);
 	}
@@ -115,8 +109,7 @@ public class AngularProjectBuildService {
 	 * @throws Exception if an internal error has occurred
 	 */
 	private void createAngularProject() throws Exception {
-		final List<String> createCommand = createCommand("ng", "new", projectName, "--skip-git", "--interactive", "false",
-				"--no-standalone");
+		final List<String> createCommand = createCommand("ng", "new", projectName, "--skip-git", "--interactive", "false");
 		final List<String> addEnvironmentsCommand = createCommand("ng", "g", ENVIRONMENTS);
 		final List<String> addLocalizeCommand = createCommand("ng", "add", DEPENDENCY_LOCALIZE, "--skip-confirmation");
 		final List<String> addLintCommand = createCommand("ng", "add", DEPENDENCY_LINT, "--skip-confirmation");

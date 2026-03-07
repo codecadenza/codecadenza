@@ -1,4 +1,6 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component, inject, ViewChild } from '@angular/core';
+import { Router } from '@angular/router';
+import { Observable, of } from 'rxjs';
 import { MenuItem, MessageService, ConfirmationService } from 'primeng/api';
 import { Table } from 'primeng/table';
 import { FileUploadHandlerEvent, FileUpload } from 'primeng/fileupload';
@@ -7,36 +9,38 @@ import { SearchInput } from '../../model/search-input.model';
 import { I18NService } from '../../services/i18n.service';
 import { FormatterService } from '../../services/formatter.service';
 import { SavedSearchService } from '../../services/saved-search.service';
-import { Observable, of } from 'rxjs';
 
 /**
  * Abstract base class for all data grid views
  */
-@Component({ template: ''})
+@Component({
+  template: ''
+})
 export abstract class AbstractDataGridView<T> {
-  @ViewChild('dataTable', {static: true}) dataTable!: Table;
-  id = '';
-  enableSearchInput = true;
-  searchInput!: SearchInput;
-  showNewButton = false;
-  showImportButton = false;
-  showSearchInputDialog = false;
-  showSaveSearchDialog = false;
-  showSavedSearchSelectionDialog = false;
-  summaryText = '';
-  contextMenuItems: MenuItem[] = [];
-  loading = false;
-  items: Array<T> = [];
-  selectedItem?: T;
-  columns: ColumnDefinition[] = [];
-  title = '';
-
-  /**
-   * Create a new instance
-   */
-  constructor(protected confirmationService: ConfirmationService, protected messageService: MessageService,
-    protected i18n: I18NService, protected formatterService: FormatterService, protected savedSearchService: SavedSearchService) {
-  }
+  protected readonly router = inject(Router);
+  protected readonly confirmationService = inject(ConfirmationService);
+  protected readonly messageService = inject(MessageService);
+  protected readonly formatterService = inject(FormatterService);
+  protected readonly savedSearchService = inject(SavedSearchService);
+  protected readonly i18n = inject(I18NService);
+  @ViewChild('dataTable', {static: true}) protected dataTable!: Table;
+  @ViewChild('fileUpload') protected fileUpload!: FileUpload;
+  protected id = '';
+  protected enableSearchInput = true;
+  protected searchInput!: SearchInput;
+  protected showNewButton = false;
+  protected showImportButton = false;
+  protected showSearchInputDialog = false;
+  protected showSaveSearchDialog = false;
+  protected showSavedSearchSelectionDialog = false;
+  protected summaryText = '';
+  protected contextMenuItems: MenuItem[] = [];
+  protected loading = false;
+  protected items: T[] = [];
+  protected selectedItem?: T;
+  protected columns: ColumnDefinition[] = [];
+  protected title = '';
+  protected menuItems: MenuItem[] = [];
 
   /**
    * Initialize the view and load the data
@@ -58,6 +62,68 @@ export abstract class AbstractDataGridView<T> {
     }
 
     this.refreshView();
+  }
+
+  /**
+   * Add the items to the menu
+   */
+  addMenuItems() {
+    this.menuItems = [];
+
+    if (this.enableSearchInput) {
+      this.menuItems.push({
+        label: this.i18n.translate('cmd_search'),
+        id: 'cmdSearch',
+        icon: 'pi pi-search',
+        command: () => this.showSearchInputDialog = true
+      });
+
+      this.menuItems.push({
+        label: this.i18n.translate('cmd_save'),
+        id: 'cmdSave',
+        icon: 'pi pi-star',
+        command: () => this.showSaveSearchDialog = true
+      });
+
+      this.menuItems.push({
+        label: this.i18n.translate('cmd_open'),
+        id: 'cmdOpen',
+        icon: 'pi pi-list',
+        command: () => this.showSavedSearchSelectionDialog = true
+      });
+    }
+
+    this.menuItems.push({
+      label: this.i18n.translate('cmd_refresh'),
+      id: 'cmdRefresh',
+      icon: 'pi pi-refresh',
+      command: () => this.refreshView()
+    });
+
+    this.menuItems.push({
+      label: this.i18n.translate('cmd_export'),
+      id: 'cmdExport',
+      icon: 'pi pi-download',
+      command: () => this.dataTable?.exportCSV()
+    });
+
+    if (this.showNewButton) {
+      this.menuItems.push({
+        label: this.i18n.translate('cmd_new'),
+        id: 'cmdNew',
+        icon: 'pi pi-plus',
+        command: () => this.onNewButtonClicked()
+      });
+    }
+
+    if (this.showImportButton) {
+      this.menuItems.push({
+        label: this.i18n.translate('cmd_import'),
+        id: 'cmdImport',
+        icon: 'pi pi-upload',
+        command: () => this.fileUpload?.basicFileInput?.nativeElement.click()
+      });
+    }
   }
 
   /**
@@ -157,7 +223,7 @@ export abstract class AbstractDataGridView<T> {
    * Method that is invoked to load the data.
    * An implementation class must override this method accordingly!
    */
-  abstract loadData(): Observable<Array<T>>;
+  abstract loadData(): Observable<T[]>;
 
   /**
    * Initialize a search input object.
@@ -200,32 +266,24 @@ export abstract class AbstractDataGridView<T> {
   /**
    * Open a confirmation dialog before calling the provided delete function
    */
-  openConfirmDeleteDialog(deleteFunction: () => void) {
-    if (!this.selectedItem) {
-      return;
-    }
-
+  openConfirmDeleteDialog(deleteFunction: (item: T) => void) {
     this.confirmationService.confirm({
       message: this.i18n.translate('msg_confirmdelete'),
       header: this.i18n.translate('dlg_header_conf'),
       icon: 'pi pi-exclamation-triangle',
-      accept: () => deleteFunction()
+      accept: deleteFunction
     });
   }
 
   /**
    * Open a confirmation dialog before calling the provided copy function
    */
-  openConfirmCopyDialog(copyFunction: () => void) {
-    if (!this.selectedItem) {
-      return;
-    }
-
+  openConfirmCopyDialog(copyFunction: (item: T) => void) {
     this.confirmationService.confirm({
       message: this.i18n.translate('msg_confirmcopy'),
       header: this.i18n.translate('dlg_header_conf'),
       icon: 'pi pi-exclamation-triangle',
-      accept: () => copyFunction()
+      accept: copyFunction
     });
   }
 

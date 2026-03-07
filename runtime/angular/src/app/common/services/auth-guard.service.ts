@@ -8,12 +8,8 @@ import { AuthService } from './auth.service';
  */
 @Injectable({ providedIn: 'root' })
 export class AuthGuardService {
-
-  /**
-   * Create a new instance
-   */
-  constructor(protected authService: AuthService, protected router: Router) {
-  }
+  private readonly authService = inject(AuthService);
+  private readonly router = inject(Router);
 
   /**
    * Return true if the resource may be accessed
