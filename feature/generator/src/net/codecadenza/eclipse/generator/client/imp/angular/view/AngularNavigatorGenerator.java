@@ -117,10 +117,10 @@ public class AngularNavigatorGenerator extends AbstractTypeScriptSourceGenerator
 	@Override
 	protected void addFields() {
 		addService("I18NService", "i18n", "../../services/i18n.service").create();
-		addField(null, "FORM_GROUP_TYPE", "TreeNavigatorNode.FORM_GROUP_TYPE").create();
-		addField(null, "FORM_TYPE", "TreeNavigatorNode.FORM_TYPE").create();
-		addField("TreeNode[]", "nodes").withDefaultValue("[]").create();
-		addField(null, "collapsed").withDefaultValue("false").withInputModifier().create();
+		addProtectedField(null, "FORM_GROUP_TYPE").withDefaultValue("TreeNavigatorNode.FORM_GROUP_TYPE").create();
+		addProtectedField(null, "FORM_TYPE").withDefaultValue("TreeNavigatorNode.FORM_TYPE").create();
+		addProtectedField("TreeNode[]", "nodes").withDefaultValue("[]").create();
+		addPublicField(null, "collapsed").withDefaultValue("false").withInputModifier().create();
 
 		if (securityHelper.isSecurityEnabled()) {
 			addService("AuthService", "authService", "../../services/auth.service").create();

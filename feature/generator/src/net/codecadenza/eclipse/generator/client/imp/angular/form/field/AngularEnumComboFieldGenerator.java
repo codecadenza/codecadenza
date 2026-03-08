@@ -21,6 +21,8 @@
  */
 package net.codecadenza.eclipse.generator.client.imp.angular.form.field;
 
+import static net.codecadenza.eclipse.generator.client.imp.angular.common.TypeScriptFieldGenerator.VISIBILITY_PROTECTED;
+
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -88,8 +90,10 @@ public class AngularEnumComboFieldGenerator extends AbstractAngularFieldGenerato
 		if (!field.isVisible())
 			return Collections.emptyList();
 
-		return Collections
-				.singletonList(new TypeScriptFieldGenerator(itemListName + ": SelectItem[]", null, formatter).withDefaultValue("[]"));
+		final var itemArray = new TypeScriptFieldGenerator(itemListName + ": SelectItem[]", VISIBILITY_PROTECTED, formatter)
+				.withDefaultValue("[]");
+
+		return Collections.singletonList(itemArray);
 	}
 
 	/*

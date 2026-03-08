@@ -115,10 +115,10 @@ public class AngularGridPanelGenerator extends AbstractTypeScriptSourceGenerator
 		if (service != null)
 			service.create();
 
-		addField(null, PARENT_OBJ_ID).withDefaultValue("''").withInputModifier().create();
+		addPublicField(null, PARENT_OBJ_ID).withDefaultValue("''").withInputModifier().create();
 
 		if (gridPanel.getAssociation() instanceof final OneToManyAssociation otm && otm.isBidirectional())
-			addField(null, "readonly").withDefaultValue("false").withInputModifier().create();
+			addPublicField(null, "readonly").withDefaultValue("false").withInputModifier().create();
 
 		tableGenerator.addFields();
 	}
