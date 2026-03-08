@@ -203,7 +203,7 @@ public class ConstrainedClass {
 			// Add all constraints that are on the method
 			addConstraints(constraints, method.getAnnotations());
 		}
-		catch (final NoSuchMethodException e) {
+		catch (final NoSuchMethodException _) {
 			// Ignored!
 		}
 

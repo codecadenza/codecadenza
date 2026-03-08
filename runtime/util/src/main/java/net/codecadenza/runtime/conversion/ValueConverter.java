@@ -215,7 +215,7 @@ public class ValueConverter<T> {
 		catch (final IllegalArgumentException e) {
 			throw e;
 		}
-		catch (final Exception e) {
+		catch (final Exception _) {
 			throw new IllegalArgumentException("The string '" + string + "' could not be converted to a '" + type.getName() + "'!");
 		}
 	}

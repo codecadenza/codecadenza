@@ -173,7 +173,7 @@ public class BeanValidator {
 				}
 			}
 		}
-		catch (final IllegalAccessException | InvocationTargetException e) {
+		catch (final IllegalAccessException | InvocationTargetException _) {
 			throw new IntrospectionException("Error while invoking getter method for property '" + propertyName + "'!");
 		}
 

@@ -120,7 +120,7 @@ public class PropertyService {
 		try {
 			return Integer.parseInt(propertyValue);
 		}
-		catch (final NumberFormatException e) {
+		catch (final NumberFormatException _) {
 			throw new IllegalPropertyValueException("Property " + name + " does not represent a valid integer value!");
 		}
 	}
@@ -137,7 +137,7 @@ public class PropertyService {
 		try {
 			return Long.parseLong(propertyValue);
 		}
-		catch (final NumberFormatException e) {
+		catch (final NumberFormatException _) {
 			throw new IllegalPropertyValueException("Property " + name + " does not represent a valid long value!");
 		}
 	}
@@ -156,7 +156,7 @@ public class PropertyService {
 			final Number n = decimalFormat.parse(propertyValue);
 			return n.doubleValue();
 		}
-		catch (final ParseException e) {
+		catch (final ParseException _) {
 			throw new IllegalPropertyValueException("Property " + name + " does not represent a valid double value!");
 		}
 	}
@@ -175,7 +175,7 @@ public class PropertyService {
 			final Number n = decimalFormat.parse(propertyValue);
 			return n.floatValue();
 		}
-		catch (final ParseException e) {
+		catch (final ParseException _) {
 			throw new IllegalPropertyValueException("Property " + name + " does not represent a valid float value!");
 		}
 	}
@@ -208,7 +208,7 @@ public class PropertyService {
 		try {
 			return dateFormat.parse(propertyValue);
 		}
-		catch (final ParseException e) {
+		catch (final ParseException _) {
 			throw new IllegalPropertyValueException("Property " + name + " does not represent a valid java.util.Date value!");
 		}
 	}
