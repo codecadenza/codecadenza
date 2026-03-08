@@ -14,10 +14,9 @@ export class SearchInputBackend extends AbstractSearchInput {
     const searchInputBackend = new SearchInputBackend();
     searchInputBackend.decimalSeparator = decimalSeparator;
     searchInputBackend.groupingSeparator = groupingSeparator;
-
-    Object.assign(searchInputBackend, this);
-
-    searchInputBackend.searchFields = [];
+    searchInputBackend.caseSensitive = searchInput.caseSensitive;
+    searchInputBackend.exactFilterMatch = searchInput.exactFilterMatch;
+    searchInputBackend.maxResult = searchInput.maxResult;
 
     searchInput.searchFields.forEach(searchInputField => {
       const backendField = new SearchInputBaseField();
