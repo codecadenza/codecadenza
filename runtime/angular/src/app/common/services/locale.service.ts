@@ -18,7 +18,11 @@ export class LocaleService {
    * Initializes the decimal and grouping separators based on the injected locale
    */
   constructor() {
-    const numberFormat = new Intl.NumberFormat(this.locale);
+    console.log('Determine settings for locale ' + this.locale);
+
+    const numberFormat = new Intl.NumberFormat(this.locale, {
+      minimumFractionDigits: 1
+    });
     const parts = numberFormat.formatToParts(LocaleService.DEFAULT_NUMBER);
 
     for (const part of parts) {
@@ -28,6 +32,9 @@ export class LocaleService {
         this.groupingSeparator = part.value;
       }
     }
+
+    console.log('Using decimal separator: \'' + this.decimalSeparator + '\'');
+    console.log('Using grouping separator: \'' + this.groupingSeparator + '\'');
   }
 
   /**
