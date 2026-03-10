@@ -56,8 +56,10 @@ public class AngularProposalTextFieldGenerator extends AbstractAngularItemSelect
 	public Map<String, String> getImports() {
 		final Map<String, String> imports = super.getImports();
 
-		if (field.isVisible())
+		if (field.isVisible()) {
 			imports.put("AutoCompleteCompleteEvent", "primeng/autocomplete");
+			imports.put("signal", "@angular/core");
+		}
 
 		return imports;
 	}
@@ -72,7 +74,7 @@ public class AngularProposalTextFieldGenerator extends AbstractAngularItemSelect
 		control.append("<p-autocomplete optionLabel=\"" + displayAttr.getName() + "\" ");
 		control.append("formControlName=\"" + field.getDTOAttribute().getName() + "\" ");
 		control.append("[forceSelection]=\"true\" ");
-		control.append("[suggestions]=\"" + itemListName + "\" ");
+		control.append("[suggestions]=\"" + itemListName + "()\" ");
 		control.append("(completeMethod)=\"" + fetchItemsMethodName + "($event)\" ");
 		control.append("[style]=\"{'width':'100%'}\" [inputStyle]=\"{'width':'100%'}\" ");
 		control.append("id=\"" + field.getName() + "\"");
@@ -113,7 +115,7 @@ public class AngularProposalTextFieldGenerator extends AbstractAngularItemSelect
 
 			formatter.addLine("next: result => {");
 			formatter.increaseIndent();
-			formatter.addLine("this." + itemListName + " = result;");
+			formatter.addLine("this." + itemListName + ".set(result);");
 			formatter.addBlankLine();
 			formatter.addLine("const emptyItem = {");
 			formatter.increaseIndent();
@@ -125,12 +127,12 @@ public class AngularProposalTextFieldGenerator extends AbstractAngularItemSelect
 			formatter.decreaseIndent();
 			formatter.addLine("};");
 			formatter.addBlankLine();
-			formatter.addLine("this." + itemListName + ".push(emptyItem);");
+			formatter.addLine("this." + itemListName + "().push(emptyItem);");
 			formatter.decreaseIndent();
 			formatter.addLine("},");
 		}
 		else
-			formatter.addLine("next: result => this." + itemListName + " = result,");
+			formatter.addLine("next: result => this." + itemListName + ".set(result),");
 
 		formatter.addLine("error: error => this.openErrorDialog(error, false)");
 		formatter.decreaseIndent();

@@ -306,7 +306,7 @@ public class AngularSingleRecordFormGenerator extends AbstractTypeScriptSourceGe
 
 			importType(OBSERVABLE, "rxjs");
 
-			formatter.addBlockComment("Load the " + domainObject.getLabel() + " from the back-end");
+			formatter.addBlockComment("Load the " + domainObject.getLabel() + " from the backend");
 			formatter.addLine("loadObject(id: string): " + OBSERVABLE + "<" + form.getDTO().getName() + "> {");
 			formatter.increaseIndent();
 			formatter.addLine("return " + new AngularServiceInvocationGenerator(method).createInvocation("id") + ";");
@@ -347,7 +347,7 @@ public class AngularSingleRecordFormGenerator extends AbstractTypeScriptSourceGe
 		if (form.isOpenEditAfterCreate())
 			for (final Form targetForm : project.getAllFormsOfProject())
 				if (targetForm.getFormType() == FormTypeEnumeration.UPDATE && targetForm.getDomainObject().equals(domainObject)) {
-					final var pathParameter = "this.object." + form.getDTO().getPKAttribute().getName();
+					final var pathParameter = "this.object()." + form.getDTO().getPKAttribute().getName();
 
 					formatter
 							.addBlockComment("Navigate to the corresponding update form after creating the new " + domainObject.getLabel());
@@ -388,8 +388,12 @@ public class AngularSingleRecordFormGenerator extends AbstractTypeScriptSourceGe
 		boolean hasLOVDialog = false;
 
 		final var formatter = new AngularContentFormatter();
-		formatter.addLine("<cc-error-dialog [error]=\"error\" [leavePage]=\"leavePage\"></cc-error-dialog>");
-		formatter.addBlankLine();
+		formatter.addLine("@if (error()) {");
+		formatter.increaseIndent();
+		formatter.addLine("<cc-error-dialog [error]=\"error()\" [leavePage]=\"leavePage\"></cc-error-dialog>");
+		formatter.decreaseIndent();
+		formatter.addLine("} @else if (formInitialized()) {");
+		formatter.increaseIndent();
 
 		// Add list-of-values dialogs
 		for (final FormField formField : form.getAllFormFields()) {
@@ -434,17 +438,12 @@ public class AngularSingleRecordFormGenerator extends AbstractTypeScriptSourceGe
 		if (hasLOVDialog)
 			formatter.addBlankLine();
 
-		if (formType == FormTypeEnumeration.UPDATE || formType == FormTypeEnumeration.READONLY) {
-			formatter.addLine("@if (object && !error) {");
-			formatter.increaseIndent();
-		}
-
 		final var container = new StringBuilder();
 		container.append("<cc-view-container i18n-headerText=\"@@" + form.getName().toLowerCase() + "_title\" ");
 		container.append("headerIcon=\"pi-file\" ");
 
 		if (formType == FormTypeEnumeration.UPDATE || formType == FormTypeEnumeration.READONLY)
-			container.append("headerText=\"" + form.getTitle() + " '{{id}}'\"");
+			container.append("headerText=\"" + form.getTitle() + " '{{ id }}'\"");
 		else
 			container.append("headerText=\"" + form.getTitle() + "\"");
 
@@ -534,11 +533,8 @@ public class AngularSingleRecordFormGenerator extends AbstractTypeScriptSourceGe
 		formatter.addLine("</form>");
 		formatter.decreaseIndent();
 		formatter.addLine("</cc-view-container>");
-
-		if (formType == FormTypeEnumeration.UPDATE || formType == FormTypeEnumeration.READONLY) {
-			formatter.decreaseIndent();
-			formatter.addLine("}");
-		}
+		formatter.decreaseIndent();
+		formatter.addLine("}");
 
 		final WorkspaceFile templateFile = form.getUserInterfaceFile();
 		templateFile.setContent(formatter.getContent());
@@ -591,7 +587,7 @@ public class AngularSingleRecordFormGenerator extends AbstractTypeScriptSourceGe
 			if (pkAttribute.getDomainAttribute().getJavaType().isIntegerOrLong())
 				gridPanel.append("'' + ");
 
-			gridPanel.append("object." + pkAttribute.getName() + "\"");
+			gridPanel.append("object()." + pkAttribute.getName() + "\"");
 
 			if (formType == FormTypeEnumeration.READONLY
 					&& panel.getBasePanel().getAssociation() instanceof final OneToManyAssociation otm && otm.isBidirectional())

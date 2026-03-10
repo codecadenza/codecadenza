@@ -1,4 +1,4 @@
-import { Component, Input, forwardRef, Output, EventEmitter, inject } from '@angular/core';
+import { Component, Input, forwardRef, Output, EventEmitter, inject, signal } from '@angular/core';
 import { NG_VALUE_ACCESSOR, ControlValueAccessor } from '@angular/forms';
 import { I18NService } from '../../services/i18n.service';
 import { Bind } from 'primeng/bind';
@@ -33,13 +33,13 @@ export class MultiSelectionList<T extends Record<string, any>> implements Contro
   @Input() public filterSourceItems = true;
   @Input() public maxNumberOfItems: number;
   @Input() public disabled = false;
-  protected selectedItems: T[] = [];
+  protected readonly selectedItems = signal<T[]>([]);
+  protected readonly _availableItems = signal<T[]>([]);
   protected loading = false;
   protected timeout: ReturnType<typeof setTimeout> | null = null;
   protected lastInput: string | null = null;
   protected sourceListHeader = '';
   protected targetListHeader = '';
-  protected _availableItems: T[] = [];
 
   /**
    * Initialize internal properties
@@ -54,8 +54,8 @@ export class MultiSelectionList<T extends Record<string, any>> implements Contro
    * Write the value
    */
   writeValue(value: T[]) {
-    if (value !== this.selectedItems) {
-      this.selectedItems = value;
+    if (value !== this.selectedItems()) {
+      this.selectedItems.set(value);
     }
   }
 
@@ -70,8 +70,8 @@ export class MultiSelectionList<T extends Record<string, any>> implements Contro
    * Update the headers of the target and the source list
    */
   updateListHeaders() {
-    this.targetListHeader = this.i18n.translate('multiselectionlist_targetheader', this.selectedItems.length.toString());
-    this.sourceListHeader = this.i18n.translate('multiselectionlist_sourceheader', this._availableItems.length.toString());
+    this.targetListHeader = this.i18n.translate('multiselectionlist_targetheader', this.selectedItems().length.toString());
+    this.sourceListHeader = this.i18n.translate('multiselectionlist_sourceheader', this._availableItems().length.toString());
   }
 
   /**
@@ -103,7 +103,7 @@ export class MultiSelectionList<T extends Record<string, any>> implements Contro
     }
 
     if (filterInput.length === 0) {
-      this._availableItems = [];
+      this._availableItems.set([]);
       this.lastInput = null;
       return;
     }
@@ -151,14 +151,14 @@ export class MultiSelectionList<T extends Record<string, any>> implements Contro
    * Return an array that contains all available items
    */
   @Input() get availableItems() {
-    return this._availableItems;
+    return this._availableItems();
   }
 
   /**
    * Add the items of the given array to the list of available items
    */
   set availableItems(items: T[]) {
-    this._availableItems = [];
+    this._availableItems.set([]);
 
     if (!items) {
       this.updateListHeaders();
@@ -172,10 +172,10 @@ export class MultiSelectionList<T extends Record<string, any>> implements Contro
         break;
       }
 
-      const item = this.selectedItems.find(selectedItem => this.getItemText(selectedItem) === this.getItemText(availableItem));
+      const item = this.selectedItems().find(selectedItem => this.getItemText(selectedItem) === this.getItemText(availableItem));
 
       if (!item) {
-        this._availableItems.push(availableItem);
+        this._availableItems().push(availableItem);
       }
     }
 

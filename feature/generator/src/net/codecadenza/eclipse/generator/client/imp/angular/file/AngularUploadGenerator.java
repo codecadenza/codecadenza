@@ -163,11 +163,11 @@ public class AngularUploadGenerator {
 		formatter.increaseIndent();
 		formatter.addLine("const uploadFile: File = file;");
 		formatter.addBlankLine();
-		formatter.addLineComment("Upload file to back-end");
+		formatter.addLineComment("Upload the file to the backend");
 
 		if (action.getType() == ActionType.INDIRECT_UPLOAD) {
 			final DTOBeanAttribute pkAttr = action.getForm().getDTO().getPKAttribute();
-			var param = "this.object." + pkAttr.getName();
+			var param = "this.object()." + pkAttr.getName();
 
 			generator.importType("mergeMap", "rxjs/operators");
 
@@ -198,16 +198,16 @@ public class AngularUploadGenerator {
 				final AttributeTagEnumeration tag = attr.getDomainAttribute().getTag();
 
 				if (tag == AttributeTagEnumeration.DOCUMENT_NAME) {
-					formatter.addLine("this.object." + attr.getName() + " = uploadFile.name;");
+					formatter.addLine("this.object()." + attr.getName() + " = uploadFile.name;");
 					attributeAdded = true;
 				}
 				else if (tag == AttributeTagEnumeration.DOCUMENT_SIZE) {
-					formatter.addLine("this.object." + attr.getName() + " = uploadFile.size;");
+					formatter.addLine("this.object()." + attr.getName() + " = uploadFile.size;");
 					attributeAdded = true;
 				}
 				else if (tag == AttributeTagEnumeration.DOCUMENT_REF || tag == AttributeTagEnumeration.DOCUMENT_DATA
 						|| (tag == AttributeTagEnumeration.NONE && uploadAttr.equals(attr.getDomainAttribute()))) {
-					formatter.addLine("this.object." + attr.getName() + " = path;");
+					formatter.addLine("this.object()." + attr.getName() + " = path;");
 					attributeAdded = true;
 				}
 			}
@@ -225,12 +225,12 @@ public class AngularUploadGenerator {
 				if (attr.getDomainAttribute() == null || !attr.getDomainAttribute().isTrackVersion())
 					continue;
 
-				formatter.addLine("this.object." + attr.getName() + " = this.object." + attr.getName() + " + 1;");
+				formatter.addLine("this.object()." + attr.getName() + " = this.object()." + attr.getName() + " + 1;");
 				attributeAdded = true;
 			}
 
 		if (attributeAdded) {
-			formatter.addLine("this.formGroup.patchValue(this.object);");
+			formatter.addLine("this.formGroup.patchValue(this.object());");
 			formatter.addBlankLine();
 		}
 

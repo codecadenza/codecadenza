@@ -12,13 +12,13 @@ export abstract class AbstractCreateRecordForm<T extends Record<string, any>> ex
    * Initialize the form
    */
   override initForm() {
-    this.object = {} as T;
-
     // Create the main form group
     this.formGroup = new UntypedFormGroup({});
 
     // Add controls
     this.addControls();
+
+    this.formInitialized.set(true);
   }
 
   /**

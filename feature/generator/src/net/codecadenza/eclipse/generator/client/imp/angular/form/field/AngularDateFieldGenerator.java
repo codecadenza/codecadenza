@@ -81,7 +81,7 @@ public class AngularDateFieldGenerator extends AbstractAngularFieldGenerator {
 		if (!field.isVisible() || hasDefaultValue || disabled)
 			return null;
 
-		final var attributeAccessor = "this.object." + field.getDTOAttribute().getName();
+		final var attributeAccessor = "this.object()." + field.getDTOAttribute().getName();
 
 		return attributeAccessor + " = DateConverter.convertToDate(" + attributeAccessor + ");";
 	}

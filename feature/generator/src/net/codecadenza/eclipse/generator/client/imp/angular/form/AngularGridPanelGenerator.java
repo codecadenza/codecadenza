@@ -159,7 +159,7 @@ public class AngularGridPanelGenerator extends AbstractTypeScriptSourceGenerator
 
 		tableGenerator.createTableSetup();
 
-		formatter.addBlockComment("Load the items from the back-end");
+		formatter.addBlockComment("Load the items from the backend");
 		formatter.addLine("loadData(" + PARENT_OBJ_ID + ": " + STRING + ") {");
 		formatter.increaseIndent();
 		formatter.addLine("return " + invocation + ";");
@@ -167,7 +167,7 @@ public class AngularGridPanelGenerator extends AbstractTypeScriptSourceGenerator
 		formatter.addLine("}");
 		formatter.addBlankLine();
 
-		formatter.addBlockComment("Reload the data from the back-end and display the objects in the table");
+		formatter.addBlockComment("Reload the data from the backend and display the objects in the table");
 		formatter.addLine("refreshView() {");
 		formatter.increaseIndent();
 		formatter.addLine("this.searchItems(this." + PARENT_OBJ_ID + ");");

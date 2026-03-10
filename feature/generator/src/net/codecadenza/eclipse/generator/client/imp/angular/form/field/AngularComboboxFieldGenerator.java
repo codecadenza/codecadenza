@@ -21,6 +21,7 @@
  */
 package net.codecadenza.eclipse.generator.client.imp.angular.form.field;
 
+import java.util.Map;
 import net.codecadenza.eclipse.generator.client.imp.angular.common.AngularContentFormatter;
 import net.codecadenza.eclipse.generator.client.imp.angular.service.AngularServiceInvocationGenerator;
 import net.codecadenza.eclipse.generator.client.imp.angular.util.AngularI18NGenerator;
@@ -50,13 +51,27 @@ public class AngularComboboxFieldGenerator extends AbstractAngularItemSelectionF
 
 	/*
 	 * (non-Javadoc)
+	 * @see net.codecadenza.eclipse.generator.client.imp.angular.form.field.AbstractAngularFieldGenerator#getImports()
+	 */
+	@Override
+	public Map<String, String> getImports() {
+		final Map<String, String> imports = super.getImports();
+
+		if (field.isVisible())
+			imports.put("signal", "@angular/core");
+
+		return imports;
+	}
+
+	/*
+	 * (non-Javadoc)
 	 * @see net.codecadenza.eclipse.generator.client.imp.angular.form.field.AbstractAngularFieldGenerator#addControlToTemplate()
 	 */
 	@Override
 	protected String addControlToTemplate() {
 		final var control = new StringBuilder();
 		control.append("<p-select optionLabel=\"" + displayAttr.getName() + "\" ");
-		control.append("[options]=\"" + itemListName + "\" ");
+		control.append("[options]=\"" + itemListName + "()\" ");
 		control.append("formControlName=\"" + field.getDTOAttribute().getName() + "\" ");
 		control.append("[style]=\"{'width':'100%'}\" id=\"" + field.getName() + "\"");
 
@@ -87,25 +102,25 @@ public class AngularComboboxFieldGenerator extends AbstractAngularItemSelectionF
 		formatter.increaseIndent();
 
 		if (disabled)
-			formatter.addLine("next: result => this." + itemListName + " = result,");
+			formatter.addLine("next: result => this." + itemListName + ".set(result),");
 		else {
 			if (formType == FormTypeEnumeration.ADD || formType == FormTypeEnumeration.CREATE) {
 				formatter.addLine("next: result => {");
 				formatter.increaseIndent();
-				formatter.addLine("this." + itemListName + " = result;");
+				formatter.addLine("this." + itemListName + ".set(result);");
 				formatter.addBlankLine();
 
 				if (!field.isMandatory()) {
 					addEmptyItem(formatter);
 
-					formatter.addLine("this.object." + field.getDTOAttribute().getName() + " = emptyItem;");
-					formatter.addLine("this.formGroup.patchValue(this.object);");
+					formatter.addLine("this.object()." + field.getDTOAttribute().getName() + " = emptyItem;");
+					formatter.addLine("this.formGroup.patchValue(this.object());");
 				}
 				else {
-					formatter.addLine("if (this." + itemListName + ".length > 0) {");
+					formatter.addLine("if (this." + itemListName + "().length > 0) {");
 					formatter.increaseIndent();
-					formatter.addLine("this.object." + field.getDTOAttribute().getName() + " = this." + itemListName + "[0];");
-					formatter.addLine("this.formGroup.patchValue(this.object);");
+					formatter.addLine("this.object()." + field.getDTOAttribute().getName() + " = this." + itemListName + "()[0];");
+					formatter.addLine("this.formGroup.patchValue(this.object());");
 					formatter.decreaseIndent();
 					formatter.addLine("}");
 				}
@@ -113,7 +128,7 @@ public class AngularComboboxFieldGenerator extends AbstractAngularItemSelectionF
 			else {
 				formatter.addLine("next: result => {");
 				formatter.increaseIndent();
-				formatter.addLine("this." + itemListName + " = result;");
+				formatter.addLine("this." + itemListName + ".set(result);");
 
 				if (!field.isMandatory()) {
 					formatter.addBlankLine();
@@ -121,10 +136,10 @@ public class AngularComboboxFieldGenerator extends AbstractAngularItemSelectionF
 					addEmptyItem(formatter);
 
 					formatter.addBlankLine();
-					formatter.addLine("if (!this.object." + field.getDTOAttribute().getName() + ") {");
+					formatter.addLine("if (!this.object()." + field.getDTOAttribute().getName() + ") {");
 					formatter.increaseIndent();
-					formatter.addLine("this.object." + field.getDTOAttribute().getName() + " = emptyItem;");
-					formatter.addLine("this.formGroup.patchValue(this.object);");
+					formatter.addLine("this.object()." + field.getDTOAttribute().getName() + " = emptyItem;");
+					formatter.addLine("this.formGroup.patchValue(this.object());");
 					formatter.addLine("return;");
 					formatter.decreaseIndent();
 					formatter.addLine("}");
@@ -132,8 +147,8 @@ public class AngularComboboxFieldGenerator extends AbstractAngularItemSelectionF
 
 				final DTOBeanAttribute pkAttr = listDTO.getPKAttribute();
 				final String nullCheck = field.isMandatory() ? "" : "?";
-				final var pkAttributeGetter = "this.object." + field.getDTOAttribute().getName() + nullCheck + "." + pkAttr.getName();
-				final var findItem = itemListName + ".find(item => item." + pkAttr.getName() + " === " + pkAttributeGetter + ")";
+				final var pkAttributeGetter = "this.object()." + field.getDTOAttribute().getName() + nullCheck + "." + pkAttr.getName();
+				final var findItem = itemListName + "().find(item => item." + pkAttr.getName() + " === " + pkAttributeGetter + ")";
 				var compare = "a." + displayAttr.getName() + ".localeCompare(b." + displayAttr.getName() + ")";
 
 				if (displayAttr.getDomainAttribute().getJavaType().isIntegerOrLong())
@@ -143,8 +158,8 @@ public class AngularComboboxFieldGenerator extends AbstractAngularItemSelectionF
 				formatter.addLineComment("Add the actual item to the list if it isn't contained");
 				formatter.addLine("if (!this." + findItem + ") {");
 				formatter.increaseIndent();
-				formatter.addLine("this." + itemListName + ".push(this.object." + field.getDTOAttribute().getName() + ");");
-				formatter.addLine("this." + itemListName + ".sort((a, b) => " + compare + ");");
+				formatter.addLine("this." + itemListName + "().push(this.object()." + field.getDTOAttribute().getName() + "!);");
+				formatter.addLine("this." + itemListName + "().sort((a, b) => " + compare + ");");
 				formatter.decreaseIndent();
 				formatter.addLine("}");
 			}
@@ -201,7 +216,7 @@ public class AngularComboboxFieldGenerator extends AbstractAngularItemSelectionF
 		formatter.decreaseIndent();
 		formatter.addLine("};");
 		formatter.addBlankLine();
-		formatter.addLine("this." + itemListName + ".push(emptyItem);");
+		formatter.addLine("this." + itemListName + "().push(emptyItem);");
 	}
 
 }

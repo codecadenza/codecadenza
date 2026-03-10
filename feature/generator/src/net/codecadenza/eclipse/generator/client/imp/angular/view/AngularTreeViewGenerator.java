@@ -141,6 +141,7 @@ public class AngularTreeViewGenerator extends AbstractTypeScriptSourceGenerator 
 		importType("AppCommonModule", "../../common/app-common.module");
 		importType("AbstractTreeView", "../../common/components/tree-view/abstract-tree-view");
 		importType(rootItem.getItemDTO().getName(), "../../domain/" + rootItem.getItemDTO().getName().toLowerCase() + ".interface");
+		importType("v4 as uuidv4", "uuid");
 
 		if (!eventInterfaces.isEmpty())
 			importTypes(eventInterfaces.stream(), "primeng/tree");
@@ -217,12 +218,12 @@ public class AngularTreeViewGenerator extends AbstractTypeScriptSourceGenerator 
 		addContextMenuFields();
 
 		if (addAdvSearch) {
-			addField("SearchInput", "searchInput!").create();
-			addField(null, "showSearchInputDialog").withDefaultValue("false").create();
+			addProtectedField("SearchInput", "searchInput!").create();
+			addProtectedField(null, "showSearchInputDialog").withDefaultValue("false").create();
 		}
 
 		tree.getQuickSearchItems()
-				.forEach(item -> addField(null, item.getDTOAttribute().getName() + "Filter").withDefaultValue("''").create());
+				.forEach(item -> addProtectedField(null, item.getDTOAttribute().getName() + "Filter").withDefaultValue("''").create());
 	}
 
 	/*
@@ -299,8 +300,8 @@ public class AngularTreeViewGenerator extends AbstractTypeScriptSourceGenerator 
 
 				// Avoid creating fields for context menus twice!
 				if (!contextMenus.contains(contextMenuName)) {
-					addField("ContextMenu", contextMenuName + "!").asViewChild(contextMenuName).create();
-					addField("MenuItem[]", menuItemArrayName).withDefaultValue("[]").create();
+					addProtectedField("ContextMenu", contextMenuName + "!").asViewChild(contextMenuName).create();
+					addProtectedField("MenuItem[]", menuItemArrayName).withDefaultValue("[]").create();
 
 					contextMenus.add(contextMenuName);
 				}
@@ -315,8 +316,8 @@ public class AngularTreeViewGenerator extends AbstractTypeScriptSourceGenerator 
 					menuItemArrayName = "menuItems" + treeItem.getAssociation().getUpperCaseName();
 				}
 
-				addField("ContextMenu", contextMenuName + "!").asViewChild(contextMenuName).create();
-				addField("MenuItem[]", menuItemArrayName).withDefaultValue("[]").create();
+				addProtectedField("ContextMenu", contextMenuName + "!").asViewChild(contextMenuName).create();
+				addProtectedField("MenuItem[]", menuItemArrayName).withDefaultValue("[]").create();
 			}
 		});
 	}
@@ -435,7 +436,7 @@ public class AngularTreeViewGenerator extends AbstractTypeScriptSourceGenerator 
 			itemContent.append("this.addContextMenuItem(this." + menuItemArrayName + ", ");
 			itemContent.append(i18n.getI18NMessage("action_refresh", "Refresh"));
 			itemContent.append(", 'pi pi-refresh', ");
-			itemContent.append("() => this." + methodName + "(this.selectedNode));");
+			itemContent.append("() => this." + methodName + "(this.selectedNode()!));");
 		}
 
 		if (itemContent.isEmpty())
@@ -512,9 +513,9 @@ public class AngularTreeViewGenerator extends AbstractTypeScriptSourceGenerator 
 		String invocationParam = "";
 
 		if (addAdvSearch || addQuickSearch)
-			formatter.addBlockComment("Send the search input object to the back-end and add the received objects to the tree view");
+			formatter.addBlockComment("Send the search input object to the backend and add the received objects to the tree view");
 		else
-			formatter.addBlockComment("Load all available items from the back-end and add the received objects to the tree view");
+			formatter.addBlockComment("Load all available items from the backend and add the received objects to the tree view");
 
 		formatter.addLine("performSearchOperation(" + methodParam + ") {");
 		formatter.increaseIndent();
@@ -572,7 +573,8 @@ public class AngularTreeViewGenerator extends AbstractTypeScriptSourceGenerator 
 
 			formatter.addLine(addItemMethodName + "(" + itemListName + ": " + itemDTO.getName() + "[]) {");
 			formatter.increaseIndent();
-			formatter.addLine(parentNodeName + " = [];");
+			formatter.addLine("const treeNodes: TreeNode[] = [];");
+			formatter.addBlankLine();
 		}
 		else {
 			BoundaryMethod method = tree.getRecursiveMethod();
@@ -595,6 +597,7 @@ public class AngularTreeViewGenerator extends AbstractTypeScriptSourceGenerator 
 			formatter.increaseIndent();
 			formatter.addIfStatement("!" + parentNodeName + " || Array.isArray(" + parentNodeName + ")", "return;", true);
 			formatter.addLine("const id = " + selectedObjectId + (pkType.isIntegerOrLong() ? ".toString()" : "") + ";");
+			formatter.addLine("const treeNodes: TreeNode[] = [];");
 			formatter.addBlankLine();
 			formatter.addLine("console.log('Load " + subItemLabel + " sub-items of " + parentItemLabel + " ' + id);");
 			formatter.addBlankLine();
@@ -602,10 +605,8 @@ public class AngularTreeViewGenerator extends AbstractTypeScriptSourceGenerator 
 			formatter.increaseIndent();
 			formatter.addLine("next: " + itemListName + " => {");
 			formatter.increaseIndent();
-			formatter.addLine(parentNodeName + ".children = [];");
 		}
 
-		formatter.addBlankLine();
 		formatter.addLine(itemListName + ".forEach(" + itemName + " => {");
 		formatter.increaseIndent();
 		formatter.addLine("let itemLabel = '';");
@@ -615,6 +616,7 @@ public class AngularTreeViewGenerator extends AbstractTypeScriptSourceGenerator 
 		formatter.addBlankLine();
 		formatter.addLine("const " + nodeName + ": TreeNode = {");
 		formatter.increaseIndent();
+		formatter.addLine("key: uuidv4(),");
 		formatter.addLine("label: itemLabel,");
 		formatter.addLine("type: '" + nodeTypeName + "',");
 		formatter.addLine("droppable: false,");
@@ -644,7 +646,13 @@ public class AngularTreeViewGenerator extends AbstractTypeScriptSourceGenerator 
 				final String itemLabel;
 
 				formatter.addLineComment("Add elements of attribute '" + attr.getName() + "'");
-				formatter.addLine("const " + subNodeName + ": TreeNode = { label: " + label + " };");
+				formatter.addLine("const " + subNodeName + ": TreeNode = {");
+				formatter.increaseIndent();
+				formatter.addLine("key: uuidv4(),");
+				formatter.addLine("label: " + label);
+				formatter.decreaseIndent();
+				formatter.addLine("};");
+				formatter.addBlankLine();
 				formatter.addLine(subNodeName + ".children = [];");
 				formatter.addLine(nodeName + ".children.push(" + subNodeName + ");");
 				formatter.addBlankLine();
@@ -691,6 +699,7 @@ public class AngularTreeViewGenerator extends AbstractTypeScriptSourceGenerator 
 			formatter.addBlankLine();
 			formatter.addLine("const " + subNodeName + ": TreeNode = {");
 			formatter.increaseIndent();
+			formatter.addLine("key: uuidv4(),");
 			formatter.addLine("label: itemLabel,");
 			formatter.addLine("type: '" + subNodeTypeName + "',");
 			formatter.addLine("droppable: " + dropItems.contains(subItem) + ",");
@@ -704,14 +713,10 @@ public class AngularTreeViewGenerator extends AbstractTypeScriptSourceGenerator 
 			formatter.addLine(nodeName + ".children.push(" + subNodeName + ");");
 		});
 
-		if (treeItem.equals(rootItem) && !addRecursiveItems)
-			formatter.addLine(parentNodeName + ".push(" + nodeName + ");");
-		else {
-			if (!treeItem.getChildren().isEmpty())
-				formatter.addBlankLine();
+		if (treeItem.equals(rootItem) && !addRecursiveItems && !treeItem.getChildren().isEmpty())
+			formatter.addBlankLine();
 
-			formatter.addIfStatement(parentNodeName + ".children", parentNodeName + ".children.push(" + nodeName + ");", false);
-		}
+		formatter.addLine("treeNodes.push(" + nodeName + ");");
 
 		// Add a container node for items of a recursive structure
 		if (recursiveStructure && treeItem.equals(rootItem)) {
@@ -726,6 +731,7 @@ public class AngularTreeViewGenerator extends AbstractTypeScriptSourceGenerator 
 			formatter.addBlankLine();
 			formatter.addLine("const " + subNodeName + ": TreeNode = {");
 			formatter.increaseIndent();
+			formatter.addLine("key: uuidv4(),");
 			formatter.addLine("label: itemLabel,");
 			formatter.addLine("type: '" + subNodeTypeName + "',");
 			formatter.addLine("droppable: " + dropItems.contains(rootItem) + ",");
@@ -744,6 +750,7 @@ public class AngularTreeViewGenerator extends AbstractTypeScriptSourceGenerator 
 
 		if (treeItem.equals(rootItem) && !addRecursiveItems) {
 			formatter.addBlankLine();
+			formatter.addLine(parentNodeName + ".set(treeNodes);");
 			formatter.addLine("this.displayNumberOfItemsInStatusField(" + itemListName + ".length);");
 		}
 		else {
@@ -752,6 +759,7 @@ public class AngularTreeViewGenerator extends AbstractTypeScriptSourceGenerator 
 
 			formatter.decreaseIndent();
 			formatter.addLine("},");
+			formatter.addLine("complete: () =>  this.updateNodeChildren(" + parentNodeName + ", treeNodes),");
 			formatter.addLine(errorHandler);
 			formatter.decreaseIndent();
 			formatter.addLine("});");
@@ -772,7 +780,7 @@ public class AngularTreeViewGenerator extends AbstractTypeScriptSourceGenerator 
 
 		boolean firstItem = true;
 
-		formatter.addBlockComment("Load the sub-items from the back-end and add them to the respective node in the tree view");
+		formatter.addBlockComment("Load the sub-items from the backend and add them to the respective node in the tree view");
 		formatter.addLine("expandNode($event: TreeNodeExpandEvent) {");
 		formatter.increaseIndent();
 
@@ -1125,7 +1133,7 @@ public class AngularTreeViewGenerator extends AbstractTypeScriptSourceGenerator 
 		final BoundaryMethodTypeEnumeration methodType = method.getMethodType();
 		final DTOBean itemDTO = treeItem.getItemDTO();
 		final DTOBeanAttribute pkAttr = itemDTO.getPKAttribute();
-		var param = "this.selectedNode.data." + pkAttr.getName();
+		var param = "node.data." + pkAttr.getName();
 
 		if (methodType == BoundaryMethodTypeEnumeration.DELETE
 				|| methodType == BoundaryMethodTypeEnumeration.REMOVE_FROM_ASSOCIATION) {
@@ -1141,12 +1149,12 @@ public class AngularTreeViewGenerator extends AbstractTypeScriptSourceGenerator 
 		}
 		else if (methodType == BoundaryMethodTypeEnumeration.DOWNLOAD) {
 			final String errorMsg = i18n.getI18NMessage("msg_errordownload", "Error while performing file download operation!");
-			var idParam = "selectedNode.data." + pkAttr.getName();
+			var idParam = "node.data." + pkAttr.getName();
 			var fileNameParam = "";
 
 			for (final DTOBeanAttribute attr : treeItem.getItemDTO().getAttributes())
 				if (attr.getDomainAttribute() != null && attr.getDomainAttribute().getTag() == AttributeTagEnumeration.DOCUMENT_NAME) {
-					fileNameParam = ", selectedNode.data." + attr.getName();
+					fileNameParam = ", node.data." + attr.getName();
 					break;
 				}
 
@@ -1158,10 +1166,10 @@ public class AngularTreeViewGenerator extends AbstractTypeScriptSourceGenerator 
 			formatter.addBlockComment("Download file");
 			formatter.addLine(method.getName() + "() {");
 			formatter.increaseIndent();
-			formatter.addLine("const selectedNode = this.selectedNode;");
+			formatter.addLine("const node = this.selectedNode();");
 			formatter.addBlankLine();
-			formatter.addIfStatement("!selectedNode || Array.isArray(selectedNode)", "return;", true);
-			formatter.addLineComment("Determine the real path of the file in the back-end");
+			formatter.addIfStatement("!node || Array.isArray(node)", "return;", true);
+			formatter.addLineComment("Determine the real path of the file in the backend");
 			formatter.addLine(new AngularServiceInvocationGenerator(method).createInvocation(idParam) + ".pipe(");
 			formatter.increaseIndent();
 			formatter.addLine("mergeMap((path: string) => this.fileService.downloadFile(path)))");
@@ -1186,11 +1194,13 @@ public class AngularTreeViewGenerator extends AbstractTypeScriptSourceGenerator 
 			formatter.addBlockComment("Delete the selected " + itemDTO.getDomainObject().getLabel());
 			formatter.addLine(method.getName() + "() {");
 			formatter.increaseIndent();
-			formatter.addIfStatement("!this.selectedNode || Array.isArray(this.selectedNode)", "return;", true);
+			formatter.addLine("const node = this.selectedNode();");
+			formatter.addBlankLine();
+			formatter.addIfStatement("!node || Array.isArray(node)", "return;", true);
 			formatter.addLine(new AngularServiceInvocationGenerator(method).createInvocation(param) + ".subscribe({");
 			formatter.increaseIndent();
 			formatter.addLine("error: error => this.displayError(error, " + errorMsg + "),");
-			formatter.addLine("complete: () => this.removeNode(this.selectedNode)");
+			formatter.addLine("complete: () => this.removeNode(node)");
 			formatter.decreaseIndent();
 			formatter.addLine("});");
 			formatter.decreaseIndent();
@@ -1201,9 +1211,9 @@ public class AngularTreeViewGenerator extends AbstractTypeScriptSourceGenerator 
 			final String errorMsg = i18n.getI18NMessage("msg_errordelete", "Error while deleting object!");
 			final DTOBean parentDTO = treeItem.getParentItem().getItemDTO();
 			final JavaType pkParentType = parentDTO.getPKAttribute().getDomainAttribute().getJavaType();
-			final var nodeCheck = "!this.selectedNode || Array.isArray(this.selectedNode) || !this.selectedNode.parent";
-			var parentId = "const parentId = this.selectedNode.parent.data." + parentDTO.getPKAttribute().getName();
-			var itemId = "const id = this.selectedNode.data." + pkAttr.getName();
+			final var nodeCheck = "!node || Array.isArray(node) || !node.parent";
+			var parentId = "const parentId = node.parent.data." + parentDTO.getPKAttribute().getName();
+			var itemId = "const id = node.data." + pkAttr.getName();
 
 			if (pkParentType.isIntegerOrLong())
 				parentId += ".toString()";
@@ -1218,6 +1228,8 @@ public class AngularTreeViewGenerator extends AbstractTypeScriptSourceGenerator 
 			formatter.addBlockComment("Remove the selected " + itemDTO.getDomainObject().getLabel() + " from the respective list");
 			formatter.addLine(method.getName() + "() {");
 			formatter.increaseIndent();
+			formatter.addLine("const node = this.selectedNode();");
+			formatter.addBlankLine();
 			formatter.addIfStatement(nodeCheck, "return;", true);
 			formatter.addLine(parentId);
 			formatter.addLine(itemId);
@@ -1225,7 +1237,7 @@ public class AngularTreeViewGenerator extends AbstractTypeScriptSourceGenerator 
 			formatter.addLine(new AngularServiceInvocationGenerator(method).createInvocation("parentId, id") + ".subscribe({");
 			formatter.increaseIndent();
 			formatter.addLine("error: error => this.displayError(error, " + errorMsg + "),");
-			formatter.addLine("complete: () => this.removeNode(this.selectedNode)");
+			formatter.addLine("complete: () => this.removeNode(node)");
 			formatter.decreaseIndent();
 			formatter.addLine("});");
 			formatter.decreaseIndent();
@@ -1243,18 +1255,20 @@ public class AngularTreeViewGenerator extends AbstractTypeScriptSourceGenerator 
 	private void addOpenFormMethod(AngularContentFormatter formatter, DTOBean dto, Form form) {
 		final String targetFormURL = AngularURLGenerator.createURL(form, false);
 		final var methodName = "open" + form.getName();
-		var selectedItemId = "this.selectedNode.data." + dto.getPKAttribute().getName();
+		var selectedNodeId = "node.data." + dto.getPKAttribute().getName();
 
 		if (dto.getPKAttribute().getDomainAttribute().getJavaType().isIntegerOrLong())
-			selectedItemId += ".toString()";
+			selectedNodeId += ".toString()";
 
 		formatter.addBlockComment("Open form '" + form.getName() + "'");
 		formatter.addLine(methodName + "() {");
 		formatter.increaseIndent();
 
 		if (form.getFormType() != FormTypeEnumeration.CREATE) {
-			formatter.addIfStatement("!this.selectedNode || Array.isArray(this.selectedNode)", "return;", true);
-			formatter.addLine("this.router.navigate(['" + targetFormURL + "/' + " + selectedItemId + "]);");
+			formatter.addLine("const node = this.selectedNode();");
+			formatter.addBlankLine();
+			formatter.addIfStatement("!node || Array.isArray(node)", "return;", true);
+			formatter.addLine("this.router.navigate(['" + targetFormURL + "/' + " + selectedNodeId + "]);");
 		}
 		else
 			formatter.addLine("this.router.navigate(['" + targetFormURL + "']);");
@@ -1282,7 +1296,7 @@ public class AngularTreeViewGenerator extends AbstractTypeScriptSourceGenerator 
 
 				formatter.addLine((firstItem ? "" : "} else ") + "if (node.type === '" + nodeTypeName + "') {");
 				formatter.increaseIndent();
-				formatter.addLine("this.selectedNode = node;");
+				formatter.addLine("this.selectedNode.set(node);");
 				formatter.addLine("this." + contextMenuName + ".show($event);");
 				formatter.decreaseIndent();
 
@@ -1298,7 +1312,7 @@ public class AngularTreeViewGenerator extends AbstractTypeScriptSourceGenerator 
 
 				formatter.addLine((firstItem ? "" : "} else ") + "if (node.type === '" + nodeTypeName + "') {");
 				formatter.increaseIndent();
-				formatter.addLine("this.selectedNode = node;");
+				formatter.addLine("this.selectedNode.set(node);");
 				formatter.addLine("this." + contextMenuName + ".show($event);");
 				formatter.decreaseIndent();
 
@@ -1534,7 +1548,7 @@ public class AngularTreeViewGenerator extends AbstractTypeScriptSourceGenerator 
 		formatter.addBlankLine();
 		formatter.addLine("<div class=\"form-spacer\"></div>");
 		formatter.addBlankLine();
-		formatter.addLine("<p-tree [value]=\"rootNodes\" selectionMode=\"single\" [(selection)]=\"selectedNode\"");
+		formatter.addLine("<p-tree [value]=\"rootNodes()\" selectionMode=\"single\" [(selection)]=\"selectedNode\"");
 		formatter.increaseIndent();
 
 		if (!dropItems.isEmpty())
@@ -1548,7 +1562,7 @@ public class AngularTreeViewGenerator extends AbstractTypeScriptSourceGenerator 
 		formatter.addLine("<ng-template let-node pTemplate=\"default\">");
 		formatter.increaseIndent();
 		formatter.addLine("<i class=\"pi pi-file\"></i>&nbsp;");
-		formatter.addLine("<span style=\"vertical-align: middle;\">{{node.label}}</span>");
+		formatter.addLine("<span style=\"vertical-align: middle;\">{{ node.label }}</span>");
 		formatter.decreaseIndent();
 		formatter.addLine("</ng-template>");
 
@@ -1556,7 +1570,7 @@ public class AngularTreeViewGenerator extends AbstractTypeScriptSourceGenerator 
 			final var nodeTypeName = treeItem.getItemDTO().getName().toUpperCase() + "_TYPE";
 
 			var itemSpan = "<span style=\"vertical-align: middle;\" (contextmenu)=\"showContextMenu($event, node)\">";
-			itemSpan += "{{node.label}}</span>";
+			itemSpan += "{{ node.label }}</span>";
 
 			formatter.addLine("<ng-template let-node pTemplate=\"" + nodeTypeName + "\">");
 			formatter.increaseIndent();
@@ -1589,7 +1603,7 @@ public class AngularTreeViewGenerator extends AbstractTypeScriptSourceGenerator 
 		formatter.increaseIndent();
 		formatter.addLine("<div class=\"form-field-cell label-field-mandatory\">");
 		formatter.increaseIndent();
-		formatter.addLine("{{statusText}}");
+		formatter.addLine("{{ statusText() }}");
 		formatter.decreaseIndent();
 		formatter.addLine("</div>");
 		formatter.decreaseIndent();

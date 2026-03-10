@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter, inject, ViewChild } from '@angular/core';
+import { Component, Input, Output, EventEmitter, inject, ViewChild, signal } from '@angular/core';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { MessageService, MenuItem, ConfirmationService } from 'primeng/api';
@@ -32,13 +32,13 @@ export abstract class AbstractDataTable<T> {
   @Input() public maxNumberOfItems: number;
   @Input() public tableId = '';
   @Input() public rowKey = '';
+  protected readonly items = signal<T[]>([]);
+  protected readonly selectedItem = signal<T | undefined>(undefined);
+  protected readonly summaryText = signal('');
+  protected readonly loading = signal(false);
   private tableDefinition!: TableDefinition;
   protected showNewButton = false;
   protected showImportButton = false;
-  protected summaryText = '';
-  protected loading = false;
-  protected items: T[] = [];
-  protected selectedItem?: T;
   protected columns: ColumnDefinition[] = [];
   protected contextMenuItems: MenuItem[] = [];
   protected title = '';
@@ -117,17 +117,14 @@ export abstract class AbstractDataTable<T> {
   searchItems(filterString: string) {
     console.log('Search items by using filter: ' + filterString);
 
-    this.loading = true;
+    this.loading.set(true);
 
     this.loadData(filterString).subscribe({
-      next: result => this.items = result.splice(0, this.maxNumberOfItems),
-      error: error => {
-        this.loading = false;
-        this.displayError(error, this.i18n.translate('msg_errordataload'));
-      },
+      next: result => this.items.set(result.splice(0, this.maxNumberOfItems)),
+      error: error => this.displayError(error, this.i18n.translate('msg_errordataload')),
       complete: () => {
-        this.loading = false;
-        this.summaryText = this.i18n.translate('msg_finisheddataload', this.items.length.toString());
+        this.loading.set(false);
+        this.summaryText.set(this.i18n.translate('msg_finisheddataload', this.items().length.toString()));
       }
     });
   }
@@ -208,9 +205,9 @@ export abstract class AbstractDataTable<T> {
   displayError(error: Error, errorMsg: string) {
     console.log(error);
 
-    this.loading = false;
+    this.loading.set(false);
     this.messageService.add({ severity: 'error', summary: errorMsg });
-    this.summaryText = errorMsg;
+    this.summaryText.set(errorMsg);
   }
 
   /**

@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnInit, signal } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { UntypedFormGroup, ValidatorFn, UntypedFormControl } from '@angular/forms';
 import { Location } from '@angular/common';
@@ -22,11 +22,12 @@ export abstract class AbstractSingleRecordForm<T extends Record<string, any>> im
   protected readonly router = inject(Router);
   protected readonly navigationHistoryService = inject(NavigationHistoryService);
   protected readonly i18n = inject(I18NService);
+  protected readonly object = signal<T>({} as T);
+  protected readonly formInitialized = signal(false);
+  protected readonly error = signal<Error | null>(null);
   protected id!: string | null;
-  protected object!: T;
   protected formGroup!: UntypedFormGroup;
   protected leavePage = true;
-  protected error: Error | null = null;
 
   /**
    * Initialize this component
@@ -83,23 +84,23 @@ export abstract class AbstractSingleRecordForm<T extends Record<string, any>> im
    */
   _loadObject(id: string) {
     this.loadObject(id).subscribe({
-      next: result => this.object = result,
-      error: error => {
-        this.openErrorDialog(error, true);
-      },
+      next: result => this.object.set(result),
+      error: error => this.openErrorDialog(error, true),
       complete: () => {
-        if (!this.isObjectAllowed(this.object)) {
+        if (!this.isObjectAllowed(this.object())) {
           this.openErrorDialog(new Error(this.i18n.translate('msg_noobjectpermission')), true);
           return;
         }
 
-        console.log('Loaded object: ' + JSON.stringify(this.object));
+        console.log('Loaded object: ' + JSON.stringify(this.object()));
 
         // Add controls
         this.addControls();
 
         // Apply the object to the form group
-        this.formGroup.patchValue(this.object);
+        this.formGroup.patchValue(this.object());
+
+        this.formInitialized.set(true);
       }
     });
   }
@@ -120,11 +121,11 @@ export abstract class AbstractSingleRecordForm<T extends Record<string, any>> im
           return;
         }
 
-        this.object = result;
+        this.object.set(result);
       },
       error: error => this.openErrorDialog(error, false),
       complete: () => {
-        if (this.object) {
+        if (this.object()) {
           const navigationTarget = this.getNavigationTargetAfterSave();
 
           if (navigationTarget) {
@@ -156,8 +157,8 @@ export abstract class AbstractSingleRecordForm<T extends Record<string, any>> im
    * Open the error dialog
    */
   openErrorDialog(error: Error, leavePage: boolean) {
-    this.error = error;
     this.leavePage = leavePage;
+    this.error.set(error);
   }
 
   /**

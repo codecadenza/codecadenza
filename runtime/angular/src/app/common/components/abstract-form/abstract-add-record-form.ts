@@ -13,7 +13,6 @@ export abstract class AbstractAddRecordForm<T extends Record<string, any>> exten
    * Initialize this form
    */
   override initForm() {
-    this.object = {} as T;
     const id = this.route.snapshot.paramMap.get('id');
 
     if (!id) {
@@ -30,6 +29,8 @@ export abstract class AbstractAddRecordForm<T extends Record<string, any>> exten
 
     // Add controls
     this.addControls();
+
+    this.formInitialized.set(true);
   }
 
   /**

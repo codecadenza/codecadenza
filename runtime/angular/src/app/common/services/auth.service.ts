@@ -1,5 +1,5 @@
-import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable, of } from 'rxjs';
+import { Injectable, Signal, signal } from '@angular/core';
+import { Observable, of } from 'rxjs';
 import { RoleEnum } from '../model/role.enum';
 
 /**
@@ -10,7 +10,7 @@ import { RoleEnum } from '../model/role.enum';
  */
 @Injectable({ providedIn: 'root' })
 export class AuthService {
-  private readonly loginStatusSubject = new BehaviorSubject<boolean>(this.isLoggedIn());
+  private readonly loggedIn = signal(this.isLoggedIn());
 
   /**
    * Check if the user has at least one of the given roles granted
@@ -30,10 +30,10 @@ export class AuthService {
   }
 
   /**
-   * Notify all listeners as soon as the login status has changed
+   * Return the readonly signal of the login status
    */
-  onLoginStatusChanged(): Observable<boolean> {
-    return this.loginStatusSubject.asObservable();
+  getLoginSignal(): Signal<boolean> {
+    return this.loggedIn.asReadonly();
   }
 
   /**

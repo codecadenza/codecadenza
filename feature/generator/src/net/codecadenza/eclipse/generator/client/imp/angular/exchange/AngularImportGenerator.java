@@ -146,7 +146,7 @@ public class AngularImportGenerator {
 
 				generator.importType("mergeMap", "rxjs/operators");
 
-				formatter.addLineComment("Upload file to back-end");
+				formatter.addLineComment("Upload the file to the backend");
 				formatter.addLine("this.fileService.uploadFile(importFile.name, file).pipe(");
 				formatter.increaseIndent();
 				formatter.addLine("mergeMap((path: string) => " + invocation + "))");

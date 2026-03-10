@@ -246,16 +246,18 @@ public class AngularCommonDataTableGenerator {
 				formatter.addBlockComment("Open a confirmation dialog before deleting the selected item");
 				formatter.addLine("confirmDelete() {");
 				formatter.increaseIndent();
-				formatter.addIfStatement("!this.selectedItem", "return;", true);
-				formatter.addLine("const item = this.selectedItem;");
+				formatter.addLine("const item = this.selectedItem();");
+				formatter.addBlankLine();
+				formatter.addIfStatement("!item", "return;", true);
 				formatter.addLine("this.openConfirmDeleteDialog(() => this." + methodName + "(item));");
 			}
 			else {
 				formatter.addBlockComment("Open a confirmation dialog before creating a copy of the selected item");
 				formatter.addLine("confirmCopy() {");
 				formatter.increaseIndent();
-				formatter.addIfStatement("!this.selectedItem", "return;", true);
-				formatter.addLine("const item = this.selectedItem;");
+				formatter.addLine("const item = this.selectedItem();");
+				formatter.addBlankLine();
+				formatter.addIfStatement("!item", "return;", true);
 				formatter.addLine("this.openConfirmCopyDialog(() => this." + methodName + "(item));");
 			}
 
@@ -299,7 +301,7 @@ public class AngularCommonDataTableGenerator {
 		}
 
 		actionList.forEach(action -> {
-			var selectedItemId = "selectedItem." + dto.getPKAttribute().getName();
+			var selectedItemId = "item." + dto.getPKAttribute().getName();
 
 			if (dto.getPKAttribute().getDomainAttribute().getJavaType().isIntegerOrLong())
 				selectedItemId += ".toString()";
@@ -324,7 +326,7 @@ public class AngularCommonDataTableGenerator {
 					errorMsg = i18n.getI18NMessage("msg_errordelete", "Error while deleting object!");
 
 				formatter.addBlockComment(action.getDescription());
-				formatter.addLine(methodName + "(selectedItem: " + dto.getName() + ") {");
+				formatter.addLine(methodName + "(item: " + dto.getName() + ") {");
 				formatter.increaseIndent();
 				formatter.addLine(new AngularServiceInvocationGenerator(boundaryMethod).createInvocation(param) + ".subscribe({");
 				formatter.increaseIndent();
@@ -347,8 +349,10 @@ public class AngularCommonDataTableGenerator {
 				formatter.increaseIndent();
 
 				if (targetForm.getFormType() == FormTypeEnumeration.READONLY || targetForm.getFormType() == FormTypeEnumeration.UPDATE) {
-					formatter.addIfStatement("!this.selectedItem", "return;", true);
-					formatter.addLine("const selectedItemId = this." + selectedItemId + ";");
+					formatter.addLine("const item = this.selectedItem();");
+					formatter.addBlankLine();
+					formatter.addIfStatement("!item", "return;", true);
+					formatter.addLine("const selectedItemId = " + selectedItemId + ";");
 					formatter.addLine("this.router.navigate(['" + targetFormURL + "/' + selectedItemId]);");
 				}
 				else if (targetForm.getFormType() == FormTypeEnumeration.ADD)

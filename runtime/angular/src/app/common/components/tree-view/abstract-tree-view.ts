@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { Router } from '@angular/router';
 import { ConfirmationService, TreeNode, MessageService, MenuItem } from 'primeng/api';
 import { FormatterService } from '../../services/formatter.service';
@@ -16,9 +16,9 @@ export abstract class AbstractTreeView {
   protected readonly messageService = inject(MessageService);
   protected readonly formatterService = inject(FormatterService);
   protected readonly i18n = inject(I18NService);
-  protected statusText = '';
-  protected selectedNode: TreeNode | TreeNode[] | null = null;
-  protected rootNodes: TreeNode[] = [];
+  protected readonly statusText = signal('');
+  protected readonly selectedNode = signal<TreeNode | TreeNode[] | null>(null);
+  protected readonly rootNodes = signal<TreeNode[]>([]);
 
   /**
    * Open a confirmation dialog before calling the provided delete function
@@ -39,38 +39,45 @@ export abstract class AbstractTreeView {
   /**
    * Remove the given node from the tree view
    */
-  removeNode(treeNode: TreeNode | TreeNode[] | null) {
-    if (!treeNode || Array.isArray(treeNode)) {
+  removeNode(nodeToRemove: TreeNode | TreeNode[] | null) {
+    if (!nodeToRemove || Array.isArray(nodeToRemove)) {
       return;
     }
 
-    const parentNode = treeNode.parent;
-    let nodes: TreeNode[] | undefined;
+    this.rootNodes.update(nodes => {
+      const updatedNodes = this.removeRecursive(nodes, nodeToRemove);
+      this.displayNumberOfItemsInStatusField(updatedNodes.length);
+      return updatedNodes;
+    });
+  }
 
-    if (!this.selectedNode || Array.isArray(this.selectedNode)) {
-      return;
-    }
+  removeRecursive(nodes: TreeNode[], nodeToRemove: TreeNode): TreeNode[] {
+    return nodes.filter(node => node.key !== nodeToRemove.key)
+      .map(node => ({
+        ...node,
+        children: node.children ? this.removeRecursive(node.children, nodeToRemove) : []
+      }));
+  }
 
-    if (parentNode) {
-      nodes = parentNode.children;
-    } else {
-      nodes = this.rootNodes;
-    }
+  /**
+   * Replace or add children to a specific node
+   */
+  updateNodeChildren(nodeToUpdate: TreeNode, children: TreeNode[]) {
+    this.rootNodes.update(nodes => this.updateRecursive(nodes, nodeToUpdate, children));
+  }
 
-    if (!nodes) {
-      return;
-    }
-
-    for (let i = 0; i < nodes.length; i++) {
-      if (nodes[i].data === this.selectedNode.data) {
-        nodes.splice(i, 1);
-        break;
+  updateRecursive(nodes: TreeNode[], nodeToUpdate: TreeNode, newChildren: TreeNode[]): TreeNode[] {
+    return nodes.map(node => {
+      if (node.key === nodeToUpdate.key) {
+        return { ...node, children: newChildren };
       }
-    }
 
-    if (!parentNode) {
-      this.displayNumberOfItemsInStatusField(nodes.length);
-    }
+      if (node.children) {
+        return { ...node, children: this.updateRecursive(node.children, nodeToUpdate, newChildren) };
+      }
+
+      return node;
+    });
   }
 
   /**
@@ -86,14 +93,14 @@ export abstract class AbstractTreeView {
    * Display the given number of items in the status text field
    */
   displayNumberOfItemsInStatusField(numberOfItems: number) {
-    this.statusText = this.i18n.translate('msg_treeviewstatustext', numberOfItems.toString());
+    this.statusText.set(this.i18n.translate('msg_treeviewstatustext', numberOfItems.toString()));
   }
 
   /**
    * Display a message in the status text field that indicates that the application is currently loading data
    */
   displayLoadingMessageInStatusField() {
-    this.statusText = this.i18n.translate('msg_statusloading');
+    this.statusText.set(this.i18n.translate('msg_statusloading'));
   }
 
   /**
@@ -103,7 +110,7 @@ export abstract class AbstractTreeView {
     console.log(error);
 
     this.messageService.add({ severity: 'error', summary: errorMsg });
-    this.statusText = errorMsg;
+    this.statusText.set(errorMsg);
   }
 
 }

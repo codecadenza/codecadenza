@@ -21,6 +21,8 @@
  */
 package net.codecadenza.eclipse.generator.client.imp.angular.form.field;
 
+import static net.codecadenza.eclipse.generator.client.imp.angular.common.TypeScriptFieldGenerator.VISIBILITY_PROTECTED;
+
 import java.util.Collections;
 import java.util.List;
 import net.codecadenza.eclipse.generator.client.imp.angular.common.AngularContentFormatter;
@@ -95,8 +97,10 @@ public abstract class AbstractAngularItemSelectionFieldGenerator extends Abstrac
 		if (!field.isVisible())
 			return Collections.emptyList();
 
-		return Collections.singletonList(new TypeScriptFieldGenerator(itemListName + ": " + listDTO.getName() + "[]",
-				TypeScriptFieldGenerator.VISIBILITY_PROTECTED, formatter).withDefaultValue("[]"));
+		final var listField = new TypeScriptFieldGenerator(itemListName, VISIBILITY_PROTECTED, formatter)
+				.withDefaultValue("signal<" + listDTO.getName() + "[]>([])");
+
+		return Collections.singletonList(listField);
 	}
 
 	/*
@@ -125,7 +129,7 @@ public abstract class AbstractAngularItemSelectionFieldGenerator extends Abstrac
 	}
 
 	/**
-	 * @return the filter parameter for the back-end invocation
+	 * @return the filter parameter for the backend invocation
 	 */
 	protected String getInvocationParameter() {
 		if (filterItems)

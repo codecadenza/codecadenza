@@ -22,7 +22,6 @@
 package net.codecadenza.eclipse.generator.client.imp.angular.security;
 
 import static net.codecadenza.eclipse.generator.client.imp.angular.common.JavaScriptType.NUMBER;
-import static net.codecadenza.eclipse.generator.client.imp.angular.common.JavaScriptType.OBSERVABLE;
 import static net.codecadenza.eclipse.generator.client.imp.angular.common.JavaScriptType.STRING;
 import static net.codecadenza.eclipse.shared.Constants.ANGULAR_COMMON_SERVICES_FOLDER;
 
@@ -92,8 +91,7 @@ public class AngularAuthServiceGenerator extends AbstractTypeScriptSourceGenerat
 	 */
 	@Override
 	protected void addImports() {
-		importTypes(Stream.of("BehaviorSubject", OBSERVABLE), "rxjs");
-		importType("Injectable", "@angular/core");
+		importTypes(Stream.of("Injectable", "signal", "Signal"), "@angular/core");
 		importType("RoleEnum", "../model/role.enum");
 		importType("SHA256", "crypto-es");
 		importType(logOnDTO.getName(), "../../domain/" + logOnDTO.getName().toLowerCase() + ".interface");
@@ -137,7 +135,7 @@ public class AngularAuthServiceGenerator extends AbstractTypeScriptSourceGenerat
 		addService("MessageService", "messageService", "primeng/api").create();
 		addService("NavigationHistoryService", "navigationHistoryService", "../../common/services/navigation-history.service")
 				.create();
-		addField(null, "loginStatusSubject").withDefaultValue("new BehaviorSubject<boolean>(this.isLoggedIn())").create();
+		addPrivateField(null, "loggedIn").withReadonlyModifier().withDefaultValue("signal(this.isLoggedIn())").create();
 
 		addDependentDTO(logOnDTO);
 
@@ -162,7 +160,7 @@ public class AngularAuthServiceGenerator extends AbstractTypeScriptSourceGenerat
 		addIsLoggedInMethod(formatter);
 		addCheckClientMethod(formatter);
 		addGetLoggedOnUserMethod(formatter);
-		addLoginStatusChangedMethod(formatter);
+		addLoginSignalMethod(formatter);
 		addChangePasswordMethod(formatter);
 		addLogoutMethod(formatter);
 	}
@@ -182,7 +180,7 @@ public class AngularAuthServiceGenerator extends AbstractTypeScriptSourceGenerat
 		formatter.addBlockComment("Perform the login operation");
 		formatter.addLine("login(userName: string, password: string) {");
 		formatter.increaseIndent();
-		formatter.addLineComment("Save the credentials in the session storage before accessing the back-end for the first time");
+		formatter.addLineComment("Save the credentials in the session storage before accessing the backend for the first time");
 
 		if (project.isSpringBootApplication()) {
 			formatter.addLine("sessionStorage.setItem(AuthService.ITEM_NAME_USER_NAME, userName);");
@@ -239,7 +237,7 @@ public class AngularAuthServiceGenerator extends AbstractTypeScriptSourceGenerat
 		formatter.addLineComment("Save the roles in the session storage");
 		formatter.addLine("sessionStorage.setItem(AuthService.ITEM_NAME_ROLES, JSON.stringify(grantedRoles));");
 		formatter.addBlankLine();
-		formatter.addLine("this.loginStatusSubject.next(true);");
+		formatter.addLine("this.loggedIn.set(true);");
 		formatter.addBlankLine();
 		formatter.addLine("// Navigate to the start page if the login was successful");
 		formatter.addLine("this.router.navigate(['/']);");
@@ -354,14 +352,14 @@ public class AngularAuthServiceGenerator extends AbstractTypeScriptSourceGenerat
 	}
 
 	/**
-	 * Add the method to notify all listeners as soon as the login status has been changed
+	 * Add the method that returns the login signal
 	 * @param formatter
 	 */
-	private void addLoginStatusChangedMethod(AngularContentFormatter formatter) {
-		formatter.addBlockComment("Notify all listeners as soon as the login status has been changed");
-		formatter.addLine("onLoginStatusChanged(): " + OBSERVABLE + "<boolean> {");
+	private void addLoginSignalMethod(AngularContentFormatter formatter) {
+		formatter.addBlockComment("Return the readonly signal of the login status");
+		formatter.addLine("getLoginSignal(): Signal<boolean> {");
 		formatter.increaseIndent();
-		formatter.addLine("return this.loginStatusSubject.asObservable();");
+		formatter.addLine("return this.loggedIn.asReadonly();");
 		formatter.decreaseIndent();
 		formatter.addLine("}");
 		formatter.addBlankLine();
@@ -439,7 +437,7 @@ public class AngularAuthServiceGenerator extends AbstractTypeScriptSourceGenerat
 		formatter.addBlockComment("Perform the logout operation");
 		formatter.addLine("logout() {");
 		formatter.increaseIndent();
-		formatter.addLine("this.loginStatusSubject.next(false);");
+		formatter.addLine("this.loggedIn.set(false);");
 		formatter.addBlankLine();
 		formatter.addLineComment("Remove all items from the session storage!");
 		formatter.addLine("sessionStorage.clear();");

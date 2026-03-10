@@ -1,11 +1,11 @@
-<cc-search-input-dialog [visible]="showSearchInputDialog" (closeDialog)="showSearchInputDialog = false" [searchInput]="searchInput"
+<cc-search-input-dialog [visible]="showSearchInputDialog()" (closeDialog)="showSearchInputDialog.set(false)" [searchInput]="searchInput()!"
   (performSearch)="performSearchOperation($event)" (performCount)="performCountOperation($event)"/>
 
-<cc-save-search-dialog [visible]="showSaveSearchDialog" (closeDialog)="showSaveSearchDialog = false" [searchInput]="searchInput"
+<cc-save-search-dialog [visible]="showSaveSearchDialog()" (closeDialog)="showSaveSearchDialog.set(false)" [searchInput]="searchInput()!"
   [viewName]="id"/>
 
-<cc-saved-search-selection-dialog [visible]="showSavedSearchSelectionDialog" (closeDialog)="showSavedSearchSelectionDialog = false"
-  [searchInput]="searchInput" [viewName]="id" (savedSearchSelected)="performSearchOperation($event)"/>
+<cc-saved-search-selection-dialog [visible]="showSavedSearchSelectionDialog()" (closeDialog)="showSavedSearchSelectionDialog.set(false)"
+  [searchInput]="searchInput()!" [viewName]="id" (savedSearchSelected)="performSearchOperation($event)"/>
 
 <cc-view-container headerText="{{ title }}" headerIcon="pi-list">
   <p-menubar [model]="menuItems" style="margin-bottom: 10px"/>
@@ -13,9 +13,9 @@
   <p-fileupload hidden="true" mode="basic" [auto]="true" [customUpload]="true"
     (uploadHandler)="onImportButtonPressed($event, fileUpload)" id="cmdImport"/>
 
-  <p-table #dataTable [columns]="columns" [value]="items" [paginator]="true" [rows]="30"
+  <p-table #dataTable [columns]="columns()" [value]="items()" [paginator]="true" [rows]="30"
     [(contextMenuSelection)]="selectedItem" [contextMenu]="cm" [resizableColumns]="true"
-    [loading]="loading" [rowsPerPageOptions]="[10, 20, 30, 50, 100, 500, 1000]" paginatorPosition="top"
+    [loading]="loading()" [rowsPerPageOptions]="[10, 20, 30, 50, 100, 500, 1000]" paginatorPosition="top"
     tableStyleClass="p-datatable-sm" selectionMode="single" id="dataTable">
     <ng-template pTemplate="header" let-columns>
       <tr>
@@ -35,7 +35,7 @@
       </tr>
     </ng-template>
     <ng-template pTemplate="summary">
-      <div style="margin-top: 0.5em">{{ summaryText }}</div>
+      <div style="margin-top: 0.5em">{{ summaryText() }}</div>
     </ng-template>
   </p-table>
 

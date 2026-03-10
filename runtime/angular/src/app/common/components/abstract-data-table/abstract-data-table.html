@@ -3,8 +3,8 @@
 <p-fileupload #fileUpload mode="basic" hidden="true" [customUpload]="true" [auto]="true"
   (uploadHandler)="onImportButtonPressed($event, fileUpload)" id="cmdImport"/>
 
-<p-table #dataTable [columns]="columns" [value]="items" [paginator]="true" [rows]="10" [(contextMenuSelection)]="selectedItem"
-  [contextMenu]="cm" [resizableColumns]="true" [loading]="loading" [rowsPerPageOptions]="[10, 20, 30, 50, 100, 500, 1000]"
+<p-table #dataTable [columns]="columns" [value]="items()" [paginator]="true" [rows]="10" [(contextMenuSelection)]="selectedItem"
+  [contextMenu]="cm" [resizableColumns]="true" [loading]="loading()" [rowsPerPageOptions]="[10, 20, 30, 50, 100, 500, 1000]"
   [scrollable]="true" [style]="tableStyle" paginatorPosition="top" selectionMode="single"
   tableStyleClass="p-datatable-sm" [id]="tableId">
   <ng-template pTemplate="header" let-columns>
@@ -25,7 +25,7 @@
     </tr>
   </ng-template>
   <ng-template pTemplate="summary">
-    <div style="margin-top: 0.5em">{{ summaryText }}</div>
+    <div style="margin-top: 0.5em">{{ summaryText() }}</div>
   </ng-template>
 </p-table>
 

@@ -2,7 +2,7 @@
 <p-confirmdialog/>
 
 <!-- Menu bar -->
-@if (loggedIn$ | async) {
+@if (loggedIn()) {
   <app-main-menu/>
 }
 
@@ -22,7 +22,7 @@
       <div class="template-page-border"></div>
 
       <!-- Add application tree view navigator -->
-      @if (loggedIn$ | async) {
+      @if (loggedIn()) {
         <div class="template-navigator">
           <cc-tree-navigator [collapsed]="collapseNavigator()"/>
         </div>
@@ -43,7 +43,7 @@
 </div>
 
 <!-- Page footer -->
-@if (loggedIn$ | async) {
+@if (loggedIn()) {
   <div id="footer" class="template-footer">
     <div class="template-footer-text-left">&copy;&nbsp;&nbsp;2026&nbsp;&bull;&nbsp;CodeCadenza</div>
     <div class="template-footer-text-right" i18n="@@app_footer_poweredby">Powered by Primeng 21</div>

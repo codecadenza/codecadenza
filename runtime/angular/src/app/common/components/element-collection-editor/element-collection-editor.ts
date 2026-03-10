@@ -1,4 +1,4 @@
-import { Component, forwardRef, inject, Input, OnInit } from '@angular/core';
+import { Component, forwardRef, inject, Input, OnInit, signal } from '@angular/core';
 import { MenuItem, MessageService, PrimeTemplate } from 'primeng/api';
 import { NG_VALUE_ACCESSOR, ControlValueAccessor, FormsModule } from '@angular/forms';
 import { I18NService } from '../../services/i18n.service';
@@ -30,9 +30,9 @@ export class ElementCollectionEditor<T extends string | Date | number > implemen
   @Input() public uniqueElements = false;
   @Input() public readOnly = false;
   @Input() public fieldType = '';
+  protected readonly elements = signal<T[]>([]);
   private onChange?: (value: T[]) => void;
   protected valueType: ValueType = ValueType.STRING;
-  protected elements: T[] = [];
   protected contextMenuItems: MenuItem[] = [];
   protected newValue = '';
   protected selectedItem: T | null = null;
@@ -59,8 +59,8 @@ export class ElementCollectionEditor<T extends string | Date | number > implemen
    * Write the value
    */
    writeValue(value: T[]) {
-     if (value !== this.elements) {
-       this.elements = value;
+     if (value !== this.elements()) {
+       this.elements.set(value);
      }
    }
 
@@ -83,10 +83,10 @@ export class ElementCollectionEditor<T extends string | Date | number > implemen
    */
   get filteredElements(): T[] {
     if (!this.newValue || this.newValue === this.valueConverter.getInitialDefaultValue(this.valueType)) {
-      return this.elements.sort();
+      return this.elements().sort();
     }
 
-    return this.elements.filter(element => {
+    return this.elements().filter(element => {
       const elementString = this.convertElementToString(element);
 
       if (!elementString) {
@@ -113,14 +113,14 @@ export class ElementCollectionEditor<T extends string | Date | number > implemen
       }
 
       // Do not allow to add duplicate elements if the list is bound to a set
-      if (this.uniqueElements && this.elements.includes(newElement)) {
+      if (this.uniqueElements && this.elements().includes(newElement)) {
         return;
       }
 
-      this.elements.push(newElement);
+      this.elements().push(newElement);
       this.newValue = '';
 
-      this.onChange?.(this.elements);
+      this.onChange?.(this.elements());
     } catch (error) {
       if (error instanceof Error) {
         this.messageService.add({ severity: 'warn', summary: error.message });
@@ -140,8 +140,8 @@ export class ElementCollectionEditor<T extends string | Date | number > implemen
    */
   deleteSelectedElement(): void {
     if (this.selectedItem) {
-      this.elements = this.elements.filter(item => item !== this.selectedItem);
-      this.onChange?.(this.elements);
+      this.elements.set(this.elements().filter(item => item !== this.selectedItem));
+      this.onChange?.(this.elements());
     }
   }
 
@@ -149,8 +149,8 @@ export class ElementCollectionEditor<T extends string | Date | number > implemen
    * Delete all elements
    */
   deleteAllElements(): void {
-    this.elements = [];
-    this.onChange?.(this.elements);
+    this.elements.set([]);
+    this.onChange?.(this.elements());
   }
 
   /**

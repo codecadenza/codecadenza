@@ -1,5 +1,4 @@
 import { Component, AfterViewInit, inject, signal } from '@angular/core';
-import { AsyncPipe } from '@angular/common';
 import { RouterOutlet } from '@angular/router';
 import { startWith, tap, delay } from 'rxjs/operators';
 import { ToastModule } from 'primeng/toast';
@@ -14,19 +13,18 @@ import { NavigationHistoryService } from './common/services/navigation-history.s
 
 @Component({
   selector: 'cc-root',
-  imports: [ RouterOutlet, AsyncPipe, AppCommonModule, ToastModule, ConfirmDialogModule, ProgressBarModule],
+  imports: [ RouterOutlet, AppCommonModule, ToastModule, ConfirmDialogModule, ProgressBarModule],
   templateUrl: './app.html'
 })
 export class App implements AfterViewInit {
-  protected loading = signal<boolean>(false);
-  protected collapseNavigator = signal<boolean>(false);
   protected readonly loadingEventController = inject(HTTPLoadingEventController);
   protected readonly windowEventController = inject(WindowResizeEventController);
   protected readonly componentScalingService = inject(ComponentScalingService);
   protected readonly navigationHistoryService = inject(NavigationHistoryService);
   protected readonly authService = inject(AuthService);
-
-  loggedIn$ = this.authService.onLoginStatusChanged();
+  protected readonly loading = signal<boolean>(false);
+  protected readonly collapseNavigator = signal<boolean>(false);
+  protected readonly loggedIn = this.authService.getLoginSignal();
 
   /**
    * Create a new instance of this component

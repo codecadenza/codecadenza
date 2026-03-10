@@ -137,7 +137,7 @@ public class AngularListOfValuesGenerator extends AbstractTypeScriptSourceGenera
 
 		tableGenerator.createTableSetup();
 
-		formatter.addBlockComment("Load the items from the back-end");
+		formatter.addBlockComment("Load the items from the backend");
 		formatter.addLine("loadData(filterText: string) {");
 		formatter.increaseIndent();
 		formatter.addLine("return " + new AngularServiceInvocationGenerator(method, dto).createInvocation("filterText") + ";");

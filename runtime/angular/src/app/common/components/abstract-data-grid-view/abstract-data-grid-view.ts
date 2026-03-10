@@ -1,4 +1,4 @@
-import { Component, inject, ViewChild } from '@angular/core';
+import { Component, inject, ViewChild, computed, signal, Signal } from '@angular/core';
 import { Router } from '@angular/router';
 import { Observable, of } from 'rxjs';
 import { MenuItem, MessageService, ConfirmationService } from 'primeng/api';
@@ -25,22 +25,39 @@ export abstract class AbstractDataGridView<T> {
   protected readonly i18n = inject(I18NService);
   @ViewChild('dataTable', {static: true}) protected dataTable!: Table;
   @ViewChild('fileUpload') protected fileUpload!: FileUpload;
+  protected readonly searchInput = signal<SearchInput | undefined>(undefined);
+  protected readonly loading = signal(false);
+  protected readonly items = signal<T[]>([]);
+  protected readonly selectedItem = signal<T | undefined>(undefined);
+  protected readonly showSearchInputDialog = signal(false);
+  protected readonly showSaveSearchDialog = signal(false);
+  protected readonly showSavedSearchSelectionDialog = signal(false);
+  protected readonly summaryText = signal('');
   protected id = '';
   protected enableSearchInput = true;
-  protected searchInput!: SearchInput;
   protected showNewButton = false;
   protected showImportButton = false;
-  protected showSearchInputDialog = false;
-  protected showSaveSearchDialog = false;
-  protected showSavedSearchSelectionDialog = false;
-  protected summaryText = '';
   protected contextMenuItems: MenuItem[] = [];
-  protected loading = false;
-  protected items: T[] = [];
-  protected selectedItem?: T;
-  protected columns: ColumnDefinition[] = [];
   protected title = '';
   protected menuItems: MenuItem[] = [];
+  protected readonly columns: Signal<ColumnDefinition[]> = computed(() => {
+    // Update the column definition as soon as the search input has changed
+    const currentSearch = this.searchInput();
+
+    if (!currentSearch || !currentSearch.searchFields) {
+      return [];
+    }
+
+    return currentSearch.searchFields
+      .filter(field => field.displayInTable)
+      .map(field => ({
+        field: field.name,
+        header: field.label,
+        width: field.width + 'px',
+        type: field.type,
+        dateTimeFormat: field.dateTimeFormat
+      }));
+  });
 
   /**
    * Initialize the view and load the data
@@ -49,17 +66,13 @@ export abstract class AbstractDataGridView<T> {
     this.id = id;
     this.enableSearchInput = enableSearchInput;
 
+    let initialSearch: SearchInput | undefined;
+
     if (this.enableSearchInput) {
-      const lastSearch = this.savedSearchService.getLastSearch(this.id);
-
-      if (lastSearch) {
-        this.searchInput = lastSearch;
-      }
+      initialSearch = this.savedSearchService.getLastSearch(this.id);
     }
 
-    if (!this.searchInput) {
-      this.searchInput = this.initSearchInput();
-    }
+    this.searchInput.set(initialSearch ?? this.initSearchInput());
 
     this.refreshView();
   }
@@ -75,21 +88,21 @@ export abstract class AbstractDataGridView<T> {
         label: this.i18n.translate('cmd_search'),
         id: 'cmdSearch',
         icon: 'pi pi-search',
-        command: () => this.showSearchInputDialog = true
+        command: () => this.showSearchInputDialog.set(true)
       });
 
       this.menuItems.push({
         label: this.i18n.translate('cmd_save'),
         id: 'cmdSave',
         icon: 'pi pi-star',
-        command: () => this.showSaveSearchDialog = true
+        command: () => this.showSaveSearchDialog.set(true)
       });
 
       this.menuItems.push({
         label: this.i18n.translate('cmd_open'),
         id: 'cmdOpen',
         icon: 'pi pi-list',
-        command: () => this.showSavedSearchSelectionDialog = true
+        command: () => this.showSavedSearchSelectionDialog.set(true)
       });
     }
 
@@ -127,49 +140,18 @@ export abstract class AbstractDataGridView<T> {
   }
 
   /**
-   * Initialize the table by adding all visible columns that are defined by the corresponding search input object
-   */
-  initTable() {
-    this.dataTable.reset();
-
-    // Add columns dynamically
-    this.columns = [];
-
-    for (const searchInputField of this.searchInput.searchFields) {
-      // Skip invisible columns
-      if (!searchInputField.displayInTable) {
-        continue;
-      }
-
-      const column: ColumnDefinition = {
-        field: searchInputField.name,
-        header: searchInputField.label,
-        width: searchInputField.width + 'px',
-        type: searchInputField.type,
-        dateTimeFormat: searchInputField.dateTimeFormat
-      };
-
-      this.columns.push(column);
-    }
-  }
-
-  /**
    * Initialize the table and load data
    */
   refreshView() {
-    this.loading = true;
-
-    this.initTable();
+    this.loading.set(true);
+    this.dataTable.reset();
 
     this.loadData().subscribe({
-      next: result => this.items = result,
-      error: error => {
-        this.loading = false;
-        this.displayError(error, this.i18n.translate('msg_errordataload'));
-      },
+      next: result => this.items.set(result),
+      error: error => this.displayError(error, this.i18n.translate('msg_errordataload')),
       complete: () => {
-        this.loading = false;
-        this.summaryText = this.i18n.translate('msg_finisheddataload', this.items.length.toString());
+        this.loading.set(false);
+        this.summaryText.set(this.i18n.translate('msg_finisheddataload', this.items().length.toString()));
       }
     });
   }
@@ -178,16 +160,16 @@ export abstract class AbstractDataGridView<T> {
    * Callback listener that notifies this component to start a search operation
    */
   performSearchOperation(searchInput: SearchInput) {
-    this.searchInput = searchInput;
-    this.showSearchInputDialog = false;
-    this.showSavedSearchSelectionDialog = false;
+    this.searchInput.set(searchInput);
+    this.showSearchInputDialog.set(false);
+    this.showSavedSearchSelectionDialog.set(false);
 
-    console.log('Perform search operation by using: ' + JSON.stringify(this.searchInput));
+    console.log('Perform search operation by using: ' + JSON.stringify(searchInput));
 
     this.refreshView();
 
     if (this.enableSearchInput) {
-      this.savedSearchService.saveLastSearch(this.id, this.searchInput);
+      this.savedSearchService.saveLastSearch(this.id, searchInput);
     }
   }
 
@@ -195,9 +177,9 @@ export abstract class AbstractDataGridView<T> {
    * Callback listener that notifies this component to start a count operation
    */
   performCountOperation(searchInput: SearchInput) {
-    this.searchInput = searchInput;
-    this.loading = true;
-    this.showSearchInputDialog = false;
+    this.searchInput.set(searchInput);
+    this.loading.set(true);
+    this.showSearchInputDialog.set(false);
 
     console.log('Perform count operation by using: ' + JSON.stringify(this.searchInput));
 
@@ -207,7 +189,7 @@ export abstract class AbstractDataGridView<T> {
         this.messageService.add(message);
       },
       error: error => this.displayError(error, this.i18n.translate('msg_errorcount')),
-      complete: () => this.loading = false
+      complete: () => this.loading.set(false)
     });
   }
 
@@ -293,9 +275,9 @@ export abstract class AbstractDataGridView<T> {
   displayError(error: Error, errorMsg: string) {
     console.error(error);
 
-    this.loading = false;
+    this.loading.set(false);
     this.messageService.add({ severity: 'error', summary: errorMsg });
-    this.summaryText = errorMsg;
+    this.summaryText.set(errorMsg);
   }
 
   /**
@@ -306,7 +288,7 @@ export abstract class AbstractDataGridView<T> {
       return value;
     }
 
-    const searchField = this.searchInput.getSearchFieldByName(fieldName);
+    const searchField = this.searchInput()!.getSearchFieldByName(fieldName);
 
     if (!searchField) {
       console.error(`The field '${fieldName}' could not be found!`);

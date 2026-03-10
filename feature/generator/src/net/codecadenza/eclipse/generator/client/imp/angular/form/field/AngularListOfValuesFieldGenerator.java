@@ -21,6 +21,8 @@
  */
 package net.codecadenza.eclipse.generator.client.imp.angular.form.field;
 
+import static net.codecadenza.eclipse.generator.client.imp.angular.common.TypeScriptFieldGenerator.VISIBILITY_PROTECTED;
+
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -91,7 +93,10 @@ public class AngularListOfValuesFieldGenerator extends AbstractAngularFieldGener
 		if (!field.isVisible() || readonly || disabled)
 			return Collections.emptyList();
 
-		return Collections.singletonList(new TypeScriptFieldGenerator(lovStatusName, null, formatter).withDefaultValue("false"));
+		final var statusField = new TypeScriptFieldGenerator(lovStatusName, VISIBILITY_PROTECTED, formatter)
+				.withDefaultValue("false");
+
+		return Collections.singletonList(statusField);
 	}
 
 	/*
@@ -126,7 +131,7 @@ public class AngularListOfValuesFieldGenerator extends AbstractAngularFieldGener
 		}
 
 		// Copy all relevant values of the list-of-values DTO to the list DTO of the corresponding form field
-		formatter.addLine("this.object." + field.getDTOAttribute().getName() + " = {");
+		formatter.addLine("this.object()." + field.getDTOAttribute().getName() + " = {");
 		formatter.increaseIndent();
 
 		final var mapping = new StringBuilder(formatter.getIndent());
@@ -148,13 +153,13 @@ public class AngularListOfValuesFieldGenerator extends AbstractAngularFieldGener
 			formatter.decreaseIndent();
 			formatter.addLine("} else {");
 			formatter.increaseIndent();
-			formatter.addLine("this.object." + field.getDTOAttribute().getName() + " = null;");
+			formatter.addLine("this.object()." + field.getDTOAttribute().getName() + " = null;");
 			formatter.decreaseIndent();
 			formatter.addLine("}");
 		}
 
 		formatter.addBlankLine();
-		formatter.addLine("this.formGroup.patchValue(this.object);");
+		formatter.addLine("this.formGroup.patchValue(this.object());");
 		formatter.addLine("this." + lovStatusName + " = false;");
 		formatter.decreaseIndent();
 		formatter.addLine("}");

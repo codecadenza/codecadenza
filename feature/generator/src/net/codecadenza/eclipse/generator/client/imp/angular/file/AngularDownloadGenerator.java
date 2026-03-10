@@ -132,7 +132,7 @@ public class AngularDownloadGenerator {
 		final AngularContentFormatter formatter = generator.getContentFormatter();
 		final DTOBeanAttribute pkAttr = dto.getPKAttribute();
 		final String errorMsg = i18n.getI18NMessage("msg_errordownload", "Error while performing file download operation!");
-		var param = "this.object." + pkAttr.getName();
+		var param = "this.object()." + pkAttr.getName();
 		var fileNameParam = "";
 
 		generator.importType("mergeMap", "rxjs/operators");
@@ -140,9 +140,9 @@ public class AngularDownloadGenerator {
 		for (final DTOBeanAttribute attr : dto.getAttributes())
 			if (attr.getDomainAttribute() != null && attr.getDomainAttribute().getTag() == AttributeTagEnumeration.DOCUMENT_NAME) {
 				if (addToPanel || formType == FormTypeEnumeration.SEARCHABLE_VIEW || formType == FormTypeEnumeration.SIMPLE_VIEW)
-					fileNameParam = ", selectedItem." + attr.getName();
+					fileNameParam = ", item." + attr.getName();
 				else
-					fileNameParam = ", this.object." + attr.getName();
+					fileNameParam = ", this.object()." + attr.getName();
 
 				break;
 			}
@@ -152,17 +152,17 @@ public class AngularDownloadGenerator {
 		formatter.increaseIndent();
 
 		if (addToPanel || formType == FormTypeEnumeration.SEARCHABLE_VIEW || formType == FormTypeEnumeration.SIMPLE_VIEW) {
-			param = "selectedItem." + pkAttr.getName();
+			param = "item." + pkAttr.getName();
 
-			formatter.addLine("const selectedItem = this.selectedItem;");
+			formatter.addLine("const item = this.selectedItem();");
 			formatter.addBlankLine();
-			formatter.addIfStatement("!selectedItem", "return;", true);
+			formatter.addIfStatement("!item", "return;", true);
 		}
 
 		if (pkAttr.getDomainAttribute().getJavaType().isIntegerOrLong())
 			param += ".toString()";
 
-		formatter.addLineComment("Determine the real path of the file in the back-end");
+		formatter.addLineComment("Determine the real path of the file in the backend");
 		formatter.addLine(new AngularServiceInvocationGenerator(action.getBoundaryMethod()).createInvocation(param) + ".pipe(");
 		formatter.increaseIndent();
 		formatter.addLine("mergeMap((path: string) => this.fileService.downloadFile(path)))");

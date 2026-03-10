@@ -118,7 +118,7 @@ public class AngularExportGenerator {
 		final DTOBeanAttribute attr = dto.getPKAttribute();
 		final String errorMsg = i18n.getI18NMessage("msg_errordataexport", "Error while performing data export operation!");
 		final var exportFileName = "export." + exchangeMethod.getDefaultFileExtension();
-		var param = "this.selectedItem." + attr.getName();
+		var param = "item." + attr.getName();
 
 		if (attr.getDomainAttribute().getJavaType().isIntegerOrLong())
 			param += ".toString()";
@@ -127,8 +127,11 @@ public class AngularExportGenerator {
 		formatter.addLine(action.getBoundaryMethod().getName() + "() {");
 		formatter.increaseIndent();
 
-		if (exchangeMethod.getSingleObjectFilterParam() != null)
-			formatter.addIfStatement("!this.selectedItem", "return;", true);
+		if (exchangeMethod.getSingleObjectFilterParam() != null) {
+			formatter.addLine("const item = this.selectedItem();");
+			formatter.addBlankLine();
+			formatter.addIfStatement("!item", "return;", true);
+		}
 
 		formatter.addLine("console.log('Start data export');");
 		formatter.addBlankLine();

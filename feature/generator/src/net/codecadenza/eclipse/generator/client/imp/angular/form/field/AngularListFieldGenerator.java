@@ -21,6 +21,7 @@
  */
 package net.codecadenza.eclipse.generator.client.imp.angular.form.field;
 
+import java.util.HashMap;
 import java.util.Map;
 import net.codecadenza.eclipse.generator.client.imp.angular.common.AngularContentFormatter;
 import net.codecadenza.eclipse.generator.client.imp.angular.service.AngularServiceInvocationGenerator;
@@ -55,8 +56,13 @@ public class AngularListFieldGenerator extends AbstractAngularItemSelectionField
 	 */
 	@Override
 	public Map<String, String> getImports() {
-		// Return an empty map in order to skip the import of the @angular/forms Validators class!
-		return Map.of();
+		// Skip the import of the @angular/forms Validators class!
+		final Map<String, String> imports = new HashMap<>();
+
+		if (field.isVisible())
+			imports.put("signal", "@angular/core");
+
+		return imports;
 	}
 
 	/*
@@ -105,7 +111,7 @@ public class AngularListFieldGenerator extends AbstractAngularItemSelectionField
 	protected String addControlToTemplate() {
 		final var control = new StringBuilder();
 		control.append("<cc-multi-selection-list labelFieldName=\"" + displayAttr.getName() + "\" ");
-		control.append("[availableItems]=\"" + itemListName + "\" id=\"" + field.getName() + "\" ");
+		control.append("[availableItems]=\"" + itemListName + "()\" id=\"" + field.getName() + "\" ");
 
 		if (filterItems) {
 			if (displayAttr.getDomainAttribute().getJavaType().isIntegerOrLong())
@@ -151,7 +157,7 @@ public class AngularListFieldGenerator extends AbstractAngularItemSelectionField
 		formatter.increaseIndent();
 		formatter.addLine(invocationGenerator.createInvocation(getInvocationParameter()) + ".subscribe({");
 		formatter.increaseIndent();
-		formatter.addLine("next: result => this." + itemListName + " = result,");
+		formatter.addLine("next: result => this." + itemListName + ".set(result),");
 		formatter.addLine("error: error => this.openErrorDialog(error, false)");
 		formatter.decreaseIndent();
 		formatter.addLine("});");

@@ -116,8 +116,8 @@ public class AngularViewGenerator extends AbstractTypeScriptSourceGenerator {
 	 */
 	@Override
 	protected void addFields() {
-		addField(STRING, "ID").asConstant("'" + form.getName() + "'").create();
-		addField(null, "rowKey", "'" + form.getDTO().getPKAttribute().getName() + "'").create();
+		addProtectedField(STRING, "ID").asConstant("'" + form.getName() + "'").create();
+		addProtectedField(null, "rowKey").withDefaultValue("'" + form.getDTO().getPKAttribute().getName() + "'").create();
 
 		tableGenerator.addFields();
 	}
@@ -130,7 +130,7 @@ public class AngularViewGenerator extends AbstractTypeScriptSourceGenerator {
 	@Override
 	protected void addMethods(AngularContentFormatter formatter) {
 		final String invocation = new AngularServiceInvocationGenerator(form.getBoundaryMethod())
-				.createInvocation("this.searchInput");
+				.createInvocation("this.searchInput()!");
 
 		formatter.addBlockComment("Initialize the view");
 		formatter.addLine("ngOnInit() {");
@@ -154,7 +154,7 @@ public class AngularViewGenerator extends AbstractTypeScriptSourceGenerator {
 
 		createSearchObjectInitMethod(formatter);
 
-		formatter.addBlockComment("Load the items from the back-end");
+		formatter.addBlockComment("Load the items from the backend");
 		formatter.addLine("loadData() {");
 		formatter.increaseIndent();
 		formatter.addLine("return " + invocation + ";");
@@ -164,7 +164,7 @@ public class AngularViewGenerator extends AbstractTypeScriptSourceGenerator {
 
 		if (formType == FormTypeEnumeration.SEARCHABLE_VIEW) {
 			final BoundaryMethod countMethod = form.getViewFormPanel().getBoundaryMethod();
-			final String countInvocation = new AngularServiceInvocationGenerator(countMethod).createInvocation("this.searchInput");
+			final String countInvocation = new AngularServiceInvocationGenerator(countMethod).createInvocation("this.searchInput()!");
 
 			formatter.addBlockComment("Perform the count operation");
 			formatter.addLine("override countRecords() {");

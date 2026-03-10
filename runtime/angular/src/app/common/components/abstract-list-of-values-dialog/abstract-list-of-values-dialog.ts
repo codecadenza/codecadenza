@@ -54,7 +54,7 @@ export abstract class AbstractListOfValuesDialog<T> extends AbstractDataTable<T>
     }
 
     if (filterInput.length === 0) {
-      this.items = [];
+      this.items.set([]);
       this.lastInput = null;
       return;
     }
@@ -64,7 +64,7 @@ export abstract class AbstractListOfValuesDialog<T> extends AbstractDataTable<T>
       return;
     }
 
-    if (this.loading) {
+    if (this.loading()) {
       // In case of a slow backend we save the input in order to stay in sync!
       this.lastInput = filterInput;
       return;
