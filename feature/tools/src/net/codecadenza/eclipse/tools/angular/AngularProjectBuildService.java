@@ -43,7 +43,7 @@ public class AngularProjectBuildService {
 	private static final String ANGULAR_VERSION = "21.1";
 	private static final String CRYPTO_ES_VERSION = "3.1";
 	private static final String PRIMEICONS_VERSION = "7.0";
-	private static final String PRIMENG_VERSION = "21.1";
+	private static final String PRIMENG_VERSION = "21.1.3";
 	private static final String PRIMENG_THEMING_VERSION = "2.0";
 	private static final String PRIMEFLEX_VERSION = "4.0";
 	private static final String UUID_VERSION = "13.0";
