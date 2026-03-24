@@ -25,18 +25,14 @@ import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.time.Duration;
 import java.util.Iterator;
-import java.util.List;
-import java.util.Optional;
 import java.util.Set;
-import java.util.stream.Stream;
 import net.codecadenza.runtime.selenium.data.PageActionResult;
 import net.codecadenza.runtime.selenium.data.PageElementTestData;
 import net.codecadenza.runtime.selenium.junit.SeleniumTestContext;
+import net.codecadenza.runtime.selenium.page.WebElementWait;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
 
 /**
  * <p>
@@ -52,7 +48,6 @@ public abstract class AbstractPageObject extends AbstractPrimefacesPageComponent
 	public static final String FORM_ID_PREFIX = "form:";
 	public static final String BUTTON_ID_LOG_IN = FORM_ID_PREFIX + "cmdLogin";
 
-	private static final String SLASH = "/";
 	private static final String URL_PARAM_OBJ_ID = "?selectedObjectId=";
 	private static final String ITEMS_PANEL_ID_SUFFIX = "_items";
 	private static final String PANEL_SUFFIX = "_panel";
@@ -66,12 +61,10 @@ public abstract class AbstractPageObject extends AbstractPrimefacesPageComponent
 	private static final String BUTTON_ID_SAVE = FORM_ID_PREFIX + "cmdSave";
 	private static final String BUTTON_ID_BACK = FORM_ID_PREFIX + "cmdBack";
 	private static final String TABLE_ID_LOV = FORM_ID_PREFIX + "dataTable";
-	private static final int TAB_PAGE_TIMEOUT_SECONDS = 5;
-	private static final int AUTO_COMPLETE_DELAY_MILLIS = 400;
 
 	/**
 	 * Constructor
-	 * @param testContext
+	 * @param testContext the Selenium test context
 	 */
 	protected AbstractPageObject(SeleniumTestContext testContext) {
 		super(testContext);
@@ -79,7 +72,7 @@ public abstract class AbstractPageObject extends AbstractPrimefacesPageComponent
 
 	/**
 	 * Open a page
-	 * @param resourcePath
+	 * @param resourcePath the path of the page to be opened
 	 * @throws AssertionError if the parameter <code>resourcePath</code> is null
 	 */
 	public void open(String resourcePath) {
@@ -88,8 +81,8 @@ public abstract class AbstractPageObject extends AbstractPrimefacesPageComponent
 
 	/**
 	 * Open a page to display data for a specific object identified by the given ID
-	 * @param resourcePath
-	 * @param objectId
+	 * @param resourcePath the path of the page to be opened
+	 * @param objectId the object ID
 	 * @throws AssertionError if the parameter <code>resourcePath</code> is null
 	 */
 	public void open(String resourcePath, String objectId) {
@@ -111,17 +104,15 @@ public abstract class AbstractPageObject extends AbstractPrimefacesPageComponent
 	 * Navigate to a page by selecting a tree view item with the specified navigation target! As the page object is created via
 	 * introspection it is necessary that the respective class provides an appropriate constructor!
 	 * @param <T> the type of the page object that should be returned
-	 * @param navigationTarget
-	 * @param pageClass
+	 * @param navigationTarget the path of page to be opened
+	 * @param pageClass the class of the page object that should be opened
 	 * @return a page instance whose type is defined by the respective parameter
 	 * @throws AssertionError if the operation has failed
 	 */
 	public <T extends AbstractPageObject> T openPageByNavigator(String navigationTarget, Class<T> pageClass) {
 		logger.debug("Navigate to '{}'", navigationTarget);
 
-		final WebElement treeItem = findWebElementByXPath(
-				XPATH_TREE_ITEM_LABEL + "/a[@href[contains(.,'" + navigationTarget + "')]]");
-		treeItem.click();
+		clickWebElementByXPath(XPATH_TREE_ITEM_LABEL + "/a[@href[contains(.,'" + navigationTarget + "')]]");
 
 		return createPageObject(pageClass);
 	}
@@ -144,7 +135,7 @@ public abstract class AbstractPageObject extends AbstractPrimefacesPageComponent
 
 	/**
 	 * Press the 'Save' button
-	 * @param pageClass
+	 * @param pageClass the class of the page object that should be opened
 	 * @param <T> the type of the page object that should be returned
 	 * @return a page instance whose type is defined by the respective parameter
 	 * @throws AssertionError if the button either could not be found, or the page object could not be created
@@ -165,13 +156,13 @@ public abstract class AbstractPageObject extends AbstractPrimefacesPageComponent
 
 	/**
 	 * Press a button with a given ID
-	 * @param id
+	 * @param id the ID of the button to be pressed
 	 * @throws AssertionError if the button could not be found
 	 */
 	public void pressButton(String id) {
 		logger.debug("Press button with ID '{}'", id);
 
-		findWebElement(id).click();
+		clickWebElement(id);
 	}
 
 	/**
@@ -184,7 +175,6 @@ public abstract class AbstractPageObject extends AbstractPrimefacesPageComponent
 
 		logger.debug("Set selection of checkbox '{}'", testData.getElementId());
 
-		final WebElement inputField = findWebElement(testData.getElementId());
 		final boolean newSelection = testData.getNewValue().equalsIgnoreCase(Boolean.toString(true));
 		final boolean currentSelection = isCheckBoxSelected(testData);
 
@@ -200,7 +190,7 @@ public abstract class AbstractPageObject extends AbstractPrimefacesPageComponent
 		logger.debug("Change selection of checkbox '{}'", testData.getElementId());
 
 		// Click on the checkbox in order to toggle its selection
-		inputField.click();
+		clickWebElement(testData.getElementId());
 	}
 
 	/**
@@ -246,18 +236,10 @@ public abstract class AbstractPageObject extends AbstractPrimefacesPageComponent
 			fail("Cannot derive ID for dynamic element of field '" + testData.getElementId() + "'");
 
 		final String panelId = testData.getElementId().substring(0, inputSuffixPos) + PANEL_SUFFIX;
+		final String itemText = prepareXPathText(testData.getNewValue());
+		final var expression = "//span[@id='" + panelId + "']//ul/li[@data-item-label=" + itemText + "]";
 
-		// Wait a short period of time until accessing the element containing the actual item!
-		testContext.delayTest(AUTO_COMPLETE_DELAY_MILLIS);
-
-		// When using Primefaces the results are added dynamically by using a different element
-		final WebElement itemPanel = findWebElement(panelId);
-
-		final boolean itemFound = selectItem(itemPanel, testData.getNewValue());
-
-		if (!itemFound)
-			fail("Could not find selectable item '" + testData.getNewValue() + "' for auto-complete field '" + testData.getElementId()
-					+ "'!");
+		clickWebElementByXPath(expression);
 	}
 
 	/**
@@ -290,18 +272,14 @@ public abstract class AbstractPageObject extends AbstractPrimefacesPageComponent
 		logger.debug("Search for item '{}' in combobox '{}'", testData.getNewValue(), testData.getElementId());
 
 		// Search for the combobox field and click on it
-		final WebElement combobox = findWebElement(testData.getElementId());
-		combobox.click();
+		clickWebElement(testData.getElementId());
 
-		// When using Primefaces the results are added dynamically by using a different element
+		// The items are added dynamically to a different element
 		final String panelId = testData.getElementId() + ITEMS_PANEL_ID_SUFFIX;
-		final WebElement itemsPanel = findWebElement(panelId);
+		final String itemText = prepareXPathText(testData.getNewValue());
+		final var expression = "//div[@id='" + panelId + "']//ul/li[text()=" + itemText + "]";
 
-		final boolean itemFound = selectItem(itemsPanel, testData.getNewValue());
-
-		if (!itemFound)
-			fail("Could not find selectable item '" + testData.getNewValue() + "' for combobox field '" + testData.getElementId()
-					+ "'!");
+		clickWebElementByXPath(expression);
 	}
 
 	/**
@@ -314,27 +292,12 @@ public abstract class AbstractPageObject extends AbstractPrimefacesPageComponent
 				testData.getExpectedValue());
 
 		final String fieldId = testData.getElementId();
+		final String itemText = prepareXPathText(testData.getExpectedValue());
+		final String expression = "//div[@id='" + testData.getElementId() + "']/span[text()=" + itemText + "]";
 
 		logger.debug("Validate the selected item of combobox '{}'", fieldId);
 
-		final List<WebElement> comboboxOptions = findWebElementsByXPath(
-				"//div[@id='" + testData.getElementId() + "']/div/select/option");
-		final var message = "Validation of combobox '" + fieldId + "' has failed!";
-
-		// Iterate over all combobox items and determine the value of the selected item
-		final Optional<WebElement> selectedElement = comboboxOptions.stream()
-				.filter(item -> item.getAttribute(ATTR_NAME_SELECTED) != null && !item.getAttribute(ATTR_NAME_SELECTED).isEmpty())
-				.findFirst();
-
-		if (selectedElement.isPresent()) {
-			final String nameAttribute = selectedElement.get().getAttribute(ATTR_NAME_VALUE);
-
-			logger.trace("Selected combobox item '{}'", nameAttribute);
-
-			assertEquals(message, testData.getExpectedValue(), nameAttribute);
-		}
-		else
-			fail("The selected combobox item could not be found!");
+		findWebElementByXPath(expression, false);
 	}
 
 	/**
@@ -347,15 +310,12 @@ public abstract class AbstractPageObject extends AbstractPrimefacesPageComponent
 
 		logger.debug("Open LoV dialog");
 
-		final WebElement lovField = findWebElement(testData.getElementId());
-
 		// Perform a double-click on that field in order to open the list-of-values!
-		doubleClickElement(lovField);
+		doubleClickElement(testData.getElementId());
 
 		// Determine the handles of the main and the list-of-values window
 		final Set<String> windowId = driver.getWindowHandles();
 		final Iterator<String> itererator = windowId.iterator();
-
 		final String mainWindowId = itererator.next();
 		final String lovWindowId = itererator.next();
 
@@ -380,18 +340,24 @@ public abstract class AbstractPageObject extends AbstractPrimefacesPageComponent
 			tableLoV.selectRow(row);
 
 			// Click on the 'Select' button in order to apply the selection
-			findWebElement(BUTTON_ID_SELECT).click();
+			clickWebElement(BUTTON_ID_SELECT);
 		}
 		else {
 			logger.debug("Press the reset button");
 
-			findWebElement(BUTTON_ID_RESET).click();
+			clickWebElement(BUTTON_ID_RESET);
 		}
 
 		logger.debug("Close LoV dialog");
 
 		// Switch control back to the main window
 		driver.switchTo().window(mainWindowId);
+
+		// Wait until the item has been selected
+		final WebElement inputElement = findWebElement(testData.getElementId());
+
+		new WebElementWait(driver, Duration.ofMillis(explicitWaitTime), logger)
+				.until(_ -> testData.getNewValue().equals(inputElement.getAttribute("value")));
 	}
 
 	/**
@@ -457,34 +423,35 @@ public abstract class AbstractPageObject extends AbstractPrimefacesPageComponent
 		logger.debug("Upload file '{}'", testData.getNewValue());
 
 		// Search for the 'Upload' button and click on it in order to open a pop-up dialog
-		findWebElement(testData.getElementId()).click();
+		clickWebElement(testData.getElementId());
 
 		// Search for the file input element and enter the path of the file to be uploaded
-		findWebElementByXPath("//div[@id='" + dialogId + "']//input[@type='file']").sendKeys(testData.getNewValue());
+		final WebElement uploadDialog = findWebElement(dialogId);
+
+		uploadDialog.findElement(By.tagName("input")).sendKeys(testData.getNewValue());
 
 		// Click on the pop-up dialog's close button
-		findWebElementByXPath("//div[@id='" + dialogId + "']//a/span[@class='ui-icon ui-icon-closethick']").click();
+		clickWebElementByXPath("//div[@id='" + dialogId + "']//a/span[@class='ui-icon ui-icon-closethick']");
 	}
 
 	/**
 	 * Open a tab page identified by the given ID
-	 * @param tabPageId
+	 * @param tabPageId the ID of the tab page to be opened
 	 * @throws AssertionError if the tab page could not be found
 	 */
 	public void openTabPage(String tabPageId) {
 		logger.debug("Open tab page '{}'", tabPageId);
 
-		final WebElement tabPage = findWebElementByXPath("//a[@href='#" + tabPageId + "']");
-		tabPage.click();
+		clickWebElementByXPath("//a[@href='#" + tabPageId + "']");
 
 		// Wait until the corresponding panel is visible!
-		new WebDriverWait(driver, Duration.ofSeconds(TAB_PAGE_TIMEOUT_SECONDS))
-				.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//div[@id='" + tabPageId + "']")));
+		new WebElementWait(driver, Duration.ofMillis(explicitWaitTime), logger)
+				.untilVisible(By.xpath("//div[@id='" + tabPageId + "']"));
 	}
 
 	/**
 	 * Wait for a message dialog and perform a status validation check
-	 * @param actionResult
+	 * @param actionResult the expected action result
 	 * @return a message dialog
 	 * @throws AssertionError if the status validation either has failed, or an element could not be found
 	 */
@@ -499,7 +466,7 @@ public abstract class AbstractPageObject extends AbstractPrimefacesPageComponent
 
 	/**
 	 * Wait for a growl notification message and perform a status validation check
-	 * @param actionResult
+	 * @param actionResult the expected action result
 	 * @throws AssertionError if the status validation either has failed, or an element could not be found
 	 */
 	public void waitForNotificationMessage(PageActionResult actionResult) {
@@ -535,35 +502,16 @@ public abstract class AbstractPageObject extends AbstractPrimefacesPageComponent
 	}
 
 	/**
-	 * Search for an existing list item with the given value and select it
-	 * @param element
-	 * @param itemValue
-	 * @return true if an item could be selected
-	 */
-	protected boolean selectItem(WebElement element, String itemValue) {
-		final Stream<WebElement> itemStream = element.findElements(By.tagName(HTML_LIST_ITEM)).stream();
-		final Optional<WebElement> item = itemStream.filter(e -> e.getText().equals(itemValue)).findFirst();
-
-		if (item.isPresent()) {
-			logger.trace("Click on item '{}'", itemValue);
-
-			item.get().click();
-
-			return true;
-		}
-
-		return false;
-	}
-
-	/**
 	 * Determine the selection of a checkbox field
 	 * @param testData the field's test data object that provides necessary information
 	 * @return true if the checkbox is selected
 	 */
 	protected boolean isCheckBoxSelected(PageElementTestData testData) {
+		final var expression = "//div[@id='" + testData.getElementId() + "']";
+		final WebElement checkBoxElement = findWebElementByXPath(expression);
+
 		// Search for the '<span>'-element that provides the information regarding the selection
-		final var expression = "//div[@id='" + testData.getElementId() + "']/div/span";
-		final WebElement spanElement = findWebElementByXPath(expression);
+		final WebElement spanElement = checkBoxElement.findElement(By.tagName("span"));
 		final String classAttribute = spanElement.getAttribute(ATTR_NAME_CLASS);
 
 		if (classAttribute == null) {
@@ -577,8 +525,8 @@ public abstract class AbstractPageObject extends AbstractPrimefacesPageComponent
 	/**
 	 * Build the page URL using the given base URL and a resource path. If necessary, both strings will be joined by using a '/'
 	 * character!
-	 * @param baseURL
-	 * @param resourcePath
+	 * @param baseURL the base URL
+	 * @param resourcePath the resource path
 	 * @return the URL
 	 */
 	protected String buildPageURL(String baseURL, String resourcePath) {

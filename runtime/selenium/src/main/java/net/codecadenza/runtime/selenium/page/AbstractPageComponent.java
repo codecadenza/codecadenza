@@ -22,6 +22,7 @@
 package net.codecadenza.runtime.selenium.page;
 
 import java.time.Duration;
+import java.time.Instant;
 import java.util.List;
 import net.codecadenza.runtime.selenium.data.PageElementTestData;
 import net.codecadenza.runtime.selenium.junit.SeleniumTestContext;
@@ -29,13 +30,11 @@ import org.junit.jupiter.api.Assertions;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.Keys;
-import org.openqa.selenium.NoSuchElementException;
+import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
-import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.FluentWait;
-import org.openqa.selenium.support.ui.WebDriverWait;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -51,32 +50,32 @@ import org.slf4j.LoggerFactory;
  */
 public abstract class AbstractPageComponent {
 	public static final String ATTR_NAME_VALUE = "value";
-	public static final String HTML_LIST_ITEM = "li";
 	public static final String ATTR_NAME_CLASS = "class";
 	public static final String ATTR_NAME_STYLE = "style";
 	public static final String ATTR_NAME_SELECTED = "selected";
 	public static final String NEW_LINE = "!NEW_LINE!";
 	public static final String ITEM_DELIMITER = ";";
-	public static final int ROW_OFFSET_X = 5;
-	public static final int ROW_OFFSET_Y = 5;
-	public static final int HTTP_POLLING_INTERVAL_MILLISECONDS = 50;
+	public static final String SLASH = "/";
+	public static final int HTTP_POLLING_INTERVAL_MILLISECONDS = 10;
 	private static final String SCROLL_SCRIPT = "arguments[0].scrollIntoView({ behavior: 'instant', block: 'center', inline: 'center' });";
 
 	protected final SeleniumTestContext testContext;
 	protected final WebDriver driver;
 	protected final long httpTimeout;
 	protected final long httpCheckDelay;
+	protected final long explicitWaitTime;
 	protected Logger logger;
 
 	/**
 	 * Constructor
-	 * @param testContext
+	 * @param testContext the Selenium test context
 	 */
 	protected AbstractPageComponent(SeleniumTestContext testContext) {
 		this.testContext = testContext;
 		this.driver = testContext.getDriver();
 		this.httpTimeout = testContext.getProperties().getHTTPTimeout();
 		this.httpCheckDelay = testContext.getProperties().getHTTPCheckDelay();
+		this.explicitWaitTime = testContext.getProperties().getExplicitWaitTime();
 		this.logger = LoggerFactory.getLogger(getClass());
 	}
 
@@ -87,7 +86,7 @@ public abstract class AbstractPageComponent {
 	public abstract String getJSCommandForPendingHTTPRequests();
 
 	/**
-	 * @param logger
+	 * @param logger the {@link Logger} that should be used
 	 */
 	public void setLogger(Logger logger) {
 		this.logger = logger;
@@ -115,13 +114,13 @@ public abstract class AbstractPageComponent {
 	}
 
 	/**
-	 * Search for an element by using the given ID
-	 * @param elementId
-	 * @param explicitWaitInSeconds controls the amount of time in seconds until an element should be visible
+	 * Find an element by using the given ID
+	 * @param elementId the ID of the element
+	 * @param clickable controls if the element must be clickable
 	 * @return the web element
 	 * @throws AssertionError if the element either could not be found, or the parameter <code>elementId</code> is null or empty
 	 */
-	public WebElement findWebElement(String elementId, int explicitWaitInSeconds) {
+	public WebElement findWebElement(String elementId, boolean clickable) {
 		logger.trace("Search for element with ID '{}'", elementId);
 
 		if (elementId == null || elementId.isEmpty())
@@ -129,17 +128,16 @@ public abstract class AbstractPageComponent {
 
 		waitForPendingHTTPRequests();
 
-		if (explicitWaitInSeconds > 0) {
-			final var wait = new WebDriverWait(driver, Duration.ofSeconds(explicitWaitInSeconds));
-			wait.until(ExpectedConditions.visibilityOfElementLocated(By.id(elementId)));
-		}
-
+		final var wait = new WebElementWait(driver, Duration.ofMillis(explicitWaitTime), logger);
 		WebElement element = null;
 
 		try {
-			element = driver.findElement(By.id(elementId));
+			if (clickable)
+				element = wait.untilClickable(By.id(elementId));
+			else
+				element = wait.untilVisible(By.id(elementId));
 		}
-		catch (final NoSuchElementException e) {
+		catch (final TimeoutException e) {
 			fail("Could not find element with ID '" + elementId + "'!", e);
 		}
 
@@ -152,22 +150,23 @@ public abstract class AbstractPageComponent {
 	}
 
 	/**
-	 * Search for an element by using the given ID
-	 * @param elementId
+	 * Find an element by using the given ID
+	 * @param elementId the ID of the element
 	 * @return the web element
 	 * @throws AssertionError if the element either could not be found, or the parameter <code>elementId</code> is null or empty
 	 */
 	public WebElement findWebElement(String elementId) {
-		return findWebElement(elementId, 0);
+		return findWebElement(elementId, false);
 	}
 
 	/**
-	 * Find an element by using a XPath expression
-	 * @param xpathExpression
+	 * Find an element by using an XPath expression
+	 * @param xpathExpression the XPath expression to search for the element
+	 * @param clickable controls if the element must be clickable
 	 * @return the web element
 	 * @throws AssertionError if the element either could not be found, or the XPath expression is null or empty
 	 */
-	public WebElement findWebElementByXPath(String xpathExpression) {
+	public WebElement findWebElementByXPath(String xpathExpression, boolean clickable) {
 		logger.trace("Search for element by using XPath expression '{}'", xpathExpression);
 
 		if (xpathExpression == null || xpathExpression.isEmpty())
@@ -175,12 +174,16 @@ public abstract class AbstractPageComponent {
 
 		waitForPendingHTTPRequests();
 
+		final var wait = new WebElementWait(driver, Duration.ofMillis(explicitWaitTime), logger);
 		WebElement element = null;
 
 		try {
-			element = driver.findElement(By.xpath(xpathExpression));
+			if (clickable)
+				element = wait.untilClickable(By.xpath(xpathExpression));
+			else
+				element = wait.untilVisible(By.xpath(xpathExpression));
 		}
-		catch (final NoSuchElementException _) {
+		catch (final TimeoutException _) {
 			fail("Could not find element using XPath '" + xpathExpression + "'!");
 		}
 
@@ -193,12 +196,41 @@ public abstract class AbstractPageComponent {
 	}
 
 	/**
-	 * Find elements by using a XPath expression
-	 * @param xpathExpression
+	 * Find an element by using an XPath expression
+	 * @param xpathExpression the XPath expression to search for the element
+	 * @return the web element
+	 * @throws AssertionError if the element either could not be found, or the XPath expression is null or empty
+	 */
+	public WebElement findWebElementByXPath(String xpathExpression) {
+		return findWebElementByXPath(xpathExpression, false);
+	}
+
+	/**
+	 * Find an element by using the given ID and click it
+	 * @param elementId the ID of the element
+	 * @throws AssertionError if the element either could not be found, or the parameter <code>elementId</code> is null or empty
+	 */
+	public void clickWebElement(String elementId) {
+		findWebElement(elementId, true).click();
+	}
+
+	/**
+	 * Find an element by using an XPath expression and click it
+	 * @param xpathExpression the XPath expression to search for the element
+	 * @throws AssertionError if the element either could not be found, or the XPath expression is null or empty
+	 */
+	public void clickWebElementByXPath(String xpathExpression) {
+		findWebElementByXPath(xpathExpression, true).click();
+	}
+
+	/**
+	 * Find elements by using an XPath expression
+	 * @param xpathExpression the XPath expression to search for the elements
+	 * @param wait a flag that controls if an explicit wait should be performed
 	 * @return a list containing all web elements
 	 * @throws AssertionError if the XPath expression is null or empty
 	 */
-	public List<WebElement> findWebElementsByXPath(String xpathExpression) {
+	public List<WebElement> findWebElementsByXPath(String xpathExpression, boolean wait) {
 		logger.trace("Search for elements by using XPath expression '{}'", xpathExpression);
 
 		if (xpathExpression == null || xpathExpression.isEmpty())
@@ -206,25 +238,35 @@ public abstract class AbstractPageComponent {
 
 		waitForPendingHTTPRequests();
 
-		return driver.findElements(By.xpath(xpathExpression));
+		if (wait) {
+			final var elementWait = new WebElementWait(driver, Duration.ofMillis(explicitWaitTime), logger);
+
+			return elementWait.untilElementsNotEmpty(By.xpath(xpathExpression));
+		}
+		else
+			return driver.findElements(By.xpath(xpathExpression));
 	}
 
 	/**
 	 * Perform a double-click on the given element
-	 * @param webElement
-	 * @throws AssertionError if the parameter <code>webElement</code> is null
+	 * @param elementId the ID of the element
 	 */
-	public void doubleClickElement(WebElement webElement) {
-		logger.trace("Perform double-click on element '{}'", webElement.getTagName());
+	public void doubleClickElement(String elementId) {
+		final WebElement webElement = findWebElement(elementId, true);
 
-		assertNotNull("Parameter 'webElement' must not be null!", webElement);
+		logger.trace("Perform double-click on element with ID '{}'", elementId);
 
-		waitForPendingHTTPRequests();
+		new Actions(driver).doubleClick(webElement).perform();
+	}
 
-		// Make sure that the element is in the visible area of the browser!
-		scrollTo(webElement);
+	/**
+	 * Perform a double-click on the element identified by the given XPath expression
+	 * @param xpathExpression the XPath expression to search for the element
+	 */
+	public void doubleClickElementByXPath(String xpathExpression) {
+		final WebElement webElement = findWebElementByXPath(xpathExpression, true);
 
-		moveToElement(webElement);
+		logger.trace("Perform double-click on element identified by XPath expression '{}'", xpathExpression);
 
 		new Actions(driver).doubleClick(webElement).perform();
 	}
@@ -269,20 +311,7 @@ public abstract class AbstractPageComponent {
 	}
 
 	/**
-	 * Wait a specific amount of time in seconds until an element should be visible
-	 * @param webElement
-	 * @param secondsToWait
-	 * @throws AssertionError if the parameter <code>webElement</code> is null
-	 */
-	public void waitUntilVisible(WebElement webElement, int secondsToWait) {
-		assertNotNull("Parameter 'webElement' must not be null!", webElement);
-
-		final var wait = new WebDriverWait(driver, Duration.ofSeconds(secondsToWait));
-		wait.until(ExpectedConditions.visibilityOf(webElement));
-	}
-
-	/**
-	 * @param webElement
+	 * @param webElement the element to move to
 	 * @throws AssertionError if the parameter <code>webElement</code> is null
 	 */
 	public void moveToElement(WebElement webElement) {
@@ -294,8 +323,8 @@ public abstract class AbstractPageComponent {
 
 	/**
 	 * Assert that a condition is true and create a log record if the assertion test has failed
-	 * @param message
-	 * @param condition
+	 * @param message the failure message
+	 * @param condition the condition to check
 	 * @throws AssertionError if the condition is not true
 	 */
 	public void assertTrue(String message, boolean condition) {
@@ -305,8 +334,8 @@ public abstract class AbstractPageComponent {
 
 	/**
 	 * Assert that an object isn't null and create a log record if the assertion test has failed
-	 * @param message
-	 * @param object
+	 * @param message the failure message
+	 * @param object the object to be checked
 	 * @throws AssertionError if the object is null
 	 */
 	public void assertNotNull(String message, Object object) {
@@ -316,9 +345,9 @@ public abstract class AbstractPageComponent {
 
 	/**
 	 * Assert that two objects are equal and create a log record if the assertion test has failed
-	 * @param message
-	 * @param expected
-	 * @param actual
+	 * @param message the failure message
+	 * @param expected the expected value
+	 * @param actual the actual value
 	 * @throws AssertionError if both objects are not equal
 	 */
 	public void assertEquals(String message, Object expected, Object actual) {
@@ -336,7 +365,7 @@ public abstract class AbstractPageComponent {
 
 	/**
 	 * Throw an assertion error and log the message
-	 * @param message
+	 * @param message the failure message
 	 * @throws AssertionError in any case
 	 */
 	public void fail(String message) {
@@ -345,8 +374,8 @@ public abstract class AbstractPageComponent {
 
 	/**
 	 * Throw an assertion error and log the message
-	 * @param message
-	 * @param t
+	 * @param message the failure message
+	 * @param t the exception that has been thrown
 	 * @throws AssertionError in any case
 	 */
 	public void fail(String message, Throwable t) {
@@ -376,8 +405,10 @@ public abstract class AbstractPageComponent {
 		if (httpCheckDelay > 0)
 			testContext.delayTest(httpCheckDelay);
 
+		final long start = Instant.now().toEpochMilli();
+
 		final FluentWait<WebDriver> wait = new FluentWait<>(driver);
-		wait.withTimeout(Duration.ofSeconds(httpTimeout));
+		wait.withTimeout(Duration.ofMillis(httpTimeout));
 		wait.pollingEvery(Duration.ofMillis(HTTP_POLLING_INTERVAL_MILLISECONDS));
 
 		wait.until(webDriver -> {
@@ -388,7 +419,7 @@ public abstract class AbstractPageComponent {
 				finished = Boolean.TRUE.equals(js.executeScript(getJSCommandForPendingHTTPRequests()));
 
 				if (finished)
-					logger.trace("No pending HTTP requests found!");
+					logger.trace("No pending HTTP requests found after {} milliseconds", (Instant.now().toEpochMilli() - start));
 				else
 					logger.trace("HTTP requests are still pending!");
 			}
@@ -417,7 +448,7 @@ public abstract class AbstractPageComponent {
 
 	/**
 	 * Scroll the browser window to the location of the given element
-	 * @param element
+	 * @param element the element to scroll to
 	 */
 	protected void scrollTo(WebElement element) {
 		if (!(driver instanceof final JavascriptExecutor jsExecutor)) {
@@ -440,6 +471,38 @@ public abstract class AbstractPageComponent {
 
 		for (final T item : actual)
 			assertTrue("List with expected items doesn't contain '" + item + "'!", expected.contains(item));
+	}
+
+	/**
+	 * Return an XPath string literal that safely contains the supplied text, regardless of the presence of single or double quotes
+	 * @param text the raw text that should be prepared
+	 * @return the converted text
+	 */
+	public static String prepareXPathText(String text) {
+		// If the text contains no single quotes, use a single‑quoted literal
+		if (!text.contains("'"))
+			return "'" + text + "'";
+
+		// If the text contains no double quotes, use a double‑quoted literal
+		if (!text.contains("\""))
+			return "\"" + text + "\"";
+
+		// Otherwise, build a concat() expression alternating between the parts that are safe for single‑quote and the literal
+		// single‑quote
+		final StringBuilder sb = new StringBuilder("concat(");
+		boolean first = true;
+
+		for (final String part : text.split("'")) {
+			if (!first)
+				sb.append(", \"'\", ");
+
+			sb.append("'").append(part).append("'");
+			first = false;
+		}
+
+		sb.append(")");
+
+		return sb.toString();
 	}
 
 }

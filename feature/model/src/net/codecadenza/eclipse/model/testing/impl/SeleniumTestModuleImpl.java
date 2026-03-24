@@ -39,7 +39,7 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
  * <li>{@link net.codecadenza.eclipse.model.testing.impl.SeleniumTestModuleImpl#getDriver <em>Driver</em>}</li>
  * <li>{@link net.codecadenza.eclipse.model.testing.impl.SeleniumTestModuleImpl#getDriverPath <em>Driver Path</em>}</li>
  * <li>{@link net.codecadenza.eclipse.model.testing.impl.SeleniumTestModuleImpl#isMaximizeWindow <em>Maximize Window</em>}</li>
- * <li>{@link net.codecadenza.eclipse.model.testing.impl.SeleniumTestModuleImpl#getImplicitWaitTime <em>Implicit Wait
+ * <li>{@link net.codecadenza.eclipse.model.testing.impl.SeleniumTestModuleImpl#getExplicitWaitTime <em>Explicit Wait
  * Time</em>}</li>
  * <li>{@link net.codecadenza.eclipse.model.testing.impl.SeleniumTestModuleImpl#getPageLoadTime <em>Page Load Time</em>}</li>
  * </ul>
@@ -95,20 +95,20 @@ public class SeleniumTestModuleImpl extends AbstractTestModuleImpl implements Se
 	protected boolean maximizeWindow = MAXIMIZE_WINDOW_EDEFAULT;
 
 	/**
-	 * The default value of the '{@link #getImplicitWaitTime() <em>Implicit Wait Time</em>}' attribute
-	 * @see #getImplicitWaitTime()
+	 * The default value of the '{@link #getExplicitWaitTime() <em>Explicit Wait Time</em>}' attribute
+	 * @see #getExplicitWaitTime()
 	 * @generated
 	 * @ordered
 	 */
-	protected static final int IMPLICIT_WAIT_TIME_EDEFAULT = 0;
+	protected static final int EXPLICIT_WAIT_TIME_EDEFAULT = 0;
 
 	/**
-	 * The cached value of the '{@link #getImplicitWaitTime() <em>Implicit Wait Time</em>}' attribute
-	 * @see #getImplicitWaitTime()
+	 * The cached value of the '{@link #getExplicitWaitTime() <em>Explicit Wait Time</em>}' attribute
+	 * @see #getExplicitWaitTime()
 	 * @generated
 	 * @ordered
 	 */
-	protected int implicitWaitTime = IMPLICIT_WAIT_TIME_EDEFAULT;
+	protected int explicitWaitTime = EXPLICIT_WAIT_TIME_EDEFAULT;
 
 	/**
 	 * The default value of the '{@link #getPageLoadTime() <em>Page Load Time</em>}' attribute
@@ -218,27 +218,27 @@ public class SeleniumTestModuleImpl extends AbstractTestModuleImpl implements Se
 
 	/*
 	 * (non-Javadoc)
-	 * @see net.codecadenza.eclipse.model.testing.SeleniumTestModule#getImplicitWaitTime()
+	 * @see net.codecadenza.eclipse.model.testing.SeleniumTestModule#getExplicitWaitTime()
 	 * @generated
 	 */
 	@Override
-	public int getImplicitWaitTime() {
-		return implicitWaitTime;
+	public int getExplicitWaitTime() {
+		return explicitWaitTime;
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * @see net.codecadenza.eclipse.model.testing.SeleniumTestModule#setImplicitWaitTime(int)
+	 * @see net.codecadenza.eclipse.model.testing.SeleniumTestModule#setExplicitWaitTime(int)
 	 * @generated
 	 */
 	@Override
-	public void setImplicitWaitTime(int newImplicitWaitTime) {
-		final int oldImplicitWaitTime = implicitWaitTime;
-		implicitWaitTime = newImplicitWaitTime;
+	public void setExplicitWaitTime(int newExplicitWaitTime) {
+		final int oldExplicitWaitTime = explicitWaitTime;
+		explicitWaitTime = newExplicitWaitTime;
 
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, TestingPackage.SELENIUM_TEST_MODULE__IMPLICIT_WAIT_TIME,
-					oldImplicitWaitTime, implicitWaitTime));
+			eNotify(new ENotificationImpl(this, Notification.SET, TestingPackage.SELENIUM_TEST_MODULE__EXPLICIT_WAIT_TIME,
+					oldExplicitWaitTime, explicitWaitTime));
 	}
 
 	/*
@@ -280,8 +280,8 @@ public class SeleniumTestModuleImpl extends AbstractTestModuleImpl implements Se
 				return getDriverPath();
 			case TestingPackage.SELENIUM_TEST_MODULE__MAXIMIZE_WINDOW:
 				return isMaximizeWindow();
-			case TestingPackage.SELENIUM_TEST_MODULE__IMPLICIT_WAIT_TIME:
-				return getImplicitWaitTime();
+			case TestingPackage.SELENIUM_TEST_MODULE__EXPLICIT_WAIT_TIME:
+				return getExplicitWaitTime();
 			case TestingPackage.SELENIUM_TEST_MODULE__PAGE_LOAD_TIME:
 				return getPageLoadTime();
 		}
@@ -306,8 +306,8 @@ public class SeleniumTestModuleImpl extends AbstractTestModuleImpl implements Se
 			case TestingPackage.SELENIUM_TEST_MODULE__MAXIMIZE_WINDOW:
 				setMaximizeWindow((Boolean) newValue);
 				return;
-			case TestingPackage.SELENIUM_TEST_MODULE__IMPLICIT_WAIT_TIME:
-				setImplicitWaitTime((Integer) newValue);
+			case TestingPackage.SELENIUM_TEST_MODULE__EXPLICIT_WAIT_TIME:
+				setExplicitWaitTime((Integer) newValue);
 				return;
 			case TestingPackage.SELENIUM_TEST_MODULE__PAGE_LOAD_TIME:
 				setPageLoadTime((Integer) newValue);
@@ -334,8 +334,8 @@ public class SeleniumTestModuleImpl extends AbstractTestModuleImpl implements Se
 			case TestingPackage.SELENIUM_TEST_MODULE__MAXIMIZE_WINDOW:
 				setMaximizeWindow(MAXIMIZE_WINDOW_EDEFAULT);
 				return;
-			case TestingPackage.SELENIUM_TEST_MODULE__IMPLICIT_WAIT_TIME:
-				setImplicitWaitTime(IMPLICIT_WAIT_TIME_EDEFAULT);
+			case TestingPackage.SELENIUM_TEST_MODULE__EXPLICIT_WAIT_TIME:
+				setExplicitWaitTime(EXPLICIT_WAIT_TIME_EDEFAULT);
 				return;
 			case TestingPackage.SELENIUM_TEST_MODULE__PAGE_LOAD_TIME:
 				setPageLoadTime(PAGE_LOAD_TIME_EDEFAULT);
@@ -359,8 +359,8 @@ public class SeleniumTestModuleImpl extends AbstractTestModuleImpl implements Se
 				return driverPath != null;
 			case TestingPackage.SELENIUM_TEST_MODULE__MAXIMIZE_WINDOW:
 				return maximizeWindow != MAXIMIZE_WINDOW_EDEFAULT;
-			case TestingPackage.SELENIUM_TEST_MODULE__IMPLICIT_WAIT_TIME:
-				return implicitWaitTime != IMPLICIT_WAIT_TIME_EDEFAULT;
+			case TestingPackage.SELENIUM_TEST_MODULE__EXPLICIT_WAIT_TIME:
+				return explicitWaitTime != EXPLICIT_WAIT_TIME_EDEFAULT;
 			case TestingPackage.SELENIUM_TEST_MODULE__PAGE_LOAD_TIME:
 				return pageLoadTime != PAGE_LOAD_TIME_EDEFAULT;
 		}
@@ -385,8 +385,8 @@ public class SeleniumTestModuleImpl extends AbstractTestModuleImpl implements Se
 		result.append(driverPath);
 		result.append(", maximizeWindow: ");
 		result.append(maximizeWindow);
-		result.append(", implicitWaitTime: ");
-		result.append(implicitWaitTime);
+		result.append(", explicitWaitTime: ");
+		result.append(explicitWaitTime);
 		result.append(", pageLoadTime: ");
 		result.append(pageLoadTime);
 		result.append(')');

@@ -49,7 +49,7 @@ public class PopUpDialog extends AbstractVaadinPageComponent {
 
 	/**
 	 * Constructor
-	 * @param pageObject
+	 * @param pageObject the page object the dialog belongs to
 	 */
 	public PopUpDialog(AbstractPageObject pageObject) {
 		super(pageObject.getTestContext());
@@ -59,7 +59,7 @@ public class PopUpDialog extends AbstractVaadinPageComponent {
 
 	/**
 	 * Search for a visible pop-up dialog and compare its status with the expected action result
-	 * @param actionResult
+	 * @param actionResult the expected action result
 	 * @throws AssertionError if the status validation either has failed, or an element could not be found
 	 */
 	public void validateStatus(PageActionResult actionResult) {
@@ -115,7 +115,7 @@ public class PopUpDialog extends AbstractVaadinPageComponent {
 		logger.debug("Close pop-up dialog");
 
 		// Click on the 'OK' button in order to close the dialog
-		findWebElementByXPath(DIALOG_BUTTON_OK_XPATH).click();
+		clickWebElementByXPath(DIALOG_BUTTON_OK_XPATH);
 	}
 
 }

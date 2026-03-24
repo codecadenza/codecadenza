@@ -378,11 +378,11 @@ public class TestingPackageImpl extends EPackageImpl implements TestingPackage {
 
 	/*
 	 * (non-Javadoc)
-	 * @see net.codecadenza.eclipse.model.testing.TestingPackage#getSeleniumTestModule_ImplicitWaitTime()
+	 * @see net.codecadenza.eclipse.model.testing.TestingPackage#getSeleniumTestModule_ExplicitWaitTime()
 	 * @generated
 	 */
 	@Override
-	public EAttribute getSeleniumTestModule_ImplicitWaitTime() {
+	public EAttribute getSeleniumTestModule_ExplicitWaitTime() {
 		return (EAttribute) seleniumTestModuleEClass.getEStructuralFeatures().get(3);
 	}
 
@@ -1281,7 +1281,7 @@ public class TestingPackageImpl extends EPackageImpl implements TestingPackage {
 		createEAttribute(seleniumTestModuleEClass, SELENIUM_TEST_MODULE__DRIVER);
 		createEAttribute(seleniumTestModuleEClass, SELENIUM_TEST_MODULE__DRIVER_PATH);
 		createEAttribute(seleniumTestModuleEClass, SELENIUM_TEST_MODULE__MAXIMIZE_WINDOW);
-		createEAttribute(seleniumTestModuleEClass, SELENIUM_TEST_MODULE__IMPLICIT_WAIT_TIME);
+		createEAttribute(seleniumTestModuleEClass, SELENIUM_TEST_MODULE__EXPLICIT_WAIT_TIME);
 		createEAttribute(seleniumTestModuleEClass, SELENIUM_TEST_MODULE__PAGE_LOAD_TIME);
 
 		testSuiteEClass = createEClass(TEST_SUITE);
@@ -1447,7 +1447,7 @@ public class TestingPackageImpl extends EPackageImpl implements TestingPackage {
 		initEAttribute(getSeleniumTestModule_MaximizeWindow(), ecorePackage.getEBoolean(), "maximizeWindow", null, 0, 1,
 				SeleniumTestModule.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED,
 				IS_ORDERED);
-		initEAttribute(getSeleniumTestModule_ImplicitWaitTime(), ecorePackage.getEInt(), "implicitWaitTime", null, 0, 1,
+		initEAttribute(getSeleniumTestModule_ExplicitWaitTime(), ecorePackage.getEInt(), "explicitWaitTime", null, 0, 1,
 				SeleniumTestModule.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED,
 				IS_ORDERED);
 		initEAttribute(getSeleniumTestModule_PageLoadTime(), ecorePackage.getEInt(), "pageLoadTime", null, 0, 1,

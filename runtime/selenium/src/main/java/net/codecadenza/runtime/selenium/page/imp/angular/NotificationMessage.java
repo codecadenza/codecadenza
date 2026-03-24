@@ -44,7 +44,7 @@ public class NotificationMessage extends AbstractAngularPageComponent {
 
 	/**
 	 * Constructor
-	 * @param pageObject
+	 * @param pageObject the page object the component belongs to
 	 */
 	public NotificationMessage(AbstractPageObject pageObject) {
 		super(pageObject.getTestContext());
@@ -54,13 +54,13 @@ public class NotificationMessage extends AbstractAngularPageComponent {
 
 	/**
 	 * Search for a visible toast message and compare its status with the expected action result
-	 * @param actionResult
+	 * @param actionResult the expected action result
 	 * @throws AssertionError if the status validation either has failed, or an element could not be found
 	 */
 	public void validateStatus(PageActionResult actionResult) {
 		logger.debug("Search for notification with status '{}'", actionResult.getStatus());
 
-		final List<WebElement> toastMessages = findWebElementsByXPath("//p-toastitem");
+		final List<WebElement> toastMessages = findWebElementsByXPath("//p-toastitem", true);
 		boolean found = false;
 
 		// Iterate through the toast messages and check their status and message

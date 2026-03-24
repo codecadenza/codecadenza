@@ -54,15 +54,19 @@ public abstract class AbstractSeleniumTestSuite {
 	 */
 	@AfterAll
 	protected static void tearDown() {
-		if (context != null) {
-			context.getDriver().quit();
+		if (context == null)
+			return;
 
-			// Clear the context as subsequent tests should use their own!
-			context = null;
+		// Wait a short period of time so that final requests can be processed before closing the browser window
+		context.delayTest(100);
 
-			// The context used by the test cases must be cleared also!
-			AbstractSeleniumTestCase.setContext(null);
-		}
+		context.getDriver().quit();
+
+		// Clear the context as subsequent tests should use their own!
+		context = null;
+
+		// The context used by the test cases must be cleared also!
+		AbstractSeleniumTestCase.setContext(null);
 	}
 
 }

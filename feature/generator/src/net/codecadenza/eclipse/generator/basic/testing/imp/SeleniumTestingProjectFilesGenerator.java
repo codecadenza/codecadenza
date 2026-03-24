@@ -191,10 +191,10 @@ public class SeleniumTestingProjectFilesGenerator implements ITestingProjectFile
 		else
 			b.append("BASE_URL=http://localhost:8080/" + project.getCode() + "\n");
 
-		b.append("# The time in seconds to wait for a page load to complete\n");
+		b.append("# The time in milliseconds to wait for a page load to complete\n");
 		b.append("PAGE_LOAD_TIMEOUT=" + testModule.getPageLoadTime() + "\n");
-		b.append("# The time in seconds the driver should wait when searching for an element if it is not immediately present\n");
-		b.append("IMPLICIT_WAIT_TIME=" + testModule.getImplicitWaitTime() + "\n");
+		b.append("# The time in milliseconds the driver should wait explicitly for an element if it is not immediately present\n");
+		b.append("EXPLICIT_WAIT_TIME=" + testModule.getExplicitWaitTime() + "\n");
 
 		if (testModule.getDriverPath() != null && !testModule.getDriverPath().isEmpty())
 			b.append("DRIVER_PATH=" + testModule.getDriverPath() + "\n");
@@ -230,14 +230,10 @@ public class SeleniumTestingProjectFilesGenerator implements ITestingProjectFile
 		b.append("TEST_DATA_PATH=" + project.getTestDataFolder() + "\n");
 		b.append("DATA_PROVIDER_CLASS=net.codecadenza.runtime.selenium.data.imp.XMLFileTestDataProvider\n");
 		b.append("DRIVER_PRODUCER_CLASS=net.codecadenza.runtime.selenium.driver.imp.StandardDriverProducer\n");
-		b.append("# The time in seconds to wait until all pending HTTP requests should have been finished\n");
-		b.append("HTTP_WAIT_TIMEOUT=5\n");
+		b.append("# The time in milliseconds to wait until all pending HTTP requests should have been finished\n");
+		b.append("HTTP_WAIT_TIMEOUT=5000\n");
 		b.append("# The time in milliseconds to wait before checking for pending HTTP requests\n");
-
-		if (project.hasVaadinClient() || project.hasAngularClient())
-			b.append("HTTP_CHECK_DELAY=400\n");
-		else
-			b.append("HTTP_CHECK_DELAY=0\n");
+		b.append("HTTP_CHECK_DELAY=0\n");
 
 		b.append("# The time in milliseconds for delaying a test after creating a page object\n");
 

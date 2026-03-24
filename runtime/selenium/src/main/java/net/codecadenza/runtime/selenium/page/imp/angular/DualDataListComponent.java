@@ -26,9 +26,9 @@ import java.time.Duration;
 import java.util.List;
 import java.util.Optional;
 import net.codecadenza.runtime.selenium.data.PageElementTestData;
-import org.openqa.selenium.WebDriver;
+import net.codecadenza.runtime.selenium.page.WebElementWait;
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.support.ui.FluentWait;
 
 /**
  * <p>
@@ -41,18 +41,14 @@ import org.openqa.selenium.support.ui.FluentWait;
  * @version 1.0.0
  */
 public class DualDataListComponent extends AbstractAngularPageComponent {
-	private static final long ITEM_WAIT_TIMEOUT_SECONDS = 2;
-	private static final long ITEM_POLLING_MILLISECONDS = 50;
-	private static final long LIST_ITEM_DELAY_MILLISECONDS = 500;
-
 	protected final String elementId;
 	protected final boolean hasSearchField;
 
 	/**
 	 * Constructor
-	 * @param pageObject
-	 * @param elementId
-	 * @param hasSearchField
+	 * @param pageObject the page object the component belongs to
+	 * @param elementId the ID of the element
+	 * @param hasSearchField flag that indicates if the component provides a search field
 	 */
 	public DualDataListComponent(AbstractPageObject pageObject, String elementId, boolean hasSearchField) {
 		super(pageObject.getTestContext());
@@ -91,30 +87,20 @@ public class DualDataListComponent extends AbstractAngularPageComponent {
 		final String[] items = testData.getNewValue().split(ITEM_DELIMITER);
 
 		for (final String item : items) {
-			boolean itemFound = false;
+			final String itemText = prepareXPathText(item);
+			final String sourceItemExpression = getSourceItemsExpression() + "[text()=" + itemText + "]";
+			final var targetItemExpression = getTargetItemsExpression() + "[text()=" + itemText + "]";
 
-			// Search for all available items
-			for (final WebElement itemElement : findWebElementsByXPath(getSourceItemsExpression())) {
-				if (item.equals(itemElement.getText())) {
-					logger.debug("Select list item '{}' by performing a double-click", item);
+			logger.debug("Select list item '{}' by performing a double-click", item);
 
-					itemFound = true;
+			// The item must be selected before performing a double-click
+			findWebElementByXPath(sourceItemExpression).click();
 
-					// The item must be selected before performing a double-click
-					itemElement.click();
+			doubleClickElementByXPath(sourceItemExpression);
 
-					// Perform a double-click on the item in order to select it!
-					doubleClickElement(itemElement);
-					break;
-				}
-			}
-
-			assertTrue("Could not select item '" + item + "'!", itemFound);
+			// Wait until the item has been added to the target list!
+			findWebElementByXPath(targetItemExpression);
 		}
-
-		// Wait a short period of time in order to make sure that the last item doesn't get lost!
-		if (items.length > 0)
-			testContext.delayTest(LIST_ITEM_DELAY_MILLISECONDS);
 	}
 
 	/**
@@ -130,7 +116,7 @@ public class DualDataListComponent extends AbstractAngularPageComponent {
 
 		// Extract all currently selected items
 		final String expression = getTargetItemsExpression();
-		final List<String> currentSelection = findWebElementsByXPath(expression).stream().map(WebElement::getText).toList();
+		final List<String> currentSelection = findWebElementsByXPath(expression, true).stream().map(WebElement::getText).toList();
 
 		if (logger.isTraceEnabled()) {
 			final Optional<String> selectedItems = currentSelection.stream().reduce((a, b) -> a + ITEM_DELIMITER + b);
@@ -155,7 +141,7 @@ public class DualDataListComponent extends AbstractAngularPageComponent {
 		var expression = "//cc-multi-selection-list[@id='" + elementId + "']//";
 		expression += "button[contains(@data-pc-name, 'pcmovealltosourcebutton')]";
 
-		final WebElement removeAllButton = findWebElementByXPath(expression);
+		final WebElement removeAllButton = findWebElementByXPath(expression, true);
 
 		// If no selected item exists the respective button cannot be clicked as it is disabled!
 		if (!removeAllButton.isEnabled())
@@ -164,20 +150,8 @@ public class DualDataListComponent extends AbstractAngularPageComponent {
 		removeAllButton.click();
 
 		// Wait until the list that contains all selected items is really empty!
-		final FluentWait<WebDriver> waitForEmptyTargetList = new FluentWait<>(driver);
-		waitForEmptyTargetList.withTimeout(Duration.ofSeconds(ITEM_WAIT_TIMEOUT_SECONDS));
-		waitForEmptyTargetList.pollingEvery(Duration.ofMillis(ITEM_POLLING_MILLISECONDS));
-
-		waitForEmptyTargetList.until(_ -> {
-			final List<WebElement> selectedItems = findWebElementsByXPath(getTargetItemsExpression());
-
-			if (selectedItems.isEmpty())
-				return true;
-
-			logger.trace("List '{}' that contains selected items is not empty!", elementId);
-
-			return false;
-		});
+		new WebElementWait(driver, Duration.ofMillis(explicitWaitTime), logger)
+				.untilElementsEmpty(By.xpath(getTargetItemsExpression()));
 	}
 
 	/**

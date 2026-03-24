@@ -45,15 +45,14 @@ public class ElementCollectionEditorComponent extends AbstractPrimefacesPageComp
 	private static final String INPUT_ID_SUFFIX = "Input";
 	private static final String TABLE_ID_SUFFIX = "Table";
 	private static final String MENU_ITEM_DELETE_ALL = "mniDeleteAll";
-	private static final long LIST_ITEM_DELAY_MILLISECONDS = 50;
 
 	protected final String elementId;
 	protected final String tableXPath;
 
 	/**
 	 * Constructor
-	 * @param pageObject
-	 * @param elementId
+	 * @param pageObject the page object the component belongs to
+	 * @param elementId the ID of the element
 	 */
 	public ElementCollectionEditorComponent(AbstractPageObject pageObject, String elementId) {
 		super(pageObject.getTestContext());
@@ -81,11 +80,12 @@ public class ElementCollectionEditorComponent extends AbstractPrimefacesPageComp
 			inputField.clear();
 			inputField.sendKeys(element);
 
-			final WebElement addButton = findWebElementByXPath("//button[@id='" + elementId + ADD_BUTTON_ID_SUFFIX + "']");
-			addButton.click();
+			clickWebElementByXPath("//button[@id='" + elementId + ADD_BUTTON_ID_SUFFIX + "']");
 
-			// Wait a short period of time to ensure the element is added before adding the next one
-			testContext.delayTest(LIST_ITEM_DELAY_MILLISECONDS);
+			final String elementText = prepareXPathText(element);
+
+			// Wait until the element has been added to the grid
+			findWebElementByXPath(tableXPath + "/tr/td[text()=" + elementText + "]");
 		}
 	}
 
@@ -97,7 +97,7 @@ public class ElementCollectionEditorComponent extends AbstractPrimefacesPageComp
 		logger.debug("Validate if the elements '{}' are contained in the editor '{}'", testData.getExpectedValue(), elementId);
 
 		final List<String> expectedElements = Arrays.asList(testData.getExpectedValue().split(ITEM_DELIMITER));
-		final List<WebElement> tableRows = findWebElementsByXPath(tableXPath + "/tr");
+		final List<WebElement> tableRows = findWebElementsByXPath(tableXPath + "/tr", true);
 		final List<String> actualElements = tableRows.stream().map(row -> row.findElement(By.xpath(".//td")).getText()).toList();
 
 		if (logger.isTraceEnabled()) {
@@ -123,8 +123,7 @@ public class ElementCollectionEditorComponent extends AbstractPrimefacesPageComp
 
 		openContextMenu(firstRow);
 
-		final WebElement contextMenuButton = findWebElementByXPath("//a[@id='" + menuItemId + "']");
-		contextMenuButton.click();
+		clickWebElementByXPath("//a[@id='" + menuItemId + "']");
 	}
 
 	/**
@@ -145,7 +144,7 @@ public class ElementCollectionEditorComponent extends AbstractPrimefacesPageComp
 
 	/**
 	 * Open the context-menu of the given row
-	 * @param rowElement
+	 * @param rowElement the row to open the context-menu for
 	 * @throws AssertionError if the context-menu either could not be found, or the parameter <code>rowElement</code> is null
 	 */
 	protected void openContextMenu(WebElement rowElement) {
@@ -156,7 +155,7 @@ public class ElementCollectionEditorComponent extends AbstractPrimefacesPageComp
 		waitForPendingHTTPRequests();
 
 		// Move the mouse pointer to a valid position that can be used to open the context-menu!
-		new Actions(driver).moveToElement(rowElement, ROW_OFFSET_X, ROW_OFFSET_Y).contextClick().build().perform();
+		new Actions(driver).moveToElement(rowElement).contextClick().build().perform();
 	}
 
 }

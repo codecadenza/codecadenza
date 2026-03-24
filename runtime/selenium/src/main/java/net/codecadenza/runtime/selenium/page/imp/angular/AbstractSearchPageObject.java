@@ -48,7 +48,7 @@ public abstract class AbstractSearchPageObject extends AbstractViewPageObject {
 
 	/**
 	 * Constructor
-	 * @param testContext
+	 * @param testContext the Selenium test context
 	 */
 	protected AbstractSearchPageObject(SeleniumTestContext testContext) {
 		super(testContext);
@@ -56,7 +56,7 @@ public abstract class AbstractSearchPageObject extends AbstractViewPageObject {
 
 	/**
 	 * Open the search dialog, enter respective data and perform the search operation
-	 * @param searchInput
+	 * @param searchInput a list of elements that provide the filter and sort criteria
 	 * @throws AssertionError if an element either could not be found, or test data is invalid
 	 */
 	public void performSearchOperation(List<PageElementTestData> searchInput) {
@@ -64,12 +64,12 @@ public abstract class AbstractSearchPageObject extends AbstractViewPageObject {
 
 		enterSearchInputData(searchInput);
 
-		findWebElement(SUBMIT_BUTTON_ID).click();
+		clickWebElement(SUBMIT_BUTTON_ID);
 	}
 
 	/**
 	 * Open the search dialog, enter respective data and perform the count operation
-	 * @param searchInput
+	 * @param searchInput a list of elements that provide the filter criteria
 	 * @throws AssertionError if an element either could not be found, or test data is invalid
 	 */
 	public void performCountOperation(List<PageElementTestData> searchInput) {
@@ -77,7 +77,7 @@ public abstract class AbstractSearchPageObject extends AbstractViewPageObject {
 
 		enterSearchInputData(searchInput);
 
-		findWebElement(COUNT_BUTTON_ID).click();
+		clickWebElement(COUNT_BUTTON_ID);
 	}
 
 	/**
@@ -89,12 +89,12 @@ public abstract class AbstractSearchPageObject extends AbstractViewPageObject {
 
 		openSearchDialog();
 
-		findWebElement(RESET_BUTTON_ID).click();
+		clickWebElement(RESET_BUTTON_ID);
 	}
 
 	/**
 	 * Enter data into the search dialog
-	 * @param searchInput
+	 * @param searchInput a list of elements that provide the filter and sort criteria
 	 * @throws AssertionError if an element either could not be found, or test data is invalid
 	 */
 	protected void enterSearchInputData(List<PageElementTestData> searchInput) {

@@ -44,7 +44,7 @@ public class MessageDialog extends AbstractPrimefacesPageComponent {
 
 	/**
 	 * Constructor
-	 * @param pageObject
+	 * @param pageObject the page object the component belongs to
 	 */
 	public MessageDialog(AbstractPageObject pageObject) {
 		super(pageObject.getTestContext());
@@ -54,7 +54,7 @@ public class MessageDialog extends AbstractPrimefacesPageComponent {
 
 	/**
 	 * Search for a visible message dialog and compare its status with the expected action result
-	 * @param actionResult
+	 * @param actionResult the expected action result
 	 * @throws AssertionError if the status validation either has failed, or an element could not be found
 	 */
 	public void validateStatus(PageActionResult actionResult) {
@@ -80,7 +80,7 @@ public class MessageDialog extends AbstractPrimefacesPageComponent {
 
 		// Search for all elements that contain parts of the displayed message
 		final var msgExpr = "//div[@id='" + DIV_ID_MESSAGES + "']/div/ul/li/span";
-		final List<WebElement> listElements = findWebElementsByXPath(msgExpr);
+		final List<WebElement> listElements = findWebElementsByXPath(msgExpr, true);
 
 		// Build one message by collecting the text of all elements
 		final Optional<String> messageText = listElements.stream().map(WebElement::getText).reduce((s1, s2) -> s1 + " " + s2);

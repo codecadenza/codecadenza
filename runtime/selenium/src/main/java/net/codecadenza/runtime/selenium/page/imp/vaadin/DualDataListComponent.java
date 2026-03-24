@@ -22,9 +22,12 @@
 package net.codecadenza.runtime.selenium.page.imp.vaadin;
 
 import com.google.common.collect.Lists;
+import java.time.Duration;
 import java.util.List;
 import java.util.Optional;
 import net.codecadenza.runtime.selenium.data.PageElementTestData;
+import net.codecadenza.runtime.selenium.page.WebElementWait;
+import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
 
@@ -44,9 +47,9 @@ public class DualDataListComponent extends AbstractVaadinPageComponent {
 
 	/**
 	 * Constructor
-	 * @param pageObject
-	 * @param elementId
-	 * @param hasSearchField
+	 * @param pageObject the page object the component belongs to
+	 * @param elementId the ID of the element
+	 * @param hasSearchField flag that indicates if the component provides a search field
 	 */
 	public DualDataListComponent(AbstractPageObject pageObject, String elementId, boolean hasSearchField) {
 		super(pageObject.getTestContext());
@@ -87,12 +90,17 @@ public class DualDataListComponent extends AbstractVaadinPageComponent {
 		findWebElementByXPath(getSourceListXPath());
 
 		for (final String item : items) {
-			final String expression = getSourceItemsXPath() + "[text()='" + item + "']";
+			final String itemText = prepareXPathText(item);
+			final String sourceItemExpression = getSourceItemsXPath() + "[text()=" + itemText + "]";
+			final var targetItemExpression = getTargetItemsXPath() + "[text()=" + itemText + "]";
 
 			logger.debug("Select list item '{}' by performing a double-click", item);
 
 			// Perform a double-click on the item in order to select it!
-			doubleClickElement(findWebElementByXPath(expression));
+			doubleClickElementByXPath(sourceItemExpression);
+
+			// Wait until the item has been added
+			findWebElementByXPath(targetItemExpression);
 		}
 	}
 
@@ -131,12 +139,17 @@ public class DualDataListComponent extends AbstractVaadinPageComponent {
 		logger.debug("Select all available items in list '{}'", elementId);
 
 		getAvailableItems().forEach(item -> {
-			final var expression = getSourceItemsXPath() + "[text()='" + item + "']";
+			final String itemText = prepareXPathText(item);
+			final var sourceItemExpression = getSourceItemsXPath() + "[text()=" + itemText + "]";
+			final var targetItemExpression = getTargetItemsXPath() + "[text()=" + itemText + "]";
 
 			logger.debug("Select list item '{}' by performing a double-click", item);
 
 			// Perform a double-click on the item in order to select it!
-			doubleClickElement(findWebElementByXPath(expression));
+			doubleClickElementByXPath(sourceItemExpression);
+
+			// Wait until the item has been added
+			findWebElementByXPath(targetItemExpression);
 		});
 	}
 
@@ -147,12 +160,16 @@ public class DualDataListComponent extends AbstractVaadinPageComponent {
 		logger.debug("Remove all selected items from list '{}'", elementId);
 
 		getSelectedItems().forEach(item -> {
-			final var expression = getTargetItemsXPath() + "[text()='" + item + "']";
+			final String itemText = prepareXPathText(item);
+			final var expression = getTargetItemsXPath() + "[text()=" + itemText + "]";
 
 			logger.debug("Remove list item '{}' by performing a double-click", item);
 
 			// Remove the item by performing a double-click
-			doubleClickElement(findWebElementByXPath(expression));
+			doubleClickElementByXPath(expression);
+
+			// Wait until the item has been removed
+			new WebElementWait(driver, Duration.ofMillis(explicitWaitTime), logger).untilInvisible(By.xpath(expression));
 		});
 	}
 
@@ -181,7 +198,7 @@ public class DualDataListComponent extends AbstractVaadinPageComponent {
 		findWebElementByXPath(listExpression);
 
 		// Get all items that have a text but no children
-		return findWebElementsByXPath(itemExpression).stream().map(WebElement::getText).toList();
+		return findWebElementsByXPath(itemExpression, true).stream().map(WebElement::getText).toList();
 	}
 
 	/**

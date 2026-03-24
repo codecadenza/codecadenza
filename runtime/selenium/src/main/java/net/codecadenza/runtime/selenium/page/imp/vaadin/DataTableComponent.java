@@ -24,9 +24,14 @@ package net.codecadenza.runtime.selenium.page.imp.vaadin;
 import static net.codecadenza.runtime.selenium.page.imp.vaadin.PopUpDialog.DIALOG_BUTTON_OK_XPATH;
 import static net.codecadenza.runtime.selenium.page.imp.vaadin.PopUpDialog.DIALOG_BUTTON_YES_XPATH;
 
+import java.time.Duration;
+import java.time.Instant;
+import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import net.codecadenza.runtime.selenium.data.PageElementTestData;
 import net.codecadenza.runtime.selenium.junit.SeleniumTestContext;
+import net.codecadenza.runtime.selenium.page.WebElementWait;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.SearchContext;
@@ -45,7 +50,6 @@ import org.openqa.selenium.interactions.Actions;
  */
 public class DataTableComponent extends AbstractVaadinPageComponent {
 	private static final String DEFAULT_DATA_TABLE_ELEMENT_ID = "dataTable";
-	private static final long MAX_NUMBER_OF_PAGES = 20;
 	private static final String MENU_ITEM_ID_COPY = "mniCopy";
 	private static final String MENU_ITEM_ID_DELETE = "mniDelete";
 	private static final String MENU_ITEM_ID_DOWNLOAD = "mniDownload";
@@ -53,14 +57,13 @@ public class DataTableComponent extends AbstractVaadinPageComponent {
 	private static final String MENU_ITEM_ID_IMPORT = "mniImport";
 	private static final String MENU_ITEM_ID_UPDATE = "mniEdit";
 	private static final String MENU_ITEM_ID_VIEW = "mniView";
-	private static final long MENU_ITEM_WAIT_TIME_MILLI_SECONDS = 20;
 
 	protected final String tableElementId;
 
 	/**
 	 * Constructor
-	 * @param testContext
-	 * @param tableElementId
+	 * @param testContext the Selenium test context
+	 * @param tableElementId the ID of the table element
 	 */
 	public DataTableComponent(SeleniumTestContext testContext, String tableElementId) {
 		super(testContext);
@@ -70,7 +73,7 @@ public class DataTableComponent extends AbstractVaadinPageComponent {
 
 	/**
 	 * Constructor
-	 * @param testContext
+	 * @param testContext the Selenium test context
 	 */
 	public DataTableComponent(SeleniumTestContext testContext) {
 		this(testContext, DEFAULT_DATA_TABLE_ELEMENT_ID);
@@ -83,15 +86,15 @@ public class DataTableComponent extends AbstractVaadinPageComponent {
 	public void pressRefreshButton() {
 		logger.debug("Press 'Refresh' button");
 
-		findWebElementByXPath("//vaadin-button[@id='" + tableElementId + "_cmdRefresh']").click();
+		clickWebElementByXPath("//vaadin-button[@id='" + tableElementId + "_cmdRefresh']");
 	}
 
 	/**
 	 * Perform a double-click on the given row
 	 * @param <T> the type of the page object to be returned
-	 * @param rowElement
-	 * @param pageClass
-	 * @return an instance of the selected page class. It returns null if no page class has been specified!
+	 * @param rowElement the row that should be double-clicked
+	 * @param pageClass the class of the page object that should be opened after performing the double-click
+	 * @return an instance of the selected page object class. It returns null if no page class has been specified!
 	 * @throws AssertionError if the page object either could not be created, or the parameter <code>rowElement</code> is null
 	 */
 	public <T extends AbstractPageObject> T doubleClickRow(WebElement rowElement, Class<T> pageClass) {
@@ -107,7 +110,7 @@ public class DataTableComponent extends AbstractVaadinPageComponent {
 
 	/**
 	 * Perform a double-click on the given row
-	 * @param rowElement
+	 * @param rowElement the row that should be double-clicked
 	 * @throws AssertionError if the parameter <code>rowElement</code> is null
 	 */
 	public void doubleClickRow(WebElement rowElement) {
@@ -116,7 +119,7 @@ public class DataTableComponent extends AbstractVaadinPageComponent {
 
 	/**
 	 * Select a row
-	 * @param rowElement
+	 * @param rowElement the row that should be selected
 	 * @throws AssertionError if the parameter <code>rowElement</code> is null
 	 */
 	public void selectRow(WebElement rowElement) {
@@ -131,7 +134,8 @@ public class DataTableComponent extends AbstractVaadinPageComponent {
 	}
 
 	/**
-	 * @param rowIndex
+	 * Get a row by its index
+	 * @param rowIndex the row index to search for
 	 * @return the row with the given index or null if a row could not be found
 	 * @throws AssertionError if the row either could not be found, or the row index is smaller than 1
 	 */
@@ -140,12 +144,14 @@ public class DataTableComponent extends AbstractVaadinPageComponent {
 
 		assertTrue("Parameter 'rowIndex' must be greater than 0!", rowIndex > 0);
 
-		return findWebElementByXPath(
-				getTableXPath() + "/vaadin-grid-cell-content[@slot='vaadin-grid-cell-content-" + rowIndex + "']");
+		final var rowExpression = getTableXPath() + "/vaadin-grid-cell-content[@slot='vaadin-grid-cell-content-" + rowIndex + "']";
+
+		return findWebElementByXPath(rowExpression, true);
 	}
 
 	/**
-	 * @param objectId
+	 * Get a row by the ID of an object
+	 * @param objectId the object ID to search for
 	 * @param skipPagination if set to true searching in subsequent pages will be skipped
 	 * @return the row with the given object ID or null if the row could not be found
 	 * @throws AssertionError if the parameter <code>objectId</code> is null or empty
@@ -156,7 +162,8 @@ public class DataTableComponent extends AbstractVaadinPageComponent {
 	}
 
 	/**
-	 * @param objectId
+	 * Get a row by the ID of an object
+	 * @param objectId the object ID to search for
 	 * @return the row with the given object ID or null if the row could not be found
 	 * @throws AssertionError if the parameter <code>objectId</code> is null or empty
 	 */
@@ -165,7 +172,8 @@ public class DataTableComponent extends AbstractVaadinPageComponent {
 	}
 
 	/**
-	 * @param cellValue
+	 * Get a row by the given cell value
+	 * @param cellValue the cell value to search for
 	 * @return the first row that contains a cell with the given value or null if an appropriate row could not be found
 	 * @throws AssertionError if the parameter <code>cellValue</code> is null or empty
 	 */
@@ -174,7 +182,8 @@ public class DataTableComponent extends AbstractVaadinPageComponent {
 	}
 
 	/**
-	 * @param cellValue
+	 * Get a row by the given cell value
+	 * @param cellValue the cell value to search for
 	 * @param skipPagination if set to true searching in subsequent pages will be skipped
 	 * @return the first row that contains a cell with the given value or null if an appropriate row could not be found
 	 * @throws AssertionError if the parameter <code>cellValue</code> is null or empty
@@ -185,8 +194,10 @@ public class DataTableComponent extends AbstractVaadinPageComponent {
 			return null;
 
 		// Click on the data table component in order to gain focus
-		findWebElement(tableElementId).click();
+		clickWebElement(tableElementId);
 
+		final String cellText = prepareXPathText(cellValue);
+		final String rowSearchExpression = getTableXPath() + "/vaadin-grid-cell-content[text()=" + cellText + "]";
 		int pageIndex = 1;
 
 		while (true) {
@@ -198,13 +209,12 @@ public class DataTableComponent extends AbstractVaadinPageComponent {
 			}
 
 			// Search for the row within the current page
-			final Optional<WebElement> optionalRow = findWebElementsByXPath(
-					getTableXPath() + "/vaadin-grid-cell-content[text()='" + cellValue + "']").stream().findFirst();
+			final Optional<WebElement> optionalRow = findWebElementsByXPath(rowSearchExpression, skipPagination).stream().findFirst();
 
 			if (optionalRow.isPresent()) {
-				logger.debug("Row found!");
+				logger.debug("Found row with value {}", cellValue);
 
-				return optionalRow.get();
+				return findWebElementByXPath(rowSearchExpression, true);
 			}
 
 			if (skipPagination)
@@ -215,18 +225,15 @@ public class DataTableComponent extends AbstractVaadinPageComponent {
 			// Load the next page
 			new Actions(driver).sendKeys(Keys.PAGE_DOWN).build().perform();
 
-			// After reaching an internal threshold we skip further processing!
-			if (pageIndex == MAX_NUMBER_OF_PAGES) {
-				logger.warn("Stop loading of further pages as the maximum number of pages ('{}') has been reached!", MAX_NUMBER_OF_PAGES);
-
-				return null;
-			}
+			// The grid only contains empty cells while loading the next page!
+			waitForNonEmptyGrid();
 
 			pageIndex++;
 		}
 	}
 
 	/**
+	 * Get the number of rows
 	 * @return the number of rows
 	 * @throws AssertionError if the table element could not be found
 	 */
@@ -240,7 +247,7 @@ public class DataTableComponent extends AbstractVaadinPageComponent {
 
 	/**
 	 * Validate if the number of visible rows in the first page of the table component is equal to the expected row count
-	 * @param testData
+	 * @param testData the test data object that provides necessary information
 	 * @throws AssertionError if the validation either has failed, or the expected row count could not be determined
 	 */
 	public void validateRowCount(PageElementTestData testData) {
@@ -256,7 +263,7 @@ public class DataTableComponent extends AbstractVaadinPageComponent {
 	/**
 	 * Validate if the number of visible rows in the first page of the table component is greater (or equal) than a given lower
 	 * limit
-	 * @param testData
+	 * @param testData the test data object that provides necessary information
 	 * @throws AssertionError if the validation either has failed, or the expected row count could not be determined
 	 */
 	public void validateMinRowCount(PageElementTestData testData) {
@@ -272,7 +279,7 @@ public class DataTableComponent extends AbstractVaadinPageComponent {
 	/**
 	 * Validate if the number of visible rows in the first page of the table component is smaller (or equal) than a given upper
 	 * limit
-	 * @param testData
+	 * @param testData the test data object that provides necessary information
 	 * @throws AssertionError if the validation either has failed, or the expected row count could not be determined
 	 */
 	public void validateMaxRowCount(PageElementTestData testData) {
@@ -286,8 +293,8 @@ public class DataTableComponent extends AbstractVaadinPageComponent {
 	}
 
 	/**
-	 * Open the context-menu of the given row
-	 * @param rowElement
+	 * Open the context-menu
+	 * @param rowElement the row to open the context menu for
 	 * @throws AssertionError if the context-menu either could not be found, or the parameter <code>rowElement</code> is null
 	 */
 	public void openContextMenu(WebElement rowElement) {
@@ -302,9 +309,9 @@ public class DataTableComponent extends AbstractVaadinPageComponent {
 	}
 
 	/**
-	 * Open the context-menu and select the item with the given ID
-	 * @param rowElement
-	 * @param elementId
+	 * Open the context-menu and select an item that is identified by the given ID
+	 * @param rowElement the row to open the context menu for
+	 * @param elementId the ID of the menu item that should be clicked
 	 * @throws AssertionError if the context-menu item either could not be found, or the parameter <code>rowElement</code> is null
 	 */
 	public void clickContextMenuItem(WebElement rowElement, String elementId) {
@@ -314,15 +321,14 @@ public class DataTableComponent extends AbstractVaadinPageComponent {
 
 		openContextMenu(rowElement);
 
-		// Wait a short period of time in order to avoid an occasionally occurring StaleElementReferenceException!
-		testContext.delayTest(MENU_ITEM_WAIT_TIME_MILLI_SECONDS);
+		final var expression = "//vaadin-context-menu-item[@id='" + tableElementId + "_" + elementId + "']";
 
-		findContextMenuItem(elementId).click();
+		clickWebElementByXPath(expression);
 	}
 
 	/**
-	 * Open the context-menu and select the item with the given ID
-	 * @param elementId
+	 * Open the context-menu
+	 * @param elementId the ID of the menu item that should be clicked
 	 * @throws AssertionError if the context-menu item could not be found
 	 */
 	public void clickContextMenuItem(String elementId) {
@@ -331,15 +337,14 @@ public class DataTableComponent extends AbstractVaadinPageComponent {
 		// Open the context menu
 		new Actions(driver).moveToElement(findWebElementByXPath(getTableXPath())).contextClick().build().perform();
 
-		// Wait a short period of time in order to avoid an occasionally occurring StaleElementReferenceException!
-		testContext.delayTest(MENU_ITEM_WAIT_TIME_MILLI_SECONDS);
+		final var expression = "//vaadin-context-menu-item[@id='" + tableElementId + "_" + elementId + "']";
 
-		findContextMenuItem(elementId).click();
+		clickWebElementByXPath(expression);
 	}
 
 	/**
 	 * Click on the context-menu item "Delete" in order to delete the object that is bound to the given row
-	 * @param rowElement
+	 * @param rowElement the row that should be deleted
 	 * @throws AssertionError if an element either could not be found, or the parameter <code>rowElement</code> is null
 	 */
 	public void clickContextMenuDelete(WebElement rowElement) {
@@ -349,15 +354,15 @@ public class DataTableComponent extends AbstractVaadinPageComponent {
 		logger.debug("Click 'Yes' button in order to confirm the delete operation");
 
 		// Search for the confirmation button in the pop-up dialog!
-		findWebElementByXPath(PopUpDialog.DIALOG_BUTTON_YES_XPATH).click();
+		clickWebElementByXPath(PopUpDialog.DIALOG_BUTTON_YES_XPATH);
 	}
 
 	/**
 	 * Click on the context-menu item 'Copy' in order to copy the object that is bound to the given row
 	 * @param <T> the type of the page object to be returned
-	 * @param rowElement
-	 * @param pageClass
-	 * @return an instance of the selected page class
+	 * @param rowElement the row that should be copied
+	 * @param pageClass the class of the page object that should be opened after performing the copy operation
+	 * @return an instance of the selected page object class
 	 * @throws AssertionError if the page object either could not be created, or an element could not be found
 	 */
 	public <T extends AbstractPageObject> T clickContextMenuCopy(WebElement rowElement, Class<T> pageClass) {
@@ -367,14 +372,14 @@ public class DataTableComponent extends AbstractVaadinPageComponent {
 		logger.debug("Click 'Yes' button in order to confirm the copy operation");
 
 		// Search for the confirmation button in the pop-up dialog!
-		findWebElementByXPath(DIALOG_BUTTON_YES_XPATH).click();
+		clickWebElementByXPath(DIALOG_BUTTON_YES_XPATH);
 
 		return createPageObject(pageClass);
 	}
 
 	/**
 	 * Click on the context-menu item 'Copy' in order to copy the object that is bound to the given row
-	 * @param rowElement
+	 * @param rowElement the row that should be copied
 	 * @throws AssertionError if an element either could not be found, or the parameter <code>rowElement</code> is null
 	 */
 	public void clickContextMenuCopy(WebElement rowElement) {
@@ -383,20 +388,20 @@ public class DataTableComponent extends AbstractVaadinPageComponent {
 		logger.debug("Click 'Yes' button in order to confirm the copy operation");
 
 		// Search for the confirmation button in the pop-up dialog!
-		findWebElementByXPath(DIALOG_BUTTON_YES_XPATH).click();
+		clickWebElementByXPath(DIALOG_BUTTON_YES_XPATH);
 
 		logger.debug("Click 'OK' button in order to close the message dialog");
 
 		// If the copy operation has been finished successfully a pop-up dialog will appear that must be closed!
-		findWebElementByXPath(DIALOG_BUTTON_OK_XPATH).click();
+		clickWebElementByXPath(DIALOG_BUTTON_OK_XPATH);
 	}
 
 	/**
 	 * Click on the context-menu item 'Edit'
-	 * @param pageClass
+	 * @param pageClass the class of the page object that should be opened
 	 * @param <T> the type of the page object to be returned
-	 * @param rowElement
-	 * @return an instance of the selected page class
+	 * @param rowElement the row to update
+	 * @return an instance of the selected page object class
 	 * @throws AssertionError if the page object either could not be created, or the context-menu item could not be found
 	 */
 	public <T extends AbstractPageObject> T clickContextMenuUpdate(WebElement rowElement, Class<T> pageClass) {
@@ -407,10 +412,10 @@ public class DataTableComponent extends AbstractVaadinPageComponent {
 
 	/**
 	 * Click on the context-menu item 'View'
-	 * @param pageClass
+	 * @param pageClass the class of the page object that should be opened
 	 * @param <T> the type of the page object to be returned
-	 * @param rowElement
-	 * @return an instance of the selected page class
+	 * @param rowElement the row to open
+	 * @return an instance of the selected page object class
 	 * @throws AssertionError if the page object either could not be created, or the context-menu item could not be found
 	 */
 	public <T extends AbstractPageObject> T clickContextMenuView(WebElement rowElement, Class<T> pageClass) {
@@ -444,7 +449,7 @@ public class DataTableComponent extends AbstractVaadinPageComponent {
 
 	/**
 	 * Click on the context-menu item 'Export data'
-	 * @param rowElement
+	 * @param rowElement the row to perform an export operation for
 	 * @throws AssertionError if the context-menu item either could not be found, or the parameter <code>rowElement</code> is null
 	 */
 	public void clickContextMenuExport(WebElement rowElement) {
@@ -461,7 +466,7 @@ public class DataTableComponent extends AbstractVaadinPageComponent {
 
 	/**
 	 * Click on the context-menu item 'Download'
-	 * @param rowElement
+	 * @param rowElement the row to perform a download operation for
 	 * @throws AssertionError if the context-menu item either could not be found, or the parameter <code>rowElement</code> is null
 	 */
 	public void clickContextMenuDownload(WebElement rowElement) {
@@ -470,20 +475,20 @@ public class DataTableComponent extends AbstractVaadinPageComponent {
 
 	/**
 	 * Click on the button 'Create new'
-	 * @param pageClass
+	 * @param pageClass the class of the page object that should be opened after creating a new object
 	 * @param <T> the type of the page object to be returned
-	 * @return an instance of the selected page class
+	 * @return an instance of the selected page object class
 	 * @throws AssertionError if the page object either could not be created, or the button could not be found
 	 */
 	public <T extends AbstractPageObject> T clickButtonCreateNew(Class<T> pageClass) {
-		findWebElementByXPath("//vaadin-button[@id='" + tableElementId + "_cmdCreate']").click();
+		clickWebElementByXPath("//vaadin-button[@id='" + tableElementId + "_cmdCreate']");
 
 		return createPageObject(pageClass);
 	}
 
 	/**
 	 * Extract the expected row count from the given test data object
-	 * @param testData
+	 * @param testData the test data object that provides necessary information
 	 * @return the expected row count
 	 * @throws AssertionError if the value could not be converted to an integer
 	 */
@@ -501,21 +506,28 @@ public class DataTableComponent extends AbstractVaadinPageComponent {
 	}
 
 	/**
-	 * @param elementId
-	 * @return the context-menu item with the given ID
-	 * @throws AssertionError if the context-menu item could not be found
-	 */
-	protected WebElement findContextMenuItem(String elementId) {
-		final var expression = "//vaadin-context-menu-item[@id='" + tableElementId + "_" + elementId + "']";
-
-		return findWebElementByXPath(expression);
-	}
-
-	/**
-	 * @return a XPath expression for finding the 'vaadin-grid' element of the data table component
+	 * @return an XPath expression for finding the 'vaadin-grid' element of the data table component
 	 */
 	protected String getTableXPath() {
 		return "//vaadin-vertical-layout[@id='" + tableElementId + "']/vaadin-grid";
+	}
+
+	/**
+	 * Wait until the grid contains at least one cell that is not empty
+	 */
+	protected void waitForNonEmptyGrid() {
+		final String gridCellsExpression = getTableXPath() + "/vaadin-grid-cell-content";
+		final long start = Instant.now().toEpochMilli();
+
+		logger.trace("Waiting for non-empty grid");
+
+		new WebElementWait(driver, Duration.ofMillis(explicitWaitTime), logger).until(_ -> {
+			final List<WebElement> cells = driver.findElements(By.xpath(gridCellsExpression));
+
+			return cells.stream().filter(Objects::nonNull).filter(cell -> !cell.getText().isEmpty()).findFirst().orElse(null);
+		});
+
+		logger.trace("Waited {} milliseconds", (Instant.now().toEpochMilli() - start));
 	}
 
 }

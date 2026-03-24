@@ -39,7 +39,7 @@ public class MessageDialog extends AbstractAngularPageComponent {
 
 	/**
 	 * Constructor
-	 * @param pageObject
+	 * @param pageObject the page object the dialog belongs to
 	 */
 	public MessageDialog(AbstractPageObject pageObject) {
 		super(pageObject.getTestContext());
@@ -49,7 +49,7 @@ public class MessageDialog extends AbstractAngularPageComponent {
 
 	/**
 	 * Search for a visible message dialog and compare its status with the expected action result
-	 * @param actionResult
+	 * @param actionResult the expected action result
 	 * @throws AssertionError if the status validation either has failed, or an element could not be found
 	 */
 	public void validateStatus(PageActionResult actionResult) {
@@ -94,7 +94,7 @@ public class MessageDialog extends AbstractAngularPageComponent {
 		logger.debug("Close message dialog");
 
 		// Search for the dialog's close button and click on it
-		findWebElementByXPath("//p-dialog//button[@id='cmdClose']").click();
+		clickWebElementByXPath("//p-dialog//button[@id='cmdClose']");
 	}
 
 }

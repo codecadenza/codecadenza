@@ -75,8 +75,7 @@ public class StandardDriverProducer implements IDriverProducer {
 			final Constructor<? extends WebDriver> constructor = webDriverClass.getConstructor();
 
 			final WebDriver driver = constructor.newInstance();
-			driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(properties.getImplicitWaitTime()));
-			driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(properties.getPageLoadTimeout()));
+			driver.manage().timeouts().pageLoadTimeout(Duration.ofMillis(properties.getPageLoadTimeout()));
 
 			if (properties.isMaximizeWindow())
 				driver.manage().window().maximize();

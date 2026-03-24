@@ -23,8 +23,6 @@ package net.codecadenza.runtime.selenium.page.imp.angular;
 
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
-import java.util.Optional;
-import java.util.stream.Stream;
 import net.codecadenza.runtime.selenium.data.PageActionResult;
 import net.codecadenza.runtime.selenium.data.PageElementTestData;
 import net.codecadenza.runtime.selenium.junit.SeleniumTestContext;
@@ -45,18 +43,16 @@ import org.openqa.selenium.WebElement;
 public abstract class AbstractPageObject extends AbstractAngularPageComponent {
 	public static final String BUTTON_ID_LOG_IN = "cmdLogin";
 
-	private static final String SLASH = "/";
 	private static final String BUTTON_ID_LOG_OUT = "cmdLogout";
 	private static final String BUTTON_ID_SELECT = "cmdSelect";
 	private static final String BUTTON_ID_RESET = "cmdReset";
 	private static final String BUTTON_ID_SAVE = "cmdSave";
 	private static final String BUTTON_ID_BACK = "cmdBack";
 	private static final String TABLE_ID_LOV = "dataTable";
-	private static final int AUTO_COMPLETE_DELAY_MILLIS = 400;
 
 	/**
 	 * Constructor
-	 * @param testContext
+	 * @param testContext the Selenium test context
 	 */
 	protected AbstractPageObject(SeleniumTestContext testContext) {
 		super(testContext);
@@ -64,7 +60,7 @@ public abstract class AbstractPageObject extends AbstractAngularPageComponent {
 
 	/**
 	 * Open a page
-	 * @param resourcePath
+	 * @param resourcePath the path of the page to be opened
 	 * @throws AssertionError if the parameter <code>resourcePath</code> is null
 	 */
 	public void open(String resourcePath) {
@@ -73,8 +69,8 @@ public abstract class AbstractPageObject extends AbstractAngularPageComponent {
 
 	/**
 	 * Open a page to display data for a specific object identified by the given ID
-	 * @param resourcePath
-	 * @param objectId
+	 * @param resourcePath the path of the page to be opened
+	 * @param objectId the ID of the object to be opened
 	 * @throws AssertionError if the parameter <code>resourcePath</code> is null
 	 */
 	public void open(String resourcePath, String objectId) {
@@ -98,15 +94,15 @@ public abstract class AbstractPageObject extends AbstractAngularPageComponent {
 	 * Navigate to a page by selecting a tree view item with the specified navigation target! As the page object is created via
 	 * introspection it is necessary that the respective class provides an appropriate constructor!
 	 * @param <T> the type of the page object that should be returned
-	 * @param navigationTarget
-	 * @param pageClass
+	 * @param navigationTarget the path of page to be opened
+	 * @param pageClass the class of the page object to open
 	 * @return a page instance whose type is defined by the respective parameter
 	 * @throws AssertionError if the operation has failed
 	 */
 	public <T extends AbstractPageObject> T openPageByNavigator(String navigationTarget, Class<T> pageClass) {
 		logger.debug("Navigate to '{}'", navigationTarget);
 
-		final WebElement toggleButton = findWebElementByXPath("//cc-tree-navigator//div[@id='cmdCollapse']/i");
+		final WebElement toggleButton = findWebElementByXPath("//cc-tree-navigator//div[@id='cmdCollapse']/i", true);
 		boolean closeNavigator = false;
 		final String classAttribute = toggleButton.getAttribute(ATTR_NAME_CLASS);
 
@@ -123,12 +119,11 @@ public abstract class AbstractPageObject extends AbstractAngularPageComponent {
 
 		final var expression = "//cc-tree-navigator//a[@href[contains(.,'" + navigationTarget + "')]]";
 
-		final WebElement treeItem = findWebElementByXPath(expression);
-		treeItem.click();
+		clickWebElementByXPath(expression);
 
 		if (closeNavigator) {
 			// Click the collapse toggle button again to hide the tree navigator
-			findWebElementByXPath("//cc-tree-navigator//div[@id='cmdCollapse']").click();
+			clickWebElementByXPath("//cc-tree-navigator//div[@id='cmdCollapse']");
 		}
 
 		return createPageObject(pageClass);
@@ -152,7 +147,7 @@ public abstract class AbstractPageObject extends AbstractAngularPageComponent {
 
 	/**
 	 * Press the 'Save' button
-	 * @param pageClass
+	 * @param pageClass the class of the page object to open after performing the save operation
 	 * @param <T> the type of the page object that should be returned
 	 * @return a page instance whose type is defined by the respective parameter
 	 * @throws AssertionError if the button either could not be found, or the page object could not be created
@@ -173,13 +168,13 @@ public abstract class AbstractPageObject extends AbstractAngularPageComponent {
 
 	/**
 	 * Press a button with a given ID
-	 * @param id
+	 * @param id the ID of the button to be pressed
 	 * @throws AssertionError if the button could not be found
 	 */
 	public void pressButton(String id) {
 		logger.debug("Press button with ID '{}'", id);
 
-		findWebElement(id).click();
+		clickWebElement(id);
 	}
 
 	/**
@@ -192,7 +187,7 @@ public abstract class AbstractPageObject extends AbstractAngularPageComponent {
 
 		logger.debug("Set selection of checkbox '{}'", testData.getElementId());
 
-		final WebElement inputField = findWebElement(testData.getElementId());
+		final WebElement inputField = findWebElement(testData.getElementId(), true);
 		final boolean newSelection = testData.getNewValue().equalsIgnoreCase(Boolean.toString(true));
 		final boolean currentSelection = inputField.isSelected();
 
@@ -249,16 +244,11 @@ public abstract class AbstractPageObject extends AbstractAngularPageComponent {
 		if (testData.getNewValue().isEmpty())
 			return;
 
-		// Wait a short period of time until accessing the element containing the actual item!
-		testContext.delayTest(AUTO_COMPLETE_DELAY_MILLIS);
+		logger.trace("Click on item '{}'", testData.getNewValue());
 
-		// Search for the first selectable item
-		final WebElement listElement = findWebElementByXPath("//p-overlay//*/ul");
+		final String itemText = prepareXPathText(testData.getNewValue());
 
-		final boolean itemFound = selectItem(listElement, testData.getNewValue());
-
-		assertTrue("Could not find selectable item '" + testData.getNewValue() + "' for auto-complete field '"
-				+ testData.getElementId() + "'!", itemFound);
+		clickWebElementByXPath("//p-overlay//*/ul/li/span[text()=" + itemText + "]");
 	}
 
 	/**
@@ -292,15 +282,12 @@ public abstract class AbstractPageObject extends AbstractAngularPageComponent {
 		logger.debug("Search for item '{}' in combobox '{}'", testData.getNewValue(), testData.getElementId());
 
 		// Search for the combobox field and click on it
-		final WebElement combobox = findWebElement(testData.getElementId());
-		combobox.click();
+		clickWebElement(testData.getElementId());
 
-		// When using PrimeNG the items are added dynamically by using an overlay element
-		final var itemExpression = "//p-overlay//p-selectitem/li//*[text()='";
+		final String itemText = prepareXPathText(testData.getNewValue());
 
-		final WebElement itemElement = findWebElementByXPath(itemExpression + testData.getNewValue() + "']");
-
-		itemElement.click();
+		// The items are added dynamically by using an overlay element
+		findWebElementByXPath("//p-overlay//p-selectitem/li/span[text()=" + itemText + "]").click();
 	}
 
 	/**
@@ -334,7 +321,7 @@ public abstract class AbstractPageObject extends AbstractAngularPageComponent {
 
 		logger.debug("Open LoV dialog");
 
-		findWebElementByXPath("//cc-lov-input-field[@id='" + testData.getElementId() + "']/div/button").click();
+		clickWebElementByXPath("//cc-lov-input-field[@id='" + testData.getElementId() + "']/div/p-button");
 
 		logger.debug("Enter text '{}' into LoV field '{}'", testData.getNewValue(), testData.getElementId());
 
@@ -351,12 +338,12 @@ public abstract class AbstractPageObject extends AbstractAngularPageComponent {
 			tableLoV.selectRow(row);
 
 			// Click on the 'Select' button in order to apply the selection
-			findWebElement(BUTTON_ID_SELECT).click();
+			clickWebElement(BUTTON_ID_SELECT);
 		}
 		else {
 			logger.debug("Press the reset button");
 
-			findWebElement(BUTTON_ID_RESET).click();
+			clickWebElement(BUTTON_ID_RESET);
 		}
 
 		logger.debug("Close LoV dialog");
@@ -502,18 +489,18 @@ public abstract class AbstractPageObject extends AbstractAngularPageComponent {
 
 	/**
 	 * Open a tab page identified by the given ID
-	 * @param tabPageId
+	 * @param tabPageId the ID of the tab page to open
 	 * @throws AssertionError if the tab page could not be found
 	 */
 	public void openTabPage(String tabPageId) {
 		logger.debug("Open tab page '{}'", tabPageId);
 
-		driver.findElement(By.xpath("//p-tab[@value='" + tabPageId + "']")).click();
+		clickWebElementByXPath("//p-tab[@value='" + tabPageId + "']");
 	}
 
 	/**
 	 * Wait for a message dialog and perform a status validation check
-	 * @param actionResult
+	 * @param actionResult the expected action result
 	 * @return a message dialog
 	 * @throws AssertionError if the status validation either has failed, or an element could not be found
 	 */
@@ -528,7 +515,7 @@ public abstract class AbstractPageObject extends AbstractAngularPageComponent {
 
 	/**
 	 * Wait for a notification message and perform a status validation check
-	 * @param actionResult
+	 * @param actionResult the expected action result
 	 * @throws AssertionError if the status validation either has failed, or an element could not be found
 	 */
 	public void waitForNotificationMessage(PageActionResult actionResult) {
@@ -563,31 +550,10 @@ public abstract class AbstractPageObject extends AbstractAngularPageComponent {
 	}
 
 	/**
-	 * Search for an existing list item with the given value and select it
-	 * @param element
-	 * @param itemValue
-	 * @return true if an item could be selected
-	 */
-	protected boolean selectItem(WebElement element, String itemValue) {
-		final Stream<WebElement> itemStream = element.findElements(By.tagName(HTML_LIST_ITEM)).stream();
-		final Optional<WebElement> item = itemStream.filter(e -> e.getText().equals(itemValue)).findFirst();
-
-		if (item.isPresent()) {
-			logger.trace("Click on item '{}'", itemValue);
-
-			item.get().click();
-
-			return true;
-		}
-
-		return false;
-	}
-
-	/**
 	 * Build the page URL using the given base URL and a resource path. If necessary, both strings will be joined by using a '/'
 	 * character!
-	 * @param baseURL
-	 * @param resourcePath
+	 * @param baseURL the base URL
+	 * @param resourcePath the resource path
 	 * @return the URL
 	 */
 	protected String buildPageURL(String baseURL, String resourcePath) {

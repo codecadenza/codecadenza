@@ -41,7 +41,7 @@ public class NotificationMessage extends AbstractPrimefacesPageComponent {
 
 	/**
 	 * Constructor
-	 * @param pageObject
+	 * @param pageObject the page object the component belongs to
 	 */
 	public NotificationMessage(AbstractPageObject pageObject) {
 		super(pageObject.getTestContext());
@@ -51,7 +51,7 @@ public class NotificationMessage extends AbstractPrimefacesPageComponent {
 
 	/**
 	 * Search for a visible growl panel and compare its status with the expected action result
-	 * @param actionResult
+	 * @param actionResult the expected action result
 	 * @throws AssertionError if the status validation either has failed, or an element could not be found
 	 */
 	public void validateStatus(PageActionResult actionResult) {

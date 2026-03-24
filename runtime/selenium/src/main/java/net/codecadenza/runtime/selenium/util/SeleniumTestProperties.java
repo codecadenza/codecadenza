@@ -43,7 +43,7 @@ public class SeleniumTestProperties extends Properties {
 	private static final long serialVersionUID = -2863977666186515210L;
 	private static final String PROPERTY_BASE_URL = "BASE_URL";
 	private static final String PROPERTY_PAGE_LOAD_TIMEOUT = "PAGE_LOAD_TIMEOUT";
-	private static final String PROPERTY_IMPLICIT_WAIT_TIME = "IMPLICIT_WAIT_TIME";
+	private static final String PROPERTY_EXPLICIT_WAIT_TIME = "EXPLICIT_WAIT_TIME";
 	private static final String PROPERTY_DRIVER_NAME = "DRIVER_NAME";
 	private static final String PROPERTY_DRIVER_PATH = "DRIVER_PATH";
 	private static final String PROPERTY_DRIVER_CLASS = "DRIVER_CLASS";
@@ -85,17 +85,17 @@ public class SeleniumTestProperties extends Properties {
 	}
 
 	/**
-	 * @return the page load timeout in seconds
+	 * @return the page load timeout in milliseconds
 	 */
 	public long getPageLoadTimeout() {
 		return getLongProperty(PROPERTY_PAGE_LOAD_TIMEOUT);
 	}
 
 	/**
-	 * @return the implicit wait time in seconds
+	 * @return the explicit wait time in milliseconds
 	 */
-	public long getImplicitWaitTime() {
-		return getLongProperty(PROPERTY_IMPLICIT_WAIT_TIME);
+	public long getExplicitWaitTime() {
+		return getLongProperty(PROPERTY_EXPLICIT_WAIT_TIME);
 	}
 
 	/**
@@ -106,7 +106,7 @@ public class SeleniumTestProperties extends Properties {
 	}
 
 	/**
-	 * @return the time in seconds to wait until all pending HTTP requests should have been finished
+	 * @return the time in milliseconds to wait until all pending HTTP requests should have been finished
 	 */
 	public long getHTTPTimeout() {
 		return getLongProperty(PROPERTY_HTTP_WAIT_TIMEOUT);

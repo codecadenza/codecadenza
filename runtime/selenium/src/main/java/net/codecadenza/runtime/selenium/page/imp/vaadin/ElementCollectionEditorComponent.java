@@ -39,7 +39,6 @@ import org.openqa.selenium.interactions.Actions;
  * @version 1.0.0
  */
 public class ElementCollectionEditorComponent extends AbstractVaadinPageComponent {
-	private static final long LIST_ITEM_DELAY_MILLISECONDS = 50;
 	private static final String MENU_ITEM_DELETE_ALL = "mniDeleteAll";
 
 	protected final String elementId;
@@ -47,8 +46,8 @@ public class ElementCollectionEditorComponent extends AbstractVaadinPageComponen
 
 	/**
 	 * Constructor
-	 * @param pageObject
-	 * @param elementId
+	 * @param pageObject the page object the component belongs to
+	 * @param elementId the ID of the element
 	 */
 	public ElementCollectionEditorComponent(AbstractPageObject pageObject, String elementId) {
 		super(pageObject.getTestContext());
@@ -76,11 +75,13 @@ public class ElementCollectionEditorComponent extends AbstractVaadinPageComponen
 			inputField.clear();
 			inputField.sendKeys(element);
 
-			final WebElement addButton = findWebElementByXPath(editorXPath + "//vaadin-button");
-			addButton.click();
+			clickWebElementByXPath(editorXPath + "//vaadin-button");
 
-			// Wait a short period of time to ensure the element is added before adding the next one
-			testContext.delayTest(LIST_ITEM_DELAY_MILLISECONDS);
+			final String elementText = prepareXPathText(element);
+			final String rowSearchExpression = editorXPath + "//vaadin-grid/vaadin-grid-cell-content/span[text()=" + elementText + "]";
+
+			// Wait until the element has been added to the grid
+			findWebElementByXPath(rowSearchExpression);
 		}
 	}
 
@@ -91,8 +92,9 @@ public class ElementCollectionEditorComponent extends AbstractVaadinPageComponen
 	public void validateElements(PageElementTestData testData) {
 		logger.debug("Validate if the elements '{}' are contained in the editor '{}'", testData.getExpectedValue(), elementId);
 
+		final String gridCellsExpression = editorXPath + "//vaadin-grid//vaadin-grid-cell-content/span";
 		final List<String> expectedElements = Arrays.asList(testData.getExpectedValue().split(ITEM_DELIMITER));
-		final List<WebElement> gridCells = findWebElementsByXPath(editorXPath + "//vaadin-grid//vaadin-grid-cell-content//span");
+		final List<WebElement> gridCells = findWebElementsByXPath(gridCellsExpression, true);
 		final List<String> actualElements = gridCells.stream().map(WebElement::getText).toList();
 
 		if (logger.isTraceEnabled()) {
@@ -115,8 +117,7 @@ public class ElementCollectionEditorComponent extends AbstractVaadinPageComponen
 
 		openContextMenu();
 
-		final WebElement deleteAllMenuItem = findWebElementByXPath("//vaadin-context-menu-item[@id='" + MENU_ITEM_DELETE_ALL + "']");
-		deleteAllMenuItem.click();
+		clickWebElementByXPath("//vaadin-context-menu-item[@id='" + MENU_ITEM_DELETE_ALL + "']");
 	}
 
 	/**

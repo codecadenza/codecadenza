@@ -21,10 +21,13 @@
  */
 package net.codecadenza.runtime.selenium.page.imp.primefaces;
 
+import java.time.Duration;
 import java.util.List;
 import java.util.Optional;
 import net.codecadenza.runtime.selenium.data.PageElementTestData;
 import net.codecadenza.runtime.selenium.junit.SeleniumTestContext;
+import net.codecadenza.runtime.selenium.page.WebElementWait;
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
 
@@ -57,8 +60,8 @@ public class DataTableComponent extends AbstractPrimefacesPageComponent {
 
 	/**
 	 * Constructor
-	 * @param testContext
-	 * @param tableElementId
+	 * @param testContext the Selenium test context
+	 * @param tableElementId the ID of the table element
 	 */
 	public DataTableComponent(SeleniumTestContext testContext, String tableElementId) {
 		super(testContext);
@@ -79,9 +82,9 @@ public class DataTableComponent extends AbstractPrimefacesPageComponent {
 	/**
 	 * Perform a double-click on the given row
 	 * @param <T> the type of the page object to be returned
-	 * @param rowElement
-	 * @param pageClass
-	 * @return an instance of the selected page class. It returns null if no page class has been specified!
+	 * @param rowElement the row that should be double-clicked
+	 * @param pageClass the class of the page object that should be opened after performing the double-click
+	 * @return an instance of the selected page object class. It returns null if no page class has been specified!
 	 * @throws AssertionError if the page object either could not be created, or the parameter <code>rowElement</code> is null
 	 */
 	public <T extends AbstractPageObject> T doubleClickRow(WebElement rowElement, Class<T> pageClass) {
@@ -92,7 +95,7 @@ public class DataTableComponent extends AbstractPrimefacesPageComponent {
 		waitForPendingHTTPRequests();
 
 		// Move the mouse pointer to a valid position that can be used to perform a double-click!
-		new Actions(driver).moveToElement(rowElement, ROW_OFFSET_X, ROW_OFFSET_Y).doubleClick().build().perform();
+		new Actions(driver).moveToElement(rowElement).doubleClick().build().perform();
 
 		if (pageClass != null)
 			return createPageObject(pageClass);
@@ -102,7 +105,7 @@ public class DataTableComponent extends AbstractPrimefacesPageComponent {
 
 	/**
 	 * Perform a double-click on the given row
-	 * @param rowElement
+	 * @param rowElement the row that should be double-clicked
 	 * @throws AssertionError if the parameter <code>rowElement</code> is null
 	 */
 	public void doubleClickRow(WebElement rowElement) {
@@ -111,7 +114,7 @@ public class DataTableComponent extends AbstractPrimefacesPageComponent {
 
 	/**
 	 * Select a row
-	 * @param rowElement
+	 * @param rowElement the row that should be selected
 	 * @throws AssertionError if the parameter <code>rowElement</code> is null
 	 */
 	public void selectRow(WebElement rowElement) {
@@ -122,11 +125,12 @@ public class DataTableComponent extends AbstractPrimefacesPageComponent {
 		waitForPendingHTTPRequests();
 
 		// Move the mouse pointer to a valid position that can be used to click on the row!
-		new Actions(driver).moveToElement(rowElement, ROW_OFFSET_X, ROW_OFFSET_Y).click().build().perform();
+		new Actions(driver).moveToElement(rowElement).click().build().perform();
 	}
 
 	/**
-	 * @param rowIndex
+	 * Get a row by its index
+	 * @param rowIndex the row index to search for
 	 * @return the row with the given index or null if a row could not be found
 	 * @throws AssertionError if the row either could not be found, or the row index is smaller than 1
 	 */
@@ -135,16 +139,12 @@ public class DataTableComponent extends AbstractPrimefacesPageComponent {
 
 		assertTrue("Parameter 'rowIndex' index must be greater than 0!", rowIndex > 0);
 
-		final WebElement row = findWebElementByXPath(getTableRowsXPath() + "[@data-ri='" + (rowIndex - 1) + "']");
-
-		// Scroll to the row as it could be the case that it is located in the invisible area of the browser!
-		scrollTo(row);
-
-		return row;
+		return findWebElementByXPath(getTableRowsXPath() + "[@data-ri='" + (rowIndex - 1) + "']", true);
 	}
 
 	/**
-	 * @param objectId
+	 * Get a row by the ID of an object
+	 * @param objectId the object ID to search for
 	 * @param skipPagination if set to true searching in subsequent pages will be skipped
 	 * @return the row with the given object ID or null if the row could not be found
 	 * @throws AssertionError if the parameter <code>objectId</code> is null or empty
@@ -156,7 +156,8 @@ public class DataTableComponent extends AbstractPrimefacesPageComponent {
 	}
 
 	/**
-	 * @param objectId
+	 * Get a row by the ID of an object
+	 * @param objectId the object ID to search for
 	 * @return the row with the given object ID or null if the row could not be found
 	 * @throws AssertionError if the parameter <code>objectId</code> is null or empty
 	 */
@@ -165,7 +166,8 @@ public class DataTableComponent extends AbstractPrimefacesPageComponent {
 	}
 
 	/**
-	 * @param cellValue
+	 * Get a row by the given cell value
+	 * @param cellValue the cell value to search for
 	 * @param skipPagination if set to true searching in subsequent pages will be skipped
 	 * @return the first row that contains a cell with the given value or null if an appropriate row could not be found
 	 * @throws AssertionError if the parameter <code>cellValue</code> is null or empty
@@ -177,7 +179,8 @@ public class DataTableComponent extends AbstractPrimefacesPageComponent {
 	}
 
 	/**
-	 * @param cellValue
+	 * Get a row by the given cell value
+	 * @param cellValue the cell value to search for
 	 * @return the first row that contains a cell with the given value or null if an appropriate row could not be found
 	 * @throws AssertionError if the parameter <code>cellValue</code> is null or empty
 	 */
@@ -186,18 +189,19 @@ public class DataTableComponent extends AbstractPrimefacesPageComponent {
 	}
 
 	/**
+	 * Get the number of rows
 	 * @return the number of rows displayed in the current page
 	 * @throws AssertionError if the table element could not be found
 	 */
 	public int getRowCount() {
 		logger.debug("Determine number of rows");
 
-		return findWebElementsByXPath(getTableRowsXPath()).size();
+		return findWebElementsByXPath(getTableRowsXPath(), false).size();
 	}
 
 	/**
 	 * Validate if the number of visible rows in the first page of the table component is equal to the expected row count
-	 * @param testData
+	 * @param testData the test data object that provides necessary information
 	 * @throws AssertionError if the validation either has failed, or the expected row count could not be determined
 	 */
 	public void validateRowCount(PageElementTestData testData) {
@@ -213,7 +217,7 @@ public class DataTableComponent extends AbstractPrimefacesPageComponent {
 	/**
 	 * Validate if the number of visible rows in the first page of the table component is greater (or equal) than a given lower
 	 * limit
-	 * @param testData
+	 * @param testData the test data object that provides necessary information
 	 * @throws AssertionError if the validation either has failed, or the expected row count could not be determined
 	 */
 	public void validateMinRowCount(PageElementTestData testData) {
@@ -229,7 +233,7 @@ public class DataTableComponent extends AbstractPrimefacesPageComponent {
 	/**
 	 * Validate if the number of visible rows in the first page of the table component is smaller (or equal) than a given upper
 	 * limit
-	 * @param testData
+	 * @param testData the test data object that provides necessary information
 	 * @throws AssertionError if the validation either has failed, or the expected row count could not be determined
 	 */
 	public void validateMaxRowCount(PageElementTestData testData) {
@@ -243,7 +247,8 @@ public class DataTableComponent extends AbstractPrimefacesPageComponent {
 	}
 
 	/**
-	 * @param rowElement
+	 * Check if the given row is empty
+	 * @param rowElement the row to be checked
 	 * @return true if the given row doesn't contain data
 	 * @throws AssertionError if the parameter <code>rowElement</code> is null
 	 */
@@ -261,7 +266,7 @@ public class DataTableComponent extends AbstractPrimefacesPageComponent {
 
 	/**
 	 * Open the context-menu of the given row
-	 * @param rowElement
+	 * @param rowElement the row to open the context menu for
 	 * @throws AssertionError if the context-menu either could not be found, or the parameter <code>rowElement</code> is null
 	 */
 	public void openContextMenu(WebElement rowElement) {
@@ -272,13 +277,13 @@ public class DataTableComponent extends AbstractPrimefacesPageComponent {
 		waitForPendingHTTPRequests();
 
 		// Move the mouse pointer to a valid position that can be used to open the context-menu!
-		new Actions(driver).moveToElement(rowElement, ROW_OFFSET_X, ROW_OFFSET_Y).contextClick().build().perform();
+		new Actions(driver).moveToElement(rowElement).contextClick().build().perform();
 	}
 
 	/**
 	 * Open the context-menu and select an item that is identified by the given ID
-	 * @param rowElement
-	 * @param elementId
+	 * @param rowElement the row to open the context menu for
+	 * @param elementId the ID of the context menu item that should be clicked
 	 * @throws AssertionError if the context-menu item either could not be found, or the parameter <code>rowElement</code> is null
 	 */
 	public void clickContextMenuItem(WebElement rowElement, String elementId) {
@@ -286,12 +291,15 @@ public class DataTableComponent extends AbstractPrimefacesPageComponent {
 
 		openContextMenu(rowElement);
 
-		findWebElement(getPanelIdPrefix() + elementId).click();
+		// Do not use clickWebElement() here as it internally performs scroll and move operations which can cause the menu item to be
+		// non-interactable!
+		final var wait = new WebElementWait(driver, Duration.ofMillis(explicitWaitTime), logger);
+		wait.untilClickable(By.id(getPanelIdPrefix() + elementId)).click();
 	}
 
 	/**
 	 * Open the context-menu and select an item that is identified by the given ID
-	 * @param elementId
+	 * @param elementId the ID of the context menu item that should be clicked
 	 * @throws AssertionError if the context-menu item could not be found
 	 */
 	public void clickContextMenuItem(String elementId) {
@@ -300,7 +308,7 @@ public class DataTableComponent extends AbstractPrimefacesPageComponent {
 
 	/**
 	 * Click on the context-menu item 'Delete' in order to delete the object that is bound to the given row
-	 * @param rowElement
+	 * @param rowElement the row that should be deleted
 	 * @throws AssertionError if an element either could not be found, or the parameter <code>rowElement</code> is null
 	 */
 	public void clickContextMenuDelete(WebElement rowElement) {
@@ -309,15 +317,15 @@ public class DataTableComponent extends AbstractPrimefacesPageComponent {
 		logger.debug("Click 'Yes' button in order to confirm delete operation");
 
 		// Click on the 'Yes' button in order to confirm the delete operation
-		findWebElement(getPanelIdPrefix() + CMD_ID_YES_DELETE).click();
+		clickWebElement(getPanelIdPrefix() + CMD_ID_YES_DELETE);
 	}
 
 	/**
 	 * Click on the context-menu item 'Copy' in order to copy the object that is bound to the given row
 	 * @param <T> the type of the page object to be returned
-	 * @param rowElement
-	 * @param pageClass
-	 * @return an instance of the selected page class
+	 * @param rowElement the row that should be copied
+	 * @param pageClass the class of the page object that should be opened after performing the copy operation
+	 * @return an instance of the selected page object class
 	 * @throws AssertionError if the page object either could not be created, or an element could not be found
 	 */
 	public <T extends AbstractPageObject> T clickContextMenuCopy(WebElement rowElement, Class<T> pageClass) {
@@ -328,7 +336,7 @@ public class DataTableComponent extends AbstractPrimefacesPageComponent {
 
 	/**
 	 * Click on the context-menu item 'Copy' in order to copy the object that is bound to the given row
-	 * @param rowElement
+	 * @param rowElement the row to be copied
 	 * @throws AssertionError if an element either could not be found, or the parameter <code>rowElement</code> is null
 	 */
 	public void clickContextMenuCopy(WebElement rowElement) {
@@ -337,14 +345,14 @@ public class DataTableComponent extends AbstractPrimefacesPageComponent {
 		logger.debug("Click 'Yes' button in order to confirm copy operation");
 
 		// Click on the 'Yes' button in order to confirm the copy operation
-		findWebElement(getPanelIdPrefix() + CMD_ID_YES_COPY).click();
+		clickWebElement(getPanelIdPrefix() + CMD_ID_YES_COPY);
 	}
 
 	/**
 	 * Click on the menu bar item 'Create new' in order to create a new object
-	 * @param pageClass
+	 * @param pageClass the class of the page object that should be opened
 	 * @param <T> the type of the page object to be returned
-	 * @return an instance of the selected page class
+	 * @return an instance of the selected page object class
 	 * @throws AssertionError if the page object either could not be created, or the menu item could not be found
 	 */
 	public <T extends AbstractPageObject> T clickMenuBarCreateNew(Class<T> pageClass) {
@@ -353,9 +361,9 @@ public class DataTableComponent extends AbstractPrimefacesPageComponent {
 
 	/**
 	 * Click on the menu bar item 'Add' in order to add a new object
-	 * @param pageClass
+	 * @param pageClass the class of the page object that should be opened
 	 * @param <T> the type of the page object to be returned
-	 * @return an instance of the selected page class
+	 * @return an instance of the selected page object class
 	 * @throws AssertionError if the page object either could not be created, or the menu item could not be found
 	 */
 	public <T extends AbstractPageObject> T clickMenuBarAddNew(Class<T> pageClass) {
@@ -364,10 +372,10 @@ public class DataTableComponent extends AbstractPrimefacesPageComponent {
 
 	/**
 	 * Click on the context-menu item 'Update'
-	 * @param pageClass
-	 * @param <T> the type of the page object to be returned
-	 * @param rowElement
-	 * @return an instance of the selected page class
+	 * @param pageClass the class of the page object that should be opened
+	 * @param <T> the type of the page object to be opened
+	 * @param rowElement the row to update
+	 * @return an instance of the selected page object class
 	 * @throws AssertionError if the page object either could not be created, or the context-menu item could not be found
 	 */
 	public <T extends AbstractPageObject> T clickContextMenuUpdate(WebElement rowElement, Class<T> pageClass) {
@@ -378,10 +386,10 @@ public class DataTableComponent extends AbstractPrimefacesPageComponent {
 
 	/**
 	 * Click on the context-menu item 'View'
-	 * @param pageClass
+	 * @param pageClass the class of the page object that should be opened
 	 * @param <T> the type of the page object to be returned
-	 * @param rowElement
-	 * @return an instance of the selected page class
+	 * @param rowElement the row to open
+	 * @return an instance of the selected page object class
 	 * @throws AssertionError if the page object either could not be created, or the context-menu item could not be found
 	 */
 	public <T extends AbstractPageObject> T clickContextMenuView(WebElement rowElement, Class<T> pageClass) {
@@ -410,12 +418,12 @@ public class DataTableComponent extends AbstractPrimefacesPageComponent {
 		findWebElementByXPath("//div[@id='" + testData.getElementId() + "']//input[@type='file']").sendKeys(testData.getNewValue());
 
 		// Click on the pop-up dialog's close button
-		findWebElementByXPath("//div[@id='" + testData.getElementId() + "']//a/span[@class='ui-icon ui-icon-closethick']").click();
+		clickWebElementByXPath("//div[@id='" + testData.getElementId() + "']//a/span[@class='ui-icon ui-icon-closethick']");
 	}
 
 	/**
 	 * Click on the context-menu item 'Export'
-	 * @param rowElement
+	 * @param rowElement the row to perform an export operation for
 	 * @throws AssertionError if the context-menu item either could not be found, or the parameter <code>rowElement</code> is null
 	 */
 	public void clickContextMenuExport(WebElement rowElement) {
@@ -432,7 +440,7 @@ public class DataTableComponent extends AbstractPrimefacesPageComponent {
 
 	/**
 	 * Click on the context-menu item 'Download'
-	 * @param rowElement
+	 * @param rowElement the row to perform a download operation for
 	 * @throws AssertionError if the context-menu item either could not be found, or the parameter <code>rowElement</code> is null
 	 */
 	public void clickContextMenuDownload(WebElement rowElement) {
@@ -454,25 +462,18 @@ public class DataTableComponent extends AbstractPrimefacesPageComponent {
 	}
 
 	/**
-	 * @param value
-	 * @param byObjectId
-	 * @param skipPagination
+	 * Find a row by either a cell value or an object ID
+	 * @param value the value that either represents an object ID or a cell text
+	 * @param byObjectId a flag that controls if a row should be searched by either using the object ID or the cell value
+	 * @param skipPagination flag that controls if pagination should be skipped
 	 * @return the row or null if a row could not be found
 	 */
 	protected WebElement findRow(String value, boolean byObjectId, boolean skipPagination) {
 		// Search for a row within the first page
-		WebElement row = null;
+		WebElement row = getRow(value, byObjectId, skipPagination);
 
-		if (byObjectId)
-			row = findRowByObjectId(value);
-		else
-			row = findRowByCellValue(value);
-
-		if (row != null) {
-			logger.debug("Row found!");
-
+		if (row != null)
 			return row;
-		}
 
 		if (!skipPagination) {
 			logger.debug("Search for row by going through all pages");
@@ -491,19 +492,10 @@ public class DataTableComponent extends AbstractPrimefacesPageComponent {
 
 				nextPageButton.click();
 
-				if (byObjectId)
-					row = findRowByObjectId(value);
-				else
-					row = findRowByCellValue(value);
+				row = getRow(value, byObjectId, skipPagination);
 
-				if (row != null) {
-					logger.debug("Row found!");
-
-					// Scroll to the row as it could be the case that it is located in the invisible area of the browser!
-					scrollTo(row);
-
+				if (row != null)
 					return row;
-				}
 			}
 		}
 
@@ -516,7 +508,35 @@ public class DataTableComponent extends AbstractPrimefacesPageComponent {
 	}
 
 	/**
-	 * @param objectId
+	 * Get a row by either a cell value or an object ID
+	 * @param value the value to search for
+	 * @param byObjectId a flag that controls if a row should be searched by either using the object ID or the cell value
+	 * @param skipPagination flag that controls if pagination should be skipped
+	 * @return the row or null if it could not be found
+	 */
+	protected WebElement getRow(String value, boolean byObjectId, boolean skipPagination) {
+		boolean rowFound = false;
+
+		if (byObjectId)
+			rowFound = checkRowExistsByObjectId(value, skipPagination);
+		else
+			rowFound = checkRowExistsByCellValue(value, skipPagination);
+
+		if (!rowFound)
+			return null;
+
+		if (byObjectId) {
+			logger.debug("Found row with ID {}", value);
+			return findRowByObjectId(value);
+		}
+
+		logger.debug("Found row with cell value {}", value);
+		return findRowByCellValue(value);
+	}
+
+	/**
+	 * Find a row with a given object ID
+	 * @param objectId the object ID to search for
 	 * @return the element that represents the row or null if the row could not be found
 	 * @throws AssertionError if the parameter <code>objectId</code> is null or empty
 	 */
@@ -524,24 +544,14 @@ public class DataTableComponent extends AbstractPrimefacesPageComponent {
 		if (objectId == null || objectId.isEmpty())
 			fail("Parameter 'objectId' must not be null or empty!");
 
-		final Optional<WebElement> optionalRow = findWebElementsByXPath(getTableRowsXPath() + "[@data-rk='" + objectId + "']")
-				.stream().findFirst();
+		final String objectIdText = prepareXPathText(objectId);
 
-		if (optionalRow.isPresent()) {
-			final WebElement row = optionalRow.get();
-
-			// Scroll to the row as it could be the case that it is located in the invisible area of the browser!
-			scrollTo(row);
-
-			return row;
-		}
-
-		// The row with the given object ID doesn't exist!
-		return null;
+		return findWebElementByXPath(getTableRowsXPath() + "[@data-rk=" + objectIdText + "]", true);
 	}
 
 	/**
-	 * @param cellValue
+	 * Find a row by the given cell value
+	 * @param cellValue the cell value to search for
 	 * @return the first row that contains a cell with the given value or null if an appropriate row could not be found
 	 * @throws AssertionError if the parameter <code>cellValue</code> is null or empty
 	 */
@@ -549,27 +559,54 @@ public class DataTableComponent extends AbstractPrimefacesPageComponent {
 		if (cellValue == null || cellValue.isEmpty())
 			fail("Parameter 'cellValue' must not be null or empty!");
 
-		final Optional<WebElement> optionalRow = findWebElementsByXPath(getTableRowsXPath() + "/td[text()='" + cellValue + "']")
-				.stream().findFirst();
+		final String cellText = prepareXPathText(cellValue);
 
-		if (optionalRow.isPresent()) {
-			final WebElement row = optionalRow.get();
-
-			// Scroll to the row as it could be the case that it is located in the invisible area of the browser!
-			scrollTo(row);
-
-			return row;
-		}
-
-		return null;
+		return findWebElementByXPath(getTableRowsXPath() + "/td[text()=" + cellText + "]", true);
 	}
 
 	/**
+	 * Check if a row with the given object ID exists
+	 * @param objectId the object ID to check
+	 * @param skipPagination flag that controls if pagination should be skipped
+	 * @return true if the row could be found
+	 * @throws AssertionError if the parameter <code>objectId</code> is null or empty
+	 */
+	protected boolean checkRowExistsByObjectId(String objectId, boolean skipPagination) {
+		if (objectId == null || objectId.isEmpty())
+			fail("Parameter 'objectId' must not be null or empty!");
+
+		final String objectIdText = prepareXPathText(objectId);
+		final var rowSearchExpression = getTableRowsXPath() + "[@data-rk=" + objectIdText + "]";
+		final Optional<WebElement> optionalRow = findWebElementsByXPath(rowSearchExpression, skipPagination).stream().findFirst();
+
+		return optionalRow.isPresent();
+	}
+
+	/**
+	 * Check if a row with the given value exists
+	 * @param cellValue the cell value to check
+	 * @param skipPagination flag that controls if pagination should be skipped
+	 * @return true if the row could be found
+	 * @throws AssertionError if the parameter <code>cellValue</code> is null or empty
+	 */
+	protected boolean checkRowExistsByCellValue(String cellValue, boolean skipPagination) {
+		if (cellValue == null || cellValue.isEmpty())
+			fail("Parameter 'cellValue' must not be null or empty!");
+
+		final String cellText = prepareXPathText(cellValue);
+		final var rowSearchExpression = getTableRowsXPath() + "/td[text()=" + cellText + "]";
+		final Optional<WebElement> optionalRow = findWebElementsByXPath(rowSearchExpression, skipPagination).stream().findFirst();
+
+		return optionalRow.isPresent();
+	}
+
+	/**
+	 * Get the element for loading the next page
 	 * @return the element that represents the 'Next Page' button or null if it could not be found
 	 */
 	protected WebElement getPaginatorNext() {
 		final var expression = "//div[@id='" + tableElementId + "_paginator_top']/div/button";
-		final List<WebElement> elements = findWebElementsByXPath(expression);
+		final List<WebElement> elements = findWebElementsByXPath(expression, true);
 
 		for (final WebElement element : elements) {
 			final String classAttribute = element.getAttribute(ATTR_NAME_CLASS);
@@ -583,7 +620,7 @@ public class DataTableComponent extends AbstractPrimefacesPageComponent {
 
 	/**
 	 * Extract the expected row count from the given test data object
-	 * @param testData
+	 * @param testData the test data object that provides necessary information
 	 * @return the expected row count
 	 * @throws AssertionError if the value could not be converted to an integer
 	 */
@@ -601,7 +638,7 @@ public class DataTableComponent extends AbstractPrimefacesPageComponent {
 	}
 
 	/**
-	 * @return a XPath expression for finding all rows of the data table
+	 * @return an XPath expression for finding all rows of the data table
 	 */
 	protected String getTableRowsXPath() {
 		return "//tbody[@id='" + tableElementId + "_data']/tr";
@@ -618,23 +655,22 @@ public class DataTableComponent extends AbstractPrimefacesPageComponent {
 
 	/**
 	 * Click on a menu item that belongs to the 'File' item
-	 * @param pageClass
+	 * @param pageClass the class of the page object that should be opened after clicking the menu item
 	 * @param <T> the type of the page object to be returned
 	 * @param itemId the ID of the menu item to be clicked
-	 * @return an instance of the selected page class or null if no page class has been provided
+	 * @return an instance of the selected page object class or null if no page class has been provided
 	 * @throws AssertionError if the page object either could not be created, or the menu item could not be found
 	 */
 	public <T extends AbstractPageObject> T clickMenuBarItem(Class<T> pageClass, String itemId) {
 		logger.debug("Click on menu bar item '{}'", itemId);
 
-		final WebElement mniFile = findWebElement(getPanelIdPrefix() + MENU_ITEM_ID_FILE);
-		final WebElement mni = findWebElement(getPanelIdPrefix() + itemId);
+		final WebElement mniFile = findWebElement(getPanelIdPrefix() + MENU_ITEM_ID_FILE, true);
 
 		// Click on menu item "File"
 		new Actions(driver).clickAndHold(mniFile).build().perform();
 
 		// Click on the selected menu item
-		mni.click();
+		clickWebElement(getPanelIdPrefix() + itemId);
 
 		if (pageClass == null)
 			return null;

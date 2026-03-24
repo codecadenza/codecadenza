@@ -41,7 +41,7 @@ public abstract class AbstractViewPageObject extends AbstractPageObject {
 
 	/**
 	 * Constructor
-	 * @param testContext
+	 * @param testContext the Selenium test context
 	 */
 	protected AbstractViewPageObject(SeleniumTestContext testContext) {
 		super(testContext);
@@ -60,7 +60,7 @@ public abstract class AbstractViewPageObject extends AbstractPageObject {
 
 	/**
 	 * Press the 'Import' button
-	 * @param testData
+	 * @param testData the test data object that provides necessary information
 	 * @throws AssertionError if the respective input element could not be found
 	 */
 	public void pressImportButton(PageElementTestData testData) {
@@ -70,9 +70,9 @@ public abstract class AbstractViewPageObject extends AbstractPageObject {
 	/**
 	 * Perform a double-click on the given row
 	 * @param <T> the type of the page object to be returned
-	 * @param rowElement
-	 * @param pageClass
-	 * @return an instance of the selected page class
+	 * @param rowElement the row that should be double-clicked
+	 * @param pageClass the class of the page object that should be opened after performing the double-click
+	 * @return an instance of the selected page object class
 	 * @throws AssertionError if the page object either could not be created, or the parameter <code>rowElement</code> is null
 	 */
 	public <T extends AbstractPageObject> T doubleClickRow(WebElement rowElement, Class<T> pageClass) {
@@ -81,7 +81,7 @@ public abstract class AbstractViewPageObject extends AbstractPageObject {
 
 	/**
 	 * Perform a double-click on the given row
-	 * @param rowElement
+	 * @param rowElement the row that should be double-clicked
 	 * @throws AssertionError if the parameter <code>rowElement</code> is null
 	 */
 	public void doubleClickRow(WebElement rowElement) {
@@ -90,7 +90,7 @@ public abstract class AbstractViewPageObject extends AbstractPageObject {
 
 	/**
 	 * Select a row
-	 * @param rowElement
+	 * @param rowElement the row that should be selected
 	 * @throws AssertionError if the parameter <code>rowElement</code> is null
 	 */
 	public void selectRow(WebElement rowElement) {
@@ -98,7 +98,8 @@ public abstract class AbstractViewPageObject extends AbstractPageObject {
 	}
 
 	/**
-	 * @param rowIndex
+	 * Get a row by its index
+	 * @param rowIndex the index of the row
 	 * @return the row with the given index or null if a row could not be found
 	 * @throws AssertionError if the row either could not be found, or the row index is smaller than 1
 	 */
@@ -107,7 +108,8 @@ public abstract class AbstractViewPageObject extends AbstractPageObject {
 	}
 
 	/**
-	 * @param objectId
+	 * Get a row by the given object ID
+	 * @param objectId the object ID to search for
 	 * @param skipPagination if set to true searching in subsequent pages will be skipped
 	 * @return the row with the given object ID or null if the row could not be found
 	 * @throws AssertionError if the parameter <code>objectId</code> is null or empty
@@ -117,7 +119,8 @@ public abstract class AbstractViewPageObject extends AbstractPageObject {
 	}
 
 	/**
-	 * @param objectId
+	 * Get a row by the given object ID
+	 * @param objectId the object ID to search for
 	 * @return the row with the given object ID or null if the row could not be found
 	 * @throws AssertionError if the parameter <code>objectId</code> is null or empty
 	 */
@@ -126,7 +129,8 @@ public abstract class AbstractViewPageObject extends AbstractPageObject {
 	}
 
 	/**
-	 * @param cellValue
+	 * Get a row by the given cell value
+	 * @param cellValue the cell value to search for
 	 * @param skipPagination if set to true searching in subsequent pages will be skipped
 	 * @return the first row that contains a cell with the given value or null if an appropriate row could not be found
 	 * @throws AssertionError if the parameter <code>cellValue</code> is null or empty
@@ -136,7 +140,8 @@ public abstract class AbstractViewPageObject extends AbstractPageObject {
 	}
 
 	/**
-	 * @param cellValue
+	 * Get a row by the given cell value
+	 * @param cellValue the cell value to search for
 	 * @return the first row that contains a cell with the given value or null if an appropriate row could not be found
 	 * @throws AssertionError if the parameter <code>cellValue</code> is null or empty
 	 */
@@ -145,6 +150,7 @@ public abstract class AbstractViewPageObject extends AbstractPageObject {
 	}
 
 	/**
+	 * Get the number of rows
 	 * @return the number of rows displayed in the current page
 	 * @throws AssertionError if the table element could not be found
 	 */
@@ -154,7 +160,7 @@ public abstract class AbstractViewPageObject extends AbstractPageObject {
 
 	/**
 	 * Validate if the number of visible rows in the first page of the table component is equal to the expected row count
-	 * @param testData
+	 * @param testData the test data object that provides necessary information
 	 * @throws AssertionError if the validation either has failed, or the expected row count could not be determined
 	 */
 	public void validateRowCount(PageElementTestData testData) {
@@ -164,7 +170,7 @@ public abstract class AbstractViewPageObject extends AbstractPageObject {
 	/**
 	 * Validate if the number of visible rows in the first page of the table component is greater (or equal) than a given lower
 	 * limit
-	 * @param testData
+	 * @param testData the test data object that provides necessary information
 	 * @throws AssertionError if the validation either has failed, or the expected row count could not be determined
 	 */
 	public void validateMinRowCount(PageElementTestData testData) {
@@ -174,7 +180,7 @@ public abstract class AbstractViewPageObject extends AbstractPageObject {
 	/**
 	 * Validate if the number of visible rows in the first page of the table component is smaller (or equal) than a given upper
 	 * limit
-	 * @param testData
+	 * @param testData the test data object that provides necessary information
 	 * @throws AssertionError if the validation either has failed, or the expected row count could not be determined
 	 */
 	public void validateMaxRowCount(PageElementTestData testData) {
@@ -182,6 +188,7 @@ public abstract class AbstractViewPageObject extends AbstractPageObject {
 	}
 
 	/**
+	 * Get the button to load the next page
 	 * @return the element that represents the 'Next Page' button or null if it could not be found
 	 */
 	public WebElement getPaginatorNext() {
@@ -190,7 +197,7 @@ public abstract class AbstractViewPageObject extends AbstractPageObject {
 
 	/**
 	 * Open the context-menu
-	 * @param rowElement
+	 * @param rowElement the row to open the context menu for
 	 * @throws AssertionError if the context-menu either could not be found, or the parameter <code>rowElement</code> is null
 	 */
 	public void openContextMenu(WebElement rowElement) {
@@ -199,8 +206,8 @@ public abstract class AbstractViewPageObject extends AbstractPageObject {
 
 	/**
 	 * Open the context-menu and select an item that is identified by the given ID
-	 * @param rowElement
-	 * @param elementId
+	 * @param rowElement the row to open the context menu for
+	 * @param elementId the ID of the menu item that should be clicked
 	 * @throws AssertionError if the context-menu item either could not be found, or the parameter <code>rowElement</code> is null
 	 */
 	public void clickContextMenuItem(WebElement rowElement, String elementId) {
@@ -209,7 +216,7 @@ public abstract class AbstractViewPageObject extends AbstractPageObject {
 
 	/**
 	 * Open the context-menu and select an item that is identified by the given ID
-	 * @param elementId
+	 * @param elementId the ID of the menu item that should be clicked
 	 * @throws AssertionError if the context-menu item could not be found
 	 */
 	public void clickContextMenuItem(String elementId) {
@@ -218,7 +225,7 @@ public abstract class AbstractViewPageObject extends AbstractPageObject {
 
 	/**
 	 * Click on the context-menu item 'Delete' in order to delete the object that is bound to the given row
-	 * @param rowElement
+	 * @param rowElement the row that should be deleted
 	 * @throws AssertionError if an element either could not be found, or the parameter <code>rowElement</code> is null
 	 */
 	public void clickContextMenuDelete(WebElement rowElement) {
@@ -227,7 +234,7 @@ public abstract class AbstractViewPageObject extends AbstractPageObject {
 
 	/**
 	 * Click on the context-menu item 'Copy' in order to copy the object that is bound to the given row
-	 * @param rowElement
+	 * @param rowElement the row that should be copied
 	 * @throws AssertionError if an element either could not be found, or the parameter <code>rowElement</code> is null
 	 */
 	public void clickContextMenuCopy(WebElement rowElement) {
@@ -236,9 +243,9 @@ public abstract class AbstractViewPageObject extends AbstractPageObject {
 
 	/**
 	 * Click on the 'New' button in order to create a new object
-	 * @param pageClass
+	 * @param pageClass the class of the page object that should be opened
 	 * @param <T> the type of the page object to be returned
-	 * @return an instance of the selected page class
+	 * @return an instance of the selected page object class
 	 * @throws AssertionError if the page object either could not be created, or the menu item could not be found
 	 */
 	public <T extends AbstractPageObject> T clickButtonCreateNew(Class<T> pageClass) {
@@ -247,9 +254,9 @@ public abstract class AbstractViewPageObject extends AbstractPageObject {
 
 	/**
 	 * Click on the 'Add' button in order to add a new object
-	 * @param pageClass
+	 * @param pageClass the class of the page object that should be opened
 	 * @param <T> the type of the page object to be returned
-	 * @return an instance of the selected page class
+	 * @return an instance of the selected page object class
 	 * @throws AssertionError if the page object either could not be created, or the menu item could not be found
 	 */
 	public <T extends AbstractPageObject> T clickButtonAddNew(Class<T> pageClass) {
@@ -258,10 +265,10 @@ public abstract class AbstractViewPageObject extends AbstractPageObject {
 
 	/**
 	 * Click on the context-menu item 'Update'
-	 * @param pageClass
+	 * @param pageClass the class of the page object that should be opened
 	 * @param <T> the type of the page object to be returned
-	 * @param rowElement
-	 * @return an instance of the selected page class
+	 * @param rowElement the row to update
+	 * @return an instance of the selected page object class
 	 * @throws AssertionError if the page object either could not be created, or the context-menu item could not be found
 	 */
 	public <T extends AbstractPageObject> T clickContextMenuUpdate(WebElement rowElement, Class<T> pageClass) {
@@ -270,10 +277,10 @@ public abstract class AbstractViewPageObject extends AbstractPageObject {
 
 	/**
 	 * Click on the context-menu item 'View'
-	 * @param pageClass
+	 * @param pageClass the class of the page object that should be opened
 	 * @param <T> the type of the page object to be returned
-	 * @param rowElement
-	 * @return an instance of the selected page class
+	 * @param rowElement the row to open
+	 * @return an instance of the selected page object class
 	 * @throws AssertionError if the page object either could not be created, or the context-menu item could not be found
 	 */
 	public <T extends AbstractPageObject> T clickContextMenuView(WebElement rowElement, Class<T> pageClass) {
@@ -299,7 +306,7 @@ public abstract class AbstractViewPageObject extends AbstractPageObject {
 
 	/**
 	 * Click on the context-menu item 'Export'
-	 * @param rowElement
+	 * @param rowElement the row to perform an export operation for
 	 * @throws AssertionError if the context-menu item either could not be found, or the parameter <code>rowElement</code> is null
 	 */
 	public void clickContextMenuExport(WebElement rowElement) {
@@ -316,7 +323,7 @@ public abstract class AbstractViewPageObject extends AbstractPageObject {
 
 	/**
 	 * Click on the context-menu item 'Download'
-	 * @param rowElement
+	 * @param rowElement the row to perform a download operation for
 	 * @throws AssertionError if the context-menu item either could not be found, or the parameter <code>rowElement</code> is null
 	 */
 	public void clickContextMenuDownload(WebElement rowElement) {

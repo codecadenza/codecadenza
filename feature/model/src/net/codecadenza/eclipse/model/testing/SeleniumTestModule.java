@@ -32,7 +32,7 @@ import java.util.List;
  * <li>{@link net.codecadenza.eclipse.model.testing.SeleniumTestModule#getDriver <em>Driver</em>}</li>
  * <li>{@link net.codecadenza.eclipse.model.testing.SeleniumTestModule#getDriverPath <em>Driver Path</em>}</li>
  * <li>{@link net.codecadenza.eclipse.model.testing.SeleniumTestModule#isMaximizeWindow <em>Maximize Window</em>}</li>
- * <li>{@link net.codecadenza.eclipse.model.testing.SeleniumTestModule#getImplicitWaitTime <em>Implicit Wait Time</em>}</li>
+ * <li>{@link net.codecadenza.eclipse.model.testing.SeleniumTestModule#getExplicitWaitTime <em>Explicit Wait Time</em>}</li>
  * <li>{@link net.codecadenza.eclipse.model.testing.SeleniumTestModule#getPageLoadTime <em>Page Load Time</em>}</li>
  * </ul>
  * @see net.codecadenza.eclipse.model.testing.TestingPackage#getSeleniumTestModule()
@@ -97,23 +97,23 @@ public interface SeleniumTestModule extends AbstractTestModule {
 	void setMaximizeWindow(boolean value);
 
 	/**
-	 * Return the value of the '<em><b>Implicit Wait Time</b></em>' attribute
-	 * @return the value of the '<em>Implicit Wait Time</em>' attribute
-	 * @see #setImplicitWaitTime(int)
-	 * @see net.codecadenza.eclipse.model.testing.TestingPackage#getSeleniumTestModule_ImplicitWaitTime()
+	 * Return the value of the '<em><b>Explicit Wait Time</b></em>' attribute
+	 * @return the value of the '<em>Explicit Wait Time</em>' attribute
+	 * @see #setExplicitWaitTime(int)
+	 * @see net.codecadenza.eclipse.model.testing.TestingPackage#getSeleniumTestModule_ExplicitWaitTime()
 	 * @model
 	 * @generated
 	 */
-	int getImplicitWaitTime();
+	int getExplicitWaitTime();
 
 	/**
-	 * Set the value of the '{@link net.codecadenza.eclipse.model.testing.SeleniumTestModule#getImplicitWaitTime <em>Implicit Wait
+	 * Set the value of the '{@link net.codecadenza.eclipse.model.testing.SeleniumTestModule#getExplicitWaitTime <em>Explicit Wait
 	 * Time</em>}' attribute
-	 * @param value the new value of the '<em>Implicit Wait Time</em>' attribute
-	 * @see #getImplicitWaitTime()
+	 * @param value the new value of the '<em>Explicit Wait Time</em>' attribute
+	 * @see #getExplicitWaitTime()
 	 * @generated
 	 */
-	void setImplicitWaitTime(int value);
+	void setExplicitWaitTime(int value);
 
 	/**
 	 * Return the value of the '<em><b>Page Load Time</b></em>' attribute

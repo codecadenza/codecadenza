@@ -26,12 +26,9 @@ import java.time.Duration;
 import java.util.List;
 import java.util.Optional;
 import net.codecadenza.runtime.selenium.data.PageElementTestData;
+import net.codecadenza.runtime.selenium.page.WebElementWait;
 import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.FluentWait;
-import org.openqa.selenium.support.ui.WebDriverWait;
 
 /**
  * <p>
@@ -46,18 +43,15 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 public class DualDataListComponent extends AbstractPrimefacesPageComponent {
 	private static final String SEARCH_INPUT_SUFFIX = "Filter";
 	private static final String SEARCH_BUTTON_SUFFIX = "Button";
-	private static final long ITEM_WAIT_TIMEOUT_SECONDS = 2;
-	private static final long ITEM_POLLING_MILLISECONDS = 50;
-	private static final long LIST_ITEM_DELAY_MILLISECONDS = 200;
 
 	protected final String elementId;
 	protected final boolean hasSearchField;
 
 	/**
 	 * Constructor
-	 * @param pageObject
-	 * @param elementId
-	 * @param hasSearchField
+	 * @param pageObject the page object the component belongs to
+	 * @param elementId the ID of the element
+	 * @param hasSearchField flag that indicates if the component provides a search field
 	 */
 	public DualDataListComponent(AbstractPageObject pageObject, String elementId, boolean hasSearchField) {
 		super(pageObject.getTestContext());
@@ -84,8 +78,7 @@ public class DualDataListComponent extends AbstractPrimefacesPageComponent {
 		inputField.clear();
 		inputField.sendKeys(testData.getFilterValue());
 
-		final WebElement filterButton = findWebElement(searchButtonId);
-		filterButton.click();
+		clickWebElement(searchButtonId);
 	}
 
 	/**
@@ -100,34 +93,17 @@ public class DualDataListComponent extends AbstractPrimefacesPageComponent {
 		final String[] items = testData.getNewValue().split(ITEM_DELIMITER);
 
 		for (final String item : items) {
-			boolean itemFound = false;
+			final String itemText = prepareXPathText(item);
+			final String sourceItemExpression = getSourceItemsExpression() + "[text()=" + itemText + "]";
+			final var targetItemExpression = getTargetItemsExpression() + "[@data-item-value=" + itemText + "]";
 
-			// Search for all available items
-			for (final WebElement itemElement : findWebElementsByXPath(getSourceItemsExpression()))
-				if (item.equals(itemElement.getAttribute("data-item-value"))) {
-					logger.debug("Select list item '{}' by performing a double-click", item);
+			logger.debug("Select list item '{}' by performing a double-click", item);
 
-					itemFound = true;
+			doubleClickElementByXPath(sourceItemExpression);
 
-					// Perform a double-click on the item in order to select it!
-					doubleClickElement(itemElement);
-
-					final var itemXPath = getTargetItemsExpression() + "[@data-item-value='" + item + "']";
-
-					// Wait until the item has been added to target list!
-					new WebDriverWait(driver, Duration.ofSeconds(ITEM_WAIT_TIMEOUT_SECONDS))
-							.until(ExpectedConditions.visibilityOfElementLocated(By.xpath(itemXPath)));
-
-					break;
-				}
-
-			if (!itemFound)
-				fail("Could not select item '" + item + "'!");
+			// Wait until the item has been added to the target list!
+			findWebElementByXPath(targetItemExpression);
 		}
-
-		// Wait a short period of time in order to make sure that the last item doesn't get lost!
-		if (items.length > 0)
-			testContext.delayTest(LIST_ITEM_DELAY_MILLISECONDS);
 	}
 
 	/**
@@ -143,7 +119,7 @@ public class DualDataListComponent extends AbstractPrimefacesPageComponent {
 
 		// Extract all currently selected items
 		final String expression = getTargetItemsExpression();
-		final List<String> currentSelection = findWebElementsByXPath(expression).stream()
+		final List<String> currentSelection = findWebElementsByXPath(expression, true).stream()
 				.filter(e -> e.getAttribute("data-item-value") != null).map(e -> e.getAttribute("data-item-value")).toList();
 
 		if (currentSelection == null) {
@@ -173,7 +149,7 @@ public class DualDataListComponent extends AbstractPrimefacesPageComponent {
 
 		final var expression = "//div[@id='" + elementId + "']/div/div/button[contains(@class, 'ui-picklist-button-add-all')]";
 
-		findWebElementByXPath(expression).click();
+		clickWebElementByXPath(expression);
 	}
 
 	/**
@@ -183,7 +159,7 @@ public class DualDataListComponent extends AbstractPrimefacesPageComponent {
 		logger.debug("Remove all selected items from list '{}'", elementId);
 
 		final var expression = "//div[@id='" + elementId + "']/div/div/button[contains(@class, 'ui-picklist-button-remove-all')]";
-		final WebElement removeAllButton = findWebElementByXPath(expression);
+		final WebElement removeAllButton = findWebElementByXPath(expression, true);
 
 		// If no selected item exists the respective button cannot be clicked as it is disabled!
 		if (!removeAllButton.isEnabled())
@@ -192,20 +168,8 @@ public class DualDataListComponent extends AbstractPrimefacesPageComponent {
 		removeAllButton.click();
 
 		// Wait until the list that contains all selected items is really empty!
-		final FluentWait<WebDriver> waitForEmptyTargetList = new FluentWait<>(driver);
-		waitForEmptyTargetList.withTimeout(Duration.ofSeconds(ITEM_WAIT_TIMEOUT_SECONDS));
-		waitForEmptyTargetList.pollingEvery(Duration.ofMillis(ITEM_POLLING_MILLISECONDS));
-
-		waitForEmptyTargetList.until(_ -> {
-			final List<WebElement> selectedItems = findWebElementsByXPath(getTargetItemsExpression());
-
-			if (selectedItems.isEmpty())
-				return true;
-
-			logger.trace("List '{}' that contains selected items is not empty!", elementId);
-
-			return false;
-		});
+		new WebElementWait(driver, Duration.ofMillis(explicitWaitTime), logger)
+				.untilElementsEmpty(By.xpath(getTargetItemsExpression()));
 	}
 
 	/**

@@ -46,7 +46,7 @@ public abstract class AbstractPrimefacesPageComponent extends AbstractPageCompon
 
 	/**
 	 * Constructor
-	 * @param testContext
+	 * @param testContext the Selenium test context
 	 */
 	protected AbstractPrimefacesPageComponent(SeleniumTestContext testContext) {
 		super(testContext);
@@ -64,8 +64,8 @@ public abstract class AbstractPrimefacesPageComponent extends AbstractPageCompon
 	/**
 	 * Create an instance of the selected page object class
 	 * @param <T> the type of the page object to be returned
-	 * @param pageClass
-	 * @return an instance of the selected page class
+	 * @param pageClass the class of the page object that should be created
+	 * @return an instance of the selected page object class
 	 * @throws AssertionError if the creation of the page object has failed
 	 */
 	protected <T extends AbstractPageObject> T createPageObject(Class<T> pageClass) {

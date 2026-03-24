@@ -26,17 +26,22 @@ import static net.codecadenza.runtime.selenium.page.imp.vaadin.PopUpDialog.DIALO
 
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import net.codecadenza.runtime.selenium.data.PageActionResult;
 import net.codecadenza.runtime.selenium.data.PageElementTestData;
 import net.codecadenza.runtime.selenium.junit.SeleniumTestContext;
 import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.SearchContext;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.interactions.Actions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
 /**
  * <p>
@@ -55,16 +60,14 @@ public abstract class AbstractPageObject extends AbstractVaadinPageComponent {
 	private static final String BUTTON_ID_SAVE = "cmdSave";
 	private static final String ATTR_NAME_VALUE = "value";
 	private static final String DATE_TIME_PICKER_ELEMENT_NAME = "vaadin-date-time-picker";
-	private static final int LOV_ROW_SELECTION_DELAY = 500;
 	private static final String NAVIGATOR_XPATH = "//vaadin-vertical-layout[@class='sidemenu-menu']//vaadin-grid";
-	private static final int SCROLL_PAGE_SIZE = 10;
-	private static final String SLASH = "/";
 	private static final String SINGLE_LINE_INPUT = "input";
 	private static final String MULTI_LINE_INPUT = "textarea";
+	private static final int MAX_PAGE_LOAD_RETRIES = 3;
 
 	/**
 	 * Constructor
-	 * @param testContext
+	 * @param testContext the Selenium test context
 	 */
 	protected AbstractPageObject(SeleniumTestContext testContext) {
 		super(testContext);
@@ -72,7 +75,7 @@ public abstract class AbstractPageObject extends AbstractVaadinPageComponent {
 
 	/**
 	 * Open a page
-	 * @param resourcePath
+	 * @param resourcePath the path of the page to be opened
 	 * @throws AssertionError if the parameter <code>resourcePath</code> is null
 	 */
 	public void open(String resourcePath) {
@@ -81,8 +84,8 @@ public abstract class AbstractPageObject extends AbstractVaadinPageComponent {
 
 	/**
 	 * Open a page to display data for a specific object identified by the given ID
-	 * @param resourcePath
-	 * @param objectId
+	 * @param resourcePath the path of the page to be opened
+	 * @param objectId the object ID
 	 * @throws AssertionError if the parameter <code>resourcePath</code> is null
 	 */
 	public void open(String resourcePath, String objectId) {
@@ -91,29 +94,75 @@ public abstract class AbstractPageObject extends AbstractVaadinPageComponent {
 		waitForPendingHTTPRequests();
 
 		String url = buildPageURL(testContext.getBaseURL(), resourcePath);
+		int attempt = 0;
 
 		if (objectId != null && !objectId.isEmpty())
 			url += SLASH + URLEncoder.encode(objectId, StandardCharsets.UTF_8);
 
 		logger.debug("Open URL '{}'", url);
 
-		driver.get(url);
+		while (true) {
+			attempt++;
+
+			try {
+				driver.get(url);
+
+				final var wait = new WebDriverWait(driver, Duration.ofMillis(testContext.getProperties().getExplicitWaitTime()));
+
+				// Wait for the document to be ready
+				wait.until(_ -> {
+					final Object state = ((JavascriptExecutor) driver).executeScript("return document.readyState");
+
+					return "complete".equals(state);
+				});
+
+				final var actualURL = driver.getCurrentUrl() != null ? driver.getCurrentUrl() : "";
+				String expectedURL = url;
+
+				if (actualURL.endsWith(SLASH) && !expectedURL.endsWith(SLASH))
+					expectedURL = expectedURL + SLASH;
+				else if (!actualURL.endsWith(SLASH) && expectedURL.endsWith(SLASH))
+					expectedURL = expectedURL.substring(0, expectedURL.lastIndexOf(SLASH));
+
+				if (!expectedURL.equals(actualURL))
+					throw new IllegalStateException("Invalid URL '" + driver.getCurrentUrl() + "'");
+
+				break;
+			}
+			catch (final Exception e) {
+				if (attempt >= MAX_PAGE_LOAD_RETRIES) {
+					// Re‑throw the original exception – test will fail
+					throw e;
+				}
+
+				logger.warn("Error while opening page! Message: {}", e.getMessage());
+
+				// Small back‑off before retrying
+				testContext.delayTest(200);
+
+				// Refresh the driver session before starting the next attempt
+				if (driver instanceof final ChromeDriver chromedriver)
+					chromedriver.executeCdpCommand("Network.clearBrowserCache", Map.of());
+			}
+		}
 	}
 
 	/**
 	 * Navigate to a page by selecting a tree view item with the specified navigation target! As the page object is created via
 	 * introspection it is necessary that the respective class provides an appropriate constructor!
 	 * @param <T> the type of the page object that should be returned
-	 * @param navigationTarget
-	 * @param pageClass
+	 * @param navigationTarget the path of page to be opened
+	 * @param pageClass the class of the page object that should be opened
 	 * @return a page instance whose type is defined by the respective parameter
 	 * @throws AssertionError if the page object could not be instantiated
 	 */
 	public <T extends AbstractPageObject> T openPageByNavigator(String navigationTarget, Class<T> pageClass) {
 		logger.debug("Navigate to '{}'", navigationTarget);
 
+		final String navigationTargetText = prepareXPathText(navigationTarget);
+
 		// We assume that the label uniquely identifies the view to be opened!
-		final var expression = NAVIGATOR_XPATH + "//vaadin-grid-tree-toggle[text()='" + navigationTarget + "']";
+		final var expression = NAVIGATOR_XPATH + "//vaadin-grid-tree-toggle[text()=" + navigationTargetText + "]";
 
 		// Search for the appropriate tree item
 		WebElement treeItem = findWebElementByXPath(expression);
@@ -140,8 +189,7 @@ public abstract class AbstractPageObject extends AbstractVaadinPageComponent {
 		logger.debug("Click 'Yes' button in order to confirm the logout operation");
 
 		// Search for the confirmation button in the pop-up dialog!
-		final WebElement confirmLogout = findWebElementByXPath(PopUpDialog.DIALOG_BUTTON_YES_XPATH);
-		confirmLogout.click();
+		clickWebElementByXPath(PopUpDialog.DIALOG_BUTTON_YES_XPATH);
 	}
 
 	/**
@@ -154,7 +202,7 @@ public abstract class AbstractPageObject extends AbstractVaadinPageComponent {
 
 	/**
 	 * Press the 'Save' button
-	 * @param pageClass
+	 * @param pageClass the class of the page object that should be opened
 	 * @param <T> the type of the page object that should be returned
 	 * @return a page instance whose type is defined by the respective parameter
 	 * @throws AssertionError if the button either could not be found, or the page object could not be created
@@ -175,13 +223,13 @@ public abstract class AbstractPageObject extends AbstractVaadinPageComponent {
 
 	/**
 	 * Press a button with a given ID
-	 * @param id
+	 * @param id the ID of the button to be pressed
 	 * @throws AssertionError if the button could not be found
 	 */
 	public void pressButton(String id) {
 		logger.debug("Press button with ID '{}'", id);
 
-		findWebElement(id).click();
+		clickWebElement(id);
 	}
 
 	/*
@@ -212,9 +260,9 @@ public abstract class AbstractPageObject extends AbstractVaadinPageComponent {
 
 		logger.debug("Set selection of checkbox '{}'", testData.getElementId());
 
-		final WebElement inputField = findWebElementByXPath("//vaadin-checkbox[@id='" + testData.getElementId() + "']/input");
+		final WebElement inputField = findWebElementByXPath("//vaadin-checkbox[@id='" + testData.getElementId() + "']");
 		final boolean newSelection = testData.getNewValue().equalsIgnoreCase(Boolean.toString(true));
-		final boolean currentSelection = inputField.isSelected();
+		final boolean currentSelection = inputField.getAttribute("checked") != null;
 
 		if (currentSelection)
 			logger.debug("Checkbox '{}' is selected", testData.getElementId());
@@ -227,7 +275,7 @@ public abstract class AbstractPageObject extends AbstractVaadinPageComponent {
 
 		logger.debug("Change selection of checkbox '{}'", testData.getElementId());
 
-		inputField.click();
+		inputField.sendKeys(" ");
 	}
 
 	/**
@@ -259,18 +307,19 @@ public abstract class AbstractPageObject extends AbstractVaadinPageComponent {
 
 		logger.debug("Enter text '{}' into auto-complete field '{}'", testData.getNewValue(), testData.getElementId());
 
+		final var comboboxExpression = "//vaadin-combo-box[@id='" + testData.getElementId() + "']";
+
 		// Clear the input field and enter a search condition
-		final WebElement inputField = findWebElementByXPath("//vaadin-combo-box[@id='" + testData.getElementId() + "']");
+		final WebElement inputField = findWebElementByXPath(comboboxExpression);
 		inputField.sendKeys(Keys.CONTROL + "a");
 		inputField.sendKeys(Keys.DELETE);
 		inputField.sendKeys(testData.getNewValue());
 
 		if (!testData.getNewValue().isEmpty()) {
-			final boolean itemFound = searchAndSelectItem(inputField, testData.getNewValue());
+			final String itemText = prepareXPathText(testData.getNewValue());
+			final String itemExpression = comboboxExpression + "//vaadin-combo-box-item[text()=" + itemText + "]";
 
-			if (!itemFound)
-				fail("Could not find selectable item '" + testData.getNewValue() + "' for auto-complete field '" + testData.getElementId()
-						+ "'!");
+			clickWebElementByXPath(itemExpression);
 		}
 	}
 
@@ -304,16 +353,44 @@ public abstract class AbstractPageObject extends AbstractVaadinPageComponent {
 
 		logger.debug("Search for item '{}' in combobox '{}'", testData.getNewValue(), testData.getElementId());
 
+		final var comboboxExpression = "//vaadin-combo-box[@id='" + testData.getElementId() + "']";
+		final String item = testData.getNewValue();
+
 		// Search for the combobox field and click on it in order to display the available items
-		final WebElement combobox = findWebElementByXPath("//vaadin-combo-box[@id='" + testData.getElementId() + "']");
+		final WebElement combobox = findWebElementByXPath(comboboxExpression, true);
 		combobox.click();
 
 		// Reset the selection if the test data contains a single whitespace!
-		if (!" ".equals(testData.getNewValue())) {
-			final boolean itemFound = searchAndSelectItem(combobox, testData.getNewValue());
+		if (!" ".equals(item)) {
+			final WebElement scroller = combobox.findElement(By.tagName("vaadin-combo-box-scroller"));
+			final String scrollerExpression = comboboxExpression + "/vaadin-combo-box-scroller";
+			final String itemExpression = scrollerExpression + "/vaadin-combo-box-item";
+			final List<String> previousItems = new ArrayList<>();
 
-			if (!itemFound)
-				fail("Could not find selectable item '" + testData.getNewValue() + "' for combobox '" + testData.getElementId() + "'!");
+			while (true) {
+				// The list only contains the items that are really visible!
+				final List<WebElement> visibleItems = findWebElementsByXPath(itemExpression, true);
+				final Optional<WebElement> itemToSearchFor = visibleItems.stream().filter(i -> i.getText().equals(item)).findFirst();
+				final List<String> actualItems = visibleItems.stream().map(WebElement::getText).toList();
+
+				if (itemToSearchFor.isPresent()) {
+					logger.trace("Item '{}' found", item);
+					itemToSearchFor.get().click();
+					break;
+				}
+
+				if (actualItems.equals(previousItems)) {
+					// It is assumed that the end is reached if both lists contain the same items
+					fail("Could not find selectable item '" + item + "' for combobox '" + testData.getElementId() + "'!");
+				}
+
+				previousItems.clear();
+				previousItems.addAll(actualItems);
+
+				logger.trace("Scroll down further {} item(s)", visibleItems.size());
+
+				visibleItems.stream().forEach(_ -> scroller.sendKeys(Keys.ARROW_DOWN));
+			}
 		}
 		else {
 			combobox.sendKeys(Keys.CONTROL + "a");
@@ -351,7 +428,7 @@ public abstract class AbstractPageObject extends AbstractVaadinPageComponent {
 		logger.debug("Open LoV dialog");
 
 		// Open the list-of-values by pressing the respective button
-		findWebElementByXPath("//div[@id='" + testData.getElementId() + "']//vaadin-button").click();
+		clickWebElementByXPath("//div[@id='" + testData.getElementId() + "']//vaadin-button");
 
 		logger.debug("Enter text '{}' into LoV field '{}'", testData.getNewValue(), testData.getElementId());
 
@@ -362,7 +439,11 @@ public abstract class AbstractPageObject extends AbstractVaadinPageComponent {
 			txtFilterInput.sendKeys(Keys.DELETE);
 			txtFilterInput.sendKeys(testData.getNewValue());
 
-			testContext.delayTest(LOV_ROW_SELECTION_DELAY);
+			// Wait until the respective row is visible
+			final String itemText = prepareXPathText(testData.getNewValue());
+			final var rowExpression = "//vaadin-grid/vaadin-grid-cell-content[text()=" + itemText + "]";
+
+			findWebElementByXPath(rowExpression);
 
 			final var tableLoV = new DataTableComponent(testContext);
 			final WebElement row = tableLoV.getRowByCellValue(testData.getNewValue(), true);
@@ -373,7 +454,7 @@ public abstract class AbstractPageObject extends AbstractVaadinPageComponent {
 		else {
 			logger.debug("Press the reset button");
 
-			findWebElementByXPath(DIALOG_BUTTON_RESET_XPATH).click();
+			clickWebElementByXPath(DIALOG_BUTTON_RESET_XPATH);
 		}
 	}
 
@@ -519,7 +600,7 @@ public abstract class AbstractPageObject extends AbstractVaadinPageComponent {
 		logger.debug("Upload file '{}'", testData.getNewValue());
 
 		// Search for the 'Upload' button and click on it in order to open a pop-up dialog
-		findWebElement(testData.getElementId()).click();
+		clickWebElement(testData.getElementId());
 
 		final WebElement upload = findWebElementByXPath(PopUpDialog.DIALOG_FILE_UPLOAD_XPATH);
 
@@ -530,18 +611,18 @@ public abstract class AbstractPageObject extends AbstractVaadinPageComponent {
 
 	/**
 	 * Open a tab page identified by the given ID
-	 * @param tabPageId
+	 * @param tabPageId the ID of the tab page to be opened
 	 * @throws AssertionError if the tab page could not be found
 	 */
 	public void openTabPage(String tabPageId) {
 		logger.debug("Open tab page '{}'", tabPageId);
 
-		findWebElement(tabPageId).click();
+		clickWebElement(tabPageId);
 	}
 
 	/**
 	 * Wait for a message dialog and perform a status validation check
-	 * @param actionResult
+	 * @param actionResult the expected action result
 	 * @return a message dialog
 	 * @throws AssertionError if the status validation either has failed, or an element could not be found
 	 */
@@ -577,8 +658,8 @@ public abstract class AbstractPageObject extends AbstractVaadinPageComponent {
 	/**
 	 * Build the page URL by using the given base URL and a resource path. If necessary, both strings will be joined by using a '/'
 	 * character!
-	 * @param baseURL
-	 * @param resourcePath
+	 * @param baseURL the base URL
+	 * @param resourcePath the resource path
 	 * @return the URL
 	 */
 	protected String buildPageURL(String baseURL, String resourcePath) {
@@ -611,45 +692,6 @@ public abstract class AbstractPageObject extends AbstractVaadinPageComponent {
 		final String textToEnter = testData.getNewValue().replace(NEW_LINE, Keys.ENTER);
 
 		input.sendKeys(textToEnter);
-	}
-
-	/**
-	 * Search for a given item and select it if it is contained in the respective list
-	 * @param combobox
-	 * @param item
-	 * @return true if an item could be selected
-	 */
-	protected boolean searchAndSelectItem(WebElement combobox, String item) {
-		final WebElement scroller = combobox.findElement(By.tagName("vaadin-combo-box-scroller"));
-		final List<String> previousItems = new ArrayList<>();
-
-		while (true) {
-			// The list only contains the items that are really visible!
-			final List<WebElement> visibleItems = scroller.findElements(By.tagName("vaadin-combo-box-item"));
-			final Optional<WebElement> itemToSearchFor = visibleItems.stream().filter(i -> i.getText().equals(item)).findFirst();
-			final List<String> actualItems = visibleItems.stream().map(WebElement::getText).toList();
-
-			if (itemToSearchFor.isPresent()) {
-				logger.trace("Item '{}' found", item);
-				itemToSearchFor.get().click();
-				return true;
-			}
-
-			if (actualItems.equals(previousItems)) {
-				// It is assumed that the end is reached if both lists contain the same items. This requires that the actual items are
-				// more or less unique.
-				logger.trace("Scrolled down to the end");
-				return false;
-			}
-
-			previousItems.clear();
-			previousItems.addAll(actualItems);
-
-			logger.trace("Scroll down to make further combobox items visible");
-
-			for (int i = 0; i < SCROLL_PAGE_SIZE; i++)
-				scroller.sendKeys(Keys.ARROW_DOWN);
-		}
 	}
 
 }

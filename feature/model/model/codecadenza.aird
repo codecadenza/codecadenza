@@ -65,7 +65,7 @@
         <description xmi:type="description_1:DiagramDescription" href="platform:/plugin/org.eclipse.emf.ecoretools.design/description/ecore.odesign#//@ownedViewpoints[name='Design']/@ownedRepresentations[name='Entities']"/>
         <target xmi:type="ecore:EPackage" href="integration.ecore#/"/>
       </ownedRepresentationDescriptors>
-      <ownedRepresentationDescriptors xmi:type="viewpoint:DRepresentationDescriptor" uid="_i-kfYKEbEei_DovGwMC79w" name="Testing class diagram" repPath="#_zq7lgAiUEeen59JB4TPsqA" changeId="1765522352746">
+      <ownedRepresentationDescriptors xmi:type="viewpoint:DRepresentationDescriptor" uid="_i-kfYKEbEei_DovGwMC79w" name="Testing class diagram" repPath="#_zq7lgAiUEeen59JB4TPsqA" changeId="1773494489145">
         <description xmi:type="description_1:DiagramDescription" href="platform:/plugin/org.eclipse.emf.ecoretools.design/description/ecore.odesign#//@ownedViewpoints[name='Design']/@ownedRepresentations[name='Entities']"/>
         <target xmi:type="ecore:EPackage" href="testing.ecore#/"/>
       </ownedRepresentationDescriptors>
@@ -10136,8 +10136,8 @@
         <actualMapping xmi:type="description_1:NodeMapping" href="platform:/plugin/org.eclipse.emf.ecoretools.design/description/ecore.odesign#//@ownedViewpoints[name='Design']/@ownedRepresentations[name='Entities']/@defaultLayer/@containerMappings[name='EC%20EClass']/@subNodeMappings[name='EC%20EAttribute']"/>
       </ownedElements>
       <ownedElements xmi:type="diagram:DNodeListElement" uid="_ZFF_RAioEeen59JB4TPsqA" name="implicitWaitTime : EInt" visible="false" tooltipText="">
-        <target xmi:type="ecore:EAttribute" href="testing.ecore#//SeleniumTestModule/implicitWaitTime"/>
-        <semanticElements xmi:type="ecore:EAttribute" href="testing.ecore#//SeleniumTestModule/implicitWaitTime"/>
+        <target xmi:type="ecore:EAttribute" href="testing.ecore#//SeleniumTestModule/explicitWaitTime"/>
+        <semanticElements xmi:type="ecore:EAttribute" href="testing.ecore#//SeleniumTestModule/explicitWaitTime"/>
         <ownedStyle xmi:type="diagram:BundledImage" uid="_ZFF_RQioEeen59JB4TPsqA" labelAlignment="LEFT">
           <description xmi:type="style:BundledImageDescription" href="platform:/plugin/org.eclipse.emf.ecoretools.design/description/ecore.odesign#//@ownedViewpoints[name='Design']/@ownedRepresentations[name='Entities']/@defaultLayer/@containerMappings[name='EC%20EClass']/@subNodeMappings[name='EC%20EAttribute']/@style"/>
         </ownedStyle>
@@ -25582,9 +25582,9 @@
         </ownedStyle>
         <actualMapping xmi:type="description_1:NodeMapping" href="platform:/plugin/org.eclipse.emf.ecoretools.design/description/ecore.odesign#//@ownedViewpoints[name='Design']/@ownedRepresentations[name='Entities']/@defaultLayer/@containerMappings[name='EC%20EClass']/@subNodeMappings[name='EC%20EAttribute']"/>
       </ownedElements>
-      <ownedElements xmi:type="diagram:DNodeListElement" uid="_kUFFYAiWEeen59JB4TPsqA" name="implicitWaitTime : EInt" tooltipText="">
-        <target xmi:type="ecore:EAttribute" href="testing.ecore#//SeleniumTestModule/implicitWaitTime"/>
-        <semanticElements xmi:type="ecore:EAttribute" href="testing.ecore#//SeleniumTestModule/implicitWaitTime"/>
+      <ownedElements xmi:type="diagram:DNodeListElement" uid="_kUFFYAiWEeen59JB4TPsqA" name="explicitWaitTime : EInt" tooltipText="">
+        <target xmi:type="ecore:EAttribute" href="testing.ecore#//SeleniumTestModule/explicitWaitTime"/>
+        <semanticElements xmi:type="ecore:EAttribute" href="testing.ecore#//SeleniumTestModule/explicitWaitTime"/>
         <ownedStyle xmi:type="diagram:BundledImage" uid="_ns73kAiWEeen59JB4TPsqA" labelAlignment="LEFT">
           <description xmi:type="style:BundledImageDescription" href="platform:/plugin/org.eclipse.emf.ecoretools.design/description/ecore.odesign#//@ownedViewpoints[name='Design']/@ownedRepresentations[name='Entities']/@defaultLayer/@containerMappings[name='EC%20EClass']/@subNodeMappings[name='EC%20EAttribute']/@style"/>
         </ownedStyle>
@@ -27527,9 +27527,6 @@
     <ownedDiagramElements xmi:type="diagram:DEdge" uid="_5gZsaG7XEfCyu_UhODeENA" visible="false" sourceNode="_5gMQ827XEfCyu_UhODeENA" targetNode="_G6cuYAiVEeen59JB4TPsqA">
       <target xmi:type="ecore:EClass" href="mapping.ecore#//MappingObject"/>
       <semanticElements xmi:type="ecore:EClass" href="mapping.ecore#//MappingObject"/>
-      <decorations xmi:type="viewpoint:Decoration" uid="_5gZsb27XEfCyu_UhODeENA">
-        <description xmi:type="description:SemanticBasedDecoration" href="platform:/plugin/org.eclipse.emf.ecoretools.design/description/ecore.odesign#//@ownedViewpoints[name='Design']/@ownedRepresentations[name='Entities']/@defaultLayer/@decorationDescriptionsSet/@decorationDescriptions[name='External']"/>
-      </decorations>
       <graphicalFilters xmi:type="diagram:HideFilter" uid="_8VmX0G7XEfCyu_UhODeENA"/>
       <ownedStyle xmi:type="diagram:EdgeStyle" uid="_5gZsaW7XEfCyu_UhODeENA" targetArrow="InputClosedArrow" routingStyle="tree">
         <description xmi:type="style:EdgeStyleDescription" href="platform:/plugin/org.eclipse.emf.ecoretools.design/description/ecore.odesign#//@ownedViewpoints[name='Design']/@ownedRepresentations[name='Entities']/@defaultLayer/@edgeMappings[name='EC%20ESupertypes']/@style"/>

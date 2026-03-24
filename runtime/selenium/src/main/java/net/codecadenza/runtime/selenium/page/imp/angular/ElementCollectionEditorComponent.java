@@ -40,15 +40,13 @@ import org.openqa.selenium.interactions.Actions;
  * @version 1.0.0
  */
 public class ElementCollectionEditorComponent extends AbstractAngularPageComponent {
-	private static final long LIST_ITEM_DELAY_MILLISECONDS = 50;
-
 	protected final String elementId;
 	protected final String editorXPath;
 
 	/**
 	 * Constructor
-	 * @param pageObject
-	 * @param elementId
+	 * @param pageObject the page object the component belongs to
+	 * @param elementId the ID of the element
 	 */
 	public ElementCollectionEditorComponent(AbstractPageObject pageObject, String elementId) {
 		super(pageObject.getTestContext());
@@ -76,11 +74,12 @@ public class ElementCollectionEditorComponent extends AbstractAngularPageCompone
 			inputField.clear();
 			inputField.sendKeys(element);
 
-			final WebElement addButton = findWebElementByXPath(editorXPath + "//button[@id='cmdAdd']");
-			addButton.click();
+			clickWebElementByXPath(editorXPath + "//button[@id='cmdAdd']");
 
-			// Wait a short period of time to ensure the element is added before adding the next one
-			testContext.delayTest(LIST_ITEM_DELAY_MILLISECONDS);
+			final String elementText = prepareXPathText(element);
+
+			// Wait until the element has been added to the grid
+			findWebElementByXPath(editorXPath + "//table/tbody/tr/td[text()=" + elementText + "]");
 		}
 	}
 
@@ -92,7 +91,7 @@ public class ElementCollectionEditorComponent extends AbstractAngularPageCompone
 		logger.debug("Validate if the elements '{}' are contained in the editor '{}'", testData.getExpectedValue(), elementId);
 
 		final List<String> expectedElements = Arrays.asList(testData.getExpectedValue().split(ITEM_DELIMITER));
-		final List<WebElement> tableRows = findWebElementsByXPath(editorXPath + "//p-table//tbody/tr");
+		final List<WebElement> tableRows = findWebElementsByXPath(editorXPath + "//table//tbody/tr", true);
 		final List<String> actualElements = tableRows.stream().map(row -> row.findElement(By.xpath(".//td")).getText()).toList();
 
 		if (logger.isTraceEnabled()) {
@@ -113,15 +112,14 @@ public class ElementCollectionEditorComponent extends AbstractAngularPageCompone
 	protected void removeAllElements() {
 		logger.debug("Remove all elements from the editor '{}'", elementId);
 
-		final WebElement table = findWebElementByXPath(editorXPath + "//p-table");
+		final WebElement table = findWebElementByXPath(editorXPath + "//table");
 
 		if (!table.findElements(By.xpath(".//tbody/tr")).isEmpty()) {
 			final WebElement firstRow = getFirstRow();
 
 			openContextMenu(firstRow);
 
-			final WebElement deleteAllMenuItem = findWebElementByXPath(editorXPath + "//*[@id='mniDeleteAll']");
-			deleteAllMenuItem.click();
+			clickWebElementByXPath(editorXPath + "//*[@id='mniDeleteAll']");
 		}
 	}
 
@@ -133,7 +131,7 @@ public class ElementCollectionEditorComponent extends AbstractAngularPageCompone
 	protected WebElement getFirstRow() {
 		logger.debug("Search for the first row");
 
-		final String tableRowXPath = editorXPath + "//p-table//tbody/tr[1]";
+		final String tableRowXPath = editorXPath + "//table//tbody/tr[1]";
 		final WebElement row = findWebElementByXPath(tableRowXPath);
 
 		// Scroll to the row as it could be the case that it is located in the invisible area of the browser!
@@ -144,7 +142,7 @@ public class ElementCollectionEditorComponent extends AbstractAngularPageCompone
 
 	/**
 	 * Open the context-menu of the given row
-	 * @param rowElement
+	 * @param rowElement the row to open the context menu for
 	 * @throws AssertionError if the context-menu either could not be found, or the parameter <code>rowElement</code> is null
 	 */
 	protected void openContextMenu(WebElement rowElement) {
@@ -155,7 +153,7 @@ public class ElementCollectionEditorComponent extends AbstractAngularPageCompone
 		waitForPendingHTTPRequests();
 
 		// Move the mouse pointer to a valid position that can be used to open the context-menu!
-		new Actions(driver).moveToElement(rowElement, ROW_OFFSET_X, ROW_OFFSET_Y).contextClick().build().perform();
+		new Actions(driver).moveToElement(rowElement).contextClick().build().perform();
 	}
 
 }

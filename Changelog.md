@@ -7,6 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 ### Changed
+2026-03-24: Use explicit waits in Selenium tests
 2026-03-07: Add support for Angular 21
 2026-02-12: Rename the application server literals that represent the supported Jakarta EE platforms
 2026-02-07: Disable the Jakarta EE security configuration for Vaadin applications deployed on Payara

@@ -50,7 +50,7 @@ public abstract class AbstractSearchPageObject extends AbstractViewPageObject {
 
 	/**
 	 * Constructor
-	 * @param testContext
+	 * @param testContext the Selenium test context
 	 */
 	protected AbstractSearchPageObject(SeleniumTestContext testContext) {
 		super(testContext);
@@ -58,7 +58,7 @@ public abstract class AbstractSearchPageObject extends AbstractViewPageObject {
 
 	/**
 	 * Open the search dialog, enter respective data and perform the search operation
-	 * @param searchInput
+	 * @param searchInput a list of elements that provide the filter and sort criteria
 	 * @throws AssertionError if an element either could not be found, or test data is invalid
 	 */
 	public void performSearchOperation(List<PageElementTestData> searchInput) {
@@ -66,12 +66,12 @@ public abstract class AbstractSearchPageObject extends AbstractViewPageObject {
 
 		enterSearchInputData(searchInput);
 
-		findWebElementByXPath(DIALOG_BUTTON_OK_XPATH).click();
+		clickWebElementByXPath(DIALOG_BUTTON_OK_XPATH);
 	}
 
 	/**
 	 * Open the search dialog, enter respective data and perform the count operation
-	 * @param searchInput
+	 * @param searchInput a list of elements that provide the filter criteria
 	 * @throws AssertionError if an element either could not be found, or test data is invalid
 	 */
 	public void performCountOperation(List<PageElementTestData> searchInput) {
@@ -79,7 +79,7 @@ public abstract class AbstractSearchPageObject extends AbstractViewPageObject {
 
 		enterSearchInputData(searchInput);
 
-		findWebElementByXPath(DIALOG_BUTTON_COUNT_XPATH).click();
+		clickWebElementByXPath(DIALOG_BUTTON_COUNT_XPATH);
 	}
 
 	/**
@@ -91,15 +91,15 @@ public abstract class AbstractSearchPageObject extends AbstractViewPageObject {
 
 		openSearchDialog();
 
-		findWebElementByXPath(DIALOG_BUTTON_RESET_XPATH).click();
+		clickWebElementByXPath(DIALOG_BUTTON_RESET_XPATH);
 
 		// Close the search dialog after performing the reset
-		findWebElementByXPath(DIALOG_BUTTON_CANCEL_XPATH).click();
+		clickWebElementByXPath(DIALOG_BUTTON_CANCEL_XPATH);
 	}
 
 	/**
 	 * Enter data into the search dialog
-	 * @param searchInput
+	 * @param searchInput a list of elements that provide the filter and sort criteria
 	 * @throws AssertionError if an element either could not be found, or test data is invalid
 	 */
 	protected void enterSearchInputData(List<PageElementTestData> searchInput) {
@@ -126,7 +126,7 @@ public abstract class AbstractSearchPageObject extends AbstractViewPageObject {
 	 * @throws AssertionError if the search button could not be found
 	 */
 	protected void openSearchDialog() {
-		findWebElementByXPath(BUTTON_SEARCH_XPATH).click();
+		clickWebElementByXPath(BUTTON_SEARCH_XPATH);
 	}
 
 }

@@ -65,14 +65,18 @@ public abstract class AbstractSeleniumTestCase {
 	 */
 	@AfterEach
 	protected void tearDown() {
-		if (context.isCloseDriver()) {
-			logger.debug("Close driver");
+		if (!context.isCloseDriver())
+			return;
 
-			context.getDriver().quit();
+		logger.debug("Close driver");
 
-			// Clear the context as subsequent tests should use their own!
-			context = null;
-		}
+		// Wait a short period of time so that final requests can be processed before closing the browser window
+		context.delayTest(100);
+
+		context.getDriver().quit();
+
+		// Clear the context as subsequent tests should use their own!
+		context = null;
 	}
 
 	/**

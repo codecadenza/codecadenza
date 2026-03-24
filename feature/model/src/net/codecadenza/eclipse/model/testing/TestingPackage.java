@@ -154,11 +154,11 @@ public interface TestingPackage extends EPackage {
 	int SELENIUM_TEST_MODULE__MAXIMIZE_WINDOW = ABSTRACT_TEST_MODULE_FEATURE_COUNT + 2;
 
 	/**
-	 * The feature ID for the '<em><b>Implicit Wait Time</b></em>' attribute
+	 * The feature ID for the '<em><b>Explicit Wait Time</b></em>' attribute
 	 * @generated
 	 * @ordered
 	 */
-	int SELENIUM_TEST_MODULE__IMPLICIT_WAIT_TIME = ABSTRACT_TEST_MODULE_FEATURE_COUNT + 3;
+	int SELENIUM_TEST_MODULE__EXPLICIT_WAIT_TIME = ABSTRACT_TEST_MODULE_FEATURE_COUNT + 3;
 
 	/**
 	 * The feature ID for the '<em><b>Page Load Time</b></em>' attribute
@@ -1123,14 +1123,14 @@ public interface TestingPackage extends EPackage {
 	EAttribute getSeleniumTestModule_MaximizeWindow();
 
 	/**
-	 * Return the meta object for the attribute '{@link net.codecadenza.eclipse.model.testing.SeleniumTestModule#getImplicitWaitTime
-	 * <em>Implicit Wait Time</em>}'
-	 * @return the meta object for the attribute '<em>Implicit Wait Time</em>'
-	 * @see net.codecadenza.eclipse.model.testing.SeleniumTestModule#getImplicitWaitTime()
+	 * Return the meta object for the attribute '{@link net.codecadenza.eclipse.model.testing.SeleniumTestModule#getExplicitWaitTime
+	 * <em>Explicit Wait Time</em>}'
+	 * @return the meta object for the attribute '<em>Explicit Wait Time</em>'
+	 * @see net.codecadenza.eclipse.model.testing.SeleniumTestModule#getExplicitWaitTime()
 	 * @see #getSeleniumTestModule()
 	 * @generated
 	 */
-	EAttribute getSeleniumTestModule_ImplicitWaitTime();
+	EAttribute getSeleniumTestModule_ExplicitWaitTime();
 
 	/**
 	 * Return the meta object for the attribute '{@link net.codecadenza.eclipse.model.testing.SeleniumTestModule#getPageLoadTime
@@ -2043,10 +2043,10 @@ public interface TestingPackage extends EPackage {
 		EAttribute SELENIUM_TEST_MODULE__MAXIMIZE_WINDOW = eINSTANCE.getSeleniumTestModule_MaximizeWindow();
 
 		/**
-		 * The meta object literal for the '<em><b>Implicit Wait Time</b></em>' attribute feature
+		 * The meta object literal for the '<em><b>Explicit Wait Time</b></em>' attribute feature
 		 * @generated
 		 */
-		EAttribute SELENIUM_TEST_MODULE__IMPLICIT_WAIT_TIME = eINSTANCE.getSeleniumTestModule_ImplicitWaitTime();
+		EAttribute SELENIUM_TEST_MODULE__EXPLICIT_WAIT_TIME = eINSTANCE.getSeleniumTestModule_ExplicitWaitTime();
 
 		/**
 		 * The meta object literal for the '<em><b>Page Load Time</b></em>' attribute feature

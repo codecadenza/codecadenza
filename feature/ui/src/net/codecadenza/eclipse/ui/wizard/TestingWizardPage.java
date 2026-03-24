@@ -70,8 +70,8 @@ import org.eclipse.swt.widgets.Text;
  * @version 1.0.0
  */
 public class TestingWizardPage extends WizardPage {
-	private static final int DEFAULT_IMPLICIT_WAIT_TIME = 1;
-	private static final int DEFAULT_PAGE_LOAD_TIMEOUT = 5;
+	private static final int DEFAULT_EXPLICIT_WAIT_TIME = 1000;
+	private static final int DEFAULT_PAGE_LOAD_TIMEOUT = 5000;
 
 	private final ApplicationWizardPage pageApp;
 	private final IntegrationWizardPage pageIntegration;
@@ -80,7 +80,7 @@ public class TestingWizardPage extends WizardPage {
 	private Combo cboDriver;
 	private Button cmdBrowse;
 	private Text txtDriverPath;
-	private Text txtImplicitWaitTime;
+	private Text txtExplicitWaitTime;
 	private Button chkMaximizeWindow;
 	private Text txtPageLoadTimeout;
 	private Text txtTestCaseSuffix;
@@ -88,7 +88,7 @@ public class TestingWizardPage extends WizardPage {
 	private SeleniumDriver driver;
 	private String driverPath;
 	private int pageLoadTimeout;
-	private int implicitWaitTime;
+	private int explicitWaitTime;
 	private boolean maximizeWindow;
 	private String testCaseSuffix;
 	private IStatus currentStatus;
@@ -225,15 +225,15 @@ public class TestingWizardPage extends WizardPage {
 			}
 		});
 
-		final var lblImplicitWaitTime = new Label(panSelenium, SWT.NONE);
-		lblImplicitWaitTime.setText("Implicit wait time (in seconds):");
+		final var lblExplicitWaitTime = new Label(panSelenium, SWT.NONE);
+		lblExplicitWaitTime.setText("Explicit wait time (in milliseconds):");
 
-		txtImplicitWaitTime = new Text(panSelenium, SWT.BORDER);
-		txtImplicitWaitTime.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
-		txtImplicitWaitTime.addModifyListener(_ -> applyImplicitWaitTime(txtImplicitWaitTime.getText()));
+		txtExplicitWaitTime = new Text(panSelenium, SWT.BORDER);
+		txtExplicitWaitTime.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
+		txtExplicitWaitTime.addModifyListener(_ -> applyExplicitWaitTime(txtExplicitWaitTime.getText()));
 
 		final var lblPageLoadTimeout = new Label(panSelenium, SWT.NONE);
-		lblPageLoadTimeout.setText("Page load timeout (in seconds):");
+		lblPageLoadTimeout.setText("Page load timeout (in milliseconds):");
 
 		txtPageLoadTimeout = new Text(panSelenium, SWT.BORDER);
 		txtPageLoadTimeout.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
@@ -419,7 +419,7 @@ public class TestingWizardPage extends WizardPage {
 		txtSeleniumNamespace.setText("");
 		txtDriverPath.setText("");
 		txtPageLoadTimeout.setText("");
-		txtImplicitWaitTime.setText("");
+		txtExplicitWaitTime.setText("");
 		txtTestCaseSuffix.setText("");
 
 		// Either enable or disable all Selenium-related fields depending on the selected state
@@ -427,7 +427,7 @@ public class TestingWizardPage extends WizardPage {
 		cboDriver.setEnabled(addSeleniumTestModule);
 		txtDriverPath.setEnabled(addSeleniumTestModule);
 		cmdBrowse.setEnabled(addSeleniumTestModule);
-		txtImplicitWaitTime.setEnabled(addSeleniumTestModule);
+		txtExplicitWaitTime.setEnabled(addSeleniumTestModule);
 		txtPageLoadTimeout.setEnabled(addSeleniumTestModule);
 		chkMaximizeWindow.setEnabled(addSeleniumTestModule);
 		txtTestCaseSuffix.setEnabled(addSeleniumTestModule);
@@ -442,8 +442,8 @@ public class TestingWizardPage extends WizardPage {
 			txtSeleniumNamespace.setText(store.getString(PREF_TEST_CONTEXT_SELENIUM));
 			txtTestCaseSuffix.setText(store.getString(PREF_TEST_CASE_SUFFIX));
 
-			// Set reasonable default values for implicit wait time and page load timeout
-			txtImplicitWaitTime.setText(Integer.toString(DEFAULT_IMPLICIT_WAIT_TIME));
+			// Set reasonable default values for explicit wait time and page load timeout
+			txtExplicitWaitTime.setText(Integer.toString(DEFAULT_EXPLICIT_WAIT_TIME));
 			txtPageLoadTimeout.setText(Integer.toString(DEFAULT_PAGE_LOAD_TIMEOUT));
 		}
 	}
@@ -464,7 +464,7 @@ public class TestingWizardPage extends WizardPage {
 			testModule.setDriver(driver);
 			testModule.setDriverPath(driverPath);
 			testModule.setPageLoadTime(pageLoadTimeout);
-			testModule.setImplicitWaitTime(implicitWaitTime);
+			testModule.setExplicitWaitTime(explicitWaitTime);
 			testModule.setMaximizeWindow(maximizeWindow);
 			testModule.setNamespace(testNamespace);
 
@@ -518,24 +518,24 @@ public class TestingWizardPage extends WizardPage {
 	/**
 	 * @param text
 	 */
-	private void applyImplicitWaitTime(String text) {
+	private void applyExplicitWaitTime(String text) {
 		if (!chkSelenium.getSelection())
 			return;
 
-		IStatus status = createStatus(IStatus.INFO, "Implicit wait time entered");
+		IStatus status = createStatus(IStatus.INFO, "Explicit wait time entered");
 
 		if (text.isEmpty())
-			status = createStatus(IStatus.ERROR, "An implicit wait time must be entered!");
+			status = createStatus(IStatus.ERROR, "An explicit wait time must be entered!");
 
 		if (!text.isEmpty())
 			try {
-				implicitWaitTime = Integer.parseInt(text);
+				explicitWaitTime = Integer.parseInt(text);
 
-				if (implicitWaitTime < 0)
-					status = createStatus(IStatus.ERROR, "The implicit wait time requires a positive integer value!");
+				if (explicitWaitTime < 0)
+					status = createStatus(IStatus.ERROR, "The explicit wait time requires a positive integer value!");
 			}
 			catch (final NumberFormatException _) {
-				status = createStatus(IStatus.ERROR, "The implicit wait time requires an integer value!");
+				status = createStatus(IStatus.ERROR, "The explicit wait time requires an integer value!");
 			}
 
 		updateStatus(status);

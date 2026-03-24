@@ -1130,7 +1130,7 @@
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute testing.ecore#//SeleniumTestModule/driver"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute testing.ecore#//SeleniumTestModule/driverPath"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute testing.ecore#//SeleniumTestModule/maximizeWindow"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute testing.ecore#//SeleniumTestModule/implicitWaitTime"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute testing.ecore#//SeleniumTestModule/explicitWaitTime"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute testing.ecore#//SeleniumTestModule/pageLoadTime"/>
     </genClasses>
     <genClasses ecoreClass="testing.ecore#//TestSuite">
