@@ -21,10 +21,10 @@
  */
 package net.codecadenza.eclipse.generator.basic.server;
 
-import net.codecadenza.eclipse.generator.basic.server.imp.PayaraServerProjectFilesGenerator;
-import net.codecadenza.eclipse.generator.basic.server.imp.WildflyServerProjectFilesGenerator;
 import net.codecadenza.eclipse.generator.basic.server.imp.LocalServerProjectFilesGenerator;
+import net.codecadenza.eclipse.generator.basic.server.imp.PayaraServerProjectFilesGenerator;
 import net.codecadenza.eclipse.generator.basic.server.imp.TomcatServerProjectFilesGenerator;
+import net.codecadenza.eclipse.generator.basic.server.imp.WildflyServerProjectFilesGenerator;
 import net.codecadenza.eclipse.model.project.Project;
 import net.codecadenza.eclipse.model.project.ServerPlatformEnumeration;
 
