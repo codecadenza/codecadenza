@@ -74,7 +74,7 @@ public class EnterDataSeleniumTestActionGenerator extends AbstractSeleniumTestAc
 
 		// Search for the initially visible panel of the first row after opening the page
 		Optional<FormPanel> initialPanel = form.getFormPanels().stream().filter(e -> e.getRowIndex() == ROW_INDEX_TOP)
-				.min((x, y) -> x.getRowIndex() - y.getRowIndex());
+				.min((x, y) -> x.getColIndex() - y.getColIndex());
 
 		if (initialPanel.isPresent()) {
 			currentTabPageId = SeleniumGeneratorUtil.getTabPageName(initialPanel.get());
@@ -84,7 +84,7 @@ public class EnterDataSeleniumTestActionGenerator extends AbstractSeleniumTestAc
 
 		// Search for the initially visible panel of the second row after opening the page
 		initialPanel = form.getFormPanels().stream().filter(e -> e.getRowIndex() == ROW_INDEX_BOTTOM)
-				.min((x, y) -> x.getRowIndex() - y.getRowIndex());
+				.min((x, y) -> x.getColIndex() - y.getColIndex());
 
 		if (initialPanel.isPresent()) {
 			currentTabPageId = SeleniumGeneratorUtil.getTabPageName(initialPanel.get());
