@@ -279,7 +279,7 @@ public class AngularCommonDataTableGenerator {
 				createAction = action;
 
 			// In case of a grid panel we only use a form of type 'CREATE' if the preferred type is not available!
-			if (addToPanel && createAction != null && targetForm.getFormType() == FormTypeEnumeration.CREATE)
+			if (addToPanel && createAction == null && targetForm.getFormType() == FormTypeEnumeration.CREATE)
 				createAction = action;
 
 			if (!addToPanel && targetForm.getFormType() == FormTypeEnumeration.CREATE)
