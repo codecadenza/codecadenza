@@ -12,6 +12,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 2026-04-02: Initialize an Angular grid panel with a form of type CREATE if a form of type ADD is not available
 
 ### Changed
+2026-03-05: Fix wrong exception logging in the REST exception mapper
 2026-03-04: Use a fix PrimeNG version to avoid failing Selenium tests
 2026-03-24: Use explicit waits in Selenium tests
 2026-03-07: Add support for Angular 21

@@ -81,16 +81,17 @@ public abstract class AbstractExceptionMapper<E extends Throwable> implements Ex
 		final StatusType status = getStatus(exception);
 		final int statusCode = status.getStatusCode();
 		final String reasonPhrase = status.getReasonPhrase();
-		final String message = ExceptionHelper.getRootCause(exception).getMessage();
+		final Throwable rootCause = ExceptionHelper.getRootCause(exception);
+		final String message = rootCause.getMessage();
+		final String messageToLog = message != null ? message : "";
 		final Logger logger = getLogger();
-		final E exceptionToPrint = logger.isTraceEnabled() ? exception : null;
 
 		if (statusCode >= Status.INTERNAL_SERVER_ERROR.getStatusCode())
 			logger.error("Error while processing {} request on resource '{}'. Message: {}", request.getMethod(), request.getPathInfo(),
-					message, exceptionToPrint);
+					messageToLog, rootCause);
 		else
 			logger.warn("Could not process {} request on resource '{}'. Message: {}", request.getMethod(), request.getPathInfo(),
-					message, exceptionToPrint);
+					messageToLog, rootCause);
 
 		// Extract the HTTP 'Accept' header to determine what representation of the response entity should be returned
 		final List<MediaType> acceptedMediaTypes = AcceptHeaderParser.parse(request.getHeader(HttpHeaders.ACCEPT));
