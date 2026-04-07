@@ -646,57 +646,6 @@ public class DomainObjectGenerator extends AbstractJavaSourceGenerator {
 	}
 
 	/**
-	 * @param uniqueAttribute
-	 * @param domainObjectName
-	 * @param pkAttribute
-	 * @return the generated named queries that are based on a given domain object attribute
-	 */
-	private String createNamedQueriesOfAttr(DomainAttribute uniqueAttribute, String domainObjectName, DomainAttribute pkAttribute) {
-		final var b = new StringBuilder();
-		final String ukAttrName = uniqueAttribute.getUpperCaseName();
-		final var getByName = "getBy" + ukAttrName;
-		final var findByName = "findBy" + ukAttrName;
-		final var checkName = "checkBy" + ukAttrName;
-		final var queryName = checkName + "And" + pkAttribute.getUpperCaseName();
-		final var paramName = uniqueAttribute.getName();
-		final var paramID = pkAttribute.getName();
-
-		// Avoid adding named queries twice!
-		if (namedQueryMap.containsKey("NQ_UK_FIND_BY_" + ukAttrName.toUpperCase()))
-			return b.toString();
-
-		namedQueryMap.put("NQ_UK_FIND_BY_" + ukAttrName.toUpperCase(), getByName);
-		namedQueryMap.put("NQ_UK_EXISTS_BY_" + ukAttrName.toUpperCase(), checkName);
-		namedQueryMap.put("NQ_UK_EXISTS_BY_" + ukAttrName.toUpperCase() + "_AND_" + pkAttribute.getName().toUpperCase(), queryName);
-
-		// Add a named query to find the domain object by the unique key
-		b.append("@NamedQuery(name=" + domainObjectName + ".NQ_UK_FIND_BY_" + ukAttrName.toUpperCase() + ", query=\"select a from ");
-		b.append(domainObjectName + " a where a." + uniqueAttribute.getName() + " = :" + paramName + "\")\n");
-
-		// Add a named query to search domain objects by the unique key
-		if (uniqueAttribute.getJavaType().isString()) {
-			b.append("@NamedQuery(name=" + domainObjectName + ".NQ_UK_SEARCH_BY_");
-			b.append(ukAttrName.toUpperCase() + ", query=\"select a from ");
-			b.append(domainObjectName + " a where a." + uniqueAttribute.getName() + " like :" + paramName + "\")\n");
-
-			namedQueryMap.put("NQ_UK_SEARCH_BY_" + ukAttrName.toUpperCase(), findByName);
-		}
-
-		// Add a named query to check the domain object by the unique key
-		b.append("@NamedQuery(name=" + domainObjectName + ".NQ_UK_EXISTS_BY_");
-		b.append(ukAttrName.toUpperCase() + ", query=\"select count(a) from ");
-		b.append(domainObjectName + " a where a." + uniqueAttribute.getName() + " = :" + paramName + "\")\n");
-
-		// Add a named query to check the domain object by the unique key and the primary key
-		b.append("@NamedQuery(name=" + domainObjectName + ".NQ_UK_EXISTS_BY_" + ukAttrName.toUpperCase());
-		b.append("_AND_" + pkAttribute.getName().toUpperCase() + ", query=\"select count(a) from ");
-		b.append(domainObjectName + " a where a." + uniqueAttribute.getName() + " = :" + paramName);
-		b.append(" and a." + pkAttribute.getName() + " <> :" + paramID + "\")\n");
-
-		return b.toString();
-	}
-
-	/**
 	 * Add named queries
 	 * @return the named queries
 	 */
@@ -708,7 +657,7 @@ public class DomainObjectGenerator extends AbstractJavaSourceGenerator {
 
 		// It could be the case that a domain object has a display attribute that in turn has no unique key!
 		if (displayAttribute != null)
-			b.append(createNamedQueriesOfAttr(displayAttribute, domainObjectName, pkAttribute));
+			b.append(createNamedQueriesOfAttribute(displayAttribute, domainObjectName, pkAttribute));
 
 		// Add named queries for unique key getter methods
 		for (final DomainObject bean : domainObject.getFullInheritanceTree()) {
@@ -719,16 +668,9 @@ public class DomainObjectGenerator extends AbstractJavaSourceGenerator {
 				if (!key.isUnique() || key.getColumns().size() > 2)
 					continue;
 
-				var getByName = "getBy";
-				var findByName = "findBy";
-				var checkName = "checkBy";
-				var checkNameAndId = "checkBy";
-
 				DomainAttribute uniqueAttribute1 = null;
 				DomainAttribute uniqueAttribute2 = null;
-				DomainAttribute uniqueAssocAttribute1 = null;
 				AbstractDomainAssociation uniqueAssoc1 = null;
-				DomainAttribute uniqueAssocAttribute2 = null;
 				AbstractDomainAssociation uniqueAssoc2 = null;
 
 				// Sort all attributes in order to be in sync with the respective repository!
@@ -758,27 +700,19 @@ public class DomainObjectGenerator extends AbstractJavaSourceGenerator {
 				for (final DBColumn column : key.getColumns())
 					for (final AbstractDomainAssociation assoc : assocs)
 						if (assoc instanceof final ManyToOneAssociation manyToOne && column.equals(manyToOne.getColumn())) {
-							if (uniqueAssoc1 == null) {
+							if (uniqueAssoc1 == null)
 								uniqueAssoc1 = manyToOne;
-								uniqueAssocAttribute1 = manyToOne.getTarget().getPKAttribute();
-							}
-							else {
+							else
 								uniqueAssoc2 = manyToOne;
-								uniqueAssocAttribute2 = manyToOne.getTarget().getPKAttribute();
-							}
 
 							break;
 						}
 						else if (assoc instanceof final OneToOneAssociation oneToOne && oneToOne.isOwner()
 								&& column.equals(oneToOne.getColumn())) {
-							if (uniqueAssoc1 == null) {
+							if (uniqueAssoc1 == null)
 								uniqueAssoc1 = oneToOne;
-								uniqueAssocAttribute1 = oneToOne.getTarget().getPKAttribute();
-							}
-							else {
+							else
 								uniqueAssoc2 = oneToOne;
-								uniqueAssocAttribute2 = oneToOne.getTarget().getPKAttribute();
-							}
 
 							break;
 						}
@@ -802,224 +736,15 @@ public class DomainObjectGenerator extends AbstractJavaSourceGenerator {
 					continue;
 
 				if (uniqueAttribute1 != null && uniqueAttribute2 == null && uniqueAssoc1 == null)
-					b.append(createNamedQueriesOfAttr(uniqueAttribute1, domainObjectName, pkAttribute));
-				else if (uniqueAttribute1 != null && uniqueAttribute2 != null) {
-					final var operator1 = uniqueAttribute1.getJavaType().isString() ? " like " : " = ";
-					final var operator2 = uniqueAttribute2.getJavaType().isString() ? " like " : " = ";
-					final String ukAttrName = uniqueAttribute1.getUpperCaseName() + "_And_" + uniqueAttribute2.getUpperCaseName();
-
-					getByName += ukAttrName;
-					findByName += ukAttrName;
-					checkName += ukAttrName;
-					checkNameAndId += ukAttrName + "_And_" + pkAttribute.getUpperCaseName();
-
-					final var jpaQLFind = new StringBuilder();
-					jpaQLFind.append("select a from " + domainObject.getName() + " a where a.");
-					jpaQLFind.append(uniqueAttribute1.getName() + operator1 + ":");
-					jpaQLFind.append(uniqueAttribute1.getName());
-					jpaQLFind.append(" and a." + uniqueAttribute2.getName() + operator2 + ":");
-					jpaQLFind.append(uniqueAttribute2.getName());
-
-					final var jpaQLGet = new StringBuilder();
-					jpaQLGet.append("select a from " + domainObject.getName() + " a where a." + uniqueAttribute1.getName() + " = :");
-					jpaQLGet.append(uniqueAttribute1.getName());
-					jpaQLGet.append(" and a." + uniqueAttribute2.getName() + " = :");
-					jpaQLGet.append(uniqueAttribute2.getName());
-
-					final var jpaQLCheck = new StringBuilder();
-					jpaQLCheck.append("select count(a) from " + domainObject.getName());
-					jpaQLCheck.append(" a where a." + uniqueAttribute1.getName() + " = :");
-					jpaQLCheck.append(uniqueAttribute1.getName());
-					jpaQLCheck.append(" and a." + uniqueAttribute2.getName() + " = :");
-					jpaQLCheck.append(uniqueAttribute2.getName());
-
-					final var jpaQLCheckByUniqueAndPrimaryKey = new StringBuilder();
-					jpaQLCheckByUniqueAndPrimaryKey.append("select count(a) from " + domainObject.getName());
-					jpaQLCheckByUniqueAndPrimaryKey.append(" a where a." + uniqueAttribute1.getName() + " = :");
-					jpaQLCheckByUniqueAndPrimaryKey.append(uniqueAttribute1.getName());
-					jpaQLCheckByUniqueAndPrimaryKey.append(" and a." + uniqueAttribute2.getName() + " = :");
-					jpaQLCheckByUniqueAndPrimaryKey.append(uniqueAttribute2.getName());
-					jpaQLCheckByUniqueAndPrimaryKey.append(" and a." + pkAttribute.getName() + " <> :");
-					jpaQLCheckByUniqueAndPrimaryKey.append(pkAttribute.getName());
-
-					// Add a named query to find the domain object by the unique key
-					b.append("@NamedQuery(name=" + domainObjectName + ".NQ_UK_FIND_BY_" + ukAttrName.toUpperCase());
-					b.append(", query=\"" + jpaQLGet.toString() + "\")\n");
-
-					if (uniqueAttribute1.getJavaType().isString() || uniqueAttribute2.getJavaType().isString()) {
-						// Add a named query to search domain objects by the unique key
-						b.append("@NamedQuery(name=" + domainObjectName + ".NQ_UK_SEARCH_BY_" + ukAttrName.toUpperCase());
-						b.append(", query=\"" + jpaQLFind.toString() + "\")\n");
-
-						namedQueryMap.put("NQ_UK_SEARCH_BY_" + ukAttrName.toUpperCase(), findByName);
-					}
-
-					// Add a named query to check if the domain object already exists
-					b.append("@NamedQuery(name=" + domainObjectName + ".NQ_UK_EXISTS_BY_" + ukAttrName.toUpperCase());
-					b.append(", query=\"" + jpaQLCheck.toString() + "\")\n");
-
-					// Add a named query to check if the domain object already exists
-					b.append("@NamedQuery(name=" + domainObjectName + ".NQ_UK_EXISTS_BY_" + ukAttrName.toUpperCase() + "_AND_");
-					b.append(pkAttribute.getName().toUpperCase() + ", query=\"" + jpaQLCheckByUniqueAndPrimaryKey.toString() + "\")\n");
-
-					namedQueryMap.put("NQ_UK_FIND_BY_" + ukAttrName.toUpperCase(), getByName);
-					namedQueryMap.put("NQ_UK_EXISTS_BY_" + ukAttrName.toUpperCase(), checkName);
-					namedQueryMap.put("NQ_UK_EXISTS_BY_" + ukAttrName.toUpperCase() + "_AND_" + pkAttribute.getName().toUpperCase(),
-							checkNameAndId);
-				}
-				else if (uniqueAttribute1 != null && uniqueAssoc1 != null) {
-					final String ukAttrName = uniqueAttribute1.getUpperCaseName() + "_And_" + uniqueAssoc1.getUpperCaseName();
-
-					getByName += ukAttrName;
-					findByName += ukAttrName;
-					checkName += ukAttrName;
-					checkNameAndId += ukAttrName + "_And_" + pkAttribute.getUpperCaseName();
-
-					final var jpaQLFind = new StringBuilder();
-					jpaQLFind.append("select a from " + domainObject.getName() + " a where a.");
-					jpaQLFind.append(uniqueAttribute1.getName() + " like :");
-					jpaQLFind.append(uniqueAttribute1.getName());
-					jpaQLFind.append(" and a." + uniqueAssoc1.getName() + "." + uniqueAssocAttribute1.getName() + " = :");
-					jpaQLFind.append(uniqueAssoc1.getName());
-
-					final var jpaQLGet = new StringBuilder();
-					jpaQLGet.append("select a from " + domainObject.getName() + " a where a." + uniqueAttribute1.getName() + " = :");
-					jpaQLGet.append(uniqueAttribute1.getName());
-					jpaQLGet.append(" and a." + uniqueAssoc1.getName() + "." + uniqueAssocAttribute1.getName() + " = :");
-					jpaQLGet.append(uniqueAssoc1.getName());
-
-					final var jpaQLCheck = new StringBuilder();
-					jpaQLCheck.append("select count(a) from " + domainObject.getName() + " a where a.");
-					jpaQLCheck.append(uniqueAttribute1.getName() + " = :");
-					jpaQLCheck.append(uniqueAttribute1.getName());
-					jpaQLCheck.append(" and a." + uniqueAssoc1.getName() + "." + uniqueAssocAttribute1.getName() + " = :");
-					jpaQLCheck.append(uniqueAssoc1.getName());
-
-					final var jpaQLCheckByUniqueAndPrimaryKey = new StringBuilder();
-					jpaQLCheckByUniqueAndPrimaryKey.append("select count(a) from " + domainObject.getName());
-					jpaQLCheckByUniqueAndPrimaryKey.append(" a where a." + uniqueAttribute1.getName() + " = :");
-					jpaQLCheckByUniqueAndPrimaryKey.append(uniqueAttribute1.getName());
-					jpaQLCheckByUniqueAndPrimaryKey.append(" and a." + uniqueAssoc1.getName() + ".");
-					jpaQLCheckByUniqueAndPrimaryKey.append(uniqueAssocAttribute1.getName() + " = :");
-					jpaQLCheckByUniqueAndPrimaryKey.append(uniqueAssoc1.getName());
-					jpaQLCheckByUniqueAndPrimaryKey.append(" and a." + pkAttribute.getName() + " <> :");
-					jpaQLCheckByUniqueAndPrimaryKey.append(pkAttribute.getName());
-
-					// Add a named query to find the domain object by the unique key
-					b.append("@NamedQuery(name=" + domainObjectName + ".NQ_UK_FIND_BY_" + ukAttrName.toUpperCase());
-					b.append(", query=\"" + jpaQLGet.toString() + "\")\n");
-
-					// Add a named query to search domain objects by the unique key
-					if (uniqueAttribute1.getJavaType().isString()) {
-						b.append("@NamedQuery(name=" + domainObjectName + ".NQ_UK_SEARCH_BY_" + ukAttrName.toUpperCase());
-						b.append(", query=\"" + jpaQLFind.toString() + "\")\n");
-
-						namedQueryMap.put("NQ_UK_SEARCH_BY_" + ukAttrName.toUpperCase(), findByName);
-					}
-
-					// Add a named query to check if the domain object already exists
-					b.append("@NamedQuery(name=" + domainObjectName + ".NQ_UK_EXISTS_BY_" + ukAttrName.toUpperCase());
-					b.append(", query=\"" + jpaQLCheck.toString() + "\")\n");
-
-					// Add a named query to check if the domain object already exists
-					b.append("@NamedQuery(name=" + domainObjectName + ".NQ_UK_EXISTS_BY_" + ukAttrName.toUpperCase() + "_AND_");
-					b.append(pkAttribute.getName().toUpperCase() + ", query=\"" + jpaQLCheckByUniqueAndPrimaryKey.toString() + "\")\n");
-
-					namedQueryMap.put("NQ_UK_FIND_BY_" + ukAttrName.toUpperCase(), getByName);
-					namedQueryMap.put("NQ_UK_EXISTS_BY_" + ukAttrName.toUpperCase(), checkName);
-					namedQueryMap.put("NQ_UK_EXISTS_BY_" + ukAttrName.toUpperCase() + "_AND_" + pkAttribute.getName().toUpperCase(),
-							checkNameAndId);
-				}
-				else if (uniqueAttribute1 == null && uniqueAttribute2 == null && uniqueAssoc1 != null && uniqueAssoc2 != null) {
-					final String ukAttrName = uniqueAssoc1.getUpperCaseName() + "_And_" + uniqueAssoc2.getUpperCaseName();
-
-					getByName += ukAttrName;
-					checkName += ukAttrName;
-					checkNameAndId += ukAttrName + "_And_" + pkAttribute.getUpperCaseName();
-
-					final var jpaQLGet = new StringBuilder();
-					jpaQLGet.append("select a from " + domainObject.getName() + " a where a." + uniqueAssoc1.getName());
-					jpaQLGet.append("." + uniqueAssocAttribute1.getName() + " = :");
-					jpaQLGet.append(uniqueAssoc1.getName());
-					jpaQLGet.append(" and a." + uniqueAssoc2.getName() + "." + uniqueAssocAttribute2.getName() + " = :");
-					jpaQLGet.append(uniqueAssoc2.getName());
-
-					final var jpaQLCheck = new StringBuilder();
-					jpaQLCheck.append("select count(a) from " + domainObject.getName() + " a where a." + uniqueAssoc1.getName());
-					jpaQLCheck.append("." + uniqueAssocAttribute1.getName() + " = :");
-					jpaQLCheck.append(uniqueAssoc1.getName());
-					jpaQLCheck.append(" and a." + uniqueAssoc2.getName() + "." + uniqueAssocAttribute2.getName() + " = :");
-					jpaQLCheck.append(uniqueAssoc2.getName());
-
-					final var jpaQLCheckByUniqueAndPrimaryKey = new StringBuilder();
-					jpaQLCheckByUniqueAndPrimaryKey.append("select count(a) from " + domainObject.getName() + " a where a.");
-					jpaQLCheckByUniqueAndPrimaryKey.append(uniqueAssoc1.getName());
-					jpaQLCheckByUniqueAndPrimaryKey.append("." + uniqueAssocAttribute1.getName() + " = :");
-					jpaQLCheckByUniqueAndPrimaryKey.append(uniqueAssoc1.getName());
-					jpaQLCheckByUniqueAndPrimaryKey.append(" and a." + uniqueAssoc2.getName());
-					jpaQLCheckByUniqueAndPrimaryKey.append("." + uniqueAssocAttribute2.getName() + " = :");
-					jpaQLCheckByUniqueAndPrimaryKey.append(uniqueAssoc2.getName());
-					jpaQLCheckByUniqueAndPrimaryKey.append(" and a." + pkAttribute.getName() + " <> :");
-					jpaQLCheckByUniqueAndPrimaryKey.append(pkAttribute.getName());
-
-					// Add a named query to find the domain object by the unique key
-					b.append("@NamedQuery(name=" + domainObjectName + ".NQ_UK_FIND_BY_" + ukAttrName.toUpperCase());
-					b.append(", query=\"" + jpaQLGet.toString() + "\")\n");
-
-					// Add a named query to check if the domain object already exists
-					b.append("@NamedQuery(name=" + domainObjectName + ".NQ_UK_EXISTS_BY_" + ukAttrName.toUpperCase());
-					b.append(", query=\"" + jpaQLCheck.toString() + "\")\n");
-
-					// Add a named query to check if the domain object already exists
-					b.append("@NamedQuery(name=" + domainObjectName + ".NQ_UK_EXISTS_BY_" + ukAttrName.toUpperCase() + "_AND_");
-					b.append(pkAttribute.getName().toUpperCase() + ", query=\"" + jpaQLCheckByUniqueAndPrimaryKey.toString() + "\")\n");
-
-					namedQueryMap.put("NQ_UK_FIND_BY_" + ukAttrName.toUpperCase(), getByName);
-					namedQueryMap.put("NQ_UK_EXISTS_BY_" + ukAttrName.toUpperCase(), checkName);
-					namedQueryMap.put("NQ_UK_EXISTS_BY_" + ukAttrName.toUpperCase() + "_AND_" + pkAttribute.getName().toUpperCase(),
-							checkNameAndId);
-				}
-				else if (uniqueAttribute1 == null && uniqueAttribute2 == null && uniqueAssoc1 != null && uniqueAssoc2 == null) {
-					final String ukAttrName = uniqueAssoc1.getUpperCaseName();
-
-					getByName += ukAttrName;
-					checkName += ukAttrName;
-					checkNameAndId += ukAttrName + "_And_" + pkAttribute.getUpperCaseName();
-
-					final var jpaQLGet = new StringBuilder();
-					jpaQLGet.append("select a from " + domainObject.getName() + " a where a." + uniqueAssoc1.getName() + ".");
-					jpaQLGet.append(uniqueAssocAttribute1.getName() + " = :" + uniqueAssoc1.getName());
-
-					final var jpaQLCheck = new StringBuilder();
-					jpaQLCheck.append("select count(a) from " + domainObject.getName());
-					jpaQLCheck.append(" a where a." + uniqueAssoc1.getName() + ".");
-					jpaQLCheck.append(uniqueAssocAttribute1.getName() + " = :" + uniqueAssoc1.getName());
-
-					final var jpaQLCheckByUniqueAndPrimaryKey = new StringBuilder();
-					jpaQLCheckByUniqueAndPrimaryKey.append("select count(a) from " + domainObject.getName() + " a where a.");
-					jpaQLCheckByUniqueAndPrimaryKey.append(uniqueAssoc1.getName());
-					jpaQLCheckByUniqueAndPrimaryKey.append("." + uniqueAssocAttribute1.getName() + " = :");
-					jpaQLCheckByUniqueAndPrimaryKey.append(uniqueAssoc1.getName());
-					jpaQLCheckByUniqueAndPrimaryKey.append(" and a." + pkAttribute.getName() + " <> :" + pkAttribute.getName());
-
-					// Add a named query to find the domain object by the unique key
-					b.append("@NamedQuery(name=" + domainObjectName + ".NQ_UK_FIND_BY_" + ukAttrName.toUpperCase());
-					b.append(", query=\"" + jpaQLGet.toString() + "\")\n");
-
-					// Add a named query to check if the domain object already exists
-					b.append("@NamedQuery(name=" + domainObjectName + ".NQ_UK_EXISTS_BY_" + ukAttrName.toUpperCase());
-					b.append(", query=\"" + jpaQLCheck.toString() + "\")\n");
-
-					// Add a named query to check if the domain object already exists
-					b.append("@NamedQuery(name=" + domainObjectName + ".NQ_UK_EXISTS_BY_" + ukAttrName.toUpperCase());
-					b.append("_AND_" + pkAttribute.getName().toUpperCase());
-					b.append(", query=\"" + jpaQLCheckByUniqueAndPrimaryKey.toString() + "\")\n");
-
-					namedQueryMap.put("NQ_UK_FIND_BY_" + ukAttrName.toUpperCase(), getByName);
-					namedQueryMap.put("NQ_UK_EXISTS_BY_" + ukAttrName.toUpperCase(), checkName);
-					namedQueryMap.put("NQ_UK_EXISTS_BY_" + ukAttrName.toUpperCase() + "_AND_" + pkAttribute.getName().toUpperCase(),
-							checkNameAndId);
-				}
+					b.append(createNamedQueriesOfAttribute(uniqueAttribute1, domainObjectName, pkAttribute));
+				else if (uniqueAttribute1 != null && uniqueAttribute2 != null)
+					b.append(createNamedQueriesOfAttributes(uniqueAttribute1, uniqueAttribute2, domainObjectName, pkAttribute));
+				else if (uniqueAttribute1 != null && uniqueAssoc1 != null)
+					b.append(createNamedQueriesOfAttributeAndAssociation(uniqueAttribute1, uniqueAssoc1, domainObjectName, pkAttribute));
+				else if (uniqueAttribute1 == null && uniqueAttribute2 == null && uniqueAssoc1 != null && uniqueAssoc2 != null)
+					b.append(createNamedQueriesOfAssociations(uniqueAssoc1, uniqueAssoc2, domainObjectName, pkAttribute));
+				else if (uniqueAttribute1 == null && uniqueAttribute2 == null && uniqueAssoc1 != null && uniqueAssoc2 == null)
+					b.append(createNamedQueriesOfAssociation(uniqueAssoc1, domainObjectName, pkAttribute));
 			}
 		}
 
@@ -1076,6 +801,334 @@ public class DomainObjectGenerator extends AbstractJavaSourceGenerator {
 		namedQueryMap.put("NQ_COUNT", "count");
 		namedQueryMap.put("NQ_CHECK", "check");
 		namedQueryMap.put("NQ_DELETE", "delete");
+
+		return b.toString();
+	}
+
+	/**
+	 * @param uniqueAttribute
+	 * @param domainObjectName
+	 * @param pkAttribute
+	 * @return the generated named queries that are based on a given domain object attribute
+	 */
+	private String createNamedQueriesOfAttribute(DomainAttribute uniqueAttribute, String domainObjectName,
+			DomainAttribute pkAttribute) {
+		final var b = new StringBuilder();
+		final String ukAttrName = uniqueAttribute.getUpperCaseName();
+		final var getByName = "getBy" + ukAttrName;
+		final var findByName = "findBy" + ukAttrName;
+		final var checkName = "checkBy" + ukAttrName;
+		final var queryName = checkName + "And" + pkAttribute.getUpperCaseName();
+		final var paramName = uniqueAttribute.getName();
+		final var paramID = pkAttribute.getName();
+
+		// Avoid adding named queries twice!
+		if (namedQueryMap.containsKey("NQ_UK_FIND_BY_" + ukAttrName.toUpperCase()))
+			return b.toString();
+
+		namedQueryMap.put("NQ_UK_FIND_BY_" + ukAttrName.toUpperCase(), getByName);
+		namedQueryMap.put("NQ_UK_EXISTS_BY_" + ukAttrName.toUpperCase(), checkName);
+		namedQueryMap.put("NQ_UK_EXISTS_BY_" + ukAttrName.toUpperCase() + "_AND_" + pkAttribute.getName().toUpperCase(), queryName);
+
+		// Add a named query to find the domain object by the unique key
+		b.append("@NamedQuery(name=" + domainObjectName + ".NQ_UK_FIND_BY_" + ukAttrName.toUpperCase() + ", query=\"select a from ");
+		b.append(domainObjectName + " a where a." + uniqueAttribute.getName() + " = :" + paramName + "\")\n");
+
+		// Add a named query to search domain objects by the unique key
+		if (uniqueAttribute.getJavaType().isString()) {
+			b.append("@NamedQuery(name=" + domainObjectName + ".NQ_UK_SEARCH_BY_");
+			b.append(ukAttrName.toUpperCase() + ", query=\"select a from ");
+			b.append(domainObjectName + " a where a." + uniqueAttribute.getName() + " like :" + paramName + "\")\n");
+
+			namedQueryMap.put("NQ_UK_SEARCH_BY_" + ukAttrName.toUpperCase(), findByName);
+		}
+
+		// Add a named query to check the domain object by the unique key
+		b.append("@NamedQuery(name=" + domainObjectName + ".NQ_UK_EXISTS_BY_");
+		b.append(ukAttrName.toUpperCase() + ", query=\"select count(a) from ");
+		b.append(domainObjectName + " a where a." + uniqueAttribute.getName() + " = :" + paramName + "\")\n");
+
+		// Add a named query to check the domain object by the unique key and the primary key
+		b.append("@NamedQuery(name=" + domainObjectName + ".NQ_UK_EXISTS_BY_" + ukAttrName.toUpperCase());
+		b.append("_AND_" + pkAttribute.getName().toUpperCase() + ", query=\"select count(a) from ");
+		b.append(domainObjectName + " a where a." + uniqueAttribute.getName() + " = :" + paramName);
+		b.append(" and a." + pkAttribute.getName() + " <> :" + paramID + "\")\n");
+
+		return b.toString();
+	}
+
+	/**
+	 * @param uniqueAttribute1
+	 * @param uniqueAttribute2
+	 * @param domainObjectName
+	 * @param pkAttribute
+	 * @return the generated named queries that are based on a given domain object attributes
+	 */
+	private String createNamedQueriesOfAttributes(DomainAttribute uniqueAttribute1, DomainAttribute uniqueAttribute2,
+			String domainObjectName, DomainAttribute pkAttribute) {
+		final var b = new StringBuilder();
+		final var operator1 = uniqueAttribute1.getJavaType().isString() ? " like " : " = ";
+		final var operator2 = uniqueAttribute2.getJavaType().isString() ? " like " : " = ";
+		final String ukAttrName = uniqueAttribute1.getUpperCaseName() + "_And_" + uniqueAttribute2.getUpperCaseName();
+		final String checkNameAndId = ukAttrName + "_And_" + pkAttribute.getUpperCaseName();
+		final var getByName = "getBy" + ukAttrName;
+		final var findByName = "findBy" + ukAttrName;
+		final var checkName = "checkBy" + ukAttrName;
+
+		if (namedQueryMap.containsKey("NQ_UK_FIND_BY_" + ukAttrName.toUpperCase()))
+			return b.toString();
+
+		final var jpaQLFind = new StringBuilder();
+		jpaQLFind.append("select a from " + domainObject.getName() + " a where a.");
+		jpaQLFind.append(uniqueAttribute1.getName() + operator1 + ":");
+		jpaQLFind.append(uniqueAttribute1.getName());
+		jpaQLFind.append(" and a." + uniqueAttribute2.getName() + operator2 + ":");
+		jpaQLFind.append(uniqueAttribute2.getName());
+
+		final var jpaQLGet = new StringBuilder();
+		jpaQLGet.append("select a from " + domainObject.getName() + " a where a." + uniqueAttribute1.getName() + " = :");
+		jpaQLGet.append(uniqueAttribute1.getName());
+		jpaQLGet.append(" and a." + uniqueAttribute2.getName() + " = :");
+		jpaQLGet.append(uniqueAttribute2.getName());
+
+		final var jpaQLCheck = new StringBuilder();
+		jpaQLCheck.append("select count(a) from " + domainObject.getName());
+		jpaQLCheck.append(" a where a." + uniqueAttribute1.getName() + " = :");
+		jpaQLCheck.append(uniqueAttribute1.getName());
+		jpaQLCheck.append(" and a." + uniqueAttribute2.getName() + " = :");
+		jpaQLCheck.append(uniqueAttribute2.getName());
+
+		final var jpaQLCheckByUniqueAndPrimaryKey = new StringBuilder();
+		jpaQLCheckByUniqueAndPrimaryKey.append("select count(a) from " + domainObject.getName());
+		jpaQLCheckByUniqueAndPrimaryKey.append(" a where a." + uniqueAttribute1.getName() + " = :");
+		jpaQLCheckByUniqueAndPrimaryKey.append(uniqueAttribute1.getName());
+		jpaQLCheckByUniqueAndPrimaryKey.append(" and a." + uniqueAttribute2.getName() + " = :");
+		jpaQLCheckByUniqueAndPrimaryKey.append(uniqueAttribute2.getName());
+		jpaQLCheckByUniqueAndPrimaryKey.append(" and a." + pkAttribute.getName() + " <> :");
+		jpaQLCheckByUniqueAndPrimaryKey.append(pkAttribute.getName());
+
+		// Add a named query to find the domain object by the unique key
+		b.append("@NamedQuery(name=" + domainObjectName + ".NQ_UK_FIND_BY_" + ukAttrName.toUpperCase());
+		b.append(", query=\"" + jpaQLGet.toString() + "\")\n");
+
+		if (uniqueAttribute1.getJavaType().isString() || uniqueAttribute2.getJavaType().isString()) {
+			// Add a named query to search domain objects by the unique key
+			b.append("@NamedQuery(name=" + domainObjectName + ".NQ_UK_SEARCH_BY_" + ukAttrName.toUpperCase());
+			b.append(", query=\"" + jpaQLFind.toString() + "\")\n");
+
+			namedQueryMap.put("NQ_UK_SEARCH_BY_" + ukAttrName.toUpperCase(), findByName);
+		}
+
+		// Add a named query to check if the domain object already exists
+		b.append("@NamedQuery(name=" + domainObjectName + ".NQ_UK_EXISTS_BY_" + ukAttrName.toUpperCase());
+		b.append(", query=\"" + jpaQLCheck.toString() + "\")\n");
+
+		// Add a named query to check if the domain object already exists
+		b.append("@NamedQuery(name=" + domainObjectName + ".NQ_UK_EXISTS_BY_" + ukAttrName.toUpperCase() + "_AND_");
+		b.append(pkAttribute.getName().toUpperCase() + ", query=\"" + jpaQLCheckByUniqueAndPrimaryKey.toString() + "\")\n");
+
+		namedQueryMap.put("NQ_UK_FIND_BY_" + ukAttrName.toUpperCase(), getByName);
+		namedQueryMap.put("NQ_UK_EXISTS_BY_" + ukAttrName.toUpperCase(), checkName);
+		namedQueryMap.put("NQ_UK_EXISTS_BY_" + ukAttrName.toUpperCase() + "_AND_" + pkAttribute.getName().toUpperCase(),
+				checkNameAndId);
+
+		return b.toString();
+	}
+
+	/**
+	 * @param uniqueAssoc1
+	 * @param uniqueAssoc2
+	 * @param domainObjectName
+	 * @param pkAttribute
+	 * @return the generated named queries that are based on the given associations
+	 */
+	private String createNamedQueriesOfAssociations(AbstractDomainAssociation uniqueAssoc1, AbstractDomainAssociation uniqueAssoc2,
+			String domainObjectName, DomainAttribute pkAttribute) {
+		final var b = new StringBuilder();
+		final String ukAttrName = uniqueAssoc1.getUpperCaseName() + "_And_" + uniqueAssoc2.getUpperCaseName();
+		final DomainAttribute uniqueAssocAttribute1 = uniqueAssoc1.getTarget().getPKAttribute();
+		final DomainAttribute uniqueAssocAttribute2 = uniqueAssoc2.getTarget().getPKAttribute();
+		final var getByName = "getBy" + ukAttrName;
+		final var checkName = "checkBy" + ukAttrName;
+		final var checkNameAndId = ukAttrName + "_And_" + pkAttribute.getUpperCaseName();
+
+		if (namedQueryMap.containsKey("NQ_UK_FIND_BY_" + ukAttrName.toUpperCase()))
+			return b.toString();
+
+		final var jpaQLGet = new StringBuilder();
+		jpaQLGet.append("select a from " + domainObject.getName() + " a where a." + uniqueAssoc1.getName());
+		jpaQLGet.append("." + uniqueAssocAttribute1.getName() + " = :");
+		jpaQLGet.append(uniqueAssoc1.getName());
+		jpaQLGet.append(" and a." + uniqueAssoc2.getName() + "." + uniqueAssocAttribute2.getName() + " = :");
+		jpaQLGet.append(uniqueAssoc2.getName());
+
+		final var jpaQLCheck = new StringBuilder();
+		jpaQLCheck.append("select count(a) from " + domainObject.getName() + " a where a." + uniqueAssoc1.getName());
+		jpaQLCheck.append("." + uniqueAssocAttribute1.getName() + " = :");
+		jpaQLCheck.append(uniqueAssoc1.getName());
+		jpaQLCheck.append(" and a." + uniqueAssoc2.getName() + "." + uniqueAssocAttribute2.getName() + " = :");
+		jpaQLCheck.append(uniqueAssoc2.getName());
+
+		final var jpaQLCheckByUniqueAndPrimaryKey = new StringBuilder();
+		jpaQLCheckByUniqueAndPrimaryKey.append("select count(a) from " + domainObject.getName() + " a where a.");
+		jpaQLCheckByUniqueAndPrimaryKey.append(uniqueAssoc1.getName());
+		jpaQLCheckByUniqueAndPrimaryKey.append("." + uniqueAssocAttribute1.getName() + " = :");
+		jpaQLCheckByUniqueAndPrimaryKey.append(uniqueAssoc1.getName());
+		jpaQLCheckByUniqueAndPrimaryKey.append(" and a." + uniqueAssoc2.getName());
+		jpaQLCheckByUniqueAndPrimaryKey.append("." + uniqueAssocAttribute2.getName() + " = :");
+		jpaQLCheckByUniqueAndPrimaryKey.append(uniqueAssoc2.getName());
+		jpaQLCheckByUniqueAndPrimaryKey.append(" and a." + pkAttribute.getName() + " <> :");
+		jpaQLCheckByUniqueAndPrimaryKey.append(pkAttribute.getName());
+
+		// Add a named query to find the domain object by the unique key
+		b.append("@NamedQuery(name=" + domainObjectName + ".NQ_UK_FIND_BY_" + ukAttrName.toUpperCase());
+		b.append(", query=\"" + jpaQLGet.toString() + "\")\n");
+
+		// Add a named query to check if the domain object already exists
+		b.append("@NamedQuery(name=" + domainObjectName + ".NQ_UK_EXISTS_BY_" + ukAttrName.toUpperCase());
+		b.append(", query=\"" + jpaQLCheck.toString() + "\")\n");
+
+		// Add a named query to check if the domain object already exists
+		b.append("@NamedQuery(name=" + domainObjectName + ".NQ_UK_EXISTS_BY_" + ukAttrName.toUpperCase() + "_AND_");
+		b.append(pkAttribute.getName().toUpperCase() + ", query=\"" + jpaQLCheckByUniqueAndPrimaryKey.toString() + "\")\n");
+
+		namedQueryMap.put("NQ_UK_FIND_BY_" + ukAttrName.toUpperCase(), getByName);
+		namedQueryMap.put("NQ_UK_EXISTS_BY_" + ukAttrName.toUpperCase(), checkName);
+		namedQueryMap.put("NQ_UK_EXISTS_BY_" + ukAttrName.toUpperCase() + "_AND_" + pkAttribute.getName().toUpperCase(),
+				checkNameAndId);
+
+		return b.toString();
+	}
+
+	/**
+	 * @param uniqueAssoc
+	 * @param domainObjectName
+	 * @param pkAttribute
+	 * @return the generated named queries that are based on the given association
+	 */
+	private String createNamedQueriesOfAssociation(AbstractDomainAssociation uniqueAssoc, String domainObjectName,
+			DomainAttribute pkAttribute) {
+		final var b = new StringBuilder();
+		final DomainAttribute uniqueAssocAttribute = uniqueAssoc.getTarget().getPKAttribute();
+		final String ukAttrName = uniqueAssoc.getUpperCaseName();
+		final var getByName = "getBy" + ukAttrName;
+		final var checkName = "checkBy" + ukAttrName;
+		final var checkNameAndId = ukAttrName + "_And_" + pkAttribute.getUpperCaseName();
+
+		if (namedQueryMap.containsKey("NQ_UK_FIND_BY_" + ukAttrName.toUpperCase()))
+			return b.toString();
+
+		final var jpaQLGet = new StringBuilder();
+		jpaQLGet.append("select a from " + domainObject.getName() + " a where a." + uniqueAssoc.getName() + ".");
+		jpaQLGet.append(uniqueAssocAttribute.getName() + " = :" + uniqueAssoc.getName());
+
+		final var jpaQLCheck = new StringBuilder();
+		jpaQLCheck.append("select count(a) from " + domainObject.getName());
+		jpaQLCheck.append(" a where a." + uniqueAssoc.getName() + ".");
+		jpaQLCheck.append(uniqueAssocAttribute.getName() + " = :" + uniqueAssoc.getName());
+
+		final var jpaQLCheckByUniqueAndPrimaryKey = new StringBuilder();
+		jpaQLCheckByUniqueAndPrimaryKey.append("select count(a) from " + domainObject.getName() + " a where a.");
+		jpaQLCheckByUniqueAndPrimaryKey.append(uniqueAssoc.getName());
+		jpaQLCheckByUniqueAndPrimaryKey.append("." + uniqueAssocAttribute.getName() + " = :");
+		jpaQLCheckByUniqueAndPrimaryKey.append(uniqueAssoc.getName());
+		jpaQLCheckByUniqueAndPrimaryKey.append(" and a." + pkAttribute.getName() + " <> :" + pkAttribute.getName());
+
+		// Add a named query to find the domain object by the unique key
+		b.append("@NamedQuery(name=" + domainObjectName + ".NQ_UK_FIND_BY_" + ukAttrName.toUpperCase());
+		b.append(", query=\"" + jpaQLGet.toString() + "\")\n");
+
+		// Add a named query to check if the domain object already exists
+		b.append("@NamedQuery(name=" + domainObjectName + ".NQ_UK_EXISTS_BY_" + ukAttrName.toUpperCase());
+		b.append(", query=\"" + jpaQLCheck.toString() + "\")\n");
+
+		// Add a named query to check if the domain object already exists
+		b.append("@NamedQuery(name=" + domainObjectName + ".NQ_UK_EXISTS_BY_" + ukAttrName.toUpperCase());
+		b.append("_AND_" + pkAttribute.getName().toUpperCase());
+		b.append(", query=\"" + jpaQLCheckByUniqueAndPrimaryKey.toString() + "\")\n");
+
+		namedQueryMap.put("NQ_UK_FIND_BY_" + ukAttrName.toUpperCase(), getByName);
+		namedQueryMap.put("NQ_UK_EXISTS_BY_" + ukAttrName.toUpperCase(), checkName);
+		namedQueryMap.put("NQ_UK_EXISTS_BY_" + ukAttrName.toUpperCase() + "_AND_" + pkAttribute.getName().toUpperCase(),
+				checkNameAndId);
+
+		return b.toString();
+	}
+
+	/**
+	 * @param uniqueAttribute
+	 * @param uniqueAssoc
+	 * @param domainObjectName
+	 * @param pkAttribute
+	 * @return the generated named queries that are based on the given attribute and association
+	 */
+	private String createNamedQueriesOfAttributeAndAssociation(DomainAttribute uniqueAttribute,
+			AbstractDomainAssociation uniqueAssoc, String domainObjectName, DomainAttribute pkAttribute) {
+		final var b = new StringBuilder();
+		final DomainAttribute uniqueAssocAttribute = uniqueAssoc.getTarget().getPKAttribute();
+		final String ukAttrName = uniqueAttribute.getUpperCaseName() + "_And_" + uniqueAssoc.getUpperCaseName();
+		final var getByName = "getBy" + ukAttrName;
+		final var findByName = "findBy" + ukAttrName;
+		final var checkName = "checkBy" + ukAttrName;
+		final var checkNameAndId = ukAttrName + "_And_" + pkAttribute.getUpperCaseName();
+
+		if (namedQueryMap.containsKey("NQ_UK_FIND_BY_" + ukAttrName.toUpperCase()))
+			return b.toString();
+
+		final var jpaQLFind = new StringBuilder();
+		jpaQLFind.append("select a from " + domainObject.getName() + " a where a.");
+		jpaQLFind.append(uniqueAttribute.getName() + " like :");
+		jpaQLFind.append(uniqueAttribute.getName());
+		jpaQLFind.append(" and a." + uniqueAssoc.getName() + "." + uniqueAssocAttribute.getName() + " = :");
+		jpaQLFind.append(uniqueAssoc.getName());
+
+		final var jpaQLGet = new StringBuilder();
+		jpaQLGet.append("select a from " + domainObject.getName() + " a where a." + uniqueAttribute.getName() + " = :");
+		jpaQLGet.append(uniqueAttribute.getName());
+		jpaQLGet.append(" and a." + uniqueAssoc.getName() + "." + uniqueAssocAttribute.getName() + " = :");
+		jpaQLGet.append(uniqueAssoc.getName());
+
+		final var jpaQLCheck = new StringBuilder();
+		jpaQLCheck.append("select count(a) from " + domainObject.getName() + " a where a.");
+		jpaQLCheck.append(uniqueAttribute.getName() + " = :");
+		jpaQLCheck.append(uniqueAttribute.getName());
+		jpaQLCheck.append(" and a." + uniqueAssoc.getName() + "." + uniqueAssocAttribute.getName() + " = :");
+		jpaQLCheck.append(uniqueAssoc.getName());
+
+		final var jpaQLCheckByUniqueAndPrimaryKey = new StringBuilder();
+		jpaQLCheckByUniqueAndPrimaryKey.append("select count(a) from " + domainObject.getName());
+		jpaQLCheckByUniqueAndPrimaryKey.append(" a where a." + uniqueAttribute.getName() + " = :");
+		jpaQLCheckByUniqueAndPrimaryKey.append(uniqueAttribute.getName());
+		jpaQLCheckByUniqueAndPrimaryKey.append(" and a." + uniqueAssoc.getName() + ".");
+		jpaQLCheckByUniqueAndPrimaryKey.append(uniqueAssocAttribute.getName() + " = :");
+		jpaQLCheckByUniqueAndPrimaryKey.append(uniqueAssoc.getName());
+		jpaQLCheckByUniqueAndPrimaryKey.append(" and a." + pkAttribute.getName() + " <> :");
+		jpaQLCheckByUniqueAndPrimaryKey.append(pkAttribute.getName());
+
+		// Add a named query to find the domain object by the unique key
+		b.append("@NamedQuery(name=" + domainObjectName + ".NQ_UK_FIND_BY_" + ukAttrName.toUpperCase());
+		b.append(", query=\"" + jpaQLGet.toString() + "\")\n");
+
+		// Add a named query to search domain objects by the unique key
+		if (uniqueAttribute.getJavaType().isString()) {
+			b.append("@NamedQuery(name=" + domainObjectName + ".NQ_UK_SEARCH_BY_" + ukAttrName.toUpperCase());
+			b.append(", query=\"" + jpaQLFind.toString() + "\")\n");
+
+			namedQueryMap.put("NQ_UK_SEARCH_BY_" + ukAttrName.toUpperCase(), findByName);
+		}
+
+		// Add a named query to check if the domain object already exists
+		b.append("@NamedQuery(name=" + domainObjectName + ".NQ_UK_EXISTS_BY_" + ukAttrName.toUpperCase());
+		b.append(", query=\"" + jpaQLCheck.toString() + "\")\n");
+
+		// Add a named query to check if the domain object already exists
+		b.append("@NamedQuery(name=" + domainObjectName + ".NQ_UK_EXISTS_BY_" + ukAttrName.toUpperCase() + "_AND_");
+		b.append(pkAttribute.getName().toUpperCase() + ", query=\"" + jpaQLCheckByUniqueAndPrimaryKey.toString() + "\")\n");
+
+		namedQueryMap.put("NQ_UK_FIND_BY_" + ukAttrName.toUpperCase(), getByName);
+		namedQueryMap.put("NQ_UK_EXISTS_BY_" + ukAttrName.toUpperCase(), checkName);
+		namedQueryMap.put("NQ_UK_EXISTS_BY_" + ukAttrName.toUpperCase() + "_AND_" + pkAttribute.getName().toUpperCase(),
+				checkNameAndId);
 
 		return b.toString();
 	}
