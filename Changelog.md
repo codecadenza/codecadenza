@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Fixed
+2026-04-08: Do not add the primary key of a table as an index when performing the database synchronization
 2026-04-08: Avoid creating duplicate foreign keys and indexes when performing a reverse engineering job
 2026-04-07: Do not create duplicate named queries for a domain object
 2026-04-03: Correctly determine the initial tab pages in generated Selenium tests

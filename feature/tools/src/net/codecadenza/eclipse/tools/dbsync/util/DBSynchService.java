@@ -356,7 +356,8 @@ public class DBSynchService {
 					while (rs.next()) {
 						final String indexName = rs.getString("INDEX_NAME");
 
-						if (indexName == null || indexName.isEmpty())
+						if (indexName == null || indexName.isEmpty()
+								|| indexName.equals(getPrimaryKeyName(databaseMetaData, table, catalogFilter, schemaFilter)))
 							continue;
 
 						// When using H2 the JDBC meta-data interface will also return system-generated indexes that should be skipped!
@@ -403,6 +404,30 @@ public class DBSynchService {
 					CodeCadenzaToolsPlugin.getInstance().logError(sqlException);
 				}
 			}
+	}
+
+	/**
+	 * Get the name of the primary key for the given table
+	 * @param databaseMetaData
+	 * @param table
+	 * @param catalogName
+	 * @param schemaName
+	 * @return the name of the primary key or null if the primary key could not be found
+	 */
+	private String getPrimaryKeyName(DatabaseMetaData databaseMetaData, DBTable table, String catalogName, String schemaName) {
+		try (ResultSet rs = databaseMetaData.getPrimaryKeys(catalogName, schemaName, table.getConvertedName())) {
+			while (rs.next()) {
+				final String primaryKeyName = rs.getString("PK_NAME");
+
+				if (primaryKeyName != null)
+					return primaryKeyName;
+			}
+		}
+		catch (final SQLException sqlException) {
+			CodeCadenzaToolsPlugin.getInstance().logError(sqlException);
+		}
+
+		return null;
 	}
 
 	/**
