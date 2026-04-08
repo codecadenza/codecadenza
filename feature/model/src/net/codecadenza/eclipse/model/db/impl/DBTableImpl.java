@@ -24,6 +24,8 @@ package net.codecadenza.eclipse.model.db.impl;
 import static net.codecadenza.eclipse.shared.Constants.DB_TABLE_SUFFIX;
 
 import java.util.Collection;
+import java.util.Set;
+import java.util.stream.Collectors;
 import net.codecadenza.eclipse.model.db.DBColumn;
 import net.codecadenza.eclipse.model.db.DBColumnType;
 import net.codecadenza.eclipse.model.db.DBIndex;
@@ -785,8 +787,14 @@ public class DBTableImpl extends EObjectImpl implements DBTable {
 	@Override
 	public void addForeignKeyCopies(DBTable sourceTable, boolean strictMode) {
 		for (final ForeignKey sourceKey : sourceTable.getForeignKeys()) {
-			final boolean keyExists = getForeignKeys().stream()
+			boolean keyExists = getForeignKeys().stream()
 					.anyMatch(existingKey -> existingKey.getConvertedName().equals(sourceKey.getConvertedName()));
+
+			if (!keyExists) {
+				// Do not add a foreign key if there is already a foreign key with a different name but the same column!
+				keyExists = getForeignKeys().stream().map(ForeignKey::getColumn)
+						.anyMatch(column -> column.getConvertedName().equals(sourceKey.getColumn().getConvertedName()));
+			}
 
 			if (keyExists)
 				continue;
@@ -852,8 +860,24 @@ public class DBTableImpl extends EObjectImpl implements DBTable {
 	@Override
 	public void addIndexCopies(DBTable sourceTable) {
 		for (final DBIndex sourceIndex : sourceTable.getIndexes()) {
-			final boolean indexFound = getIndexes().stream()
+			boolean indexFound = getIndexes().stream()
 					.anyMatch(existingIndex -> sourceIndex.getConvertedName().equals(existingIndex.getConvertedName()));
+
+			if (!indexFound) {
+				// Do not add an index if there is already an index with a different name but the same columns!
+				final Set<String> newIndexColumns = sourceIndex.getColumns().stream().map(DBColumn::getConvertedName)
+						.collect(Collectors.toSet());
+
+				for (final DBIndex existingIndex : getIndexes()) {
+					final Set<String> existingIndexColumns = existingIndex.getColumns().stream().map(DBColumn::getConvertedName)
+							.collect(Collectors.toSet());
+
+					indexFound = newIndexColumns.equals(existingIndexColumns);
+
+					if (indexFound)
+						break;
+				}
+			}
 
 			if (indexFound)
 				continue;
