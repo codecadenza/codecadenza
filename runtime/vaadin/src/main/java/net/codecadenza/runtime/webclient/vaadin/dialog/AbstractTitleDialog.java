@@ -87,7 +87,7 @@ public abstract class AbstractTitleDialog extends Dialog {
 	}
 
 	/**
-	 * @param hlButtons
+	 * @param footer
 	 */
 	protected void addButtons(DialogFooter footer) {
 		final var cmdOK = new Button(i18n.getTranslation(CMD_OK));
